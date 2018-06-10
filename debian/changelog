@@ -1,0 +1,140 @@
+baka-mplayer (2.0.4-1) unstable; urgency=low
+
+  * New: Highly requested Hide All Controls mode (under Settings menu)
+  * New: Ability to add external audio files
+  * New: Option to not save recently opened files
+  * New: Option to not restore playback position
+  * New: Option to change mpv msg-level
+  * New: "clear" command
+  * New: Explain how to leave full screen mode
+  * New: Message is displayed for Motion Interpolation & Deinterlace options
+  * New: Media Info displays if hwdec is in use or not
+  * Fixed: Reordering playlist items would make them disappear (Windows only)
+  * Fixed: Show message if file couldn't be opened
+  * Fixed: An issue with resuming playback position
+  * Fixed: Hide Album Art fully hides that portion
+  * Fixed: Command line output is no longer double spaced
+  * Changed: Double click a Key Binding entry to change it
+  * Changed: Renamed an item to Open Copied Link
+  * Changed: Cmd line shortcut key is now Ctrl+`
+  * Changed: Cmd line no longer requires "debug debug" to show output
+  * Changed: Gesture info is visually represented
+  * Changed: Button text case to Sane Case
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Tue, 1 Dec 2015 08:00:00 -0500
+
+baka-mplayer (2.0.3-1) unstable; urgency=low
+
+  * Hint: If you speed up the video, Baka will display how much real time you have remaining.
+  * Fixed: Status info is now displayed with audio files without album art
+  * Fixed: Disable Show in Folder for online files
+  * Fixed: Key Bindings table is, and can be, sorted alphabetically
+  * Changed: Logo :D
+  * Changed: Settings file uses JSON
+  * Changed: Currently playing file is selected in playlist (old behavior)
+  * Changed: External subtitles will be labeled as so
+  * Changed: Volume level shown on mouse scroll
+  * Changed: Speed is increased/decreased by interval of 10%
+  * Changed: Sub font size is increased/decreased by 0.1
+  * Improved: Overall design
+  * Improved: Playback Info display
+  * Added: Croatian translation
+  * Added: Dutch translation
+  * Added: French translation
+  * Added: Spanish translation
+  * Added: Mute (different from setting volume to 0)
+  * Added: Thumbnail buttons (Windows only)
+  * Added: Metadata (ex. ID3 Tags) to playback info
+  * Added: Delete external sub file along with video file (optional)
+  * Added: Motion Interpolation option (previously called "smoothmotion")
+  * Added: "help" command
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Wed, 3 Jun 2015 16:00:00 -0500
+
+baka-mplayer (2.0.2-1) unstable; urgency=low
+
+  * Fixed: Dim Desktop on multiple platforms
+  * Fixed: Playing files located in the root directory (Windows only)
+  * Fixed: Show parent folder under recently opened list (Windows only)
+  * Fixed: Show in Folder selects file (Windows only)
+  * Fixed: Gesture sensitivity is resolution independent
+  * Changed: Custom settings implementation
+  * Changed: File info shows up as overlay
+  * Changed: Some default key-bindings for easier workflow
+  * Improved: Major code refracting for efficiency
+  * Improved: Playlist
+  * Improved: Fit Window
+  * Improved: Settings
+  * Improved: Multiple-monitor support
+  * Improved: Tweaked interface colors for better visibility
+  * Added: Italian translation
+  * Added: Support for custom keyboard shortcuts
+  * Added: Playlist will auto show if cursor is near it in full screen
+  * Added: Automatic Updating (Windows only)
+  * Added: Command-Line engine
+  * Added: Support for easily updating youtube-dl
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Sun, 25 Jan 2015 22:42:00 -0500
+
+baka-mplayer (2.0.1-1) unstable; urgency=low
+
+  * Windows Build Available!
+  * Fixed: Spacing in debug window output
+  * Fixed: Some issue with loading mpv settings
+  * Fixed: Modified PKGBUILD to download much faster than before
+  * Fixed: Desktop file for better platform integration
+  * Fixed: Playlist search is now case-insensitive
+  * Changed: Build system from CMake to QMake
+  * Changed: Some menu item shortcut keys
+  * Changed: Increased seekbar height
+  * Changed: Fast seeking
+  * Changed: Do not save window size into settings
+  * Changed: Currently playing item is bolded
+  * Added: Youtube video playback support (and others)
+  * Added: Ability to open directories
+  * Added: Recently opened file list
+  * Added: Interact with mpv directly via command line interface
+  * Added: Fit Window 150%
+  * Added: Gesture Support
+  * Added: Up/Down Arrow keys navigate playlist, Enter plays
+  * Added Translations (Chinese, Korean, Portuguese, Russian)
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Sun, 28 Dec 2014 20:30:00 -0500
+
+baka-mplayer (2.0.0-1) unstable; urgency=low
+
+  * Entire new look and feel
+  * More complete manual
+  * More efficient preferences functionality
+  * Changes to right-click (now opens context menu in full  *screen mode)
+  * Playlist drag and drop support
+  * Mpv settings in settings file
+  * Settings version information for better version upgrading
+  * Baka MPlayer album art for music without album art
+  * More useful Media Info dialog
+  * Playback speed adjusting
+  * Use of mpv OSD to notify you about various actions
+  * Update manager version information
+  * Window fitting probably works better
+  * Screenshot Dialog for selecting location and screenshot template
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Thu, 20 Nov 2014 11:30:00 -0500
+
+baka-mplayer (1.9.9-1) unstable; urgency=low
+
+  * New build system
+  * Desktop file for appearing in linux distro's application menus
+  * Disabled check for updates which caused a segfault in the last version (even though it doesn't do anything anyway)
+  * Cleanup in various areas
+  * More dependencies specified
+  * Playlist functionality modified--enabled when there is a single file and some use cases have been repaired
+  * Dim lights works better
+  * Always on top functionality
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Fri, 26 Sep 2014 15:58:00 -0500
+
+baka-mplayer (1.9.8-1) unstable; urgency=low
+
+  * Initial Release (continuation of https://github.com/godly-devotion/Baka-MPlayer)
+
+ -- Joshua Park (godly-devotion) <azian.otaku@live.com>  Mon, 08 Sep 2014 20:34:00 -0500

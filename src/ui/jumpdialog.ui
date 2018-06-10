@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>JumpDialog</class>
+ <widget class="QDialog" name="JumpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>330</width>
+    <height>45</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
+	background: #1A1A1A;
+	color: whitesmoke;
+}
+
+#horizontalLayoutWidget {
+	background: #454A4D;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+/* QSpinBox */
+
+QSpinBox {
+	background: #454A4D;
+}
+QSpinBox::disabled {
+	color: #6F6F6F;
+}
+QSpinBox::up-button, 
+QSpinBox::down-button {
+	border: none;
+	width: 10px;
+}
+QSpinBox::up-arrow {
+	background: url(:/img/up-arrow.svg);
+}
+QSpinBox::down-arrow {
+	background: url(:/img/down-arrow.svg);
+}
+
+/* QPushButton */
+
+QPushButton {
+	background: #454A4D;
+	border: 1px solid #000;
+	border-radius: 2px;
+	color: whitesmoke;
+	min-width: 76px;
+	min-height: 17px;
+	padding: 4px 6px;
+}
+QPushButton:focus {
+	border: 1px solid #008098;
+	outline: none;
+}
+QPushButton:pressed {
+	background: #2E3133;
+}
+QPushButton:disabled {
+	background: transparent;
+	border: 1px solid #454A4D;
+	color: #6F6F6F;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <widget class="QLabel" name="validEntryLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../rsclist.qrc">:/img/not_exists.svg</pixmap>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="horizontalLayoutWidget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QSpinBox" name="hourBox">
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="suffix">
+         <string> hr</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+	background: transparent;
+}</string>
+        </property>
+        <property name="text">
+         <string>:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="minBox">
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="suffix">
+         <string> min</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+	background: transparent;
+}</string>
+        </property>
+        <property name="text">
+         <string>:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="secBox">
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+        <property name="suffix">
+         <string> sec</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="okButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>&amp;OK</string>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>hourBox</tabstop>
+  <tabstop>minBox</tabstop>
+  <tabstop>secBox</tabstop>
+  <tabstop>okButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../rsclist.qrc"/>
+ </resources>
+ <connections/>
+</ui>

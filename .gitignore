@@ -1,0 +1,8 @@
+build*
+*.pro.*
+Makefile
+*.kdev4
+*.qm
+*.out
+.tags*
+.qmake.stash
