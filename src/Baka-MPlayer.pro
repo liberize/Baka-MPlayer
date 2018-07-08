@@ -5,12 +5,13 @@
 #-------------------------------------------------
 
 VERSION   = 2.0.4
-QT       += core gui network svg
+QT       += core gui network svg gui-private
 CODECFORSRC = UTF-8
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = baka-mplayer
 TEMPLATE = app
 
+PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
 CONFIG += c++11 link_pkgconfig
 
 DESTDIR = build
@@ -174,7 +175,8 @@ SOURCES += main.cpp\
     ui/screenshotdialog.cpp \
     ui/updatedialog.cpp \
     ui/keydialog.cpp \
-    overlay.cpp
+    overlay.cpp \
+    widgets/mpvglwidget.cpp
 
 HEADERS  += \
     bakaengine.h \
@@ -204,7 +206,8 @@ HEADERS  += \
     ui/screenshotdialog.h \
     ui/updatedialog.h \
     ui/keydialog.h \
-    recent.h
+    recent.h \
+    widgets/mpvglwidget.h
 
 FORMS    += \
     ui/aboutdialog.ui \

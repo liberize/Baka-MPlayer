@@ -6,10 +6,12 @@
 #include <QFileInfo>
 #include <QFileInfoList>
 #include <QDateTime>
+#include <QVBoxLayout>
 
 #include "bakaengine.h"
 #include "overlayhandler.h"
 #include "util.h"
+#include "widgets/mpvglwidget.h"
 
 static void wakeup(void *ctx)
 {
@@ -17,7 +19,7 @@ static void wakeup(void *ctx)
     QCoreApplication::postEvent(mpvhandler, new QEvent(QEvent::User));
 }
 
-MpvHandler::MpvHandler(int64_t wid, QObject *parent):
+MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     QObject(parent),
     baka(static_cast<BakaEngine*>(parent))
 {
@@ -27,7 +29,7 @@ MpvHandler::MpvHandler(int64_t wid, QObject *parent):
         throw "Could not create mpv object";
 
     // set mpv options
-    mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &wid);
+    mpv_set_option_string(mpv, "vo", "libmpv");
     mpv_set_option_string(mpv, "input-cursor", "no");   // no mouse handling
     mpv_set_option_string(mpv, "cursor-autohide", "no");// no cursor-autohide, we handle that
     mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
@@ -45,14 +47,28 @@ MpvHandler::MpvHandler(int64_t wid, QObject *parent):
 
     // setup callback event handling
     mpv_set_wakeup_callback(mpv, wakeup, this);
+
+    widget = new MpvGlWidget;
+    widget->setMpvHandler(this);
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(widget);
+    container->setLayout(layout);
 }
 
 MpvHandler::~MpvHandler()
 {
+    if (widget)
+    {
+        delete widget;
+        widget = nullptr;
+    }
     if(mpv)
     {
         mpv_terminate_destroy(mpv);
-        mpv = NULL;
+        mpv = nullptr;
     }
 }
 
@@ -60,6 +76,25 @@ void MpvHandler::Initialize()
 {
     if(mpv_initialize(mpv) < 0)
         throw "Could not initialize mpv";
+}
+
+QWidget *MpvHandler::mpvWidget()
+{
+    return widget->self();
+}
+
+mpv_render_context *MpvHandler::createRenderContext(mpv_render_param *params)
+{
+    mpv_render_context *render = nullptr;
+    if (mpv_render_context_create(&render, mpv, params) < 0)
+        throw std::runtime_error("Could not create render context");
+    return render;
+}
+
+void MpvHandler::destroyRenderContext(mpv_render_context *render)
+{
+    mpv_render_context_set_update_callback(render, nullptr, nullptr);
+    mpv_render_context_free(render);
 }
 
 QString MpvHandler::getMediaInfo()

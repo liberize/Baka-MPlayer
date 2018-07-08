@@ -6,6 +6,9 @@
 #include <QStringList>
 
 #include <mpv/client.h>
+#include <mpv/qthelper.hpp>
+#include <mpv/render.h>
+#include <mpv/render_gl.h>
 
 #include "mpvtypes.h"
 
@@ -13,13 +16,14 @@
 #define MPV_REPLY_PROPERTY 2
 
 class BakaEngine;
+class MpvGlWidget;
 
 class MpvHandler : public QObject
 {
 friend class BakaEngine;
     Q_OBJECT
 public:
-    explicit MpvHandler(int64_t wid, QObject *parent = 0);
+    explicit MpvHandler(QWidget *container, QObject *parent = 0);
     ~MpvHandler();
 
     void Initialize();
@@ -45,6 +49,10 @@ public:
     int getOsdHeight()                      { return osdHeight; }
 
     QString getMediaInfo();
+
+    QWidget *mpvWidget();
+    mpv_render_context *createRenderContext(mpv_render_param *params);
+    void destroyRenderContext(mpv_render_context *render);
 
 protected:
     virtual bool event(QEvent*);
@@ -175,6 +183,7 @@ signals:
 private:
     BakaEngine *baka;
     mpv_handle *mpv = nullptr;
+    MpvGlWidget *widget = nullptr;
 
     // variables
     Mpv::PlayState playState = Mpv::Idle;
