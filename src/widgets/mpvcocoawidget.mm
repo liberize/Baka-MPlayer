@@ -1,13 +1,29 @@
-#ifdef Q_OS_DARWIN
-
 #include "mpvcocoawidget.h"
 #include "mpvhandler.h"
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
+#import <AppKit/AppKit.h>
 #import <OpenGL/gl.h>
 #import <OpenGL/gl3.h>
 
-#pragma mark - Global Functions
+@class VideoView;
+
+@interface ViewLayer : CAOpenGLLayer
+
+@property (nonatomic, weak) VideoView *videoView;
+@property (nonatomic, strong) dispatch_queue_t mpvGLQueue;
+
+@end
+
+@interface VideoView : NSView
+
+@property (nonatomic, strong) ViewLayer *videoLayer;
+@property (nonatomic, assign) MpvHandler *mpvHandler;
+@property (nonatomic, assign) mpv_render_context *mpvRenderContext;
+@property (nonatomic, strong) NSLock *uninitLock;
+
+@end
 
 static void *mpvGetOpenGL(void *ctx, const char* name)
 {
@@ -29,15 +45,6 @@ void mpvUpdateCallback(void *ctx) {
     });
 }
 
-#pragma mark - ViewLayer Class
-
-@interface ViewLayer : CAOpenGLLayer
-
-@property (nonatomic, weak) VideoView *videoView;
-@property (nonatomic, strong) dispatch_queue_t mpvGLQueue;
-
-@end
-
 @implementation ViewLayer
 
 - (id)init
@@ -48,30 +55,46 @@ void mpvUpdateCallback(void *ctx) {
         _mpvGLQueue = dispatch_queue_create("com.colliderli.iina.mpvgl", attr);
         self.opaque = YES;
         self.asynchronous = NO;
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     }
     return self;
+}
+
+- (void)initMpvStuff {
+    mpv_opengl_init_params glInit { &mpvGetOpenGL, nullptr, nullptr };
+    mpv_render_param params[] {
+        { MPV_RENDER_PARAM_API_TYPE, (void*)MPV_RENDER_API_TYPE_OPENGL },
+        { MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, (void*)&glInit },
+        { MPV_RENDER_PARAM_INVALID, nullptr },
+        { MPV_RENDER_PARAM_INVALID, nullptr }
+    };
+    _videoView.mpvRenderContext = _videoView.mpvHandler->createRenderContext(params);
+    mpv_render_context_set_update_callback(_videoView.mpvRenderContext, mpvUpdateCallback, (__bridge void *)self);
+}
+
+- (void)ignoreGLError {
+    glGetError();
 }
 
 - (CGLPixelFormatObj)copyCGLPixelFormatForDisplayMask:(uint32_t)mask
 {
     CGLPixelFormatAttribute attributes0[] = {
         kCGLPFADoubleBuffer,
-        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+        kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_3_2_Core,
         kCGLPFAAccelerated,
         kCGLPFAAllowOfflineRenderers,
-        0
+        (CGLPixelFormatAttribute)0
     };
     CGLPixelFormatAttribute attributes1[] = {
         kCGLPFADoubleBuffer,
-        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+        kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_3_2_Core,
         kCGLPFAAllowOfflineRenderers,
-        0
+        (CGLPixelFormatAttribute)0
     };
     CGLPixelFormatAttribute attributes2[] = {
         kCGLPFADoubleBuffer,
         kCGLPFAAllowOfflineRenderers,
-        0
+        (CGLPixelFormatAttribute)0
     };
 
     CGLPixelFormatObj pixFormatObj = NULL;
@@ -110,8 +133,7 @@ void mpvUpdateCallback(void *ctx) {
     [_videoView.uninitLock lock];
 
     if (!_videoView.mpvRenderContext) {
-        [_videoView.uninitLock unlock];
-        return;
+        [self initMpvStuff];
     }
 
     CGLLockContext(glContext);
@@ -122,10 +144,13 @@ void mpvUpdateCallback(void *ctx) {
     GLint i = 0;
     glGetIntegerv(GLenum(GL_DRAW_FRAMEBUFFER_BINDING), &i);
     GLint dims[] = {0, 0, 0, 0};
-    glGetIntegerv(GLenum(GL_VIEWPORT), &dims);
+    glGetIntegerv(GLenum(GL_VIEWPORT), dims);
 
     mpv_render_context *context = _videoView.mpvRenderContext;
     if (context) {
+        NSLog(@"view width: %d, height: %d", self.frame.size.width, self.frame.size.height);
+        NSLog(@"opengl width: %d, height: %d", dims[2], dims[3]);
+
         bool yes = true;
         mpv_opengl_fbo fbo { i, dims[2], dims[3], 0 };
         mpv_render_param params[] {
@@ -133,7 +158,7 @@ void mpvUpdateCallback(void *ctx) {
             {MPV_RENDER_PARAM_FLIP_Y, &yes}
         };
         mpv_render_context_render(context, params);
-        ignoreGLError();
+        [self ignoreGLError];
     } else {
         glClearColor(0, 0, 0, 1);
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT));
@@ -185,70 +210,42 @@ void mpvUpdateCallback(void *ctx) {
             NSLog(@"GL_STACK_OVERFLOW");
             break;
         default:
-            break
+            break;
     }
 }
-
-- (void)ignoreGLError {
-    glGetError();
-}
-
-@end
-
-#pragma mark - VideoView Class
-
-@interface VideoView : NSView
-
-@property (nonatomic, strong) ViewLayer *videoLayer;
-@property (nonatomic, assign) MpvHandler *mpvHandler;
-@property (nonatomic, assign) mpv_render_context *mpvRenderContext;
-@property (nonatomic, strong) NSLock *uninitLock;
 
 @end
 
 @implementation VideoView
 
-- (id)initWithFrame:(CGRect)frame {
-    [super initWithFrame:frame];
+- (id)initWithFrame:(NSRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        // set up layer
+        _videoLayer = [[ViewLayer alloc] init];
+        _videoLayer.videoView = self;
+        _videoLayer.contentsScale = [[NSScreen mainScreen] backingScaleFactor];
+        self.layer = _videoLayer;
+        self.wantsLayer = YES;
 
-    // set up layer
-    _videoLayer = [[ViewLayer alloc] init];
-    _videoLayer.videoView = self;
-    _videoLayer.contentsScale = [[NSScreen mainScreen] backingScaleFactor];
-    self.layer = _videoLayer;
-    self.wantsLayer = YES;
+        // other settings
+        self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+        self.wantsBestResolutionOpenGLSurface = YES;
 
-    // other settings
-    self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    self.wantsBestResolutionOpenGLSurface = YES;
-
-    _mpvHandler = NULL;
-    _mpvRenderContext = NULL;
-    _uninitLock = [[NSLock alloc] init];
+        _mpvHandler = NULL;
+        _mpvRenderContext = NULL;
+        _uninitLock = [[NSLock alloc] init];
+    }
+    return self;
 }
 
-- (void)initMpv:(MpvHandler *)mpv {
-    [_uninitLock lock];
-    if (_mpvRenderContext) {
-        _mpvhandler->destroyRenderContext(_mpvRenderContext);
-    }
-    mpv_opengl_init_params glInit { &mpvGetOpenGL, nullptr, nullptr };
-    mpv_render_param params[] {
-        { MPV_RENDER_PARAM_API_TYPE, (void*)MPV_RENDER_API_TYPE_OPENGL },
-        { MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, (void*)&glInit },
-        { MPV_RENDER_PARAM_INVALID, nullptr },
-        { MPV_RENDER_PARAM_INVALID, nullptr }
-    };
-    _mpvhandler = mpv;
-    _mpvRenderContext = _mpvHandler->createRenderContext(params);
-    mpv_render_context_set_update_callback(_mpvRenderContext, mpvUpdateCallback, (__bridge void *)_videoLayer);
-    [_uninitLock unlock];
+- (void)setMpvHandle:(MpvHandler *)mpv {
+    _mpvHandler = mpv;
 }
 
 - (void)dealloc {
     [_uninitLock lock];
     if (_mpvRenderContext) {
-        mpvHandler->destroyRenderContext(_mpvRenderContext);
+        _mpvHandler->destroyRenderContext(_mpvRenderContext);
         _mpvRenderContext = NULL;
     }
     [_uninitLock unlock];
@@ -271,16 +268,14 @@ void mpvUpdateCallback(void *ctx) {
 
 @end
 
-#pragma mark - MpvCocoaWidget Class
-
 MpvCocoaWidget::MpvCocoaWidget(QWidget *parent) :
     QMacCocoaViewContainer(0, parent)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    VideoView *view = [[VideoView alloc] initWithFrame:CGRectMake(0, 0, width(), height())];
-    setCocoaView(view);
-    [view release];
-    [pool release];
+    @autoreleasepool {
+        NSLog(@"width: %d, height: %d", width(), height());
+        VideoView *view = [[VideoView alloc] initWithFrame:NSMakeRect(0, 0, width(), height())];
+        setCocoaView(view);
+    }
 }
 
 MpvCocoaWidget::~MpvCocoaWidget()
@@ -294,12 +289,10 @@ QWidget *MpvCocoaWidget::self()
 
 void MpvCocoaWidget::setMpvHandler(MpvHandler *handler)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSView *view = cocoaView();
-    if (view) {
-        [view initMpv:handler];
+    @autoreleasepool {
+        VideoView *view = (VideoView *)cocoaView();
+        if (view) {
+            [view setMpvHandler:handler];
+        }
     }
-    [pool release];
 }
-
-#endif

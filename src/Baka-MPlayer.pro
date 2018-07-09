@@ -20,11 +20,13 @@ RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
 macx {
-  PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
-  CONFIG += objective_c
-  QT_CONFIG -= no-pkg-config
-  SOURCES += platform/osx.cpp
-  ICON = img/logo.icns
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
+    CONFIG += objective_c
+    QT_CONFIG -= no-pkg-config
+    SOURCES += platform/osx.cpp
+    ICON = img/logo.icns
+    QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+    LIBS += -framework AppKit -framework Foundation -framework OpenGL -framework QuartzCore
 }
 
 unix:!macx {
@@ -179,8 +181,10 @@ SOURCES += main.cpp\
     overlay.cpp \
     widgets/mpvglwidget.cpp
 
-OBJECTIVE_SOURCES += \
-    widgets/mpvcocoawidget.mm
+macx {
+    OBJECTIVE_SOURCES += \
+        widgets/mpvcocoawidget.mm
+}
 
 HEADERS  += \
     bakaengine.h \

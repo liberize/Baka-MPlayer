@@ -1,7 +1,6 @@
 #ifndef MPVCOCOAWIDGET_H
 #define MPVCOCOAWIDGET_H
 
-#ifdef Q_OS_DARWIN
 
 #include <QMacCocoaViewContainer>
 #include <mpv/client.h>
@@ -24,5 +23,4 @@ protected:
     void setMpvHandler(MpvHandler *handler);
 };
 
-#endif
 #endif // MPVCOCOAWIDGET_H
