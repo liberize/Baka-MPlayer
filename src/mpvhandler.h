@@ -16,7 +16,7 @@
 #define MPV_REPLY_PROPERTY 2
 
 class BakaEngine;
-class MpvGlWidget;
+class MpvWidget;
 
 class MpvHandler : public QObject
 {
@@ -183,7 +183,7 @@ signals:
 private:
     BakaEngine *baka;
     mpv_handle *mpv = nullptr;
-    MpvGlWidget *widget = nullptr;
+    MpvWidget *widget = nullptr;
 
     // variables
     Mpv::PlayState playState = Mpv::Idle;

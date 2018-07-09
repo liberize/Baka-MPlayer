@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = baka-mplayer
 TEMPLATE = app
 
-PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
 CONFIG += c++11 link_pkgconfig
 
 DESTDIR = build
@@ -21,6 +20,8 @@ RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
 macx {
+  PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
+  CONFIG += objective_c
   QT_CONFIG -= no-pkg-config
   SOURCES += platform/osx.cpp
   ICON = img/logo.icns
@@ -178,6 +179,9 @@ SOURCES += main.cpp\
     overlay.cpp \
     widgets/mpvglwidget.cpp
 
+OBJECTIVE_SOURCES += \
+    widgets/mpvcocoawidget.mm
+
 HEADERS  += \
     bakaengine.h \
     mpvhandler.h \
@@ -207,7 +211,9 @@ HEADERS  += \
     ui/updatedialog.h \
     ui/keydialog.h \
     recent.h \
-    widgets/mpvglwidget.h
+    widgets/mpvwidget.h \
+    widgets/mpvglwidget.h \
+    widgets/mpvcocoawidget.h
 
 FORMS    += \
     ui/aboutdialog.ui \

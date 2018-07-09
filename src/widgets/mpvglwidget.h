@@ -6,10 +6,10 @@
 #include <mpv/qthelper.hpp>
 #include <mpv/render.h>
 #include <mpv/render_gl.h>
+#include "mpvwidget.h"
 
-class MpvHandler;
 
-class MpvGlWidget : public QOpenGLWidget
+class MpvGlWidget : public QOpenGLWidget, public MpvWidget
 {
     Q_OBJECT
 
@@ -17,6 +17,7 @@ public:
     explicit MpvGlWidget(QWidget *parent = nullptr);
     ~MpvGlWidget();
 
+protected:
     QWidget *self();
     void setMpvHandler(MpvHandler *handler);
 

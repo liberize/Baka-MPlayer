@@ -11,7 +11,12 @@
 #include "bakaengine.h"
 #include "overlayhandler.h"
 #include "util.h"
+
+#ifdef Q_OS_DARWIN
+#include "widgets/mpvcocoawidget.h"
+#else
 #include "widgets/mpvglwidget.h"
+#endif
 
 static void wakeup(void *ctx)
 {
@@ -48,13 +53,17 @@ MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     // setup callback event handling
     mpv_set_wakeup_callback(mpv, wakeup, this);
 
+#ifdef Q_OS_DARWIN
+    widget = new MpvCocoaWidget;
+#else
     widget = new MpvGlWidget;
+#endif
     widget->setMpvHandler(this);
 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(widget);
+    layout->addWidget(widget->self());
     container->setLayout(layout);
 }
 
