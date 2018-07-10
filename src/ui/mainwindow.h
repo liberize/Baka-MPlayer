@@ -38,7 +38,6 @@ public:
 
     QString getLang()          { return lang; }
     QString getOnTop()         { return onTop; }
-    int getAutoFit()           { return autoFit; }
     int getMaxRecent()         { return maxRecent; }
     bool getHidePopup()        { return hidePopup; }
     bool getRemaining()        { return remaining; }
@@ -76,7 +75,6 @@ private slots:
     void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
     void FullScreen(bool fs);                       // makes window fullscreen
     void ShowPlaylist(bool visible);                // sets the playlist visibility
-    void HideAlbumArt(bool hide);                   // hides the album art
     void UpdateRecentFiles();                       // populate recentFiles menu
     void SetPlayButtonIcon(bool play);
     void SetNextButtonEnabled(bool enable);
@@ -105,8 +103,7 @@ private:
     Recent *current = nullptr;
     QString lang,
             onTop;
-    int autoFit,
-        maxRecent;
+    int maxRecent;
     bool hidePopup,
          remaining,
          screenshotDialog,
@@ -119,7 +116,6 @@ private:
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }
     void setOnTop(QString s)         { emit onTopChanged(onTop = s); }
-    void setAutoFit(int i)           { emit autoFitChanged(autoFit = i); }
     void setMaxRecent(int i)         { emit maxRecentChanged(maxRecent = i); }
     void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
     void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
@@ -132,7 +128,6 @@ public slots:
 signals:
     void langChanged(QString);
     void onTopChanged(QString);
-    void autoFitChanged(int);
     void maxRecentChanged(int);
     void hidePopupChanged(bool);
     void remainingChanged(bool);

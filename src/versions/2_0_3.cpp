@@ -54,11 +54,11 @@ void BakaEngine::Load2_0_3()
 {
     QJsonObject root = settings->getRoot();
     window->setOnTop(QJsonValueRef2(root["onTop"]).toString("never"));
-    window->setAutoFit(QJsonValueRef2(root["autoFit"]).toInt(100));
     sysTrayIcon->setVisible(QJsonValueRef2(root["trayIcon"]).toBool(false));
     window->setHidePopup(QJsonValueRef2(root["hidePopup"]).toBool(false));
     window->setRemaining(QJsonValueRef2(root["remaining"]).toBool(true));
-    window->ui->splitter->setNormalPosition(QJsonValueRef2(root["splitter"]).toInt(window->ui->splitter->max()*1.0/8));
+    window->ui->playlistLayoutWidget->resize(QJsonValueRef2(root["playlistWidth"]).toInt(window->ui->centralwidget->width()*1.0/8),
+                                             window->ui->centralwidget->height());
     window->setDebug(QJsonValueRef2(root["debug"]).toBool(false));
     //window->ui->hideFilesButton->setChecked(!QJsonValueRef2(root["showAll"]).toBool(true));
     root["showAll"] = true;
@@ -123,14 +123,10 @@ void BakaEngine::SaveSettings()
     QString version = "2.0.3";
     QJsonObject root = settings->getRoot();
     root["onTop"] = window->onTop;
-    root["autoFit"] = window->autoFit;
     root["trayIcon"] = sysTrayIcon->isVisible();
     root["hidePopup"] = window->hidePopup;
     root["remaining"] = window->remaining;
-    root["splitter"] = (window->ui->splitter->position() == 0 ||
-                                    window->ui->splitter->position() == window->ui->splitter->max()) ?
-                                    window->ui->splitter->normalPosition() :
-                                    window->ui->splitter->position();
+    root["playlistWidth"] = window->ui->playlistLayoutWidget->width();
     root["showAll"] = true; //!window->ui->hideFilesButton->isChecked();
     root["screenshotDialog"] = window->screenshotDialog;
     root["debug"] = window->debug;

@@ -22,7 +22,7 @@ static void wakeup(void *ctx)
     QCoreApplication::postEvent(mpvhandler, new QEvent(QEvent::User));
 }
 
-MpvHandler::MpvHandler(QWidget *container, QObject *parent):
+MpvHandler::MpvHandler(QObject *parent):
     QObject(parent),
     baka(static_cast<BakaEngine*>(parent))
 {
@@ -51,18 +51,12 @@ MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     // setup callback event handling
     mpv_set_wakeup_callback(mpv, wakeup, this);
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    container->setLayout(layout);
-
 #ifdef Q_OS_DARWIN
-    widget = new MpvCocoaWidget(container);
+    widget = new MpvCocoaWidget();
 #else
-    widget = new MpvGlWidget(container);
+    widget = new MpvGlWidget();
 #endif
     widget->setMpvHandler(this);
-    layout->addWidget(widget->self());
 }
 
 MpvHandler::~MpvHandler()

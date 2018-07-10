@@ -23,7 +23,7 @@ class MpvHandler : public QObject
 friend class BakaEngine;
     Q_OBJECT
 public:
-    explicit MpvHandler(QWidget *container, QObject *parent = 0);
+    explicit MpvHandler(QObject *parent = 0);
     ~MpvHandler();
 
     void Initialize();

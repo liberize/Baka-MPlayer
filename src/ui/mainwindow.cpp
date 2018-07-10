@@ -19,7 +19,28 @@ MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
+
+    // initialize managers/handlers
+    baka = new BakaEngine(this);
+    mpv = baka->mpv;
+
+//    QGridLayout *layout = new QGridLayout();
+//    layout->setSpacing(0);
+//    layout->setContentsMargins(0, 0, 0, 0);
+//    layout->addWidget(mpv->mpvWidget(), 0, 0, Qt::AlignCenter);
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(mpv->mpvWidget());
+
     ui->setupUi(this);
+    //layout->addWidget(ui->verticalWidget, 0, 0, Qt::AlignLeft | Qt::AlignBottom);
+    //layout->addWidget(ui->playlistLayoutWidget, 0, 0, Qt::AlignRight | Qt::AlignTop);
+    ui->centralwidget->setLayout(layout);
+    setCentralWidget(ui->centralwidget);
+
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
     ui->actionUpdate_Streaming_Support->setEnabled(false);
@@ -27,13 +48,9 @@ MainWindow::MainWindow(QWidget *parent):
     ShowPlaylist(false);
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
-    // initialize managers/handlers
-    baka = new BakaEngine(this);
-    mpv = baka->mpv;
-
     ui->playlistWidget->AttachEngine(baka);
-    ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
-    ui->mpvFrame->setMouseTracking(true);
+   // mpv->mpvWidget()->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
+    //mpv->mpvWidget()->setMouseTracking(true);
     autohide = new QTimer(this);
 
     // command action mappings (action (right) performs command (left))
@@ -58,12 +75,6 @@ MainWindow::MainWindow(QWidget *parent):
         {"screenshot", ui->actionWithout_Subtitles},
         {"add_subtitles", ui->action_Add_Subtitle_File},
         {"add_audio", ui->action_Add_Audio_File},
-        {"fitwindow", ui->action_To_Current_Size},
-        {"fitwindow 50", ui->action50},
-        {"fitwindow 75", ui->action75},
-        {"fitwindow 100", ui->action100},
-        {"fitwindow 150", ui->action150},
-        {"fitwindow 200", ui->action200},
         {"fullscreen", ui->action_Full_Screen},
         {"hide_all_controls", ui->actionHide_All_Controls},
         {"jump", ui->action_Jump_to_Time},
@@ -79,7 +90,6 @@ MainWindow::MainWindow(QWidget *parent):
         {"playlist repeat this", ui->action_This_File},
         {"playlist shuffle", ui->actionSh_uffle},
         {"playlist toggle", ui->action_Show_Playlist},
-        {"playlist full", ui->action_Hide_Album_Art},
         {"dim", ui->action_Dim_Lights},
         {"play_pause", ui->action_Play},
         {"quit", ui->actionE_xit},
@@ -222,7 +232,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(autohide, &QTimer::timeout, // cursor autohide
             [=]
             {
-                if(ui->mpvFrame->geometry().contains(ui->mpvFrame->mapFromGlobal(cursor().pos())))
+                if(mpv->mpvWidget()->geometry().contains(mpv->mpvWidget()->mapFromGlobal(cursor().pos())))
                     setCursor(QCursor(Qt::BlankCursor));
                 if(autohide)
                     autohide->stop();
@@ -379,11 +389,9 @@ MainWindow::MainWindow(QWidget *parent):
                     if(video)
                     {
                         // if we were hiding album art, show it--we've gone to a video
-                        if(ui->mpvFrame->styleSheet() != QString()) // remove filler album art
-                            ui->mpvFrame->setStyleSheet("");
-                        if(ui->action_Hide_Album_Art->isChecked())
-                            HideAlbumArt(false);
-                        ui->action_Hide_Album_Art->setEnabled(false);
+                        if(mpv->mpvWidget()->styleSheet() != QString()) // remove filler album art
+                            mpv->mpvWidget()->setStyleSheet("");
+
                         ui->menuSubtitle_Track->setEnabled(true);
                         if(ui->menuSubtitle_Track->actions().count() > 1)
                         {
@@ -410,10 +418,9 @@ MainWindow::MainWindow(QWidget *parent):
                         if(!albumArt)
                         {
                             // put in filler albumArt
-                            if(ui->mpvFrame->styleSheet() == QString())
-                                ui->mpvFrame->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
+                            if(mpv->mpvWidget()->styleSheet() == QString())
+                                mpv->mpvWidget()->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
                         }
-                        ui->action_Hide_Album_Art->setEnabled(true);
                         ui->menuSubtitle_Track->setEnabled(false);
                         ui->menuFont_Si_ze->setEnabled(false);
                         ui->actionShow_Subtitles->setEnabled(false);
@@ -436,9 +443,9 @@ MainWindow::MainWindow(QWidget *parent):
                     if(ui->menuAudio_Tracks->actions().count() == 1)
                         ui->menuAudio_Tracks->actions().first()->setEnabled(false);
 
-                    if(pathChanged && autoFit)
+                    if(pathChanged)
                     {
-                        baka->FitWindow(autoFit, false);
+                        baka->FitWindow();
                         pathChanged = false;
                     }
                 }
@@ -542,8 +549,8 @@ MainWindow::MainWindow(QWidget *parent):
                                 SetPlaybackControls(false);
                                 ui->seekBar->setTracking(0);
                                 ui->actionStop_after_Current->setChecked(false);
-                                if(ui->mpvFrame->styleSheet() != QString()) // remove filler album art
-                                    ui->mpvFrame->setStyleSheet("");
+                                if(mpv->mpvWidget()->styleSheet() != QString()) // remove filler album art
+                                    mpv->mpvWidget()->setStyleSheet("");
                             }
                         }
                         else
@@ -740,32 +747,6 @@ MainWindow::MainWindow(QWidget *parent):
                 TogglePlaylist();
             });
 
-    connect(ui->splitter, &CustomSplitter::positionChanged,             // Splitter position changed
-            [=](int i)
-            {
-                blockSignals(true);
-                if(i == 0) // right-most, playlist is hidden
-                {
-                    ui->action_Show_Playlist->setChecked(false);
-                    ui->action_Hide_Album_Art->setChecked(false);
-                    ui->playlistLayoutWidget->setVisible(false);
-                }
-                else if(i == ui->splitter->max()) // left-most, album art is hidden, playlist is visible
-                {
-                    ui->action_Show_Playlist->setChecked(true);
-                    ui->action_Hide_Album_Art->setChecked(true);
-                }
-                else // in the middle, album art is visible, playlist is visible
-                {
-                    ui->action_Show_Playlist->setChecked(true);
-                    ui->action_Hide_Album_Art->setChecked(false);
-                }
-                ui->playlistLayoutWidget->setVisible(ui->action_Show_Playlist->isChecked());
-                blockSignals(false);
-                if(ui->actionMedia_Info->isChecked())
-                    baka->overlay->showInfoText();
-            });
-
     connect(ui->searchBox, &QLineEdit::textChanged,                     // Playlist: Search box
             [=](QString s)
             {
@@ -945,7 +926,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         if(gestures)
         {
-            if(ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
+            if(mpv->mpvWidget()->geometry().contains(event->pos())) // mouse is in the mpvFrame
                 baka->gesture->Begin(GestureHandler::HSEEK_VVOLUME, event->globalPos(), pos());
             else if(!isFullScreen()) // not fullscreen
                 baka->gesture->Begin(GestureHandler::MOVE, event->globalPos(), pos());
@@ -959,7 +940,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     else if(event->button() == Qt::RightButton &&
             !isFullScreenMode() &&  // not fullscreen mode
             mpv->getPlayState() > 0 &&  // playing
-            ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
+            mpv->mpvWidget()->geometry().contains(event->pos())) // mouse is in the mpvFrame
     {
         mpv->PlayPause(ui->playlistWidget->CurrentItem());
     }
@@ -985,7 +966,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         playbackRect.setTop(playbackRect.bottom() - 60);
         bool showPlayback = playbackRect.contains(event->globalPos());
         ui->playbackLayoutWidget->setVisible(showPlayback || ui->outputTextEdit->isVisible());
-        ui->seekBar->setVisible(showPlayback || ui->outputTextEdit->isVisible());
 
         QRect playlistRect = geometry();
         playlistRect.setLeft(playlistRect.right() - qCeil(playlistRect.width()/7.0));
@@ -1008,7 +988,7 @@ void MainWindow::leaveEvent(QEvent *event)
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == ui->mpvFrame && isFullScreenMode() && event->type() == QEvent::MouseMove)
+    if(obj == mpv->mpvWidget() && isFullScreenMode() && event->type() == QEvent::MouseMove)
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         mouseMoveEvent(mouseEvent);
@@ -1065,7 +1045,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())) // if mouse is in the mpvFrame
+    if(event->button() == Qt::LeftButton && mpv->mpvWidget()->geometry().contains(event->pos())) // if mouse is in the mpvFrame
     {
         if(!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
             FullScreen(true);
@@ -1130,7 +1110,6 @@ void MainWindow::SetPlaybackControls(bool enable)
     ui->action_Full_Screen->setEnabled(enable);
     if(!enable)
     {
-        ui->action_Hide_Album_Art->setEnabled(false);
         ui->menuSubtitle_Track->setEnabled(false);
         ui->menuFont_Si_ze->setEnabled(false);
     }
@@ -1158,7 +1137,6 @@ void MainWindow::HideAllControls(bool w, bool s)
     {
         if(menuVisible)
             ui->menubar->setVisible(true);
-        ui->seekBar->setVisible(true);
         ui->playbackLayoutWidget->setVisible(true);
         setContextMenuPolicy(Qt::NoContextMenu);
         setCursor(QCursor(Qt::ArrowCursor)); // show cursor
@@ -1187,8 +1165,7 @@ void MainWindow::FullScreen(bool fs)
 
 bool MainWindow::isPlaylistVisible()
 {
-    // if the position is 0, playlist is hidden
-    return (ui->splitter->position() != 0);
+    return ui->playlistLayoutWidget->isVisible();
 }
 
 void MainWindow::TogglePlaylist()
@@ -1198,30 +1175,16 @@ void MainWindow::TogglePlaylist()
 
 void MainWindow::ShowPlaylist(bool visible)
 {
-    if(ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
-        return;
-
-    if(visible)
-        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
+    if (visible)
+    {
+        ui->playlistLayoutWidget->show();
+        ui->playlistLayoutWidget->setFocus();
+    }
     else
     {
-        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
-            ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
-        ui->splitter->setPosition(0); // set splitter position to right-most
+        ui->playlistLayoutWidget->hide();
         setFocus();
     }
-}
-
-void MainWindow::HideAlbumArt(bool hide)
-{
-    if(hide)
-    {
-        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
-            ui->splitter->setNormalPosition(ui->splitter->position()); // save splitter position as the normal position
-        ui->splitter->setPosition(ui->splitter->max()); // bring the splitter position to the left-most
-    }
-    else
-        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring the splitter to normal position
 }
 
 void MainWindow::UpdateRecentFiles()
@@ -1291,13 +1254,10 @@ void MainWindow::SetRemainingLabels(int time)
     {
         ui->durationLabel->setText(Util::FormatTime(time, time));
         ui->remainingLabel->setVisible(false);
-        ui->seperatorLabel->setVisible(false);
     }
     else
     {
         ui->remainingLabel->setVisible(true);
-        ui->seperatorLabel->setVisible(true);
-
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if(remaining)
         {

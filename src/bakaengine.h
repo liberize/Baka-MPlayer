@@ -82,12 +82,6 @@ public:
         {"Ctrl+`",          {"output",                              tr("Access command-line")}},
         {"F1",              {"online_help",                         tr("Launch online help")}},
         {"Space",           {"play_pause",                          tr("Play/Pause")}},
-        {"Alt+1",           {"fitwindow",                           tr("Fit the window to the video")}},
-        {"Alt+2",           {"fitwindow 50",                        tr("Fit window to %0%").arg("50")}},
-        {"Alt+3",           {"fitwindow 75",                        tr("Fit window to %0%").arg("75")}},
-        {"Alt+4",           {"fitwindow 100",                       tr("Fit window to %0%").arg("100")}},
-        {"Alt+5",           {"fitwindow 150",                       tr("Fit window to %0%").arg("150")}},
-        {"Alt+6",           {"fitwindow 200",                       tr("Fit window to %0%").arg("200")}},
         {"Esc",             {"boss",                                tr("Boss key")}},
         {"Down",            {"playlist select +1",                  tr("Select next file on playlist")}},
         {"Up",              {"playlist select -1",                  tr("Select previous file on playlist")}},
@@ -303,15 +297,6 @@ private:
           }
          }
         },
-        {"fitwindow",
-         {&BakaEngine::BakaFitWindow,
-          {
-           tr("[percent]"),
-           tr("fit the window"),
-           QString()
-          }
-         }
-        },
         {"deinterlace",
          {&BakaEngine::BakaDeinterlace,
           {
@@ -451,7 +436,6 @@ private:
     void BakaUpdate(QStringList&);
     void BakaOpen(QStringList&);
     void BakaPlayPause(QStringList&);
-    void BakaFitWindow(QStringList&);
     void BakaAspect(QStringList&);
     void BakaDeinterlace(QStringList&);
     void BakaInterpolate(QStringList&);
@@ -473,7 +457,7 @@ public:
     void MediaInfo(bool show);
     void PlayPause();
     void Jump();
-    void FitWindow(int percent = 0, bool msg = true);
+    void FitWindow();
     void Dim(bool dim);
     void About(QString what = QString());
     void Quit();

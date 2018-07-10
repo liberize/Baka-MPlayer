@@ -34,9 +34,6 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->hidePopupCheckBox->setChecked(baka->window->getHidePopup());
     ui->gestureCheckBox->setChecked(baka->window->getGestures());
     ui->langComboBox->setCurrentText(baka->window->getLang());
-    int autofit = baka->window->getAutoFit();
-    ui->autoFitCheckBox->setChecked((bool)autofit);
-    ui->comboBox->setCurrentText(QString::number(autofit)+"%");
     ui->gestureCheckBox->setChecked(baka->window->getGestures());
     int maxRecent= baka->window->getMaxRecent();
     ui->recentCheckBox->setChecked(maxRecent > 0);
@@ -50,12 +47,6 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     // add shortcuts
     saved = baka->input;
     PopulateShortcuts();
-
-    connect(ui->autoFitCheckBox, &QCheckBox::clicked,
-            [=](bool b)
-            {
-                ui->comboBox->setEnabled(b);
-            });
 
     connect(ui->changeButton, &QPushButton::clicked,
             [=]
@@ -149,10 +140,6 @@ PreferencesDialog::~PreferencesDialog()
         baka->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
         baka->window->setGestures(ui->gestureCheckBox->isChecked());
         baka->window->setLang(ui->langComboBox->currentText());
-        if(ui->autoFitCheckBox->isChecked())
-            baka->window->setAutoFit(ui->comboBox->currentText().left(ui->comboBox->currentText().length()-1).toInt());
-        else
-            baka->window->setAutoFit(0);
         baka->window->setMaxRecent(ui->recentCheckBox->isChecked() ? ui->recentSpinBox->value() : 0);
         baka->window->setGestures(ui->gestureCheckBox->isChecked());
         baka->window->setResume(ui->resumeCheckBox->isChecked());

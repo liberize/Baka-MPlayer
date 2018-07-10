@@ -242,8 +242,6 @@ void BakaEngine::BakaPlaylist(QStringList &args)
                 window->ui->playlistWidget->Shuffle();
             else if(arg == "toggle")
                 window->ShowPlaylist(!window->isPlaylistVisible());
-            else if(arg == "full")
-                window->HideAlbumArt(window->ui->action_Hide_Album_Art->isChecked());
             else
                 InvalidParameter(arg);
         }
@@ -406,31 +404,15 @@ void BakaEngine::PlayPause()
     mpv->PlayPause(window->ui->playlistWidget->CurrentItem());
 }
 
-
-void BakaEngine::BakaFitWindow(QStringList &args)
+void BakaEngine::FitWindow()
 {
-    if(args.empty())
-        FitWindow();
-    else
-    {
-        QString arg = args.front();
-        args.pop_front();
-        if(args.empty())
-            FitWindow(arg.toInt());
-        else
-            InvalidParameter(args.join(' '));
-    }
-}
-
-void BakaEngine::FitWindow(int percent, bool msg)
-{
-    if(window->isFullScreen() || window->isMaximized() || !window->ui->menuFit_Window->isEnabled())
+    if(window->isFullScreen() || window->isMaximized())
         return;
 
     mpv->LoadVideoParams();
 
     const Mpv::VideoParams &vG = mpv->getFileInfo().video_params; // video geometry
-    QRect mG = window->ui->mpvFrame->geometry(),                  // mpv geometry
+    QRect mG = mpv->mpvWidget()->geometry(),                      // mpv geometry
           wfG = window->frameGeometry(),                          // frame geometry of window (window geometry + window frame)
           wG = window->geometry(),                                // window geometry
           aG = qApp->desktop()->availableGeometry(wfG.center());  // available geometry of the screen we're in--(geometry not including the taskbar)
@@ -447,28 +429,8 @@ void BakaEngine::FitWindow(int percent, bool msg)
     else
         a = double(vG.dwidth)/vG.dheight; // use display width and height for aspect ratio
 
-    // calculate resulting display:
-    if(percent == 0) // fit to window
-    {
-        // set our current mpv frame dimensions
-        w = mG.width();
-        h = mG.height();
-
-        double cmp = w/h - a, // comparison
-               eps = 0.01;  // epsilon (deal with rounding errors) we consider -eps < 0 < eps ==> 0
-
-        if(cmp > eps) // too wide
-            w = h * a; // calculate width based on the correct height
-        else if(cmp < -eps) // too long
-            h = w / a; // calculate height based on the correct width
-    }
-    else // fit into desired dimensions
-    {
-        double scale = percent / 100.0; // get scale
-
-        w = vG.width * scale;  // get scaled width
-        h = vG.height * scale; // get scaled height
-    }
+    w = vG.width;  // video width
+    h = vG.height; // video height
 
     double dW = w + (wfG.width() - mG.width()),   // calculate display width of the window
            dH = h + (wfG.height() - mG.height()); // calculate display height of the window
@@ -493,7 +455,7 @@ void BakaEngine::FitWindow(int percent, bool msg)
                                      Qt::AlignCenter,
                                      QSize(dW,
                                            dH),
-                                     percent == 0 ? wfG : aG); // center in window (autofit) or on our screen
+                                     aG); // center on our screen
 
     // adjust the rect to compensate for the frame
     rect.setLeft(rect.left() + (wG.left() - wfG.left()));
@@ -503,11 +465,6 @@ void BakaEngine::FitWindow(int percent, bool msg)
 
     // finally set the geometry of the window
     window->setGeometry(rect);
-
-    // note: the above block is required because there is no setFrameGeometry function
-
-    if(msg)
-        mpv->ShowText(tr("Fit Window: %0").arg(percent == 0 ? tr("To Current Size") : (QString::number(percent)+"%")));
 }
 
 void BakaEngine::BakaDeinterlace(QStringList &args)
