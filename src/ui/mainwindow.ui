@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>653</width>
-    <height>400</height>
+    <height>434</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -26,7 +26,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
 	font-family: &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #1A1A1A;
+	background: #292929;
 	color: whitesmoke;
 }
 
@@ -34,18 +34,18 @@
 
 QMenuBar,
 QMenuBar::item {
-	background: #1A1A1A;
+	background: #292929;
 }
 QMenuBar::item:selected {
-	background: #383838;
+	background: #515151;
 }
 
 QMenu {
-	background: #1A1A1A;
-    border: 1px solid #383838;
+	background: #292929;
+    border: 1px solid #515151;
 }
 QMenu::item:selected {
-	background: #383838;
+	background: #515151;
  }
 QMenu::item:checked {
 	/* distinguish check state for menu item's with images here */
@@ -55,7 +55,7 @@ QMenu::item::disabled {
 }
 /* QMenu::item::disabled:selected { } */
 QMenu::separator {
-	background: #383838;
+	background: #515151;
 	height: 1px;
 	margin: 2px 0;
 }
@@ -71,12 +71,12 @@ QSplitter::handle,
 
 #outputTextEdit {
 	font: 12px &quot;Courier New&quot;, monospace;
-	border-top: 1px solid #383838;
+	border-top: 1px solid #515151;
 }
 
 #inputLineEdit {
 	font: 12px &quot;Courier New&quot;,monospace;
-	border-top: 1px solid #383838;
+	border-top: 1px solid #515151;
 	padding: 2px;
 }
 #inputLineEdit:focus {
@@ -86,8 +86,8 @@ QSplitter::handle,
 /* Playlist group */
 
 #searchBox {
-	background: #383838;
-	border: 1px solid #383838;
+	background: #515151;
+	border: 1px solid #515151;
 	font-size: 12px;
 	padding: 4px 2px;
 }
@@ -111,11 +111,11 @@ QListView {
 	outline: none;
 }
 #playlistWidget::item {
-	background: #1A1A1A;
+	background: #292929;
 	padding: 4px 2px;
 }
 #playlistWidget::item:selected {
-	background: #383838;
+	background: #515151;
 }
 #playlistWidget:item:selected:active,
 #playlistWidget:item:selected:!active {
@@ -139,7 +139,7 @@ QScrollBar::sub-line:vertical {
 }
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical  {
-	background: #383838;
+	background: #515151;
 	margin: 0 2px;
 }
 QScrollBar::up-arrow:vertical,
@@ -162,22 +162,37 @@ QScrollBar::sub-line:horizontal {
 }
 QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
-	background: #383838;
+	background: #515151;
 	margin: 2px 0;
 }
 QScrollBar::left-arrow:horizontal,
 QScrollBar::right-arrow:horizontal {
 	background: transparent;
+}
+QToolTip
+{
+  background-color: #1A1A1A;
+  color: #A5A5A5;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="playbackLayoutWidget" native="true">
+   <widget class="QWidget" name="mpvContainer" native="true">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>270</y>
-      <width>374</width>
-      <height>97</height>
+      <x>0</x>
+      <y>20</y>
+      <width>301</width>
+      <height>91</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="controlsWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>330</y>
+      <width>430</width>
+      <height>65</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -187,23 +202,30 @@ QScrollBar::right-arrow:horizontal {
      </sizepolicy>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #292929;</string>
+     <string notr="true">background-color: #1A1A1A;
+border-radius: 5px;</string>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <property name="leftMargin">
-      <number>5</number>
+      <number>15</number>
      </property>
      <property name="topMargin">
-      <number>5</number>
+      <number>2</number>
      </property>
      <property name="rightMargin">
-      <number>5</number>
+      <number>15</number>
      </property>
      <property name="bottomMargin">
-      <number>5</number>
+      <number>2</number>
      </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QPushButton" name="muteButton">
          <property name="sizePolicy">
@@ -240,12 +262,34 @@ QScrollBar::right-arrow:horizontal {
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="CustomSlider" name="volumeSlider">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>65</width>
+           <height>20</height>
+          </size>
          </property>
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
@@ -293,7 +337,7 @@ QSlider::handle:horizontal {
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
+           <width>60</width>
            <height>20</height>
           </size>
          </property>
@@ -312,8 +356,8 @@ QSlider::handle:horizontal {
          </property>
          <property name="maximumSize">
           <size>
-           <width>18</width>
-           <height>16</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="cursor">
@@ -324,20 +368,34 @@ QSlider::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_previous.svg</normaloff>
-           <disabledoff>:/img/disabled_previous.svg</disabledoff>
-           <disabledon>:/img/disabled_previous.svg</disabledon>:/img/default_previous.svg</iconset>
+           <normaloff>:/img/default_previous.svg</normaloff>:/img/default_previous.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>18</width>
-           <height>16</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="flat">
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>16</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="QPushButton" name="playButton">
@@ -352,8 +410,8 @@ QSlider::handle:horizontal {
          </property>
          <property name="maximumSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="cursor">
@@ -364,20 +422,34 @@ QSlider::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_play.svg</normaloff>
-           <disabledoff>:/img/disabled_play.svg</disabledoff>
-           <disabledon>:/img/disabled_play.svg</disabledon>:/img/default_play.svg</iconset>
+           <normaloff>:/img/default_play.svg</normaloff>:/img/default_play.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>34</width>
-           <height>34</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="flat">
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>16</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="IndexButton" name="nextButton">
@@ -392,8 +464,8 @@ QSlider::handle:horizontal {
          </property>
          <property name="maximumSize">
           <size>
-           <width>18</width>
-           <height>16</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="cursor">
@@ -404,14 +476,12 @@ QSlider::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_next.svg</normaloff>
-           <disabledoff>:/img/disabled_next.svg</disabledoff>
-           <disabledon>:/img/disabled_next.svg</disabledon>:/img/default_next.svg</iconset>
+           <normaloff>:/img/default_next.svg</normaloff>:/img/default_next.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>18</width>
-           <height>16</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="flat">
@@ -420,47 +490,7 @@ QSlider::handle:horizontal {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="rewindButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="icon">
-          <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_reverse.svg</normaloff>
-           <disabledoff>:/img/disabled_reverse.svg</disabledoff>
-           <disabledon>:/img/disabled_reverse.svg</disabledon>:/img/default_reverse.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>14</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_5">
+        <spacer name="horizontalSpacer_7">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -476,47 +506,9 @@ QSlider::handle:horizontal {
         </spacer>
        </item>
        <item>
-        <widget class="OpenButton" name="openButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_open.svg</normaloff>:/img/default_open.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="playlistButton">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -538,9 +530,7 @@ QSlider::handle:horizontal {
          </property>
          <property name="icon">
           <iconset resource="../rsclist.qrc">
-           <normaloff>:/img/default_playlist.svg</normaloff>
-           <disabledoff>:/img/disabled_playlist.svg</disabledoff>
-           <disabledon>:/img/disabled_playlist.svg</disabledon>:/img/default_playlist.svg</iconset>
+           <normaloff>:/img/default_playlist.svg</normaloff>:/img/default_playlist.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -560,13 +550,31 @@ QSlider::handle:horizontal {
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLabel" name="durationLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Sans,FreeSans</family>
+           <pointsize>-1</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #A5A5A5;</string>
          </property>
          <property name="text">
           <string>0:00:00</string>
@@ -577,15 +585,37 @@ QSlider::handle:horizontal {
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>3</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="SeekBar" name="seekBar">
          <property name="enabled">
           <bool>false</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16</height>
+          </size>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
@@ -625,18 +655,49 @@ QSlider::sub-page:horizontal {
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>3</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="remainingLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Sans,FreeSans</family>
+           <pointsize>-1</pointsize>
+          </font>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="toolTip">
           <string>Click to change between total and remaining time</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #A5A5A5;</string>
          </property>
          <property name="text">
           <string>-0:00:00</string>
@@ -650,13 +711,13 @@ QSlider::sub-page:horizontal {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="playlistLayoutWidget" native="true">
+   <widget class="QWidget" name="sidebarWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>355</x>
       <y>10</y>
-      <width>256</width>
-      <height>244</height>
+      <width>281</width>
+      <height>301</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -665,7 +726,10 @@ QSlider::sub-page:horizontal {
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
-    <layout class="QVBoxLayout" name="playlistLayout">
+    <property name="styleSheet">
+     <string notr="true">background: #292929;</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_7">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -679,55 +743,112 @@ QSlider::sub-page:horizontal {
       <number>0</number>
      </property>
      <property name="bottomMargin">
-      <number>1</number>
+      <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="searchBox">
-       <property name="mouseTracking">
-        <bool>false</bool>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="styleSheet">
+        <string notr="true">QTabWidget::pane { /* The tab widget frame */
+	padding: 0px 0px;
+}
+
+QTabWidget::tab-bar {
+	alignment: center;
+}
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+	color: #A5A5A5;
+	border-style: none;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	min-width: 100px;
+	height: 30px;
+}
+QTabBar::tab:selected {
+	font-weight: bold;
+}
+QTabBar::tab:!selected {
+	font-weight: normal;
+}</string>
        </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
+       <property name="currentIndex">
+        <number>1</number>
        </property>
-       <property name="placeholderText">
-        <string>Search Playlist</string>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="playlistControlLayout" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>2</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="currentFileButton">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="toolTip">
-           <string>Select the Current File</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>PLAYLIST</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="searchBox">
+           <property name="mouseTracking">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: #515151;
+color: #A5A5A5;
+border: none;
+padding: 3px 1px;</string>
+           </property>
+           <property name="placeholderText">
+            <string>Search Playlist</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="playlistControlLayout" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="currentFileButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="toolTip">
+               <string>Select the Current File</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
 	padding: 2px;
 	margin: 1px;
 }
@@ -735,83 +856,83 @@ QPushButton:flat {
     border: none; /* no border for a flat push button */
 }
 QPushButton:flat:pressed {
-	background: #383838;
+	background: #515151;
 	border-radius: 2px;
 }</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../rsclist.qrc">
-            <normaloff>:/img/select_current.svg</normaloff>:/img/select_current.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>12</width>
-            <height>12</height>
-           </size>
-          </property>
-          <property name="flat">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="CustomLabel" name="indexLabel">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="toolTip">
-           <string>Click to play a specific file by index</string>
-          </property>
-          <property name="text">
-           <string>0 / 0</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="margin">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="refreshButton">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="toolTip">
-           <string>Refresh Playlist</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
+              </property>
+              <property name="icon">
+               <iconset resource="../rsclist.qrc">
+                <normaloff>:/img/select_current.svg</normaloff>:/img/select_current.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>12</width>
+                <height>12</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_18">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="CustomLabel" name="indexLabel">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Click to play a specific file by index</string>
+              </property>
+              <property name="text">
+               <string>0 / 0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="margin">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_19">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refreshButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="toolTip">
+               <string>Refresh Playlist</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
 	padding: 2px;
 	margin: 1px;
 }
@@ -819,52 +940,116 @@ QPushButton:flat {
     border: none; /* no border for a flat push button */
 }
 QPushButton:flat:pressed {
-	background: #383838;
+	background: #515151;
 	border-radius: 2px;
 }</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../rsclist.qrc">
-            <normaloff>:/img/refresh_view.svg</normaloff>:/img/refresh_view.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>12</width>
-            <height>12</height>
-           </size>
-          </property>
-          <property name="flat">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="PlaylistWidget" name="playlistWidget">
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="contextMenuPolicy">
-        <enum>Qt::DefaultContextMenu</enum>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="dragDropMode">
-        <enum>QAbstractItemView::InternalMove</enum>
-       </property>
+              </property>
+              <property name="icon">
+               <iconset resource="../rsclist.qrc">
+                <normaloff>:/img/refresh_view.svg</normaloff>:/img/refresh_view.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>12</width>
+                <height>12</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="PlaylistWidget" name="playlistWidget">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::DefaultContextMenu</enum>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::InternalMove</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_4">
+        <attribute name="title">
+         <string>ONLINE</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="searchBox_4">
+           <property name="mouseTracking">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: #515151;
+color: #A5A5A5;
+border: none;
+padding: 3px 1px;</string>
+           </property>
+           <property name="placeholderText">
+            <string>Search Online</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="OnlineWidget" name="onlineWidget">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::DefaultContextMenu</enum>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::InternalMove</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="verticalWidget" native="true">
+   <widget class="QWidget" name="debugWidget" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>140</y>
-      <width>361</width>
+      <width>311</width>
       <height>120</height>
      </rect>
     </property>
@@ -873,6 +1058,9 @@ QPushButton:flat:pressed {
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #29000000;</string>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
@@ -927,6 +1115,10 @@ QPushButton:flat:pressed {
      </item>
     </layout>
    </widget>
+   <zorder>mpvContainer</zorder>
+   <zorder>debugWidget</zorder>
+   <zorder>controlsWidget</zorder>
+   <zorder>sidebarWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1564,11 +1756,6 @@ QPushButton:flat:pressed {
    <header>widgets/customslider.h</header>
   </customwidget>
   <customwidget>
-   <class>OpenButton</class>
-   <extends>QPushButton</extends>
-   <header>widgets/openbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>IndexButton</class>
    <extends>QPushButton</extends>
    <header>widgets/indexbutton.h</header>
@@ -1592,6 +1779,11 @@ QPushButton:flat:pressed {
    <class>CustomLineEdit</class>
    <extends>QLineEdit</extends>
    <header>widgets/customlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>OnlineWidget</class>
+   <extends>QListWidget</extends>
+   <header>widgets/onlinewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

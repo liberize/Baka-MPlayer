@@ -10,8 +10,7 @@
 #include "mpvwidget.h"
 
 
-class MpvCocoaWidget : public QMacCocoaViewContainer, public MpvWidget
-{
+class MpvCocoaWidget : public QMacCocoaViewContainer, public MpvWidget {
     Q_OBJECT
 
 public:

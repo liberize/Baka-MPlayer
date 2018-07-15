@@ -13,8 +13,7 @@ class PreferencesDialog;
 
 class BakaEngine;
 
-class PreferencesDialog : public QDialog
-{
+class PreferencesDialog : public QDialog {
     Q_OBJECT
 public:
     explicit PreferencesDialog(BakaEngine *baka, QWidget *parent = 0);
@@ -38,8 +37,7 @@ private:
     QString screenshotDir;
     int numberOfShortcuts;
 
-    class SortLock : public QMutex
-    {
+    class SortLock : public QMutex {
     public:
         SortLock(QTableWidget *parent);
 

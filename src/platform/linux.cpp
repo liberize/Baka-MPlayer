@@ -26,12 +26,12 @@ bool DimLightsSupported()
 {
     QString tmp = "_NET_WM_CM_S"+QString::number(QX11Info::appScreen());
     Atom a = XInternAtom(QX11Info::display(), tmp.toUtf8().constData(), false);
-    if(a && XGetSelectionOwner(QX11Info::display(), a)) // hack for QX11Info::isCompositingManagerRunning()
+    if (a && XGetSelectionOwner(QX11Info::display(), a)) // hack for QX11Info::isCompositingManagerRunning()
         return true;
     return false;
 }
 
-void SetAlwaysOnTop(WId wid, bool ontop)
+void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 {
     Display *display = QX11Info::display();
     XEvent event;
@@ -39,7 +39,7 @@ void SetAlwaysOnTop(WId wid, bool ontop)
     event.xclient.serial = 0;
     event.xclient.send_event = True;
     event.xclient.display = display;
-    event.xclient.window  = wid;
+    event.xclient.window  = main->winId();
     event.xclient.message_type = XInternAtom (display, "_NET_WM_STATE", False);
     event.xclient.format = 32;
 
@@ -51,6 +51,22 @@ void SetAlwaysOnTop(WId wid, bool ontop)
 
     XSendEvent(display, DefaultRootWindow(display), False,
                            SubstructureRedirectMask|SubstructureNotifyMask, &event);
+}
+
+void SetAspectRatio(QMainWindow *main, int w, int h)
+{
+    Display *display = QX11Info::display();
+    XSizeHints *sizeHints = XAllocSizeHints();
+    if (sizeHints == NULL)
+        return;
+
+    sizeHints->flags = USPosition | PAspect;
+    sizeHints->min_aspect.x = w;
+    sizeHints->max_aspect.x = w;
+    sizeHints->min_aspect.y = h;
+    sizeHints->max_aspect.y = h;
+
+    XSetWMNormalHints(display, main->winId(), sizeHints);
 }
 
 QString SettingsLocation()

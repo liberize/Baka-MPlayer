@@ -10,8 +10,7 @@ namespace Ui {
 class InputDialog;
 }
 
-class InputDialog : public QDialog
-{
+class InputDialog : public QDialog {
     Q_OBJECT
 public:
     explicit InputDialog(QString prompt, QString title, const std::function<bool (QString)> &validation, QWidget *parent = 0);

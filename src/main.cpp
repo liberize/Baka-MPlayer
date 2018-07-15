@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     // parse command line
     QStringList args = QApplication::arguments();
     QStringList::iterator arg = args.begin();
-    if(++arg != args.end())
+    if (++arg != args.end())
         w.Load(*arg);
     else
         w.Load();

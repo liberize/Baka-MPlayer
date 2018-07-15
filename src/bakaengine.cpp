@@ -16,7 +16,7 @@
 BakaEngine::BakaEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
-    mpv(new MpvHandler(this)),
+    mpv(new MpvHandler(window->ui->mpvContainer, this)),
     settings(new Settings(Util::SettingsLocation(), this)),
     gesture(new GestureHandler(this)),
     overlay(new OverlayHandler(this)),
@@ -28,33 +28,28 @@ BakaEngine::BakaEngine(QObject *parent):
     translator(nullptr),
     qtTranslator(nullptr)
 {
-    if(Util::DimLightsSupported())
+    if (Util::DimLightsSupported())
         dimDialog = new DimDialog(window, nullptr);
-    else
-    {
+    else {
         dimDialog = nullptr;
         window->ui->action_Dim_Lights->setEnabled(false);
     }
 
-    connect(mpv, &MpvHandler::messageSignal,
-            [=](QString msg)
-            {
-                Print(msg, "mpv");
-            });
-    connect(update, &UpdateManager::messageSignal,
-            [=](QString msg)
-            {
-                Print(msg, "update");
-            });
+    connect(mpv, &MpvHandler::messageSignal, [=] (QString msg) {
+        Print(msg, "mpv");
+    });
+    connect(update, &UpdateManager::messageSignal, [=] (QString msg) {
+        Print(msg, "update");
+    });
 }
 
 BakaEngine::~BakaEngine()
 {
-    if(translator != nullptr)
+    if (translator != nullptr)
         delete translator;
-    if(qtTranslator != nullptr)
+    if (qtTranslator != nullptr)
         delete qtTranslator;
-    if(dimDialog != nullptr)
+    if (dimDialog != nullptr)
         delete dimDialog;
     delete update;
     delete overlay;
@@ -71,19 +66,16 @@ void BakaEngine::LoadSettings()
 
 void BakaEngine::Command(QString command)
 {
-    if(command == QString())
+    if (command == QString())
         return;
     QStringList args = command.split(" ");
-    if(!args.empty())
-    {
-        if(args.front() == "baka") // implicitly understood
+    if (!args.empty()) {
+        if (args.front() == "baka") // implicitly understood
             args.pop_front();
 
-        if(!args.empty())
-        {
+        if (!args.empty()) {
             auto iter = BakaCommandMap.find(args.front());
-            if(iter != BakaCommandMap.end())
-            {
+            if (iter != BakaCommandMap.end()) {
                 args.pop_front();
                 (this->*(iter->first))(args); // execute command
             }

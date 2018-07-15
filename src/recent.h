@@ -3,24 +3,16 @@
 
 #include <QString>
 
-struct Recent
-{
+struct Recent {
     Recent(QString s = QString(), QString t = QString(), int p = 0):
         path(s), title(t), time(p) {}
 
-    operator QString() const
-    {
-        return path;
-    }
+    operator QString() const { return path; }
+    bool operator==(const Recent &recent) const { return (path == recent.path); }
 
-    bool operator==(const Recent &recent) const
-    {
-        return (path == recent.path);
-    }
-
-    QString path,
-            title;
-    int     time;
+    QString path;
+    QString title;
+    int time;
 };
 
 #endif // RECENT_H

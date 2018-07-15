@@ -9,8 +9,7 @@
 #include "mpvwidget.h"
 
 
-class MpvGlWidget : public QOpenGLWidget, public MpvWidget
-{
+class MpvGlWidget : public QOpenGLWidget, public MpvWidget {
     Q_OBJECT
 
 public:

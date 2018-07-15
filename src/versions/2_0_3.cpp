@@ -57,14 +57,20 @@ void BakaEngine::Load2_0_3()
     sysTrayIcon->setVisible(QJsonValueRef2(root["trayIcon"]).toBool(false));
     window->setHidePopup(QJsonValueRef2(root["hidePopup"]).toBool(false));
     window->setRemaining(QJsonValueRef2(root["remaining"]).toBool(true));
-    window->ui->playlistLayoutWidget->resize(QJsonValueRef2(root["playlistWidth"]).toInt(window->ui->centralwidget->width()*1.0/8),
-                                             window->ui->centralwidget->height());
+
+    int sidebarWidth = QJsonValueRef2(root["sidebarWidth"]).toInt(200);
+    window->setSidebarWidth(sidebarWidth);
+
+    double controlsCenterX = QJsonValueRef2(root["controlsCenterX"]).toDouble(0.5);
+    double controlsCenterY = QJsonValueRef2(root["controlsCenterY"]).toDouble(0.2);
+    window->setControlsCenterPos(QPointF(controlsCenterX, controlsCenterY));
+
     window->setDebug(QJsonValueRef2(root["debug"]).toBool(false));
     //window->ui->hideFilesButton->setChecked(!QJsonValueRef2(root["showAll"]).toBool(true));
     root["showAll"] = true;
     window->setScreenshotDialog(QJsonValueRef2(root["screenshotDialog"]).toBool(true));
     window->recent.clear();
-    for(auto entry : root["recent"].toArray())
+    for (auto entry : root["recent"].toArray())
     {
         QJsonObject entry_json = entry.toObject();
         window->recent.append(Recent(entry_json["path"].toString(), entry_json["title"].toString(), QJsonValueRef2(entry_json["time"]).toInt(0)));
@@ -76,8 +82,7 @@ void BakaEngine::Load2_0_3()
     window->setLang(QJsonValueRef2(root["lang"]).toString("auto"));
 #if defined(Q_OS_WIN)
     QDate last = QDate::fromString(root["lastcheck"].toString()); // convert to date
-    if(last.daysTo(QDate::currentDate()) > 7) // been a week since we last checked?
-    {
+    if (last.daysTo(QDate::currentDate()) > 7) { // been a week since we last checked?
         update->CheckForUpdates();
         root["lastcheck"] = QDate::currentDate().toString();
     }
@@ -89,8 +94,7 @@ void BakaEngine::Load2_0_3()
 
     // load settings defined input bindings
     QJsonObject input_json = root["input"].toObject();
-    for(auto &key : input_json.keys())
-    {
+    for (auto &key : input_json.keys()) {
         QJsonArray parts = input_json[key].toArray();
         input[key] = QPair<QString, QString>{
             parts[0].toString(),
@@ -113,8 +117,8 @@ void BakaEngine::Load2_0_3()
     mpv_json.remove("screenshot-directory");
     mpv->MsgLevel(QJsonValueRef2(mpv_json["msg-level"]).toString("status"));
     mpv_json.remove("msg-level");
-    for(auto &key : mpv_json.keys())
-        if(key != QString() && mpv_json[key].toString() != QString())
+    for (auto &key : mpv_json.keys())
+        if (key != QString() && mpv_json[key].toString() != QString())
             mpv->SetOption(key, mpv_json[key].toString());
 }
 
@@ -126,7 +130,9 @@ void BakaEngine::SaveSettings()
     root["trayIcon"] = sysTrayIcon->isVisible();
     root["hidePopup"] = window->hidePopup;
     root["remaining"] = window->remaining;
-    root["playlistWidth"] = window->ui->playlistLayoutWidget->width();
+    root["sidebarWidth"] = window->getSidebarWidth();
+    root["controlsCenterX"] = window->getControlsCenterPos().x();
+    root["controlsCenterY"] = window->getControlsCenterPos().y();
     root["showAll"] = true; //!window->ui->hideFilesButton->isChecked();
     root["screenshotDialog"] = window->screenshotDialog;
     root["debug"] = window->debug;
@@ -138,31 +144,26 @@ void BakaEngine::SaveSettings()
     root["version"] = version;
 
     QJsonArray recent_json;
-    for(auto &entry : window->recent)
-    {
+    for (auto &entry : window->recent) {
         QJsonObject recent_sub_object_json;
         recent_sub_object_json["path"] = QDir::fromNativeSeparators(entry.path);
-        if(entry.title != QString())
+        if (entry.title != QString())
             recent_sub_object_json["title"] = entry.title;
-        if(entry.time > 0)
+        if (entry.time > 0)
             recent_sub_object_json["time"] = entry.time;
         recent_json.append(recent_sub_object_json);
     }
     root["recent"] = recent_json;
 
     QJsonObject input_json;
-    for(auto input_iter = input.begin(); input_iter != input.end(); ++input_iter)
-    {
+    for (auto input_iter = input.begin(); input_iter != input.end(); ++input_iter) {
         auto default_iter = default_input.find(input_iter.key());
-        if(default_iter != default_input.end())
-        {
-            if(input_iter->first == default_iter->first &&
+        if (default_iter != default_input.end()) {
+            if (input_iter->first == default_iter->first &&
                input_iter->second == default_iter->second) // skip entries that are the same as a default_input entry
                 continue;
-        }
-        else // not found in defaults
-        {
-            if(*input_iter == QPair<QString, QString>({QString(), QString()})) // skip empty entries
+        } else { // not found in defaults
+            if (*input_iter == QPair<QString, QString>({QString(), QString()})) // skip empty entries
                 continue;
         }
         QJsonArray arr;

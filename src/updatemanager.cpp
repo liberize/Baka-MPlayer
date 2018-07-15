@@ -34,7 +34,7 @@ UpdateManager::~UpdateManager()
 
 bool UpdateManager::CheckForUpdates()
 {
-    if(busy)
+    if (busy)
         return false;
     busy = true;
     emit messageSignal(tr("Checking for updates..."));
@@ -42,45 +42,39 @@ bool UpdateManager::CheckForUpdates()
     QNetworkRequest request(Util::VersionFileUrl());
     QNetworkReply *reply = manager->get(request);
 
-    connect(reply, &QNetworkReply::downloadProgress,
-            [=](qint64 received, qint64 total)
-            {
-                emit progressSignal((int)(50.0*received/total));
-            });
+    connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
+        emit progressSignal((int)(50.0*received/total));
+    });
 
-    connect(reply, &QNetworkReply::finished,
-            [=]
-            {
-                if(reply->error())
-                    emit messageSignal(reply->errorString());
+    connect(reply, &QNetworkReply::finished, [=] {
+        if (reply->error())
+            emit messageSignal(reply->errorString());
+        else {
+            QList<QByteArray> lines = reply->readAll().split('\n');
+            QList<QByteArray> pair;
+            QString lastPair;
+            // go through the next 50% incrementally during parsing
+            double amnt = 50.0/lines.length(),
+                   cur = 50+amnt;
+            for (auto line : lines) {
+                if ((pair = line.split('=')).size() != 2)
+                    info[lastPair].append(line);
                 else
-                {
-                    QList<QByteArray> lines = reply->readAll().split('\n');
-                    QList<QByteArray> pair;
-                    QString lastPair;
-                    // go through the next 50% incrementally during parsing
-                    double amnt = 50.0/lines.length(),
-                           cur = 50+amnt;
-                    for(auto line : lines)
-                    {
-                        if((pair = line.split('=')).size() != 2)
-                            info[lastPair].append(line);
-                        else
-                            info[(lastPair = pair[0])] = QString(pair[1]);
-                        emit progressSignal((int)(cur += amnt));
-                    }
-                    emit progressSignal(100);
-                    busy = false;
-                }
-                reply->deleteLater();
-            });
+                    info[(lastPair = pair[0])] = QString(pair[1]);
+                emit progressSignal((int)(cur += amnt));
+            }
+            emit progressSignal(100);
+            busy = false;
+        }
+        reply->deleteLater();
+    });
     return true;
 }
 
 #if defined(Q_OS_WIN)
 bool UpdateManager::DownloadUpdate(const QString &url)
 {
-    if(busy)
+    if (busy)
         return false;
     busy = true;
     emit messageSignal(tr("Downloading update..."));
@@ -88,8 +82,7 @@ bool UpdateManager::DownloadUpdate(const QString &url)
     QNetworkRequest request(url);
     QString filename = QDir::toNativeSeparators(QString("%0/Baka-MPlayer.zip").arg(QCoreApplication::applicationDirPath()));
     QFile *file = new QFile(filename);
-    if(!file->open(QFile::WriteOnly | QFile::Truncate))
-    {
+    if (!file->open(QFile::WriteOnly | QFile::Truncate)) {
         emit messageSignal(tr("fopen error\n"));
         delete file;
         busy = false;
@@ -98,52 +91,40 @@ bool UpdateManager::DownloadUpdate(const QString &url)
 
     QNetworkReply *reply = manager->get(request);
 
-    connect(reply, &QNetworkReply::downloadProgress,
-            [=](qint64 received, qint64 total)
-            {
-                emit progressSignal((int)(99.0*received/total));
-            });
+    connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
+        emit progressSignal((int)(99.0*received/total));
+    });
 
-    connect(reply, &QNetworkReply::readyRead,
-            [=]
-            {
-                if(reply->error())
-                    emit messageSignal(reply->errorString());
-                else if(file->write(reply->read(reply->bytesAvailable()), reply->bytesAvailable()) == -1)
-                    emit messageSignal(tr("write error"));
-            });
+    connect(reply, &QNetworkReply::readyRead, [=] {
+        if (reply->error())
+            emit messageSignal(reply->errorString());
+        else if (file->write(reply->read(reply->bytesAvailable()), reply->bytesAvailable()) == -1)
+            emit messageSignal(tr("write error"));
+    });
 
-    connect(reply, &QNetworkReply::finished,
-            [=]
-            {
-                if(reply->error())
-                {
-                    emit messageSignal(reply->errorString());
-                    file->close();
-                    delete file;
-                }
-                else
-                {
-                    file->flush();
-                    file->close();
-                    delete file;
-                    QUrl redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-                    if(redirect.isEmpty())
-                    {
-                        busy = false;
-                        emit messageSignal(tr("Download complete"));
-                        ApplyUpdate(filename);
-                        emit progressSignal(100);
-                    }
-                    else
-                    {
-                        emit messageSignal(tr("Redirected..."));
-                        busy = false;
-                        DownloadUpdate(redirect.toString());
-                    }
-                }
-                reply->deleteLater();
-            });
+    connect(reply, &QNetworkReply::finished, [=] {
+        if (reply->error()) {
+            emit messageSignal(reply->errorString());
+            file->close();
+            delete file;
+        } else {
+            file->flush();
+            file->close();
+            delete file;
+            QUrl redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+            if (redirect.isEmpty()) {
+                busy = false;
+                emit messageSignal(tr("Download complete"));
+                ApplyUpdate(filename);
+                emit progressSignal(100);
+            } else {
+                emit messageSignal(tr("Redirected..."));
+                busy = false;
+                DownloadUpdate(redirect.toString());
+            }
+        }
+        reply->deleteLater();
+    });
     return true;
 }
 
@@ -159,8 +140,7 @@ void UpdateManager::ApplyUpdate(const QString &file)
     int err;
     struct zip *z = zip_open(file.toUtf8(), 0, &err);
     int n = zip_get_num_entries(z, 0);
-    for(int64_t i = 0; i < n; ++i)
-    {
+    for (int64_t i = 0; i < n; ++i) {
         // get file stats
         struct zip_stat s;
         zip_stat_index(z, i, 0, &s);
@@ -180,8 +160,7 @@ void UpdateManager::ApplyUpdate(const QString &file)
     // write updater batch script
     emit messageSignal(tr("Creating updater script..."));
     QFile f(bat);
-    if(!f.open(QFile::WriteOnly | QFile::Truncate))
-    {
+    if (!f.open(QFile::WriteOnly | QFile::Truncate)) {
         emit messageSignal(tr("Could not open file for writing..."));
         return;
     }

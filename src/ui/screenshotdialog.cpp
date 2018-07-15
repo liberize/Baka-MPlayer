@@ -20,25 +20,21 @@ ScreenshotDialog::ScreenshotDialog(bool &_always, bool &_screenshot, MpvHandler 
     ui->locationEdit->setText(QDir::toNativeSeparators(mpv->getScreenshotDir()));
     ui->templateEdit->setText(mpv->getScreenshotTemplate());
 
-    connect(ui->browseButton, &QPushButton::clicked,
-            [=]
-            {
-                QString dir = QFileDialog::getExistingDirectory(this, tr("Choose screenshot directory"), ui->locationEdit->text());
-                if(dir != QString())
-                    ui->locationEdit->setText(dir);
-            });
+    connect(ui->browseButton, &QPushButton::clicked, [=] {
+        QString dir = QFileDialog::getExistingDirectory(this, tr("Choose screenshot directory"), ui->locationEdit->text());
+        if (dir != QString())
+            ui->locationEdit->setText(dir);
+    });
 
-    connect(ui->saveButton, &QPushButton::clicked,
-            [=]
-            {
-                mpv->ScreenshotFormat(ui->formatComboBox->currentText());
-                mpv->ScreenshotDirectory(QDir::fromNativeSeparators(ui->locationEdit->text()));
-                mpv->ScreenshotTemplate(ui->templateEdit->text());
-                always = ui->showCheckBox->isChecked();
-                screenshot = ui->subtitlesCheckBox->isChecked();
-                mpv->Screenshot(screenshot);
-                accept();
-            });
+    connect(ui->saveButton, &QPushButton::clicked, [=] {
+        mpv->ScreenshotFormat(ui->formatComboBox->currentText());
+        mpv->ScreenshotDirectory(QDir::fromNativeSeparators(ui->locationEdit->text()));
+        mpv->ScreenshotTemplate(ui->templateEdit->text());
+        always = ui->showCheckBox->isChecked();
+        screenshot = ui->subtitlesCheckBox->isChecked();
+        mpv->Screenshot(screenshot);
+        accept();
+    });
 }
 
 ScreenshotDialog::~ScreenshotDialog()

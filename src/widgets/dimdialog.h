@@ -5,8 +5,7 @@
 #include <QMouseEvent>
 
 class MainWindow;
-class DimDialog : public QDialog
-{
+class DimDialog : public QDialog {
     Q_OBJECT
 public:
     explicit DimDialog(MainWindow *window, QWidget *parent = 0);

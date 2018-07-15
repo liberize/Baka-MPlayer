@@ -19,8 +19,7 @@ GestureHandler::GestureHandler(QObject *parent):
 
 GestureHandler::~GestureHandler()
 {
-    if(elapsedTimer)
-    {
+    if (elapsedTimer) {
         delete elapsedTimer;
         elapsedTimer = nullptr;
     }
@@ -28,8 +27,7 @@ GestureHandler::~GestureHandler()
 
 bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
 {
-    if(!elapsedTimer)
-    {
+    if (!elapsedTimer) {
         elapsedTimer = new QElapsedTimer();
         elapsedTimer->start();
         this->gesture_type = gesture_type;
@@ -37,14 +35,12 @@ bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
         // calculate pixel ratios based on physical dpi
         hRatio = qApp->desktop()->physicalDpiX() / 800.0;
         vRatio = qApp->desktop()->physicalDpiY() / 450.0;
-    }
-    else
+    } else
         return false;
 
-    if(gesture_type == MOVE)
+    if (gesture_type == MOVE)
         start.windowPos = windowPos;
-    else // if(gesture_type == HSEEK_VVOLUME)
-    {
+    else /* if (gesture_type == HSEEK_VVOLUME) */ {
         QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
         start.time = baka->mpv->getTime();
         start.volume = baka->mpv->getVolume();
@@ -55,20 +51,17 @@ bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
 
 bool GestureHandler::Process(QPoint mousePos)
 {
-    if(elapsedTimer && elapsedTimer->elapsed() > timer_threshold) // 10ms seems pretty good for all purposes
-    {
+    if (elapsedTimer && elapsedTimer->elapsed() > timer_threshold) {    // 10ms seems pretty good for all purposes
         QPoint delta = mousePos - start.mousePos;
 
-        if(gesture_type == MOVE)
+        if (gesture_type == MOVE)
             baka->window->move(start.windowPos + delta);
-        else
-        {
-            switch(gesture_state)
-            {
+        else {
+            switch(gesture_state) {
             case NONE:
-                if(abs(delta.x()) >= abs(delta.y()) + gesture_threshold)
+                if (abs(delta.x()) >= abs(delta.y()) + gesture_threshold)
                     gesture_state = SEEKING;
-                else if(abs(delta.y()) >= abs(delta.x()) + gesture_threshold)
+                else if (abs(delta.y()) >= abs(delta.x()) + gesture_threshold)
                     gesture_state = ADJUSTING_VOLUME;
                 break;
             case SEEKING:
@@ -85,15 +78,13 @@ bool GestureHandler::Process(QPoint mousePos)
 
         elapsedTimer->restart();
         return true;
-    }
-    else
+    } else
         return false;
 }
 
 bool GestureHandler::End()
 {
-    if(elapsedTimer)
-    {
+    if (elapsedTimer) {
         delete elapsedTimer;
         elapsedTimer = nullptr;
         QApplication::restoreOverrideCursor();

@@ -4,8 +4,7 @@
 #include <QSlider>
 #include <QMouseEvent>
 
-class CustomSlider : public QSlider
-{
+class CustomSlider : public QSlider {
     Q_OBJECT
 public:
     explicit CustomSlider(QWidget *parent = 0);

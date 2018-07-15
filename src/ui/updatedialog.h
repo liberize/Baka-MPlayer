@@ -11,8 +11,7 @@ class UpdateDialog;
 
 class BakaEngine;
 
-class UpdateDialog : public QDialog
-{
+class UpdateDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -29,11 +28,11 @@ private:
     BakaEngine *baka;
 
     QTime *timer;
-    double avgSpeed = 1,
-           lastSpeed = 0;
-    int lastProgress,
-        lastTime,
-        state;
+    double avgSpeed = 1;
+    double lastSpeed = 0;
+    int lastProgress;
+    int lastTime;
+    int state;
     bool init;
 };
 

@@ -17,8 +17,7 @@ class OverlayHandler;
 class UpdateManager;
 class DimDialog;
 
-class BakaEngine : public QObject
-{
+class BakaEngine : public QObject {
     Q_OBJECT
 public:
     explicit BakaEngine(QObject *parent = 0);
@@ -45,48 +44,48 @@ public:
     // they are loaded into the input before parsing the settings file
     // when saving the settings file we don't save things that appear here
     const QHash<QString, QPair<QString, QString>> default_input = {
-        {"Ctrl++",          {"mpv add sub-scale +0.1",              tr("Increase sub size")}},
-        {"Ctrl+-",          {"mpv add sub-scale -0.1",              tr("Decrease sub size")}},
-        {"Ctrl+W",          {"mpv cycle sub-visibility",            tr("Toggle subtitle visibility")}},
-        {"Ctrl+R",          {"mpv set time-pos 0",                  tr("Restart playback")}},
-        {"PgDown",          {"mpv add chapter +1",                  tr("Go to next chapter")}},
-        {"PgUp",            {"mpv add chapter -1",                  tr("Go to previous chapter")}},
-        {"Right",           {"mpv seek +5",                         tr("Seek forwards by %0 sec").arg("5")}},
-        {"Left",            {"mpv seek -5",                         tr("Seek backwards by %0 sec").arg("5")}},
-        {"Shift+Left",      {"mpv frame_back_step",                 tr("Frame step backwards")}},
-        {"Shift+Right",     {"mpv frame_step",                      tr("Frame step")}},
-        {"Ctrl+M",          {"mute",                                tr("Toggle mute audio")}},
-        {"Ctrl+T",          {"screenshot subtitles",                tr("Take screenshot with subtitles")}},
-        {"Ctrl+Shift+T",    {"screenshot",                          tr("Take screenshot without subtitles")}},
-        {"Ctrl+Down",       {"volume -5",                           tr("Decrease volume")}},
-        {"Ctrl+Up",         {"volume +5",                           tr("Increase volume")}},
-        {"Ctrl+Shift+Up",   {"speed +0.1",                          tr("Increase playback speed by %0").arg("10")}},
-        {"Ctrl+Shift+Down", {"speed -0.1",                          tr("Decrease playback speed by %0").arg("10")}},
-        {"Ctrl+Shift+R",    {"speed 1.0",                           tr("Reset speed")}},
-        {"Alt+Return",      {"fullscreen",                          tr("Toggle fullscreen")}},
-        {"Ctrl+H",          {"hide_all_controls",                   tr("Toggle hide all controls mode")}},
-        {"Ctrl+D",          {"dim",                                 tr("Dim lights")}},
-        {"Ctrl+E",          {"show_in_folder",                      tr("Show the file in its folder")}},
-        {"Tab",             {"media_info",                          tr("View media information")}},
-        {"Ctrl+J",          {"jump",                                tr("Show jump to time dialog")}},
-        {"Ctrl+N",          {"new",                                 tr("Open a new window")}},
-        {"Ctrl+O",          {"open",                                tr("Show open file dialog")}},
-        {"Ctrl+Q",          {"quit",                                tr("Quit")}},
-        {"Ctrl+Right",      {"playlist play +1",                    tr("Play next file")}},
-        {"Ctrl+Left",       {"playlist play -1",                    tr("Play previous file")}},
-        {"Ctrl+S",          {"stop",                                tr("Stop playback")}},
-        {"Ctrl+U",          {"open_location",                       tr("Show location dialog")}},
-        {"Ctrl+V",          {"open_clipboard",                      tr("Open clipboard location")}},
-        {"Ctrl+F",          {"playlist toggle",                     tr("Toggle playlist visibility")}},
-        {"Ctrl+Z",          {"open_recent 0",                       tr("Open the last played file")}},
-        {"Ctrl+`",          {"output",                              tr("Access command-line")}},
-        {"F1",              {"online_help",                         tr("Launch online help")}},
-        {"Space",           {"play_pause",                          tr("Play/Pause")}},
-        {"Esc",             {"boss",                                tr("Boss key")}},
-        {"Down",            {"playlist select +1",                  tr("Select next file on playlist")}},
-        {"Up",              {"playlist select -1",                  tr("Select previous file on playlist")}},
-        {"Return",          {"playlist play",                       tr("Play selected file on playlist")}},
-        {"Del",             {"playlist remove",                     tr("Remove selected file from playlist")}}
+        {"Ctrl++",          {"mpv add sub-scale +0.1", tr("Increase sub size")}},
+        {"Ctrl+-",          {"mpv add sub-scale -0.1", tr("Decrease sub size")}},
+        {"Ctrl+W",          {"mpv cycle sub-visibility", tr("Toggle subtitle visibility")}},
+        {"Ctrl+R",          {"mpv set time-pos 0", tr("Restart playback")}},
+        {"PgDown",          {"mpv add chapter +1", tr("Go to next chapter")}},
+        {"PgUp",            {"mpv add chapter -1", tr("Go to previous chapter")}},
+        {"Right",           {"mpv seek +5", tr("Seek forwards by %0 sec").arg("5")}},
+        {"Left",            {"mpv seek -5", tr("Seek backwards by %0 sec").arg("5")}},
+        {"Shift+Left",      {"mpv frame_back_step", tr("Frame step backwards")}},
+        {"Shift+Right",     {"mpv frame_step", tr("Frame step")}},
+        {"Ctrl+M",          {"mute", tr("Toggle mute audio")}},
+        {"Ctrl+T",          {"screenshot subtitles", tr("Take screenshot with subtitles")}},
+        {"Ctrl+Shift+T",    {"screenshot", tr("Take screenshot without subtitles")}},
+        {"Ctrl+Down",       {"volume -5", tr("Decrease volume")}},
+        {"Ctrl+Up",         {"volume +5", tr("Increase volume")}},
+        {"Ctrl+Shift+Up",   {"speed +0.1", tr("Increase playback speed by %0").arg("10")}},
+        {"Ctrl+Shift+Down", {"speed -0.1", tr("Decrease playback speed by %0").arg("10")}},
+        {"Ctrl+Shift+R",    {"speed 1.0", tr("Reset speed")}},
+        {"Alt+Return",      {"fullscreen", tr("Toggle fullscreen")}},
+        {"Ctrl+H",          {"hide_all_controls", tr("Toggle hide all controls mode")}},
+        {"Ctrl+D",          {"dim", tr("Dim lights")}},
+        {"Ctrl+E",          {"show_in_folder", tr("Show the file in its folder")}},
+        {"Tab",             {"media_info", tr("View media information")}},
+        {"Ctrl+J",          {"jump", tr("Show jump to time dialog")}},
+        {"Ctrl+N",          {"new", tr("Open a new window")}},
+        {"Ctrl+O",          {"open", tr("Show open file dialog")}},
+        {"Ctrl+Q",          {"quit", tr("Quit")}},
+        {"Ctrl+Right",      {"playlist play +1", tr("Play next file")}},
+        {"Ctrl+Left",       {"playlist play -1", tr("Play previous file")}},
+        {"Ctrl+S",          {"stop", tr("Stop playback")}},
+        {"Ctrl+U",          {"open_location", tr("Show location dialog")}},
+        {"Ctrl+V",          {"open_clipboard", tr("Open clipboard location")}},
+        {"Ctrl+F",          {"playlist toggle", tr("Toggle playlist visibility")}},
+        {"Ctrl+Z",          {"open_recent 0", tr("Open the last played file")}},
+        {"Ctrl+`",          {"output", tr("Access command-line")}},
+        {"F1",              {"online_help", tr("Launch online help")}},
+        {"Space",           {"play_pause", tr("Play/Pause")}},
+        {"Esc",             {"boss", tr("Boss key")}},
+        {"Down",            {"playlist select +1", tr("Select next file on playlist")}},
+        {"Up",              {"playlist select -1", tr("Select previous file on playlist")}},
+        {"Return",          {"playlist play", tr("Play selected file on playlist")}},
+        {"Del",             {"playlist remove", tr("Remove selected file from playlist")}}
     };
 
 public slots:
@@ -118,302 +117,39 @@ private:
     // todo: write advanced information about commands
     typedef void(BakaEngine::*BakaCommandFPtr)(QStringList&);
     const QHash<QString, QPair<BakaCommandFPtr, QStringList>> BakaCommandMap = {
-        {"mpv", // command
-         {&BakaEngine::BakaMpv,
-          {
-           // params     description
-           QString(), tr("executes mpv command"),
-           QString() // advanced
-          }
-         }
-        },
-        {"sh",
-         {&BakaEngine::BakaSh,
-          {
-           QString(), tr("executes system shell command"),
-           QString()
-          }
-         }
-        },
-        {"new",
-         {&BakaEngine::BakaNew, // function pointer to command functionality
-          {
-           // params     description
-           QString(), tr("creates a new instance of baka-mplayer"),
-           QString()
-          }
-         }
-        },
-        {"open_location",
-         {&BakaEngine::BakaOpenLocation,
-          {
-           QString(),
-           tr("shows the open location dialog"),
-           QString()
-          }
-         }
-        },
-        {"open_clipboard",
-         {&BakaEngine::BakaOpenClipboard,
-          {
-           QString(),
-           tr("opens the clipboard"),
-           QString()
-          }
-         }
-        },
-        {"show_in_folder",
-         {&BakaEngine::BakaShowInFolder,
-          {
-           QString(),
-           tr("shows the current file in folder"),
-           QString()
-          }
-         }
-        },
-        {"add_subtitles",
-         {&BakaEngine::BakaAddSubtitles,
-          {
-           QString(),
-           tr("add subtitles dialog"),
-           QString()
-          }
-         }
-        },
-        {"add_audio",
-         {&BakaEngine::BakaAddAudio,
-          {
-           QString(),
-           tr("add audio track dialog"),
-           QString()
-          }
-         }
-        },
-        {"screenshot",
-         {&BakaEngine::BakaScreenshot,
-          {
-           tr("[subs]"),
-           tr("take a screenshot (with subtitles if specified)"),
-           QString()
-          }
-         }
-        },
-        {"media_info",
-         {&BakaEngine::BakaMediaInfo,
-          {
-           QString(),
-           tr("toggles media info display"),
-           QString()
-          }
-         }
-        },
-        {"stop",
-         {&BakaEngine::BakaStop,
-          {
-           QString(),
-           tr("stops the current playback"),
-           QString()
-          }
-         }
-        },
-        {"playlist",
-         {&BakaEngine::BakaPlaylist,
-          {
-           "[...]",
-           tr("playlist options"),
-           QString()
-          }
-         }
-        },
-        {"jump",
-         {&BakaEngine::BakaJump,
-          {
-           QString(),
-           tr("opens jump dialog"),
-           QString()
-          }
-         }
-        },
-        {"dim",
-         {&BakaEngine::BakaDim,
-          {
-           QString(),
-           tr("toggles dim desktop"),
-           QString()
-          }
-         }
-        },
-        {"output",
-         {&BakaEngine::BakaOutput,
-          {
-           QString(),
-           tr("toggles output textbox"),
-           QString()
-          }
-         }
-        },
-        {"preferences",
-         {&BakaEngine::BakaPreferences,
-          {
-           QString(),
-           tr("opens preferences dialog"),
-           QString()
-          }
-         }
-        },
-        {"online_help",
-         {&BakaEngine::BakaOnlineHelp,
-          {
-           QString(),
-           tr("launches online help"),
-           QString()
-          }
-         }
-        },
-        {"update",
-         {&BakaEngine::BakaUpdate,
-          {
-           QString(),
-           tr("opens the update dialog or updates youtube-dl"),
-           QString()
-          }
-         }
-        },
-        {"open",
-         {&BakaEngine::BakaOpen,
-          {
-           tr("[file]"),
-           tr("opens the open file dialog or the file specified"),
-           QString()
-          }
-         }
-        },
-        {"play_pause",
-         {&BakaEngine::BakaPlayPause,
-          {
-           QString(),
-           tr("toggle play/pause state"),
-           QString()
-          }
-         }
-        },
-        {"deinterlace",
-         {&BakaEngine::BakaDeinterlace,
-          {
-           QString(),
-           tr("toggle deinterlace"),
-           QString()
-          }
-         }
-        },
-        {"interpolate",
-         {&BakaEngine::BakaInterpolate,
-          {
-           QString(),
-           tr("toggle motion interpolation"),
-           QString()
-          }
-         }
-        },
-        {"mute",
-         {&BakaEngine::BakaMute,
-          {
-           QString(),
-           tr("mutes the audio"),
-           QString()
-          },
-         }
-        },
-        {"volume",
-         {&BakaEngine::BakaVolume,
-          {
-           tr("[level]"),
-           tr("adjusts the volume"),
-           QString()
-          }
-         }
-        },
-        {"speed",
-         {&BakaEngine::BakaSpeed,
-          {
-           tr("[ratio]"),
-           tr("adjusts the speed"),
-           QString()
-          }
-         }
-        },
-        {"fullscreen",
-         {&BakaEngine::BakaFullScreen,
-          {
-           QString(),
-           tr("toggles fullscreen state"),
-           QString()
-          }
-         }
-        },
-        {"hide_all_controls",
-         {&BakaEngine::BakaHideAllControls,
-          {
-           QString(),
-           tr("toggles hide all controls state"),
-           QString()
-          }
-         }
-        },
-        {"boss",
-         {&BakaEngine::BakaBoss,
-          {
-           QString(),
-           tr("pause and hide the window"),
-           QString()
-          }
-         }
-        },
-        {"clear",
-         {&BakaEngine::BakaClear,
-          {
-           QString(),
-           tr("clears the output textbox"),
-           QString()
-          }
-         }
-        },
-        {"help",
-         {&BakaEngine::BakaHelp,
-          {
-           tr("[command]"),
-           tr("internal help menu"),
-           QString()
-          }
-         }
-        },
-        {"about",
-         {&BakaEngine::BakaAbout,
-          {
-           tr("[qt]"),
-           tr("open about dialog"),
-           QString()
-          }
-         }
-        },
-        {"msg_level",
-         {&BakaEngine::BakaMsgLevel,
-          {
-           tr("[level]"),
-           tr("set mpv msg-level"),
-           QString()
-          }
-         }
-        },
-        {"quit",
-         {&BakaEngine::BakaQuit,
-          {
-           QString(),
-           tr("quit baka-mplayer"),
-           QString()
-          }
-         }
-        }
+        {"mpv",            {&BakaEngine::BakaMpv, {QString(), tr("executes mpv command"), QString()}}},
+        {"sh",             {&BakaEngine::BakaSh, {QString(), tr("executes system shell command"), QString()}}},
+        {"new",            {&BakaEngine::BakaNew, {QString(), tr("creates a new instance of baka-mplayer"), QString()}}},
+        {"open_location",  {&BakaEngine::BakaOpenLocation, {QString(), tr("shows the open location dialog"), QString()}}},
+        {"open_clipboard", {&BakaEngine::BakaOpenClipboard, {QString(), tr("opens the clipboard"), QString()}}},
+        {"show_in_folder", {&BakaEngine::BakaShowInFolder, {QString(), tr("shows the current file in folder"), QString()}}},
+        {"add_subtitles",  {&BakaEngine::BakaAddSubtitles, {QString(), tr("add subtitles dialog"), QString()}}},
+        {"add_audio",      {&BakaEngine::BakaAddAudio, {QString(), tr("add audio track dialog"), QString()}}},
+        {"screenshot",     {&BakaEngine::BakaScreenshot, {tr("[subs]"), tr("take a screenshot (with subtitles if specified)"), QString()}}},
+        {"media_info",     {&BakaEngine::BakaMediaInfo, {QString(), tr("toggles media info display"), QString()}}},
+        {"stop",           {&BakaEngine::BakaStop, {QString(), tr("stops the current playback"), QString()}}},
+        {"playlist",       {&BakaEngine::BakaPlaylist, {"[...]", tr("playlist options"), QString()}}},
+        {"jump",           {&BakaEngine::BakaJump, {QString(), tr("opens jump dialog"), QString()}}},
+        {"dim",            {&BakaEngine::BakaDim, {QString(), tr("toggles dim desktop"), QString()}}},
+        {"output",         {&BakaEngine::BakaOutput, {QString(), tr("toggles output textbox"), QString()}}},
+        {"preferences",    {&BakaEngine::BakaPreferences, {QString(), tr("opens preferences dialog"), QString()}}},
+        {"online_help",    {&BakaEngine::BakaOnlineHelp, {QString(), tr("launches online help"), QString()}}},
+        {"update",         {&BakaEngine::BakaUpdate, {QString(), tr("opens the update dialog or updates youtube-dl"), QString()}}},
+        {"open",           {&BakaEngine::BakaOpen, {tr("[file]"), tr("opens the open file dialog or the file specified"), QString()}}},
+        {"play_pause",     {&BakaEngine::BakaPlayPause, {QString(), tr("toggle play/pause state"), QString()}}},
+        {"deinterlace",    {&BakaEngine::BakaDeinterlace, {QString(), tr("toggle deinterlace"), QString()}}},
+        {"interpolate",    {&BakaEngine::BakaInterpolate, {QString(), tr("toggle motion interpolation"), QString()}}},
+        {"mute",           {&BakaEngine::BakaMute, {QString(), tr("mutes the audio"), QString()},}},
+        {"volume",         {&BakaEngine::BakaVolume, {tr("[level]"), tr("adjusts the volume"), QString()}}},
+        {"speed",          {&BakaEngine::BakaSpeed, {tr("[ratio]"), tr("adjusts the speed"), QString()}}},
+        {"fullscreen",     {&BakaEngine::BakaFullScreen, {QString(), tr("toggles fullscreen state"), QString()}}},
+        {"hide_all_controls", {&BakaEngine::BakaHideAllControls, {QString(), tr("toggles hide all controls state"), QString()}}},
+        {"boss",           {&BakaEngine::BakaBoss, {QString(), tr("pause and hide the window"), QString()}}},
+        {"clear",          {&BakaEngine::BakaClear, {QString(), tr("clears the output textbox"), QString()}}},
+        {"help",           {&BakaEngine::BakaHelp, {tr("[command]"), tr("internal help menu"), QString()}}},
+        {"about",          {&BakaEngine::BakaAbout, {tr("[qt]"), tr("open about dialog"), QString()}}},
+        {"msg_level",      {&BakaEngine::BakaMsgLevel, {tr("[level]"), tr("set mpv msg-level"), QString()}}},
+        {"quit",           {&BakaEngine::BakaQuit, {QString(), tr("quit baka-mplayer"), QString()}}}
     };
     // Baka Command Functions
     void BakaMpv(QStringList&);

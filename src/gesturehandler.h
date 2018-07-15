@@ -7,8 +7,7 @@
 
 class BakaEngine;
 
-class GestureHandler : public QObject
-{
+class GestureHandler : public QObject {
     Q_OBJECT
 public:
     enum GESTURE_TYPE {
@@ -35,19 +34,18 @@ private:
 
     QElapsedTimer *elapsedTimer;
 
-    double hRatio,
-           vRatio;
-    int timer_threshold,
-        gesture_threshold;
+    double hRatio;
+    double vRatio;
+    int timer_threshold;
+    int gesture_threshold;
 
-    int gesture_type,
-        gesture_state;
-    struct
-    {
-        QPoint mousePos,
-               windowPos;
-        int    time,
-               volume;
+    int gesture_type;
+    int gesture_state;
+    struct {
+        QPoint mousePos;
+        QPoint windowPos;
+        int    time;
+        int    volume;
     } start;
 };
 

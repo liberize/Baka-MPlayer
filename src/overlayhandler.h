@@ -14,8 +14,7 @@
 class BakaEngine;
 class Overlay;
 
-class OverlayHandler : public QObject
-{
+class OverlayHandler : public QObject {
     Q_OBJECT
 public:
     explicit OverlayHandler(QObject *parent = 0);
@@ -36,9 +35,9 @@ private:
     QMutex overlay_mutex;
 
     QTimer *refresh_timer;
-    int min_overlay,
-        max_overlay,
-        overlay_id;
+    int min_overlay;
+    int max_overlay;
+    int overlay_id;
 };
 
 #endif // OVERLAYHANDLER_H

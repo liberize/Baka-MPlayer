@@ -8,8 +8,7 @@
 
 class BakaEngine;
 
-class UpdateManager : public QObject
-{
+class UpdateManager : public QObject {
     Q_OBJECT
 public:
     explicit UpdateManager(QObject *parent = 0);

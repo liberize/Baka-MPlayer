@@ -1,9 +1,11 @@
+
 #ifndef UTIL_H
 #define UTIL_H
 
 #include <QWidget>
 #include <QString>
 #include <QTextStream>
+#include <QMainWindow>
 #include "recent.h"
 
 class Settings;
@@ -15,7 +17,8 @@ QString VersionFileUrl();
 QString DownloadFileUrl();
 
 bool DimLightsSupported();
-void SetAlwaysOnTop(WId wid, bool);
+void SetAlwaysOnTop(QMainWindow *main, bool);
+void SetAspectRatio(QMainWindow *main, int w, int h);
 QString SettingsLocation();
 
 bool IsValidFile(QString path);

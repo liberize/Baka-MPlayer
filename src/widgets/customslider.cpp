@@ -16,10 +16,9 @@ void CustomSlider::setValueNoSignal(int value)
 
 void CustomSlider::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::LeftButton)
-  {
-      setValue(QStyle::sliderValueFromPosition(minimum(), maximum(), event->x(), width()));
-      event->accept();
-  }
-  QSlider::mousePressEvent(event);
+    if (event->button() == Qt::LeftButton) {
+        setValue(QStyle::sliderValueFromPosition(minimum(), maximum(), event->x(), width()));
+        event->accept();
+    }
+    QSlider::mousePressEvent(event);
 }

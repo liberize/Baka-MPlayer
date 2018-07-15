@@ -13,8 +13,7 @@
 
 class BakaEngine;
 
-class Settings : public QObject
-{
+class Settings : public QObject {
     Q_OBJECT
 public:
     explicit Settings(QString file, QObject *parent = 0);

@@ -26,7 +26,7 @@ InputDialog::~InputDialog()
 QString InputDialog::getInput(QString prompt, QString title, const std::function<bool (QString)> &validation, QWidget *parent)
 {
     InputDialog dialog(prompt, title, validation, parent);
-    if(dialog.exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
         return dialog.ui->inputLineEdit->text();
     else
         return "";

@@ -16,36 +16,34 @@ bool IsValidUrl(QString url)
 QString FormatTime(int _time, int _totalTime)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
-    if(_totalTime >= 3600) // hours
+    if (_totalTime >= 3600) // hours
         return time.toString("h:mm:ss");
-    if(_totalTime >= 60)   // minutes
+    if (_totalTime >= 60)   // minutes
         return time.toString("mm:ss");
-    return time.toString("0:ss");   // seconds
+    return time.toString("00:ss");   // seconds
 }
 
 QString FormatRelativeTime(int _time)
 {
     QString prefix;
-    if(_time < 0)
-    {
+    if (_time < 0) {
         prefix = "-";
         _time = -_time;
-    }
-    else
+    } else
         prefix = "+";
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
-    if(_time >= 3600) // hours
+    if (_time >= 3600) // hours
         return prefix+time.toString("h:mm:ss");
-    if(_time >= 60)   // minutes
+    if (_time >= 60)   // minutes
         return prefix+time.toString("mm:ss");
     return prefix+time.toString("0:ss");   // seconds
 }
 
 QString FormatNumber(int val, int length)
 {
-    if(length < 10)
+    if (length < 10)
         return QString::number(val);
-    else if(length < 100)
+    else if (length < 100)
         return QString("%1").arg(val, 2, 10, QChar('0'));
     else
         return QString("%1").arg(val, 3, 10, QChar('0'));
@@ -53,17 +51,14 @@ QString FormatNumber(int val, int length)
 
 QString FormatNumberWithAmpersand(int val, int length)
 {
-    if(length < 10)
+    if (length < 10)
         return "&"+QString::number(val);
-    else if(length < 100)
-    {
-        if(val < 10)
+    else if (length < 100) {
+        if (val < 10)
             return "0&"+QString::number(val);
         return QString("%1").arg(val, 2, 10, QChar('0'));
-    }
-    else
-    {
-        if(val < 10)
+    } else {
+        if (val < 10)
             return "00&"+QString::number(val);
         return QString("%1").arg(val, 3, 10, QChar('0'));
     }
@@ -79,8 +74,7 @@ QString HumanSize(qint64 size)
     QStringListIterator i(list);
     QString unit("bytes");
 
-    while(num >= 1024.0 && i.hasNext())
-     {
+    while (num >= 1024.0 && i.hasNext()) {
         unit = i.next();
         num /= 1024.0;
     }
@@ -90,30 +84,25 @@ QString HumanSize(qint64 size)
 QString ShortenPathToParent(const Recent &recent)
 {
     const int long_name = 100;
-    if(recent.title != QString())
+    if (recent.title != QString())
         return QString("%0 (%1)").arg(recent.title, recent.path);
     QString p = QDir::fromNativeSeparators(recent.path);
     int i = p.lastIndexOf('/');
-    if(i != -1)
-    {
+    if (i != -1) {
         int j = p.lastIndexOf('/', i-1);
-        if(j != -1)
-        {
+        if (j != -1) {
             QString parent = p.mid(j+1, i-j-1),
                     file = p.mid(i+1);
             // todo: smarter trimming
-            if(parent.length() > long_name)
-            {
+            if (parent.length() > long_name) {
                 parent.truncate(long_name);
                 parent += "..";
             }
-            if(file.length() > long_name)
-            {
+            if (file.length() > long_name) {
                 file.truncate(long_name);
                 i = p.lastIndexOf('.');
                 file += "..";
-                if(i != -1)
-                {
+                if (i != -1) {
                     QString ext = p.mid(i);
                     file.truncate(file.length()-ext.length());
                     file += ext; // add the extension back
@@ -128,9 +117,8 @@ QString ShortenPathToParent(const Recent &recent)
 QStringList ToNativeSeparators(QStringList list)
 {
     QStringList ret;
-    for(auto element : list)
-    {
-        if(Util::IsValidLocation(element))
+    for (auto element : list) {
+        if (Util::IsValidLocation(element))
             ret.push_back(element);
         else
             ret.push_back(QDir::toNativeSeparators(element));
@@ -141,7 +129,7 @@ QStringList ToNativeSeparators(QStringList list)
 QStringList FromNativeSeparators(QStringList list)
 {
     QStringList ret;
-    for(auto element : list)
+    for (auto element : list)
         ret.push_back(QDir::fromNativeSeparators(element));
     return ret;
 }
@@ -149,21 +137,18 @@ QStringList FromNativeSeparators(QStringList list)
 int GCD(int u, int v)
 {
     int shift;
-    if(u == 0) return v;
-    if(v == 0) return u;
-    for(shift = 0; ((u | v) & 1) == 0; ++shift)
-    {
+    if (u == 0) return v;
+    if (v == 0) return u;
+    for (shift = 0; ((u | v) & 1) == 0; ++shift) {
        u >>= 1;
        v >>= 1;
     }
-    while((u & 1) == 0)
+    while ((u & 1) == 0)
         u >>= 1;
-    do
-    {
+    do {
         while ((v & 1) == 0)
             v >>= 1;
-        if (u > v)
-        {
+        if (u > v) {
             unsigned int t = v;
             v = u;
             u = t;
@@ -175,8 +160,8 @@ int GCD(int u, int v)
 
 QString Ratio(int w, int h)
 {
-    int gcd=GCD(w, h);
-    if(gcd == 0)
+    int gcd = GCD(w, h);
+    if (gcd == 0)
         return "0:0";
     return QString("%0:%1").arg(QString::number(w/gcd), QString::number(h/gcd));
 }

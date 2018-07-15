@@ -32,27 +32,25 @@ OverlayHandler::OverlayHandler(QObject *parent):
 
 OverlayHandler::~OverlayHandler()
 {
-    for(auto o : overlays)
+    for (auto o : overlays)
         delete o;
 }
 
 void OverlayHandler::showStatusText(const QString &text, int duration)
 {
-    if(text != QString())
+    if (text != QString())
         showText(text,
                  QFont(Util::MonospaceFont(),
                        14, QFont::Bold), QColor(0xFFFFFF),
                  QPoint(20, 20), duration, OVERLAY_STATUS);
-    else if(duration == 0)
+    else if (duration == 0)
         remove(OVERLAY_STATUS);
 }
 
 void OverlayHandler::showInfoText(bool show)
 {
-    if(show) // show media info
-    {
-        if(refresh_timer == nullptr)
-        {
+    if (show) { // show media info
+        if (refresh_timer == nullptr) {
             refresh_timer = new QTimer(this);
             refresh_timer->setSingleShot(true);
             connect(refresh_timer, &QTimer::timeout, // on timeout
@@ -63,9 +61,7 @@ void OverlayHandler::showInfoText(bool show)
                  QFont(Util::MonospaceFont(),
                        14, QFont::Bold), QColor(0xFFFF00),
                  QPoint(20, 20), 0, OVERLAY_INFO);
-    }
-    else // hide media info
-    {
+    } else { // hide media info
         delete refresh_timer;
         refresh_timer = nullptr;
         remove(OVERLAY_INFO);
@@ -76,10 +72,9 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
 {
     overlay_mutex.lock();
     // increase next overlay_id
-    if(id == -1) // auto id
-    {
+    if (id == -1) { // auto id
         id = overlay_id;
-        if(overlay_id+1 > max_overlay)
+        if (overlay_id+1 > max_overlay)
             overlay_id = min_overlay;
         else
             ++overlay_id;
@@ -92,10 +87,10 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     const float fm_correction = 1.3;
     int w = 0,
         h = fm.height()*lines.length();
-    for(auto line : lines)
+    for (auto line : lines)
         w = std::max(fm.width(line), w);
-    float xF = float(baka->mpv->mpvWidget()->width()-2*pos.x()) / (fm_correction*w);
-    float yF = float(baka->mpv->mpvWidget()->height()-2*pos.y()) / h;
+    float xF = float(baka->window->ui->mpvContainer->width()-2*pos.x()) / (fm_correction*w);
+    float yF = float(baka->window->ui->mpvContainer->height()-2*pos.y()) / h;
     font.setPointSizeF(std::min(font.pointSizeF()*std::min(xF, yF), font.pointSizeF()));
 
     fm = QFontMetrics(font);
@@ -103,8 +98,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     w = 0;
     QPainterPath path(QPoint(0, 0));
     QPoint p = QPoint(0, h);
-    for(auto line : lines)
-    {
+    for (auto line : lines) {
         path.addText(p, font, line);
         w = std::max(int(fm_correction*path.currentPosition().x()), w);
         p += QPoint(0, h);
@@ -129,7 +123,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
         0, canvas->width(), canvas->height());
 
     // add over mpv as label
-    QLabel *label = new QLabel(baka->mpv->mpvWidget());
+    QLabel *label = new QLabel(baka->window->ui->mpvContainer);
     label->setStyleSheet("background-color:rgb(0,0,0,0);background-image:url();");
     label->setGeometry(pos.x(),
                        pos.y(),
@@ -139,17 +133,16 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     label->show();
 
     QTimer *timer;
-    if(duration == 0)
+    if (duration == 0)
         timer = nullptr;
-    else
-    {
+    else {
         timer = new QTimer(this);
         timer->start(duration);
         connect(timer, &QTimer::timeout, // on timeout
                 [=] { remove(id); });
     }
 
-    if(overlays.find(id) != overlays.end())
+    if (overlays.find(id) != overlays.end())
         delete overlays[id];
     overlays[id] = new Overlay(label, canvas, timer, this);
     overlay_mutex.unlock();
@@ -159,8 +152,7 @@ void OverlayHandler::remove(int id)
 {
     overlay_mutex.lock();
     baka->mpv->RemoveOverlay(id);
-    if(overlays.find(id) != overlays.end())
-    {
+    if (overlays.find(id) != overlays.end()) {
         delete overlays[id];
         overlays.remove(id);
     }

@@ -23,7 +23,7 @@ macx {
     PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
     CONFIG += objective_c
     QT_CONFIG -= no-pkg-config
-    SOURCES += platform/osx.cpp
+    OBJECTIVE_SOURCES += platform/osx.mm widgets/mpvcocoawidget.mm
     ICON = img/logo.icns
     QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
     LIBS += -framework AppKit -framework Foundation -framework OpenGL -framework QuartzCore
@@ -105,7 +105,7 @@ TRANSLATIONS_COMPILED ~= s/\.ts/.qm/g
 CONFIG(embed_translations) {
     # create translations resource file
     system("echo \'<RCC><qresource prefix=\"/\">\' > translations.qrc")
-    for(translation, TRANSLATIONS_COMPILED):system("echo \'<file>$$translation</file>\' >> translations.qrc")
+    for (translation, TRANSLATIONS_COMPILED):system("echo \'<file>$$translation</file>\' >> translations.qrc")
     system("echo \'</qresource></RCC>\'" >> translations.qrc)
 
     # add file to build
@@ -179,12 +179,8 @@ SOURCES += main.cpp\
     ui/updatedialog.cpp \
     ui/keydialog.cpp \
     overlay.cpp \
-    widgets/mpvglwidget.cpp
-
-macx {
-    OBJECTIVE_SOURCES += \
-        widgets/mpvcocoawidget.mm
-}
+    widgets/mpvglwidget.cpp \
+    widgets/onlinewidget.cpp
 
 HEADERS  += \
     bakaengine.h \
@@ -217,7 +213,8 @@ HEADERS  += \
     recent.h \
     widgets/mpvwidget.h \
     widgets/mpvglwidget.h \
-    widgets/mpvcocoawidget.h
+    widgets/mpvcocoawidget.h \
+    widgets/onlinewidget.h
 
 FORMS    += \
     ui/aboutdialog.ui \

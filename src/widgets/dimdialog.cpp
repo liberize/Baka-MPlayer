@@ -16,23 +16,20 @@ DimDialog::DimDialog(MainWindow *window, QWidget *parent) :
     setWindowOpacity(.6);
     setStyleSheet("background-color: black;");
 
-    connect(qApp, &QApplication::focusWindowChanged,
-            [=](QWindow *focusWindow)
-            {
-                // note: focusWindow will be nullptr if anything is clicked outside of our program which is useful
-                // the only other problem is that when dragging by the top handle
-                // it will be 0 thus reverting dim lights, this is a side effect
-                // which will have to stay for now.
-                if(this->isVisible())
-                {
-                    // this may indeed disallow opening menus in dimDesktop but it also corrects
-                    // a glitch caused by the needed AlwaysOnTop state of the window and other dialogs
-                    if(focusWindow == this->windowHandle())
-                        window->activateWindow();
-                    else if(focusWindow != window->windowHandle())
-                        this->close();
-                }
-            });
+    connect(qApp, &QApplication::focusWindowChanged, [=](QWindow *focusWindow) {
+        // note: focusWindow will be nullptr if anything is clicked outside of our program which is useful
+        // the only other problem is that when dragging by the top handle
+        // it will be 0 thus reverting dim lights, this is a side effect
+        // which will have to stay for now.
+        if (this->isVisible()) {
+            // this may indeed disallow opening menus in dimDesktop but it also corrects
+            // a glitch caused by the needed AlwaysOnTop state of the window and other dialogs
+            if (focusWindow == this->windowHandle())
+                window->activateWindow();
+            else if (focusWindow != window->windowHandle())
+                this->close();
+        }
+    });
 }
 
 void DimDialog::show()

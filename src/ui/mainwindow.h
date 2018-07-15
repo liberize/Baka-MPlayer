@@ -28,8 +28,7 @@ class MainWindow;
 class BakaEngine;
 class MpvHandler;
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
 friend class BakaEngine;
     Q_OBJECT
 public:
@@ -47,6 +46,13 @@ public:
     bool getResume()           { return resume; }
     bool getHideAllControls()  { return hideAllControls; }
     bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
+
+    QPointF getControlsCenterPos() { return controlsCenterPos; }
+    void setControlsCenterPos(const QPointF &pos) { controlsCenterPos = pos; updateControlsPos(); }
+    void updateControlsPos();
+    int getSidebarWidth() { return sidebarWidth; }
+    void setSidebarWidth(int width) { sidebarWidth = width; updateSidebarWidth(); }
+    void updateSidebarWidth();
 
     Ui::MainWindow  *ui;
     QImage albumArt;
@@ -74,7 +80,7 @@ protected:
 private slots:
     void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
     void FullScreen(bool fs);                       // makes window fullscreen
-    void ShowPlaylist(bool visible);                // sets the playlist visibility
+    void ShowSidebar(bool visible, bool anim = true, int index = -1);                // sets the playlist visibility
     void UpdateRecentFiles();                       // populate recentFiles menu
     void SetPlayButtonIcon(bool play);
     void SetNextButtonEnabled(bool enable);
@@ -91,27 +97,32 @@ private:
                             *playpause_toolbutton,
                             *next_toolbutton;
 #endif
-    bool            pathChanged,
-                    menuVisible,
-                    firstItem       = false,
-                    init            = false,
-                    playlistState   = false;
-    QTimer          *autohide       = nullptr;
+    bool pathChanged = false;
+    bool menuVisible = true;
+    bool firstItem = false;
+    bool init = false;
+    bool playlistState = false;
+    QTimer *autohide = nullptr;
 
     // variables
     QList<Recent> recent;
     Recent *current = nullptr;
-    QString lang,
-            onTop;
-    int maxRecent;
-    bool hidePopup,
-         remaining,
-         screenshotDialog,
-         debug,
-         gestures,
-         resume,
-         hideAllControls = false;
+    QString lang;
+    QString onTop;
+    int maxRecent = false;
+    bool hidePopup = false;
+    bool remaining = false;
+    bool screenshotDialog = false;
+    bool debug = false;
+    bool gestures = false;
+    bool resume = true;
+    bool hideAllControls = false;
     QHash<QString, QAction*> commandActionMap;
+
+    QPointF controlsCenterPos = QPointF(0.5, 0.2);
+    QPoint controlsMoveStartPos = QPoint(-1, -1);
+    int sidebarWidth = 200;
+    int sidebarResizeStartX = -1;
 
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }

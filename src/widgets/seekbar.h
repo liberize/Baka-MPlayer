@@ -7,8 +7,7 @@
 
 #include "customslider.h"
 
-class SeekBar : public CustomSlider
-{
+class SeekBar : public CustomSlider {
     Q_OBJECT
 public:
     explicit SeekBar(QWidget *parent = 0);

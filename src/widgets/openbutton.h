@@ -4,8 +4,7 @@
 #include <QPushButton>
 #include <QMouseEvent>
 
-class OpenButton : public QPushButton
-{
+class OpenButton : public QPushButton {
     Q_OBJECT
 public:
     explicit OpenButton(QWidget *parent = 0);

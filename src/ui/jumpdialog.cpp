@@ -18,15 +18,12 @@ JumpDialog::JumpDialog(int _maxTime, QWidget *parent) :
     connect(ui->secBox, SIGNAL(valueChanged(int)),
             this, SLOT(validate()));
 
-    if(maxTime > 3600)
+    if (maxTime > 3600)
         ui->hourBox->setFocus();
-    else if(maxTime > 60)
-    {
+    else if (maxTime > 60) {
         ui->hourBox->setEnabled(false);
         ui->minBox->setFocus();
-    }
-    else
-    {
+    } else {
         ui->hourBox->setEnabled(false);
         ui->minBox->setEnabled(false);
         ui->secBox->setFocus();
@@ -41,7 +38,7 @@ JumpDialog::~JumpDialog()
 int JumpDialog::getTime(int maxTime, QWidget *parent)
 {
     JumpDialog dialog(maxTime, parent);
-    if(dialog.exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
         return dialog.time;
     return -1;
 }
@@ -52,13 +49,10 @@ void JumpDialog::validate()
             ui->minBox->value()*60+
             ui->secBox->value();
 
-    if(time < maxTime)
-    {
+    if (time < maxTime) {
         ui->validEntryLabel->setPixmap(QPixmap(":/img/exists.svg"));
         ui->okButton->setEnabled(true);
-    }
-    else
-    {
+    } else {
         ui->validEntryLabel->setPixmap(QPixmap(":/img/not_exists.svg"));
         ui->okButton->setEnabled(false);
     }

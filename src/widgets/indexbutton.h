@@ -5,8 +5,7 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 
-class IndexButton : public QPushButton
-{
+class IndexButton : public QPushButton {
     Q_OBJECT
 public:
     explicit IndexButton(QWidget *parent = 0);

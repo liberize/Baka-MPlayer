@@ -8,6 +8,9 @@
 #include <QUrl>
 // not needed as SetAlwaysOnTop was stubbed for now
 //#include <QWindow>
+#include <QMainWindow>
+
+#import <AppKit/Appkit.h>
 
 namespace Util {
 
@@ -27,17 +30,23 @@ bool DimLightsSupported()
     return true;
 }
 
-void SetAlwaysOnTop(WId wid, bool ontop)
+void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 {
   if (ontop){
     // doesn't work
     /*
-    QWindow *window = QWindow::fromWinId(wid);
+    QWindow *window = QWindow::fromWinId(main->winId());
     window->setFlags(
           Qt::WindowStaysOnTopHint
       );
     */
   }
+}
+
+void SetAspectRatio(QMainWindow *main, int w, int h)
+{
+    NSView *view = (__bridge NSView *)(void *)(main->winId());
+    view.window.contentAspectRatio = NSMakeSize(w, h);
 }
 
 QString SettingsLocation()

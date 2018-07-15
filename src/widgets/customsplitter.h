@@ -3,8 +3,7 @@
 
 #include <QSplitter>
 
-class CustomSplitter : public QSplitter
-{
+class CustomSplitter : public QSplitter {
     Q_OBJECT
 public:
     explicit CustomSplitter(QWidget *parent = 0);

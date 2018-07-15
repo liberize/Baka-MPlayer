@@ -21,8 +21,8 @@ public:
     static int showScreenshotDialog(bool &always, bool &screenshot, MpvHandler *mpv, QWidget *parent = 0);
 private:
     Ui::ScreenshotDialog *ui;
-    bool &always,
-         &screenshot;
+    bool &always;
+    bool &screenshot;
 };
 
 #endif // SCREENSHOTDIALOG_H

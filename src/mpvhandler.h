@@ -18,12 +18,11 @@
 class BakaEngine;
 class MpvWidget;
 
-class MpvHandler : public QObject
-{
+class MpvHandler : public QObject {
 friend class BakaEngine;
     Q_OBJECT
 public:
-    explicit MpvHandler(QObject *parent = 0);
+    explicit MpvHandler(QWidget *container, QObject *parent = 0);
     ~MpvHandler();
 
     void Initialize();
@@ -50,7 +49,7 @@ public:
 
     QString getMediaInfo();
 
-    QWidget *mpvWidget();
+    QWidget *getWidget();
     mpv_render_context *createRenderContext(mpv_render_param *params);
     void destroyRenderContext(mpv_render_context *render);
 
@@ -149,7 +148,7 @@ private slots:
     void setAid(int i)                      { emit aidChanged(aid = i); }
     void setSid(int i)                      { emit sidChanged(sid = i); }
     void setSubtitleVisibility(bool b)      { emit subtitleVisibilityChanged(subtitleVisibility = b); }
-    void setMute(bool b)                    { if(mute != b) emit muteChanged(mute = b); }
+    void setMute(bool b)                    { if (mute != b) emit muteChanged(mute = b); }
 
 signals:
     void playlistChanged(const QStringList&);
@@ -188,28 +187,28 @@ private:
     // variables
     Mpv::PlayState playState = Mpv::Idle;
     Mpv::FileInfo fileInfo;
-    QString     file,
-                path,
-                screenshotFormat,
-                screenshotTemplate,
-                screenshotDir,
-                suffix,
-                vo,
-                msgLevel;
-    double      speed = 1;
-    int         time = 0,
-                lastTime = 0,
-                volume = 100,
-                index = 0,
-                vid,
-                aid,
-                sid;
-    bool        init = false,
-                playlistVisible = false,
-                subtitleVisibility = true,
-                mute = false;
-    int         osdWidth,
-                osdHeight;
+    QString file;
+    QString path;
+    QString screenshotFormat;
+    QString screenshotTemplate;
+    QString screenshotDir;
+    QString suffix;
+    QString vo;
+    QString msgLevel;
+    double  speed = 1;
+    int     time = 0;
+    int     lastTime = 0;
+    int     volume = 100;
+    int     index = 0;
+    int     vid;
+    int     aid;
+    int     sid;
+    bool    init = false;
+    bool    playlistVisible = false;
+    bool    subtitleVisibility = true;
+    bool    mute = false;
+    int     osdWidth;
+    int     osdHeight;
 };
 
 #endif // MPVHANDLER_H

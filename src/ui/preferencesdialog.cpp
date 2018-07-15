@@ -23,11 +23,11 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     PopulateLangs();
 
     QString ontop = baka->window->getOnTop();
-    if(ontop == "never")
+    if (ontop == "never")
         ui->neverRadioButton->setChecked(true);
-    else if(ontop == "playing")
+    else if (ontop == "playing")
         ui->playingRadioButton->setChecked(true);
-    else if(ontop == "always")
+    else if (ontop == "always")
         ui->alwaysRadioButton->setChecked(true);
     ui->resumeCheckBox->setChecked(baka->window->getResume());
     ui->groupBox_2->setChecked(baka->sysTrayIcon->isVisible());
@@ -48,72 +48,57 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     saved = baka->input;
     PopulateShortcuts();
 
-    connect(ui->changeButton, &QPushButton::clicked,
-            [=]
-            {
-                QString dir = QFileDialog::getExistingDirectory(this, tr("Choose screenshot directory"), screenshotDir);
-                if(dir != QString())
-                    screenshotDir = dir;
-            });
+    connect(ui->changeButton, &QPushButton::clicked, [=] {
+        QString dir = QFileDialog::getExistingDirectory(this, tr("Choose screenshot directory"), screenshotDir);
+        if (dir != QString())
+            screenshotDir = dir;
+    });
 
-    connect(ui->addKeyButton, &QPushButton::clicked,
-            [=]
-            {
-                SelectKey(true);
-            });
+    connect(ui->addKeyButton, &QPushButton::clicked, [=] {
+        SelectKey(true);
+    });
 
-    connect(ui->editKeyButton, &QPushButton::clicked,
-            [=]
-            {
-                int i = ui->infoWidget->currentRow();
-                if(i == -1)
-                    return;
+    connect(ui->editKeyButton, &QPushButton::clicked, [=] {
+        int i = ui->infoWidget->currentRow();
+        if (i == -1)
+            return;
 
-                SelectKey(false,
-                    {ui->infoWidget->item(i, 0)->text(),
-                    {ui->infoWidget->item(i, 1)->text(),
-                     ui->infoWidget->item(i, 2)->text()}});
-            });
+        SelectKey(false,
+            {ui->infoWidget->item(i, 0)->text(),
+            {ui->infoWidget->item(i, 1)->text(),
+             ui->infoWidget->item(i, 2)->text()}});
+    });
 
-    connect(ui->resetKeyButton, &QPushButton::clicked,
-            [=]
-            {
-                if(QMessageBox::question(this, tr("Reset All Key Bindings?"), tr("Are you sure you want to reset all shortcut keys to its original bindings?")) == QMessageBox::Yes)
-                {
-                    baka->input = baka->default_input;
-                    while(numberOfShortcuts > 0)
-                        RemoveRow(numberOfShortcuts-1);
-                    PopulateShortcuts();
-                }
-            });
+    connect(ui->resetKeyButton, &QPushButton::clicked, [=] {
+        if (QMessageBox::question(this, tr("Reset All Key Bindings?"), tr("Are you sure you want to reset all shortcut keys to its original bindings?")) == QMessageBox::Yes) {
+            baka->input = baka->default_input;
+            while (numberOfShortcuts > 0)
+                RemoveRow(numberOfShortcuts-1);
+            PopulateShortcuts();
+        }
+    });
 
-    connect(ui->removeKeyButton, &QPushButton::clicked,
-            [=]
-            {
-                int row = ui->infoWidget->currentRow();
-                if(row == -1)
-                    return;
+    connect(ui->removeKeyButton, &QPushButton::clicked, [=] {
+        int row = ui->infoWidget->currentRow();
+        if (row == -1)
+            return;
 
-                baka->input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
-                RemoveRow(row);
-            });
+        baka->input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
+        RemoveRow(row);
+    });
 
-    connect(ui->infoWidget, &QTableWidget::currentCellChanged,
-            [=](int r,int,int,int)
-            {
-                ui->editKeyButton->setEnabled(r != -1);
-                ui->removeKeyButton->setEnabled(r != -1);
-            });
+    connect(ui->infoWidget, &QTableWidget::currentCellChanged, [=](int r,int,int,int) {
+        ui->editKeyButton->setEnabled(r != -1);
+        ui->removeKeyButton->setEnabled(r != -1);
+    });
 
-    connect(ui->infoWidget, &QTableWidget::doubleClicked,
-            [=](const QModelIndex &index)
-            {
-                int i = index.row();
-                SelectKey(false,
-                    {ui->infoWidget->item(i, 0)->text(),
-                    {ui->infoWidget->item(i, 1)->text(),
-                     ui->infoWidget->item(i, 2)->text()}});
-            });
+    connect(ui->infoWidget, &QTableWidget::doubleClicked, [=](const QModelIndex &index) {
+        int i = index.row();
+        SelectKey(false,
+            {ui->infoWidget->item(i, 0)->text(),
+            {ui->infoWidget->item(i, 1)->text(),
+             ui->infoWidget->item(i, 2)->text()}});
+    });
 
     connect(ui->recentCheckBox, SIGNAL(toggled(bool)),
             ui->recentSpinBox, SLOT(setEnabled(bool)));
@@ -127,14 +112,13 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
 PreferencesDialog::~PreferencesDialog()
 {
-    if(result() == QDialog::Accepted)
-    {
+    if (result() == QDialog::Accepted) {
         baka->window->setResume(ui->resumeCheckBox->isChecked());
-        if(ui->neverRadioButton->isChecked())
+        if (ui->neverRadioButton->isChecked())
             baka->window->setOnTop("never");
-        else if(ui->playingRadioButton->isChecked())
+        else if (ui->playingRadioButton->isChecked())
             baka->window->setOnTop("playing");
-        else if(ui->alwaysRadioButton->isChecked())
+        else if (ui->alwaysRadioButton->isChecked())
             baka->window->setOnTop("always");
         baka->sysTrayIcon->setVisible(ui->groupBox_2->isChecked());
         baka->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
@@ -148,8 +132,7 @@ PreferencesDialog::~PreferencesDialog()
         baka->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
         baka->mpv->MsgLevel(ui->msgLvlComboBox->currentText());
         baka->window->MapShortcuts();
-    }
-    else
+    } else
         baka->input = saved;
     delete sortLock;
     delete ui;
@@ -170,8 +153,7 @@ void PreferencesDialog::PopulateLangs()
     flist = root.entryInfoList({"*.qm"}, QDir::Files);
     // add the languages to the combo box
     ui->langComboBox->addItem("auto");
-    for(auto &i : flist)
-    {
+    for (auto &i : flist) {
         QString lang = i.fileName().mid(i.fileName().indexOf("_") + 1); // baka-mplayer_....
         lang.chop(3); // -  .qm
         ui->langComboBox->addItem(lang);
@@ -182,10 +164,9 @@ void PreferencesDialog::PopulateShortcuts()
 {
     sortLock->lock();
     numberOfShortcuts = 0;
-    for(auto iter = baka->input.begin(); iter != baka->input.end(); ++iter)
-    {
+    for (auto iter = baka->input.begin(); iter != baka->input.end(); ++iter) {
         QPair<QString, QString> p = iter.value();
-        if(p.first == QString() || p.second == QString())
+        if (p.first == QString() || p.second == QString())
             continue;
         AddRow(iter.key(), p.first, p.second);
     }
@@ -200,7 +181,7 @@ void PreferencesDialog::AddRow(QString first, QString second, QString third)
     ui->infoWidget->setItem(numberOfShortcuts, 1, new QTableWidgetItem(second));
     ui->infoWidget->setItem(numberOfShortcuts, 2, new QTableWidgetItem(third));
     ++numberOfShortcuts;
-    if(locked)
+    if (locked)
         sortLock->unlock();
 }
 
@@ -210,7 +191,7 @@ void PreferencesDialog::ModifyRow(int row, QString first, QString second, QStrin
     ui->infoWidget->item(row, 0)->setText(first);
     ui->infoWidget->item(row, 1)->setText(second);
     ui->infoWidget->item(row, 2)->setText(third);
-    if(locked)
+    if (locked)
         sortLock->unlock();
 }
 
@@ -222,7 +203,7 @@ void PreferencesDialog::RemoveRow(int row)
     ui->infoWidget->removeCellWidget(row, 2);
     ui->infoWidget->removeRow(row);
     --numberOfShortcuts;
-    if(locked)
+    if (locked)
         sortLock->unlock();
 }
 
@@ -231,48 +212,39 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
     sortLock->lock();
     KeyDialog dialog(this);
     int status = 0;
-    while(status != 2)
-    {
+    while (status != 2) {
         QPair<QString, QPair<QString, QString>> result = dialog.SelectKey(add, init);
-        if(result == QPair<QString, QPair<QString, QString>>()) // cancel
+        if (result == QPair<QString, QPair<QString, QString>>()) // cancel
             break;
-        for(int i = 0; i < numberOfShortcuts; ++i)
-        {
-            if(!add && i == ui->infoWidget->currentRow()) // don't compare selected row if we're changing
+        for (int i = 0; i < numberOfShortcuts; ++i) {
+            if (!add && i == ui->infoWidget->currentRow()) // don't compare selected row if we're changing
                 continue;
-            if(ui->infoWidget->item(i, 0)->text() == result.first)
-            {
-                if(QMessageBox::question(this,
+            if (ui->infoWidget->item(i, 0)->text() == result.first) {
+                if (QMessageBox::question(this,
                        tr("Existing keybinding"),
                        tr("%0 is already being used. Would you like to change its function?").arg(
-                           result.first)) == QMessageBox::Yes)
-                {
+                           result.first)) == QMessageBox::Yes) {
                     baka->input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
                     RemoveRow(i);
                     status = 0;
-                }
-                else
-                {
+                } else {
                     init = result;
                     status = 1;
                 }
                 break;
             }
         }
-        if(status == 0)
-        {
-            if(add) // add
+        if (status == 0) {
+            if (add) // add
                 AddRow(result.first, result.second.first, result.second.second);
-            else // change
-            {
-                if(result.first != init.first)
+            else { // change
+                if (result.first != init.first)
                     baka->input[init.first] = {QString(), QString()};
                 ModifyRow(ui->infoWidget->currentRow(), result.first, result.second.first, result.second.second);
             }
             baka->input[result.first] = result.second;
             status = 2;
-        }
-        else
+        } else
             status = 0;
     }
     sortLock->unlock();

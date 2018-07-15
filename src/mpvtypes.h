@@ -10,13 +10,24 @@
 namespace Mpv
 {
     // filetypes supported by mpv: https://github.com/mpv-player/mpv/blob/master/player/external_files.c
-    const QStringList audio_filetypes = {"*.mp3","*.ogg","*.wav","*.wma","*.m4a","*.aac","*.ac3","*.ape","*.flac","*.ra","*.mka","*.dts","*.opus"},
-                      video_filetypes = {"*.avi","*.divx","*.mpg","*.mpeg","*.m1v","*.m2v","*.mpv","*.dv","*.3gp","*.mov","*.mp4","*.m4v","*.mqv","*.dat","*.vcd","*.ogm","*.ogv","*.asf","*.wmv","*.vob","*.mkv","*.ram","*.flv","*.rm","*.ts","*.rmvb","*.dvr-ms","*.m2t","*.m2ts","*.rec","*.f4v","*.hdmov","*.webm","*.vp8","*.letv","*.hlv","*.mts"},
-                      media_filetypes = audio_filetypes + video_filetypes,
-                      subtitle_filetypes = {"*.sub","*.srt","*.ass","*.ssa","*.smi","*.rt","*.txt","*.mks","*.vtt","*.sup"};
+    const QStringList audio_filetypes = {
+        "*.mp3","*.ogg","*.wav","*.wma","*.m4a","*.aac","*.ac3","*.ape",
+        "*.flac","*.ra","*.mka","*.dts","*.opus"
+    };
+    const QStringList video_filetypes = {
+        "*.avi","*.divx","*.mpg","*.mpeg","*.m1v","*.m2v","*.mpv","*.dv",
+        "*.3gp","*.mov","*.mp4","*.m4v","*.mqv","*.dat","*.vcd","*.ogm",
+        "*.ogv","*.asf","*.wmv","*.vob","*.mkv","*.ram","*.flv","*.rm",
+        "*.ts","*.rmvb","*.dvr-ms","*.m2t","*.m2ts","*.rec","*.f4v","*.hdmov",
+        "*.webm","*.vp8","*.letv","*.hlv","*.mts"
+    };
+    const QStringList media_filetypes = audio_filetypes + video_filetypes;
+    const QStringList subtitle_filetypes = {
+        "*.sub","*.srt","*.ass","*.ssa","*.smi","*.rt","*.txt","*.mks",
+        "*.vtt","*.sup"
+    };
 
-    enum PlayState
-    {
+    enum PlayState {
         // this number scheme is set so we know all playStates greater than 0 mean the video is in play
         Idle = -1,
         Started = 1,
@@ -25,31 +36,25 @@ namespace Mpv
         Paused = 4,
         Stopped = -2
     };
-    struct Chapter
-    {
+    struct Chapter {
         QString title;
         int time;
     };
-    struct Track
-    {
+    struct Track {
         int id;
         QString type;
         int src_id;
         QString title;
         QString lang;
-        unsigned albumart : 1,
-                 _default : 1,
-                 external : 1;
+        unsigned albumart : 1;
+        unsigned _default : 1;
+        unsigned external : 1;
         QString external_filename;
         QString codec;
 
-        bool operator==(const Track &t)
-        {
-            return (id == t.id);
-        }
+        bool operator==(const Track &t) { return (id == t.id); }
     };
-    struct VideoParams
-    {
+    struct VideoParams {
         QString codec;
         int width = 0,
             height = 0,
@@ -57,15 +62,13 @@ namespace Mpv
             dheight = 0;
         double aspect = 0;
     };
-    struct AudioParams
-    {
+    struct AudioParams {
         QString codec;
-        int samplerate,
-            channels;
+        int samplerate;
+        int channels;
     };
 
-    struct FileInfo
-    {
+    struct FileInfo {
         QString media_title;
         int length = 0;
         QMap<QString, QString> metadata;

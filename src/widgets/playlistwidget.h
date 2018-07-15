@@ -5,11 +5,11 @@
 #include <QContextMenuEvent>
 #include <QDropEvent>
 #include <QAction>
+#include <QMouseEvent>
 
 class BakaEngine;
 
-class PlaylistWidget : public QListWidget
-{
+class PlaylistWidget : public QListWidget {
     Q_OBJECT
 public:
     explicit PlaylistWidget(QWidget *parent = 0);
@@ -36,7 +36,11 @@ protected slots:
     void RemoveFromPlaylist(QListWidgetItem *item);
     void DeleteFromDisk(QListWidgetItem *item);
 
+signals:
+    void mouseMoved();
+
 protected:
+    void mouseMoveEvent(QMouseEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
     void dropEvent(QDropEvent *event);
 
@@ -45,9 +49,9 @@ private:
 
     QStringList playlist;
     QString file, suffix;
-    bool newPlaylist,
-         refresh,
-         showAll;
+    bool newPlaylist;
+    bool refresh;
+    bool showAll;
 };
 
 #endif // PLAYLISTWIDGET_H

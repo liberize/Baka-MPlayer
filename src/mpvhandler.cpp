@@ -22,13 +22,13 @@ static void wakeup(void *ctx)
     QCoreApplication::postEvent(mpvhandler, new QEvent(QEvent::User));
 }
 
-MpvHandler::MpvHandler(QObject *parent):
+MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     QObject(parent),
     baka(static_cast<BakaEngine*>(parent))
 {
     // create mpv
     mpv = mpv_create();
-    if(!mpv)
+    if (!mpv)
         throw "Could not create mpv object";
 
     // set mpv options
@@ -52,22 +52,26 @@ MpvHandler::MpvHandler(QObject *parent):
     mpv_set_wakeup_callback(mpv, wakeup, this);
 
 #ifdef Q_OS_DARWIN
-    widget = new MpvCocoaWidget();
+    widget = new MpvCocoaWidget(container);
 #else
-    widget = new MpvGlWidget();
+    widget = new MpvGlWidget(container);
 #endif
     widget->setMpvHandler(this);
+    widget->self()->show();
+
+    QVBoxLayout *layout = new QVBoxLayout(container);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(widget->self());
 }
 
 MpvHandler::~MpvHandler()
 {
-    if (widget)
-    {
+    if (widget) {
         delete widget;
         widget = nullptr;
     }
-    if(mpv)
-    {
+    if (mpv) {
         mpv_terminate_destroy(mpv);
         mpv = nullptr;
     }
@@ -75,11 +79,11 @@ MpvHandler::~MpvHandler()
 
 void MpvHandler::Initialize()
 {
-    if(mpv_initialize(mpv) < 0)
+    if (mpv_initialize(mpv) < 0)
         throw "Could not initialize mpv";
 }
 
-QWidget *MpvHandler::mpvWidget()
+QWidget *MpvHandler::getWidget()
 {
     return widget->self();
 }
@@ -115,11 +119,10 @@ QString MpvHandler::getMediaInfo()
     int vtracks = 0,
         atracks = 0;
 
-    for(auto &track : fileInfo.tracks)
-    {
-        if(track.type == "video")
+    for (auto &track : fileInfo.tracks) {
+        if (track.type == "video")
             ++vtracks;
-        else if(track.type == "audio")
+        else if (track.type == "audio")
             ++atracks;
     }
 
@@ -130,7 +133,7 @@ QString MpvHandler::getMediaInfo()
             inner.arg(tr("File size"), Util::HumanSize(fi.size())) +
             inner.arg(tr("Date created"), fi.created().toString()) +
             inner.arg(tr("Media length"), Util::FormatTime(fileInfo.length, fileInfo.length)) + '\n';
-    if(fileInfo.video_params.codec != QString())
+    if (fileInfo.video_params.codec != QString())
         out += outer.arg(tr("Video (x%0)").arg(QString::number(vtracks)), fileInfo.video_params.codec) +
             inner.arg(tr("Video Output"), QString("%0 (hwdec %1)").arg(current_vo, hwdec_active)) +
             inner.arg(tr("Resolution"), QString("%0 x %1 (%2)").arg(QString::number(fileInfo.video_params.width),
@@ -139,26 +142,24 @@ QString MpvHandler::getMediaInfo()
             inner.arg(tr("FPS"), QString::number(fps)) +
             inner.arg(tr("A/V Sync"), QString::number(avsync)) +
             inner.arg(tr("Bitrate"), tr("%0 kbps").arg(vbitrate/1000)) + '\n';
-    if(fileInfo.audio_params.codec != QString())
+    if (fileInfo.audio_params.codec != QString())
         out += outer.arg(tr("Audio (x%0)").arg(QString::number(atracks)), fileInfo.audio_params.codec) +
             inner.arg(tr("Audio Output"), current_ao) +
             inner.arg(tr("Sample Rate"), QString::number(fileInfo.audio_params.samplerate)) +
             inner.arg(tr("Channels"), QString::number(fileInfo.audio_params.channels)) +
             inner.arg(tr("Bitrate"), tr("%0 kbps").arg(abitrate)) + '\n';
 
-    if(fileInfo.chapters.length() > 0)
-    {
+    if (fileInfo.chapters.length() > 0) {
         out += outer.arg(tr("Chapters"), QString());
         int n = 1;
-        for(auto &chapter : fileInfo.chapters)
+        for (auto &chapter : fileInfo.chapters)
             out += inner.arg(QString::number(n++), chapter.title);
         out += '\n';
     }
 
-    if(fileInfo.metadata.size() > 0)
-    {
+    if (fileInfo.metadata.size() > 0) {
         out += outer.arg(tr("Metadata"), QString());
-        for(auto data = fileInfo.metadata.begin(); data != fileInfo.metadata.end(); ++data)
+        for (auto data = fileInfo.metadata.begin(); data != fileInfo.metadata.end(); ++data)
             out += inner.arg(data.key(), *data);
         out += '\n';
     }
@@ -168,70 +169,48 @@ QString MpvHandler::getMediaInfo()
 
 bool MpvHandler::event(QEvent *event)
 {
-    if(event->type() == QEvent::User)
-    {
-        while(mpv)
-        {
+    if (event->type() == QEvent::User) {
+        while (mpv) {
             mpv_event *event = mpv_wait_event(mpv, 0);
-            if(event == nullptr ||
-               event->event_id == MPV_EVENT_NONE)
-            {
+            if (event == nullptr ||
+               event->event_id == MPV_EVENT_NONE) {
                 break;
             }
             HandleErrorCode(event->error);
-            switch (event->event_id)
-            {
+            switch (event->event_id) {
             case MPV_EVENT_PROPERTY_CHANGE:
             {
                 mpv_event_property *prop = (mpv_event_property*)event->data;
-                if(QString(prop->name) == "playback-time") // playback-time does the same thing as time-pos but works for streaming media
-                {
-                    if(prop->format == MPV_FORMAT_DOUBLE)
-                    {
+                if (QString(prop->name) == "playback-time") {   // playback-time does the same thing as time-pos but works for streaming media
+                    if (prop->format == MPV_FORMAT_DOUBLE) {
                         setTime((int)*(double*)prop->data);
                         lastTime = time;
                     }
-                }
-                else if(QString(prop->name) == "ao-volume")
-                {
-                    if(prop->format == MPV_FORMAT_DOUBLE)
+                } else if (QString(prop->name) == "ao-volume") {
+                    if (prop->format == MPV_FORMAT_DOUBLE)
                         setVolume((int)*(double*)prop->data);
-                }
-                else if(QString(prop->name) == "sid")
-                {
-                    if(prop->format == MPV_FORMAT_INT64)
+                } else if (QString(prop->name) == "sid") {
+                    if (prop->format == MPV_FORMAT_INT64)
                         setSid(*(int*)prop->data);
-                }
-                else if(QString(prop->name) == "aid")
-                {
-                    if(prop->format == MPV_FORMAT_INT64)
+                } else if (QString(prop->name) == "aid") {
+                    if (prop->format == MPV_FORMAT_INT64)
                         setAid(*(int*)prop->data);
-                }
-                else if(QString(prop->name) == "sub-visibility")
-                {
-                    if(prop->format == MPV_FORMAT_FLAG)
+                } else if (QString(prop->name) == "sub-visibility") {
+                    if (prop->format == MPV_FORMAT_FLAG)
                         setSubtitleVisibility((bool)*(unsigned*)prop->data);
-                }
-                else if(QString(prop->name) == "ao-mute")
-                {
-                    if(prop->format == MPV_FORMAT_FLAG)
+                } else if (QString(prop->name) == "ao-mute") {
+                    if (prop->format == MPV_FORMAT_FLAG)
                         setMute((bool)*(unsigned*)prop->data);
-                }
-                else if(QString(prop->name) == "core-idle")
-                {
-                    if(prop->format == MPV_FORMAT_FLAG)
-                    {
-                        if((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
+                } else if (QString(prop->name) == "core-idle") {
+                    if (prop->format == MPV_FORMAT_FLAG) {
+                        if ((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
                             ShowText(tr("Buffering..."), 0);
                         else
                             ShowText(QString(), 0);
                     }
-                }
-                else if(QString(prop->name) == "paused-for-cache")
-                {
-                    if(prop->format == MPV_FORMAT_FLAG)
-                    {
-                        if((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
+                } else if (QString(prop->name) == "paused-for-cache") {
+                    if (prop->format == MPV_FORMAT_FLAG) {
+                        if ((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
                             ShowText(tr("Your network is slow or stuck, please wait a bit"), 0);
                         else
                             ShowText(QString(), 0);
@@ -260,7 +239,7 @@ bool MpvHandler::event(QEvent *event)
                 ShowText(QString(), 0);
                 break;
             case MPV_EVENT_END_FILE:
-                if(playState == Mpv::Loaded)
+                if (playState == Mpv::Loaded)
                     ShowText(tr("File couldn't be opened"));
                 setPlayState(Mpv::Stopped);
                 break;
@@ -270,7 +249,7 @@ bool MpvHandler::event(QEvent *event)
             case MPV_EVENT_LOG_MESSAGE:
             {
                 mpv_event_log_message *message = static_cast<mpv_event_log_message*>(event->data);
-                if(message != nullptr)
+                if (message != nullptr)
                     emit messageSignal(message->text);
                 break;
             }
@@ -317,7 +296,7 @@ void MpvHandler::RemoveOverlay(int id)
 
 bool MpvHandler::FileExists(QString f)
 {
-    if(Util::IsValidUrl(f)) // web url
+    if (Util::IsValidUrl(f)) // web url
         return true;
     return QFile(f).exists();
 }
@@ -329,34 +308,24 @@ void MpvHandler::LoadFile(QString f)
 
 QString MpvHandler::LoadPlaylist(QString f)
 {
-    if(f == QString()) // ignore empty file name
+    if (f == QString()) // ignore empty file name
         return QString();
 
-    if(f == "-")
-    {
+    if (f == "-") {
         setPath("");
         setPlaylist({f});
-    }
-    else if(Util::IsValidUrl(f)) // web url
-    {
+    } else if (Util::IsValidUrl(f)) { // web url
         setPath("");
         setPlaylist({f});
-    }
-    else // local file
-    {
+    } else { // local file
         QFileInfo fi(f);
-        if(!fi.exists()) // file doesn't exist
-        {
+        if (!fi.exists()) { // file doesn't exist
             ShowText(tr("File does not exist")); // tell the user
             return QString(); // don't do anything more
-        }
-        else if(fi.isDir()) // if directory
-        {
+        } else if (fi.isDir()) { // if directory
             setPath(QDir::toNativeSeparators(fi.absoluteFilePath()+"/")); // set new path
             return PopulatePlaylist();
-        }
-        else if(fi.isFile()) // if file
-        {
+        } else if (fi.isFile()) { // if file
             setPath(QDir::toNativeSeparators(fi.absolutePath()+"/")); // set new path
             PopulatePlaylist();
             return fi.fileName();
@@ -367,25 +336,19 @@ QString MpvHandler::LoadPlaylist(QString f)
 
 bool MpvHandler::PlayFile(QString f)
 {
-    if(f == QString()) // ignore if file doesn't exist
+    if (f == QString()) // ignore if file doesn't exist
         return false;
 
-    if(path == QString()) // web url
-    {
+    if (path == QString()) { // web url
         OpenFile(f);
         setFile(f);
-    }
-    else
-    {
+    } else {
         QFile qf(path+f);
-        if(qf.exists())
-        {
+        if (qf.exists()) {
             OpenFile(path+f);
             setFile(f);
             Play();
-        }
-        else
-        {
+        } else {
             ShowText(tr("File no longer exists")); // tell the user
             return false;
         }
@@ -395,8 +358,7 @@ bool MpvHandler::PlayFile(QString f)
 
 void MpvHandler::Play()
 {
-    if(playState > 0 && mpv)
-    {
+    if (playState > 0 && mpv) {
         int f = 0;
         mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "pause", MPV_FORMAT_FLAG, &f);
     }
@@ -404,8 +366,7 @@ void MpvHandler::Play()
 
 void MpvHandler::Pause()
 {
-    if(playState > 0 && mpv)
-    {
+    if (playState > 0 && mpv) {
         int f = 1;
         mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "pause", MPV_FORMAT_FLAG, &f);
     }
@@ -419,10 +380,9 @@ void MpvHandler::Stop()
 
 void MpvHandler::PlayPause(QString fileIfStopped)
 {
-    if(playState < 0) // not playing, play plays the selected playlist file
+    if (playState < 0) // not playing, play plays the selected playlist file
         PlayFile(fileIfStopped);
-    else
-    {
+    else {
         const char *args[] = {"cycle", "pause", NULL};
         AsyncCommand(args);
     }
@@ -437,13 +397,10 @@ void MpvHandler::Restart()
 void MpvHandler::Rewind()
 {
     // if user presses rewind button twice within 3 seconds, stop video
-    if(time < 3)
-    {
+    if (time < 3) {
         Stop();
-    }
-    else
-    {
-        if(playState == Mpv::Playing)
+    } else {
+        if (playState == Mpv::Playing)
             Restart();
         else
             Stop();
@@ -452,43 +409,31 @@ void MpvHandler::Rewind()
 
 void MpvHandler::Mute(bool m)
 {
-    if(playState > 0)
-    {
+    if (playState > 0) {
         const char *args[] = {"set", "ao-mute", m ? "yes" : "no", NULL};
         AsyncCommand(args);
-    }
-    else
+    } else
         setMute(m);
 }
 
 void MpvHandler::Seek(int pos, bool relative, bool osd)
 {
-    if(playState > 0)
-    {
-        if(relative)
-        {
+    if (playState > 0) {
+        if (relative) {
             const QByteArray tmp = (((pos >= 0) ? "+" : QString())+QString::number(pos)).toUtf8();
-            if(osd)
-            {
+            if (osd) {
                 const char *args[] = {"osd-msg", "seek", tmp.constData(), NULL};
                 AsyncCommand(args);
-            }
-            else
-            {
+            } else {
                 const char *args[] = {"seek", tmp.constData(), NULL};
                 AsyncCommand(args);
             }
-        }
-        else
-        {
+        } else {
             const QByteArray tmp = QString::number(pos).toUtf8();
-            if(osd)
-            {
+            if (osd) {
                 const char *args[] = {"osd-msg", "seek", tmp.constData(), "absolute", NULL};
                 AsyncCommand(args);
-            }
-            else
-            {
+            } else {
                 const char *args[] = {"seek", tmp.constData(), "absolute", NULL};
                 AsyncCommand(args);
             }
@@ -537,19 +482,16 @@ void MpvHandler::PreviousChapter()
 
 void MpvHandler::Volume(int level, bool osd)
 {
-    if(level > 100) level = 100;
-    else if(level < 0) level = 0;
+    if (level > 100) level = 100;
+    else if (level < 0) level = 0;
 
     double v = level;
 
-    if(playState > 0)
-    {
+    if (playState > 0) {
         mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "ao-volume", MPV_FORMAT_DOUBLE, &v);
-        if(osd)
+        if (osd)
             ShowText(tr("Volume: %0%").arg(QString::number(level)));
-    }
-    else
-    {
+    } else {
         mpv_set_option(mpv, "volume", MPV_FORMAT_DOUBLE, &v);
         setVolume(level);
     }
@@ -557,7 +499,7 @@ void MpvHandler::Volume(int level, bool osd)
 
 void MpvHandler::Speed(double d)
 {
-    if(playState > 0)
+    if (playState > 0)
         mpv_set_property_async(mpv, MPV_REPLY_PROPERTY, "speed", MPV_FORMAT_DOUBLE, &d);
     setSpeed(d);
 }
@@ -617,7 +559,7 @@ void MpvHandler::ScreenshotDirectory(QString s)
 
 void MpvHandler::AddSubtitleTrack(QString f)
 {
-    if(f == QString())
+    if (f == QString())
         return;
     const QByteArray tmp = f.toUtf8();
     const char *args[] = {"sub-add", tmp.constData(), NULL};
@@ -626,7 +568,7 @@ void MpvHandler::AddSubtitleTrack(QString f)
     auto old = fileInfo.tracks; // save the current track-list
     LoadTracks(); // load the new track list
     auto current = fileInfo.tracks;
-    for(auto track : old) // remove the old tracks in current
+    for (auto track : old) // remove the old tracks in current
         current.removeOne(track);
     Mpv::Track &track = current.first();
     ShowText(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.external ? "external" : track.lang));
@@ -634,7 +576,7 @@ void MpvHandler::AddSubtitleTrack(QString f)
 
 void MpvHandler::AddAudioTrack(QString f)
 {
-    if(f == QString())
+    if (f == QString())
         return;
     const QByteArray tmp = f.toUtf8();
     const char *args[] = {"audio-add", tmp.constData(), NULL};
@@ -642,7 +584,7 @@ void MpvHandler::AddAudioTrack(QString f)
     auto old = fileInfo.tracks;
     LoadTracks();
     auto current = fileInfo.tracks;
-    for(auto track : old)
+    for (auto track : old)
         current.removeOne(track);
     Mpv::Track &track = current.first();
     ShowText(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.external ? "external" : track.lang));
@@ -669,15 +611,14 @@ void MpvHandler::Deinterlace(bool deinterlace)
 
 void MpvHandler::Interpolate(bool interpolate)
 {
-    if(vo == QString())
+    if (vo == QString())
         vo = mpv_get_property_string(mpv, "current-vo");
     QStringList vos = vo.split(',');
-    for(auto &o : vos)
-    {
+    for (auto &o : vos) {
         int i = o.indexOf(":interpolation");
-        if(interpolate && i == -1)
+        if (interpolate && i == -1)
             o.append(":interpolation");
-        else if(i != -1)
+        else if (i != -1)
             o.remove(i, QString(":interpolation").length());
     }
     setVo(vos.join(','));
@@ -733,63 +674,40 @@ void MpvHandler::LoadTracks()
     fileInfo.tracks.clear();
     mpv_node node;
     mpv_get_property(mpv, "track-list", MPV_FORMAT_NODE, &node);
-    if(node.format == MPV_FORMAT_NODE_ARRAY)
-    {
-        for(int i = 0; i < node.u.list->num; i++)
-        {
-            if(node.u.list->values[i].format == MPV_FORMAT_NODE_MAP)
-            {
+    if (node.format == MPV_FORMAT_NODE_ARRAY) {
+        for (int i = 0; i < node.u.list->num; i++) {
+            if (node.u.list->values[i].format == MPV_FORMAT_NODE_MAP) {
                 Mpv::Track track;
-                for(int n = 0; n < node.u.list->values[i].u.list->num; n++)
-                {
-                    if(QString(node.u.list->values[i].u.list->keys[n]) == "id")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
+                for (int n = 0; n < node.u.list->values[i].u.list->num; n++) {
+                    if (QString(node.u.list->values[i].u.list->keys[n]) == "id") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
                             track.id = node.u.list->values[i].u.list->values[n].u.int64;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "type")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "type") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             track.type = node.u.list->values[i].u.list->values[n].u.string;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "src-id")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "src-id") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
                             track.src_id = node.u.list->values[i].u.list->values[n].u.int64;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "title")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "title") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             track.title = node.u.list->values[i].u.list->values[n].u.string;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "lang")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "lang") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             track.lang = node.u.list->values[i].u.list->values[n].u.string;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "albumart")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "albumart") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
                             track.albumart = node.u.list->values[i].u.list->values[n].u.flag;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "default")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "default") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
                             track._default = node.u.list->values[i].u.list->values[n].u.flag;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "external")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "external") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
                             track.external = node.u.list->values[i].u.list->values[n].u.flag;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "external-filename")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "external-filename") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             track.external_filename = node.u.list->values[i].u.list->values[n].u.string;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "codec")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "codec") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             track.codec = node.u.list->values[i].u.list->values[n].u.string;
                     }
                 }
@@ -806,23 +724,16 @@ void MpvHandler::LoadChapters()
     fileInfo.chapters.clear();
     mpv_node node;
     mpv_get_property(mpv, "chapter-list", MPV_FORMAT_NODE, &node);
-    if(node.format == MPV_FORMAT_NODE_ARRAY)
-    {
-        for(int i = 0; i < node.u.list->num; i++)
-        {
-            if(node.u.list->values[i].format == MPV_FORMAT_NODE_MAP)
-            {
+    if (node.format == MPV_FORMAT_NODE_ARRAY) {
+        for (int i = 0; i < node.u.list->num; i++) {
+            if (node.u.list->values[i].format == MPV_FORMAT_NODE_MAP) {
                 Mpv::Chapter ch;
-                for(int n = 0; n < node.u.list->values[i].u.list->num; n++)
-                {
-                    if(QString(node.u.list->values[i].u.list->keys[n]) == "title")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
+                for (int n = 0; n < node.u.list->values[i].u.list->num; n++) {
+                    if (QString(node.u.list->values[i].u.list->keys[n]) == "title") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                             ch.title = node.u.list->values[i].u.list->values[n].u.string;
-                    }
-                    else if(QString(node.u.list->values[i].u.list->keys[n]) == "time")
-                    {
-                        if(node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_DOUBLE)
+                    } else if (QString(node.u.list->values[i].u.list->keys[n]) == "time") {
+                        if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_DOUBLE)
                             ch.time = (int)node.u.list->values[i].u.list->values[n].u.double_;
                     }
                 }
@@ -851,18 +762,13 @@ void MpvHandler::LoadAudioParams()
     fileInfo.audio_params.codec = mpv_get_property_string(mpv, "audio-codec");
     mpv_node node;
     mpv_get_property(mpv, "audio-params", MPV_FORMAT_NODE, &node);
-    if(node.format == MPV_FORMAT_NODE_MAP)
-    {
-        for(int i = 0; i < node.u.list->num; i++)
-        {
-            if(QString(node.u.list->keys[i]) == "samplerate")
-            {
-                if(node.u.list->values[i].format == MPV_FORMAT_INT64)
+    if (node.format == MPV_FORMAT_NODE_MAP) {
+        for (int i = 0; i < node.u.list->num; i++) {
+            if (QString(node.u.list->keys[i]) == "samplerate") {
+                if (node.u.list->values[i].format == MPV_FORMAT_INT64)
                     fileInfo.audio_params.samplerate = node.u.list->values[i].u.int64;
-            }
-            else if(QString(node.u.list->keys[i]) == "channel-count")
-            {
-                if(node.u.list->values[i].format == MPV_FORMAT_INT64)
+            } else if (QString(node.u.list->keys[i]) == "channel-count") {
+                if (node.u.list->values[i].format == MPV_FORMAT_INT64)
                     fileInfo.audio_params.channels = node.u.list->values[i].u.int64;
             }
         }
@@ -876,9 +782,9 @@ void MpvHandler::LoadMetadata()
     fileInfo.metadata.clear();
     mpv_node node;
     mpv_get_property(mpv, "metadata", MPV_FORMAT_NODE, &node);
-    if(node.format == MPV_FORMAT_NODE_MAP)
-        for(int n = 0; n < node.u.list->num; n++)
-            if(node.u.list->values[n].format == MPV_FORMAT_STRING)
+    if (node.format == MPV_FORMAT_NODE_MAP)
+        for (int n = 0; n < node.u.list->num; n++)
+            if (node.u.list->values[n].format == MPV_FORMAT_STRING)
                 fileInfo.metadata[node.u.list->keys[n]] = node.u.list->values[n].u.string;
 }
 
@@ -893,14 +799,13 @@ void MpvHandler::Command(const QStringList &strlist)
     // convert input string into char array
     int len = strlist.length();
     char **data = new char*[len+1];
-    for(int i = 0; i < len; ++i)
-    {
+    for (int i = 0; i < len; ++i) {
         data[i] = new char[strlist[i].length()+1];
         memcpy(data[i], QByteArray(strlist[i].toUtf8()).begin(), strlist[i].length()+1);
     }
     data[len] = NULL;
     AsyncCommand(const_cast<const char**>(data));
-    for(int i = 0; i < len; ++i)
+    for (int i = 0; i < len; ++i)
         delete [] data[i];
     delete [] data;
 
@@ -926,19 +831,18 @@ void MpvHandler::OpenFile(QString f)
 
 QString MpvHandler::PopulatePlaylist()
 {
-    if(path != "")
-    {
+    if (path != "") {
         QStringList playlist;
         QDir root(path);
         QStringList filter = Mpv::media_filetypes;
-        if(path != QString() && file != QString())
+        if (path != QString() && file != QString())
             filter.append(QString("*.%1").arg(file.split(".").last()));
         QFileInfoList flist;
         flist = root.entryInfoList(filter, QDir::Files);
-        for(auto &i : flist)
+        for (auto &i : flist)
             playlist.push_back(i.fileName()); // add files to the list
         setPlaylist(playlist);
-        if(playlist.empty())
+        if (playlist.empty())
             return QString();
         return playlist.first();
     }
@@ -964,9 +868,9 @@ void MpvHandler::Command(const char *args[])
 
 void MpvHandler::HandleErrorCode(int error_code)
 {
-    if(error_code >= 0)
+    if (error_code >= 0)
         return;
     QString error = mpv_error_string(error_code);
-    if(error != QString())
+    if (error != QString())
         emit messageSignal(error+"\n");
 }

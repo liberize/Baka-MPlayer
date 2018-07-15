@@ -7,12 +7,10 @@ CustomLabel::CustomLabel(QWidget *parent) :
 
 void CustomLabel::mousePressEvent(QMouseEvent *event)
 {
-    if(isEnabled() && event->button() == Qt::LeftButton)
-    {
+    if (isEnabled() && event->button() == Qt::LeftButton) {
         emit clicked();
         event->accept();
-    }
-    else {
+    } else {
         QLabel::mousePressEvent(event);
     }
 }

@@ -7,8 +7,7 @@ namespace Ui {
 class JumpDialog;
 }
 
-class JumpDialog : public QDialog
-{
+class JumpDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -23,8 +22,8 @@ private slots:
 private:
     Ui::JumpDialog *ui;
 
-    int time,
-        maxTime;
+    int time;
+    int maxTime;
 };
 
 #endif // JUMPDIALOG_H

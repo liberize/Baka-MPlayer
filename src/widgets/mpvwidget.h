@@ -4,8 +4,7 @@
 class QWidget;
 class MpvHandler;
 
-class MpvWidget
-{
+class MpvWidget {
 public:
     virtual ~MpvWidget() {}
     virtual QWidget *self() = 0;

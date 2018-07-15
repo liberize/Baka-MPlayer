@@ -4,8 +4,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 
-class CustomLabel : public QLabel
-{
+class CustomLabel : public QLabel {
     Q_OBJECT
 public:
     explicit CustomLabel(QWidget *parent = 0);

@@ -4,8 +4,7 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 
-class CustomLineEdit : public QLineEdit
-{
+class CustomLineEdit : public QLineEdit {
     Q_OBJECT
 public:
     explicit CustomLineEdit(QWidget *parent = 0);

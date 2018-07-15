@@ -16,16 +16,13 @@ Settings::~Settings()
 void Settings::Load()
 {
     QFile f(file);
-    if(f.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QString l = f.readLine();
         f.close();
-        if(l.startsWith("{"))
-        {
-            if(f.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (l.startsWith("{")) {
+            if (f.open(QIODevice::ReadOnly | QIODevice::Text))
                 document = QJsonDocument::fromJson(f.readAll());
-        }
-        else
+        } else
             LoadIni();
     }
 }
@@ -33,8 +30,7 @@ void Settings::Load()
 void Settings::LoadIni()
 {
     QFile f(file);
-    if(f.open(QFile::ReadOnly | QIODevice::Text))
-    {
+    if (f.open(QFile::ReadOnly | QIODevice::Text)) {
         QTextStream fin(&f);
         fin.setCodec("UTF-8");
         QString line;
@@ -42,18 +38,14 @@ void Settings::LoadIni()
         QString group;
         QJsonObject group_obj,
                     root = getRoot();
-        do
-        {
+        do {
             line = fin.readLine().trimmed();
-            if(line.startsWith('[') && line.endsWith(']')) // group
-            {
-                if(group != QString())
+            if (line.startsWith('[') && line.endsWith(']')) { // group
+                if (group != QString())
                     root[group] = group_obj;
                 group = line.mid(1, line.length()-2); // [...] <- get ...
                 group_obj = QJsonObject();
-            }
-            else if((i = ParseLine(line)) != -1) // foo=bar
-            {
+            }  else if ((i = ParseLine(line)) != -1) { // foo=bar
                 QString key = FixKeyOnLoad(line.left(i)),
                         val = line.mid(i+1);
                 bool    b = (val == "true" || val == "false");
@@ -61,28 +53,26 @@ void Settings::LoadIni()
                 int     ival = val.toInt(&iok);
                 bool    dok;
                 double  dval = val.toDouble(&dok);
-                if(group == "baka-mplayer")
+                if (group == "baka-mplayer")
                     root[key] = b ? QJsonValue(val=="true") : (iok ? (dok ? QJsonValue(dval) : QJsonValue(ival)) : QJsonValue(val));
                 else
                     group_obj[key] = b ? QJsonValue(val=="true") : (iok ? (dok ? QJsonValue(dval) : QJsonValue(ival)) : QJsonValue(val));
             }
-        } while(!line.isNull());
+        } while (!line.isNull());
         f.close();
 
-        if(group != QString())
+        if (group != QString())
             root[group] = group_obj;
 
         // remove excess baka-mplayer group
         root.remove("baka-mplayer");
 
         // fix input
-        if(root.find("input") != root.end())
-        {
+        if (root.find("input") != root.end()) {
             QJsonObject input_obj = root["input"].toObject();
-            for(auto in : input_obj)
-            {
+            for (auto in : input_obj) {
                 QJsonArray opts;
-                for(auto &o : in.toString().split('#'))
+                for (auto &o : in.toString().split('#'))
                     opts.append(o.trimmed());
                 in = opts;
             }
@@ -90,12 +80,10 @@ void Settings::LoadIni()
         }
 
         // fix recent
-        if(root.find("recent") != root.end())
-        {
+        if (root.find("recent") != root.end()) {
             QStringList recent = SplitQStringList(root["recent"].toString());
             QJsonArray R;
-            for(auto str : recent)
-            {
+            for (auto str : recent) {
                 QJsonObject r;
                 r["path"] = str;
                 R.append(r);
@@ -110,8 +98,7 @@ void Settings::LoadIni()
 void Settings::Save()
 {
     QFile f(file);
-    if(f.open(QFile::WriteOnly | QFile::Truncate | QIODevice::Text))
-    {
+    if (f.open(QFile::WriteOnly | QFile::Truncate | QIODevice::Text)) {
         f.write(document.toJson());
         f.close();
     }
@@ -129,11 +116,10 @@ void Settings::setRoot(QJsonObject root)
 
 int Settings::ParseLine(QString line)
 {
-    for(int i = 0; i < line.length(); ++i)
-    {
-        if(line[i] == '\\')
+    for (int i = 0; i < line.length(); ++i) {
+        if (line[i] == '\\')
             ++i; // skip the next char (escape sequence)
-        else if(line[i] == '=')
+        else if (line[i] == '=')
             return i;
     }
     return -1;
@@ -141,10 +127,9 @@ int Settings::ParseLine(QString line)
 
 QString Settings::FixKeyOnLoad(QString key)
 {
-    for(int i = 0; i < key.length(); ++i)
-    {
+    for (int i = 0; i < key.length(); ++i) {
         // revert escaped characters
-        if(key[i] == '\\')
+        if (key[i] == '\\')
             key.remove(i, 1);
     }
     return key;
@@ -154,26 +139,22 @@ QStringList Settings::SplitQStringList(QString str)
 {
     QStringList list;
     QString entry;
-    for(int i = 0; i < str.length(); ++i)
-    {
+    for (int i = 0; i < str.length(); ++i) {
         // revert escaped characters
-        if(str[i] == '\\' && (str[i+1] == ',' || str[i+1] == '\\')) // treat invalid escape sequences as normal '\'s
+        if (str[i] == '\\' && (str[i+1] == ',' || str[i+1] == '\\')) // treat invalid escape sequences as normal '\'s
             entry += str[++i];
-        else if(str[i] == ',')
-        {
+        else if (str[i] == ',') {
             entry = entry.trimmed();
-            if(entry != QString())
-            {
+            if (entry != QString()) {
                 list.push_back(entry);
                 entry = QString();
             }
-        }
-        else
+        } else
             entry += str[i];
 
     }
     entry = entry.trimmed();
-    if(entry != QString())
+    if (entry != QString())
         list.push_back(entry);
     return list;
 }
