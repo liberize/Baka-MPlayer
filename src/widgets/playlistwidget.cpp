@@ -18,6 +18,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     showAll(true)
 {
     setAttribute(Qt::WA_NoMousePropagation);
+    setIconSize(QSize(12, 12));
 }
 
 void PlaylistWidget::AttachEngine(BakaEngine *baka)
@@ -28,7 +29,7 @@ void PlaylistWidget::AttachEngine(BakaEngine *baka)
         newPlaylist = true;
         if (refresh) {
             Populate();
-            BoldText(file, true);
+            UpdateDisplay(file, true);
             refresh = false;
         }
     });
@@ -39,11 +40,11 @@ void PlaylistWidget::AttachEngine(BakaEngine *baka)
             if (f != QString())
                 suffix = file.split('.').last();
             Populate();
-            BoldText(file, true);
+            UpdateDisplay(file, true);
             newPlaylist = false;
         } else {
-            BoldText(file, false);
-            BoldText(f, true);
+            UpdateDisplay(file, false);
+            UpdateDisplay(f, true);
             file = f;
         }
         SelectIndex(CurrentIndex());
@@ -52,6 +53,12 @@ void PlaylistWidget::AttachEngine(BakaEngine *baka)
     connect(this, &PlaylistWidget::doubleClicked, [=] (const QModelIndex &i) {
         PlayIndex(i.row());
     });
+}
+
+void PlaylistWidget::AddItems(const QStringList &labels)
+{
+    for (const auto &label : labels)
+        addItem(new QListWidgetItem(QIcon(":/img/blank.svg"), label));
 }
 
 void PlaylistWidget::Populate()
@@ -68,7 +75,7 @@ void PlaylistWidget::Populate()
 
     if (showAll == true) {
         clear();
-        addItems(playlist);
+        AddItems(playlist);
     } else {
         // filter by suffix
         QStringList newPlaylist;
@@ -77,7 +84,7 @@ void PlaylistWidget::Populate()
                 newPlaylist.append(*i);
         // load
         clear();
-        addItems(newPlaylist);
+        AddItems(newPlaylist);
     }
     SelectItem(item);
 }
@@ -159,7 +166,7 @@ void PlaylistWidget::RemoveIndex(int index)
         RemoveFromPlaylist(current);
 }
 
-void PlaylistWidget::BoldText(const QString &f, bool state)
+void PlaylistWidget::UpdateDisplay(const QString &f, bool playing)
 {
     auto items = findItems(f, Qt::MatchExactly);
     if (items.empty())
@@ -167,7 +174,13 @@ void PlaylistWidget::BoldText(const QString &f, bool state)
     auto *item = items.first();
     if (item) {
         QFont font = item->font();
-        font.setBold(state);
+        if (playing) {
+            font.setBold(true);
+            item->setIcon(QIcon(":/img/select_current.svg"));
+        } else {
+            font.setBold(false);
+            item->setIcon(QIcon(":/img/blank.svg"));
+        }
         item->setFont(font);
     }
 }
@@ -188,9 +201,9 @@ void PlaylistWidget::Search(const QString &s)
     }
 
     clear();
-    addItems(newPlaylist);
+    AddItems(newPlaylist);
 
-    BoldText(file, true);
+    UpdateDisplay(file, true);
     SelectItem(item);
 }
 
@@ -206,7 +219,7 @@ void PlaylistWidget::ShowAll(bool b)
     showAll = b;
     Populate();
 
-    BoldText(file, true);
+    UpdateDisplay(file, true);
     SelectItem(item);
 }
 
@@ -232,9 +245,9 @@ void PlaylistWidget::Shuffle()
     std::swap(*iter, *newPlaylist.begin());
     // load
     clear();
-    addItems(newPlaylist);
+    AddItems(newPlaylist);
 
-    BoldText(file, true);
+    UpdateDisplay(file, true);
     SelectItem(item);
 }
 
@@ -296,7 +309,7 @@ void PlaylistWidget::DeleteFromDisk(QListWidgetItem *item)
 
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    emit mouseMoved();
+    emit mouseMoved(event);
     QListWidget::mouseMoveEvent(event);
 }
 

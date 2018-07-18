@@ -11,9 +11,11 @@
 #include "bakaengine.h"
 #include "overlayhandler.h"
 #include "util.h"
-#include "widgets/mpvglwidget.h"
-#ifdef Q_OS_DARWIN
+
+#ifdef ENABLE_MPV_COCOA_WIDGET
 #include "widgets/mpvcocoawidget.h"
+#else
+#include "widgets/mpvglwidget.h"
 #endif
 
 static void wakeup(void *ctx)
@@ -51,7 +53,7 @@ MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     // setup callback event handling
     mpv_set_wakeup_callback(mpv, wakeup, this);
 
-#ifdef Q_OS_DARWIN
+#ifdef ENABLE_MPV_COCOA_WIDGET
     widget = new MpvCocoaWidget(container);
 #else
     widget = new MpvGlWidget(container);
@@ -203,10 +205,10 @@ bool MpvHandler::event(QEvent *event)
                         setMute((bool)*(unsigned*)prop->data);
                 } else if (QString(prop->name) == "core-idle") {
                     if (prop->format == MPV_FORMAT_FLAG) {
-                        if ((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
-                            ShowText(tr("Buffering..."), 0);
-                        else
-                            ShowText(QString(), 0);
+//                        if ((bool)*(unsigned*)prop->data && playState == Mpv::Playing)
+//                            ShowText(tr("Buffering..."), 0);
+//                        else
+//                            ShowText(QString(), 0);
                     }
                 } else if (QString(prop->name) == "paused-for-cache") {
                     if (prop->format == MPV_FORMAT_FLAG) {
@@ -233,10 +235,11 @@ bool MpvHandler::event(QEvent *event)
                 SetProperties();
             case MPV_EVENT_UNPAUSE:
                 setPlayState(Mpv::Playing);
+                ShowText(tr("Resume"), 1000);
                 break;
             case MPV_EVENT_PAUSE:
                 setPlayState(Mpv::Paused);
-                ShowText(QString(), 0);
+                ShowText(tr("Pause"), 1000);
                 break;
             case MPV_EVENT_END_FILE:
                 if (playState == Mpv::Loaded)

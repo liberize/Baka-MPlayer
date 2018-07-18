@@ -981,11 +981,11 @@ Information : la valeur doit être comprise entre %0 et %1</translation>
         <translation>&amp;Diminuer de 5 %</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
+        <source>&amp;Increase by 10%</source>
         <translation>&amp;Augmenter de 0.1 %</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
+        <source>&amp;Decrease by 10%</source>
         <translation>&amp;Diminuer de 0.1 %</translation>
     </message>
     <message>

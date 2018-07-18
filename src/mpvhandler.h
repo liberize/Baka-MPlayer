@@ -173,7 +173,6 @@ signals:
     void vidChanged(int);
     void aidChanged(int);
     void sidChanged(int);
-    void debugChanged(bool);
     void subtitleVisibilityChanged(bool);
     void muteChanged(bool);
 

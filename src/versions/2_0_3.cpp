@@ -65,7 +65,6 @@ void BakaEngine::Load2_0_3()
     double controlsCenterY = QJsonValueRef2(root["controlsCenterY"]).toDouble(0.2);
     window->setControlsCenterPos(QPointF(controlsCenterX, controlsCenterY));
 
-    window->setDebug(QJsonValueRef2(root["debug"]).toBool(false));
     //window->ui->hideFilesButton->setChecked(!QJsonValueRef2(root["showAll"]).toBool(true));
     root["showAll"] = true;
     window->setScreenshotDialog(QJsonValueRef2(root["screenshotDialog"]).toBool(true));
@@ -78,7 +77,6 @@ void BakaEngine::Load2_0_3()
     window->setMaxRecent(QJsonValueRef2(root["maxRecent"]).toInt(5));
     window->setGestures(QJsonValueRef2(root["gestures"]).toBool(true));
     window->setResume(QJsonValueRef2(root["resume"]).toBool(true));
-    window->setHideAllControls(QJsonValueRef2(root["hideAllControls"]).toBool(false));
     window->setLang(QJsonValueRef2(root["lang"]).toString("auto"));
 #if defined(Q_OS_WIN)
     QDate last = QDate::fromString(root["lastcheck"].toString()); // convert to date
@@ -135,12 +133,10 @@ void BakaEngine::SaveSettings()
     root["controlsCenterY"] = window->getControlsCenterPos().y();
     root["showAll"] = true; //!window->ui->hideFilesButton->isChecked();
     root["screenshotDialog"] = window->screenshotDialog;
-    root["debug"] = window->debug;
     root["maxRecent"] = window->maxRecent;
     root["lang"] = window->lang;
     root["gestures"] = window->gestures;
     root["resume"] = window->resume;
-    root["hideAllControls"] = window->hideAllControls;
     root["version"] = version;
 
     QJsonArray recent_json;

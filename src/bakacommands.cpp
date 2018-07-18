@@ -212,12 +212,12 @@ void BakaEngine::BakaPlaylist(QStringList &args)
             }
         } else if (args.empty()) {
             if (arg == "remove") {
-                if (window->isPlaylistVisible() && !window->ui->inputLineEdit->hasFocus() && !window->ui->searchBox->hasFocus())
+                if (window->isSidebarVisible() && !window->ui->playlistSearchBox->hasFocus())
                     window->ui->playlistWidget->RemoveIndex(window->ui->playlistWidget->currentRow());
             } else if (arg == "shuffle")
                 window->ui->playlistWidget->Shuffle();
             else if (arg == "toggle")
-                window->ShowSidebar(!window->isPlaylistVisible());
+                window->ShowSidebar(!window->isSidebarVisible());
             else
                 InvalidParameter(arg);
         } else if (arg == "repeat") {
@@ -228,16 +228,19 @@ void BakaEngine::BakaPlaylist(QStringList &args)
                     if (window->ui->action_Off->isChecked()) {
                         window->ui->action_This_File->setChecked(false);
                         window->ui->action_Playlist->setChecked(false);
+                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat_off.svg"));
                     }
                 } else if (arg == "this") {
                     if (window->ui->action_This_File->isChecked()) {
                         window->ui->action_Off->setChecked(false);
                         window->ui->action_Playlist->setChecked(false);
+                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat_one.svg"));
                     }
                 } else if (arg == "playlist") {
                     if (window->ui->action_Playlist->isChecked()) {
                         window->ui->action_Off->setChecked(false);
                         window->ui->action_This_File->setChecked(false);
+                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat.svg"));
                     }
                 } else
                     InvalidParameter(arg);
@@ -287,14 +290,6 @@ void BakaEngine::Dim(bool dim)
         dimDialog->show();
     else
         dimDialog->close();
-}
-
-void BakaEngine::BakaOutput(QStringList &args)
-{
-    if (args.empty())
-        window->setDebug(!window->getDebug());
-    else
-        InvalidParameter(args.join(' '));
 }
 
 void BakaEngine::BakaPreferences(QStringList &args)
@@ -494,39 +489,12 @@ void BakaEngine::BakaFullScreen(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaHideAllControls(QStringList &args)
-{
-    if (args.empty()) {
-        window->HideAllControls(!window->hideAllControls);
-        // this is horribly inefficient, I picked the data structure never expecting
-        //  the need to do an inverse lookup; I personally don't believe it's at all
-        //  necessary to show this message.
-        if (window->hideAllControls) {
-            for (auto i = input.begin(); i != input.end(); ++i) {
-                if (i->first == "hide_all_controls") {
-                    mpv->ShowText(tr("Press %0 to show all controls again").arg(i.key()));
-                    break;
-                }
-            }
-        }
-    } else
-        InvalidParameter(args.join(' '));
-}
-
 void BakaEngine::BakaBoss(QStringList &args)
 {
     if (args.empty()) {
         mpv->Pause();
         window->setWindowState(window->windowState() | Qt::WindowMinimized); // minimize window
     } else
-        InvalidParameter(args.join(' '));
-}
-
-void BakaEngine::BakaClear(QStringList &args)
-{
-    if (args.empty())
-        window->ui->outputTextEdit->setPlainText(QString());
-    else
         InvalidParameter(args.join(' '));
 }
 

@@ -980,11 +980,11 @@ Note: Value must be from %0 - %1</source>
         <translation>Уменьшить на 5%</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
+        <source>&amp;Increase by 10%</source>
         <translation>Увеличить на 0,1%</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
+        <source>&amp;Decrease by 10%</source>
         <translation>Уменьшить на 0,1%</translation>
     </message>
     <message>

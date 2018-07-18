@@ -26,83 +26,70 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
 	font-family: &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #292929;
-	color: whitesmoke;
+	background: #1A1A1A;
+	color: #A5A5A5;
 }
 
 /* QMenuBar and stuff */
 
-QMenuBar,
+QMenuBar {
+  background: #272727;
+}
 QMenuBar::item {
-	background: #292929;
+  color: #FFFFFF;
+  background: transparent;
 }
 QMenuBar::item:selected {
-	background: #515151;
+	background: #0770DD;
 }
 
 QMenu {
-	background: #292929;
-    border: 1px solid #515151;
+  background: #272727;
+}
+QMenu::item {
+  color: #FFFFFF;
+  background: transparent;
 }
 QMenu::item:selected {
-	background: #515151;
- }
+	background: #0770DD;
+}
 QMenu::item:checked {
-	/* distinguish check state for menu item's with images here */
 }
 QMenu::item::disabled {
-	color: #6F6F6F;
+	color: #696969;
 }
-/* QMenu::item::disabled:selected { } */
 QMenu::separator {
-	background: #515151;
-	height: 1px;
+	background: #4A4A4A;
+	height: 2px;
 	margin: 2px 0;
-}
-
-/* QSplitter */
-
-QSplitter::handle,
-#mpvFrame,
-#outputTextEdit,
-#inputLineEdit {
-	background: black;
-}
-
-#outputTextEdit {
-	font: 12px &quot;Courier New&quot;, monospace;
-	border-top: 1px solid #515151;
-}
-
-#inputLineEdit {
-	font: 12px &quot;Courier New&quot;,monospace;
-	border-top: 1px solid #515151;
-	padding: 2px;
-}
-#inputLineEdit:focus {
-	border-color: #008098;
 }
 
 /* Playlist group */
 
-#searchBox {
-	background: #515151;
-	border: 1px solid #515151;
-	font-size: 12px;
-	padding: 4px 2px;
+#playlistSearchBox,
+#onlineSearchBox {
+  color: #A5A5A5;
+	background-color: #515151;
+	border: none;
+	font-size: 13px;
+	padding: 5px 3px;
 }
-#searchBox:focus {
+#playlistSearchBox:focus,
+#onlineSearchBox:focus {
 	border-color: #008098;
 }
 
 /* time labels */
 #durationLabel {
-	font-size: 12px;
+	font-size: 10px;
 }
 #seperatorLabel,
 #remainingLabel {
 	color: gray;
-	font-size: 12px;
+	font-size: 10px;
+}
+#indexLabel {
+  font-size: 11px;
 }
 
 /* playlistWidget */
@@ -111,7 +98,7 @@ QListView {
 	outline: none;
 }
 #playlistWidget::item {
-	background: #292929;
+	background: #1A1A1A;
 	padding: 4px 2px;
 }
 #playlistWidget::item:selected {
@@ -122,14 +109,34 @@ QListView {
 	color: whitesmoke;
 }
 
+#repeatButton,
+#shuffleButton,
+#addButton,
+#refreshButton {
+  padding: 2px;
+  margin: 1px;
+}
+#repeatButton:flat,
+#shuffleButton:flat,
+#addButton:flat,
+#refreshButton:flat {
+    border: none; /* no border for a flat push button */
+}
+#repeatButton:flat:pressed,
+#shuffleButton:flat:pressed,
+#addButton:flat:pressed,
+#refreshButton:flat:pressed {
+  background: #515151;
+  border-radius: 2px;
+}
+
 /* QScrollBar */
 
 QScrollBar:vertical {
-	padding-left: 1px;
-	width: 6px;
+	width: 4px;
 }
 QScrollBar::handle:vertical {
-	background: #008098;
+	background: #767676;
 	border-radius: 2px;
 	min-height: 10px;
 }
@@ -148,11 +155,10 @@ QScrollBar::down-arrow:vertical {
 }
 
 QScrollBar:horizontal {
-	height: 6px;
-	padding-top: 1px;
+	height: 4px;
 }
 QScrollBar::handle:horizontal {
-	background: #008098;
+	background: #767676;
 	border-radius: 2px;
 	min-width: 10px;
 }
@@ -169,8 +175,7 @@ QScrollBar::left-arrow:horizontal,
 QScrollBar::right-arrow:horizontal {
 	background: transparent;
 }
-QToolTip
-{
+QToolTip {
   background-color: #1A1A1A;
   color: #A5A5A5;
 }</string>
@@ -506,7 +511,7 @@ QSlider::handle:horizontal {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="playlistButton">
+        <widget class="QPushButton" name="sidebarButton">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -716,8 +721,8 @@ QSlider::sub-page:horizontal {
      <rect>
       <x>355</x>
       <y>10</y>
-      <width>281</width>
-      <height>301</height>
+      <width>262</width>
+      <height>274</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -727,7 +732,7 @@ QSlider::sub-page:horizontal {
      </sizepolicy>
     </property>
     <property name="styleSheet">
-     <string notr="true">background: #292929;</string>
+     <string notr="true">background: #1A1A1A;</string>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_7">
      <property name="spacing">
@@ -759,12 +764,13 @@ QTabWidget::tab-bar {
 /* Style the tab using the tab sub-control. Note that
     it reads QTabBar _not_ QTabWidget */
 QTabBar::tab {
+  font-size: 13px;
 	color: #A5A5A5;
 	border-style: none;
 	padding-top: 4px;
 	padding-bottom: 4px;
 	min-width: 100px;
-	height: 30px;
+	height: 40px;
 }
 QTabBar::tab:selected {
 	font-weight: bold;
@@ -774,13 +780,13 @@ QTabBar::tab:!selected {
 }</string>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
          <string>PLAYLIST</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -797,24 +803,56 @@ QTabBar::tab:!selected {
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="searchBox">
+          <widget class="CustomLineEdit" name="playlistSearchBox">
            <property name="mouseTracking">
             <bool>false</bool>
            </property>
            <property name="focusPolicy">
             <enum>Qt::ClickFocus</enum>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="styleSheet">
-            <string notr="true">background-color: #515151;
-color: #A5A5A5;
-border: none;
-padding: 3px 1px;</string>
+            <string notr="true">background-color: #515151;</string>
            </property>
            <property name="placeholderText">
             <string>Search Playlist</string>
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="PlaylistWidget" name="playlistWidget">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::DefaultContextMenu</enum>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::InternalMove</enum>
            </property>
           </widget>
          </item>
@@ -837,7 +875,7 @@ padding: 3px 1px;</string>
              <number>0</number>
             </property>
             <item>
-             <widget class="QPushButton" name="currentFileButton">
+             <widget class="QPushButton" name="repeatButton">
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -845,29 +883,42 @@ padding: 3px 1px;</string>
                <enum>Qt::NoFocus</enum>
               </property>
               <property name="toolTip">
-               <string>Select the Current File</string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-	padding: 2px;
-	margin: 1px;
-}
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-QPushButton:flat:pressed {
-	background: #515151;
-	border-radius: 2px;
-}</string>
+               <string>Repeat</string>
               </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
-                <normaloff>:/img/select_current.svg</normaloff>:/img/select_current.svg</iconset>
+                <normaloff>:/img/repeat_off.svg</normaloff>:/img/repeat_off.svg</iconset>
               </property>
               <property name="iconSize">
                <size>
-                <width>12</width>
-                <height>12</height>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="shuffleButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="toolTip">
+               <string>Shuffle Playlist</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../rsclist.qrc">
+                <normaloff>:/img/shuffle.svg</normaloff>:/img/shuffle.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
                </size>
               </property>
               <property name="flat">
@@ -889,13 +940,7 @@ QPushButton:flat:pressed {
              </spacer>
             </item>
             <item>
-             <widget class="CustomLabel" name="indexLabel">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="toolTip">
-               <string>Click to play a specific file by index</string>
-              </property>
+             <widget class="QLabel" name="indexLabel">
               <property name="text">
                <string>0 / 0</string>
               </property>
@@ -921,6 +966,32 @@ QPushButton:flat:pressed {
              </spacer>
             </item>
             <item>
+             <widget class="QPushButton" name="addButton">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="toolTip">
+               <string>Add File to Playlist</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../rsclist.qrc">
+                <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>12</width>
+                <height>12</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="refreshButton">
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
@@ -930,19 +1001,6 @@ QPushButton:flat:pressed {
               </property>
               <property name="toolTip">
                <string>Refresh Playlist</string>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-	padding: 2px;
-	margin: 1px;
-}
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-QPushButton:flat:pressed {
-	background: #515151;
-	border-radius: 2px;
-}</string>
               </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
@@ -960,22 +1018,6 @@ QPushButton:flat:pressed {
              </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="PlaylistWidget" name="playlistWidget">
-           <property name="focusPolicy">
-            <enum>Qt::ClickFocus</enum>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::DefaultContextMenu</enum>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="dragDropMode">
-            <enum>QAbstractItemView::InternalMove</enum>
-           </property>
           </widget>
          </item>
         </layout>
@@ -1001,18 +1043,18 @@ QPushButton:flat:pressed {
           <number>0</number>
          </property>
          <item>
-          <widget class="QLineEdit" name="searchBox_4">
+          <widget class="CustomLineEdit" name="onlineSearchBox">
            <property name="mouseTracking">
             <bool>false</bool>
            </property>
            <property name="focusPolicy">
             <enum>Qt::ClickFocus</enum>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="styleSheet">
-            <string notr="true">background-color: #515151;
-color: #A5A5A5;
-border: none;
-padding: 3px 1px;</string>
+            <string notr="true">background-color: #515151;</string>
            </property>
            <property name="placeholderText">
             <string>Search Online</string>
@@ -1044,81 +1086,6 @@ padding: 3px 1px;</string>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="debugWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>140</y>
-      <width>311</width>
-      <height>120</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #29000000;</string>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPlainTextEdit" name="outputTextEdit">
-       <property name="contextMenuPolicy">
-        <enum>Qt::PreventContextMenu</enum>
-       </property>
-       <property name="acceptDrops">
-        <bool>false</bool>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="undoRedoEnabled">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="CustomLineEdit" name="inputLineEdit">
-       <property name="mouseTracking">
-        <bool>false</bool>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="placeholderText">
-        <string>&gt;</string>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <zorder>mpvContainer</zorder>
-   <zorder>debugWidget</zorder>
-   <zorder>controlsWidget</zorder>
-   <zorder>sidebarWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1157,27 +1124,6 @@ padding: 3px 1px;</string>
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuFit_Window">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Fit &amp;Window</string>
-     </property>
-     <addaction name="action_To_Current_Size"/>
-    </widget>
-    <widget class="QMenu" name="menuAspect_Ratio">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Aspect &amp;Ratio</string>
-     </property>
-     <addaction name="action_Auto_Detect"/>
-     <addaction name="actionForce_4_3"/>
-     <addaction name="actionForce_16_9"/>
-     <addaction name="actionForce_2_35_1"/>
-    </widget>
     <widget class="QMenu" name="menuSubtitle_Track">
      <property name="enabled">
       <bool>false</bool>
@@ -1213,9 +1159,6 @@ padding: 3px 1px;</string>
     <addaction name="action_Full_Screen"/>
     <addaction name="menuTake_Screenshot"/>
     <addaction name="separator"/>
-    <addaction name="menuFit_Window"/>
-    <addaction name="menuAspect_Ratio"/>
-    <addaction name="separator"/>
     <addaction name="actionShow_Subtitles"/>
     <addaction name="menuSubtitle_Track"/>
     <addaction name="menuFont_Si_ze"/>
@@ -1232,10 +1175,6 @@ padding: 3px 1px;</string>
     <widget class="QMenu" name="menuR_epeat">
      <property name="title">
       <string>R&amp;epeat</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../rsclist.qrc">
-       <normaloff>:/img/repeat.svg</normaloff>:/img/repeat.svg</iconset>
      </property>
      <addaction name="action_Off"/>
      <addaction name="separator"/>
@@ -1262,6 +1201,9 @@ padding: 3px 1px;</string>
      </property>
      <addaction name="action_Increase"/>
      <addaction name="action_Decrease"/>
+     <addaction name="separator"/>
+     <addaction name="action_Double_Speed"/>
+     <addaction name="action_Half_Speed"/>
      <addaction name="separator"/>
      <addaction name="action_Reset"/>
     </widget>
@@ -1314,8 +1256,6 @@ padding: 3px 1px;</string>
     <addaction name="action_Show_Playlist"/>
     <addaction name="separator"/>
     <addaction name="action_Dim_Lights"/>
-    <addaction name="actionHide_All_Controls"/>
-    <addaction name="actionShow_D_ebug_Output"/>
     <addaction name="separator"/>
     <addaction name="action_Preferences"/>
    </widget>
@@ -1450,10 +1390,6 @@ padding: 3px 1px;</string>
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="icon">
-    <iconset resource="../rsclist.qrc">
-     <normaloff>:/img/shuffle.svg</normaloff>:/img/shuffle.svg</iconset>
-   </property>
    <property name="text">
     <string>Sh&amp;uffle</string>
    </property>
@@ -1545,16 +1481,6 @@ padding: 3px 1px;</string>
     <string>About &amp;Baka MPlayer</string>
    </property>
   </action>
-  <action name="action_To_Current_Size">
-   <property name="text">
-    <string>To &amp;Current Size</string>
-   </property>
-  </action>
-  <action name="action_Auto_Detect">
-   <property name="text">
-    <string>&amp;Auto Detect</string>
-   </property>
-  </action>
   <action name="action_Add_Subtitle_File">
    <property name="enabled">
     <bool>true</bool>
@@ -1621,14 +1547,6 @@ padding: 3px 1px;</string>
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="actionShow_D_ebug_Output">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show &amp;Command Line</string>
-   </property>
-  </action>
   <action name="action_Increase_Volume">
    <property name="text">
     <string>&amp;Increase by 5%</string>
@@ -1664,12 +1582,22 @@ padding: 3px 1px;</string>
   </action>
   <action name="action_Increase">
    <property name="text">
-    <string>&amp;Increase by 0.1%</string>
+    <string>&amp;Increase by 10%</string>
    </property>
   </action>
   <action name="action_Decrease">
    <property name="text">
-    <string>&amp;Decrease by 0.1%</string>
+    <string>&amp;Decrease by 10%</string>
+   </property>
+  </action>
+  <action name="action_Double_Speed">
+   <property name="text">
+    <string>&amp;Up to 2.0x</string>
+   </property>
+  </action>
+  <action name="action_Half_Speed">
+   <property name="text">
+    <string>&amp;Down to 0.5x</string>
    </property>
   </action>
   <action name="action_Reset">
@@ -1728,26 +1656,6 @@ padding: 3px 1px;</string>
     <string>&amp;Add Audio File...</string>
    </property>
   </action>
-  <action name="actionHide_All_Controls">
-   <property name="text">
-    <string>&amp;Hide All Controls</string>
-   </property>
-  </action>
-  <action name="actionForce_2_35_1">
-   <property name="text">
-    <string>Force &amp;2.35:1</string>
-   </property>
-  </action>
-  <action name="actionForce_16_9">
-   <property name="text">
-    <string>Force 16:&amp;9</string>
-   </property>
-  </action>
-  <action name="actionForce_4_3">
-   <property name="text">
-    <string>Force &amp;4:3</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1764,11 +1672,6 @@ padding: 3px 1px;</string>
    <class>SeekBar</class>
    <extends>QSlider</extends>
    <header>widgets/seekbar.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CustomLabel</class>
-   <extends>QLabel</extends>
-   <header>widgets/customlabel.h</header>
   </customwidget>
   <customwidget>
    <class>PlaylistWidget</class>

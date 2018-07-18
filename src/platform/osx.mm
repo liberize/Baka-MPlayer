@@ -81,4 +81,45 @@ QString MonospaceFont()
     return "Monospace";
 }
 
+#ifdef ENABLE_MPV_COCOA_WIDGET
+
+void SetWantsLayer(QWidget *widget, bool wants)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    view.wantsLayer = wants ? YES : NO;
+}
+
+void SetLayerOpaque(QWidget *widget, bool opaque)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    view.layer.opaque = opaque ? YES : NO;
+}
+
+void SetLayerOpacity(QWidget *widget, double opacity)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    view.layer.opacity = opacity;
+}
+
+void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, double a)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef color = CGColorCreate(colorSpace, (CGFloat[]) {r, g, b, a});
+    view.layer.backgroundColor = color;
+}
+
+void SetLayerCornerRadius(QWidget *widget, double r)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    view.layer.cornerRadius = r;
+}
+
+void SetCanDrawSubviewsIntoLayer(QWidget *widget)
+{
+    NSView *view = (__bridge NSView *)(void *)(widget->winId());
+    view.canDrawSubviewsIntoLayer = YES;
+}
+
+#endif
 }

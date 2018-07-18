@@ -13,6 +13,7 @@
 #include <QHash>
 #include <QAction>
 #include <QRect>
+#include <QPropertyAnimation>
 
 #if defined(Q_OS_WIN)
 #include <QWinThumbnailToolBar>
@@ -41,11 +42,8 @@ public:
     bool getHidePopup()        { return hidePopup; }
     bool getRemaining()        { return remaining; }
     bool getScreenshotDialog() { return screenshotDialog; }
-    bool getDebug()            { return debug; }
     bool getGestures()         { return gestures; }
     bool getResume()           { return resume; }
-    bool getHideAllControls()  { return hideAllControls; }
-    bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
 
     QPointF getControlsCenterPos() { return controlsCenterPos; }
     void setControlsCenterPos(const QPointF &pos) { controlsCenterPos = pos; updateControlsPos(); }
@@ -74,13 +72,13 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
-    void TogglePlaylist();                          // toggles playlist visibility
-    bool isPlaylistVisible();                       // is the playlist visible?
+    void ToggleSidebar();                          // toggles playlist visibility
+    bool isSidebarVisible();                       // is the playlist visible?
 
 private slots:
-    void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
     void FullScreen(bool fs);                       // makes window fullscreen
-    void ShowSidebar(bool visible, bool anim = true, int index = -1);                // sets the playlist visibility
+    void ShowControls(bool visible, bool anim = true);
+    void ShowSidebar(bool visible, bool anim = true, int index = -1);     // sets the playlist visibility
     void UpdateRecentFiles();                       // populate recentFiles menu
     void SetPlayButtonIcon(bool play);
     void SetNextButtonEnabled(bool enable);
@@ -113,16 +111,17 @@ private:
     bool hidePopup = false;
     bool remaining = false;
     bool screenshotDialog = false;
-    bool debug = false;
     bool gestures = false;
     bool resume = true;
-    bool hideAllControls = false;
     QHash<QString, QAction*> commandActionMap;
 
     QPointF controlsCenterPos = QPointF(0.5, 0.2);
     QPoint controlsMoveStartPos = QPoint(-1, -1);
     int sidebarWidth = 200;
     int sidebarResizeStartX = -1;
+#ifdef Q_OS_DARWIN
+    int delayedFullScreen = -1;      // 0: normal, 1: fullscreen
+#endif
 
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }
@@ -131,10 +130,8 @@ public slots:
     void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
     void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
     void setScreenshotDialog(bool b) { emit screenshotDialogChanged(screenshotDialog = b); }
-    void setDebug(bool b)            { emit debugChanged(debug = b); }
     void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
     void setResume(bool b)           { emit resumeChanged(resume = b); }
-    void setHideAllControls(bool b)  { emit hideAllControlsChanged(hideAllControls = b); }
 
 signals:
     void langChanged(QString);
@@ -143,10 +140,8 @@ signals:
     void hidePopupChanged(bool);
     void remainingChanged(bool);
     void screenshotDialogChanged(bool);
-    void debugChanged(bool);
     void gesturesChanged(bool);
     void resumeChanged(bool);
-    void hideAllControlsChanged(bool);
 };
 
 #endif // MAINWINDOW_H

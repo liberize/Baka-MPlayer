@@ -726,12 +726,12 @@
         <translation>볼륨 줄이기 5%(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
-        <translation>자막 크기 키우기 0.1%(&amp;I)</translation>
+        <source>&amp;Increase by 10%</source>
+        <translation>자막 크기 키우기 10%(&amp;I)</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
-        <translation>자막 크기 줄이기 0.1%(&amp;D)</translation>
+        <source>&amp;Decrease by 10%</source>
+        <translation>자막 크기 줄이기 10%(&amp;D)</translation>
     </message>
     <message>
         <source>15&amp;0%</source>

@@ -907,12 +907,12 @@
         <translation>Tùy &amp;chỉnh...</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
+        <source>&amp;Increase by 10%</source>
         <translation>Tăng 0.&amp;1%</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
-        <translation>Giảm &amp;0.1%</translation>
+        <source>&amp;Decrease by 10%</source>
+        <translation>Giảm &amp;10%</translation>
     </message>
     <message>
         <source>&amp;Reset</source>

@@ -968,11 +968,11 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
+        <source>&amp;Increase by 10%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
+        <source>&amp;Decrease by 10%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -898,12 +898,12 @@
         <translation>&amp;პარამეტრები...</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
-        <translation>0.1%-ით &amp;გაზრდა</translation>
+        <source>&amp;Increase by 10%</source>
+        <translation>10%-ით &amp;გაზრდა</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
-        <translation>0.1%-ით &amp;შემცირება</translation>
+        <source>&amp;Decrease by 10%</source>
+        <translation>10%-ით &amp;შემცირება</translation>
     </message>
     <message>
         <source>&amp;Reset</source>

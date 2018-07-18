@@ -27,6 +27,7 @@ macx {
     ICON = img/logo.icns
     QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
     LIBS += -framework AppKit -framework Foundation -framework OpenGL -framework QuartzCore
+    DEFINES += "ENABLE_MPV_COCOA_WIDGET"
 }
 
 unix:!macx {

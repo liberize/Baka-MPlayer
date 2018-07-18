@@ -14,6 +14,7 @@
 @property (nonatomic, assign) MpvHandler *mpvHandler;
 @property (nonatomic, assign) mpv_render_context *mpvRenderContext;
 @property (nonatomic, strong) NSLock *uninitLock;
+@property (nonatomic, assign) std::function<void()> firstDrawCallback;
 
 @end
 
@@ -48,7 +49,7 @@ void mpvUpdateCallback(void *ctx) {
     {
         dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, -1);
         _mpvGLQueue = dispatch_queue_create("com.baka.mpvgl", attr);
-        //self.opaque = YES;
+        self.opaque = YES;
         self.asynchronous = NO;
         self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 
@@ -165,6 +166,8 @@ void mpvUpdateCallback(void *ctx) {
         glClearColor(0, 0, 0, 1);
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT));
         [self initMpv];
+        if (_firstDrawCallback)
+            _firstDrawCallback();
     }
     glFlush();
 
@@ -204,20 +207,20 @@ void mpvUpdateCallback(void *ctx) {
     return self;
 }
 
-//- (BOOL)mouseDownCanMoveWindow {
-//    return YES;
-//}
+- (BOOL)mouseDownCanMoveWindow {
+    return YES;
+}
 
-//- (BOOL)isOpaque {
-//    return YES;
-//}
+- (BOOL)isOpaque {
+    return YES;
+}
 
 - (void)draw:(NSRect)dirtyRect {
 }
 
-//- (BOOL)acceptsFirstMouse:(NSEvent *)event {
-//    return YES;
-//}
+- (BOOL)acceptsFirstMouse:(NSEvent *)event {
+    return YES;
+}
 
 @end
 
@@ -227,6 +230,11 @@ MpvCocoaWidget::MpvCocoaWidget(QWidget *parent) :
     @autoreleasepool {
         VideoView *view = [[VideoView alloc] initWithFrame:NSMakeRect(0, 0, width(), height())];
         setCocoaView(view);
+
+        ViewLayer *layer = (ViewLayer *)view.layer;
+        layer.firstDrawCallback = [=] {
+            emit firstDrawComplete();
+        };
     }
 }
 

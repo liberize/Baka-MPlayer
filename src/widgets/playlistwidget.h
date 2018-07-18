@@ -20,6 +20,7 @@ public slots:
     void Populate();
     void RefreshPlaylist();
 
+    void AddItems(const QStringList &labels);
     void SelectItem(const QString &item);
     QString CurrentItem();
     int CurrentIndex(); // index of the current playing file
@@ -32,12 +33,12 @@ public slots:
     void Shuffle();
 
 protected slots:
-    void BoldText(const QString &f, bool state);
+    void UpdateDisplay(const QString &f, bool playing);
     void RemoveFromPlaylist(QListWidgetItem *item);
     void DeleteFromDisk(QListWidgetItem *item);
 
 signals:
-    void mouseMoved();
+    void mouseMoved(QMouseEvent *event);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

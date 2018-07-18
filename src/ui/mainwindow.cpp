@@ -6,6 +6,7 @@
 #include <QMimeData>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
+#include <QGraphicsOpacityEffect>
 #include <QDebug>
 
 #include "bakaengine.h"
@@ -17,29 +18,55 @@
 #include "inputdialog.h"
 #include "screenshotdialog.h"
 
+#ifdef ENABLE_MPV_COCOA_WIDGET
+#include "widgets/mpvcocoawidget.h"
+#endif
+
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->sidebarWidget->hide();
 
     // initialize managers/handlers
     baka = new BakaEngine(this);
     mpv = baka->mpv;
 
+#ifdef ENABLE_MPV_COCOA_WIDGET
+    Util::SetWantsLayer(ui->controlsWidget, true);
+    Util::SetLayerOpaque(ui->controlsWidget, true);
+    Util::SetLayerCornerRadius(ui->controlsWidget, 5);
+    Util::SetWantsLayer(ui->sidebarWidget, true);
+    Util::SetLayerOpaque(ui->sidebarWidget, true);
+    connect(dynamic_cast<MpvCocoaWidget *>(mpv->getWidget()), &MpvCocoaWidget::firstDrawComplete, [=] {
+        Util::SetCanDrawSubviewsIntoLayer(ui->controlsWidget);
+        Util::SetCanDrawSubviewsIntoLayer(ui->sidebarWidget);
+    });
+#endif
+
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
     ui->actionUpdate_Streaming_Support->setEnabled(false);
 #endif
-    ShowSidebar(false);
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
+
+    ui->playlistSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(12, 12));
+    ui->onlineSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(12, 12));
 
     ui->playlistWidget->AttachEngine(baka);
     ui->onlineWidget->AttachEngine(baka);
 
-    auto fixCursor = [=] {          // fix tab widget intercept MouseMove event
+    auto fixCursor = [=] (QMouseEvent *event) {          // fix tab widget intercept MouseMove event
         if (sidebarResizeStartX < 0)
             unsetCursor();
+        if (cursor().shape() == Qt::BlankCursor)
+            unsetCursor();
+        ShowControls(true);
+        autohide->stop();
+        if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
+                sidebarResizeStartX < 0 && autohide)
+            autohide->start(3000);
     };
     connect(ui->playlistWidget, &PlaylistWidget::mouseMoved, fixCursor);
     connect(ui->onlineWidget, &OnlineWidget::mouseMoved, fixCursor);
@@ -61,10 +88,6 @@ MainWindow::MainWindow(QWidget *parent):
         {"mpv set sub-scale 1", ui->action_Reset_Size},
         {"mpv add sub-scale +0.1", ui->action_Size},
         {"mpv add sub-scale -0.1", ui->actionS_ize},
-        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these baka-commands so we can output messages when they change
-        {"mpv set video-aspect 16:9", ui->actionForce_16_9},
-        {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
-        {"mpv set video-aspect 4:3", ui->actionForce_4_3},
         {"mpv cycle sub-visibility", ui->actionShow_Subtitles},
         {"mpv set time-pos 0", ui->action_Restart},
         {"mpv frame_step", ui->action_Frame_Step},
@@ -77,7 +100,6 @@ MainWindow::MainWindow(QWidget *parent):
         {"add_subtitles", ui->action_Add_Subtitle_File},
         {"add_audio", ui->action_Add_Audio_File},
         {"fullscreen", ui->action_Full_Screen},
-        {"hide_all_controls", ui->actionHide_All_Controls},
         {"jump", ui->action_Jump_to_Time},
         {"media_info", ui->actionMedia_Info},
         {"new", ui->action_New_Player},
@@ -100,8 +122,9 @@ MainWindow::MainWindow(QWidget *parent):
         {"volume -5", ui->action_Decrease_Volume},
         {"speed +0.1", ui->action_Increase},
         {"speed -0.1", ui->action_Decrease},
+        {"speed 2.0", ui->action_Double_Speed},
+        {"speed 0.5", ui->action_Half_Speed},
         {"speed 1.0", ui->action_Reset},
-        {"output", ui->actionShow_D_ebug_Output},
         {"preferences", ui->action_Preferences},
         {"online_help", ui->actionOnline_Help},
         {"update", ui->action_Check_for_Updates},
@@ -176,23 +199,6 @@ MainWindow::MainWindow(QWidget *parent):
         SetRemainingLabels(mpv->getTime());
     });
 
-    connect(this, &MainWindow::debugChanged, [=] (bool b) {
-        ui->actionShow_D_ebug_Output->setChecked(b);
-        ui->debugWidget->setVisible(b);
-        mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
-                                       QCursor::pos(),
-                                       Qt::NoButton,Qt::NoButton,Qt::NoModifier));
-        if (b)
-            ui->inputLineEdit->setFocus();
-    });
-
-    connect(this, &MainWindow::hideAllControlsChanged, [=] (bool b) {
-        HideAllControls(b);
-        blockSignals(true);
-        ui->actionHide_All_Controls->setChecked(b);
-        blockSignals(false);
-    });
-
     connect(baka->sysTrayIcon, &QSystemTrayIcon::activated, [=] (QSystemTrayIcon::ActivationReason reason) {
         if (reason == QSystemTrayIcon::Trigger) {
             if (!hidePopup) {
@@ -210,7 +216,8 @@ MainWindow::MainWindow(QWidget *parent):
 
     connect(autohide, &QTimer::timeout, [=] {  // cursor autohide
         if (ui->mpvContainer->geometry().contains(ui->mpvContainer->mapFromGlobal(cursor().pos())))
-            setCursor(QCursor(Qt::BlankCursor));
+            setCursor(Qt::BlankCursor);
+        ShowControls(false);
         if (autohide)
             autohide->stop();
     });
@@ -347,8 +354,6 @@ MainWindow::MainWindow(QWidget *parent):
                     ui->actionShow_Subtitles->setChecked(false);
                 }
                 ui->menuTake_Screenshot->setEnabled(true);
-                ui->menuFit_Window->setEnabled(true);
-                ui->menuAspect_Ratio->setEnabled(true);
                 ui->action_Frame_Step->setEnabled(true);
                 ui->actionFrame_Back_Step->setEnabled(true);
                 ui->action_Deinterlace->setEnabled(true);
@@ -364,8 +369,6 @@ MainWindow::MainWindow(QWidget *parent):
                 ui->actionShow_Subtitles->setEnabled(false);
                 ui->actionShow_Subtitles->setChecked(false);
                 ui->menuTake_Screenshot->setEnabled(false);
-                ui->menuFit_Window->setEnabled(false);
-                ui->menuAspect_Ratio->setEnabled(false);
                 ui->action_Frame_Step->setEnabled(false);
                 ui->actionFrame_Back_Step->setEnabled(false);
                 ui->action_Deinterlace->setEnabled(false);
@@ -431,7 +434,6 @@ MainWindow::MainWindow(QWidget *parent):
 #if defined(Q_OS_WIN)
                 playpause_toolbutton->setEnabled(true);
 #endif
-                //ui->playlistButton->setEnabled(true);
                 ui->action_Show_Playlist->setEnabled(true);
                 ui->menuAudio_Tracks->setEnabled(true);
                 init = true;
@@ -608,42 +610,35 @@ MainWindow::MainWindow(QWidget *parent):
         mpv->Volume(i, true);
     });
 
-    connect(ui->playlistButton, &QPushButton::clicked, [=] {                // Playback: Clicked the playlist button
-        TogglePlaylist();
+    connect(ui->sidebarButton, &QPushButton::clicked, [=] {                // Playback: Clicked the playlist button
+        ToggleSidebar();
     });
 
-    connect(ui->searchBox, &QLineEdit::textChanged, [=] (QString s) {       // Playlist: Search box
+    connect(ui->playlistSearchBox, &QLineEdit::textChanged, [=] (QString s) {       // Playlist: Search box
         ui->playlistWidget->Search(s);
-    });
-
-    connect(ui->indexLabel, &CustomLabel::clicked, [=] {                    // Playlist: Clicked the indexLabel
-        QString res = InputDialog::getInput(tr("Enter the file number you want to play:\nNote: Value must be from %0 - %1").arg("1", QString::number(ui->playlistWidget->count())),
-                                            tr("Enter File Number"), [this] (QString input) {
-                                                int in = input.toInt();
-                                                if (in >= 1 && in <= ui->playlistWidget->count())
-                                                    return true;
-                                                return false;
-                                            },
-                                            this);
-        if (res != "")
-            ui->playlistWidget->PlayIndex(res.toInt()-1);                   // user index will be 1 greater than actual
     });
 
     connect(ui->playlistWidget, &PlaylistWidget::currentRowChanged, [=] (int) {     // Playlist: Playlist selection changed
         SetIndexLabels(true);
     });
 
-    connect(ui->currentFileButton, &QPushButton::clicked, [=] {                     // Playlist: Select current file button
-        ui->playlistWidget->SelectIndex(ui->playlistWidget->CurrentIndex());
+    connect(ui->repeatButton, &QPushButton::clicked, [=] {
+        if (ui->action_Off->isChecked())
+            ui->action_Playlist->trigger();
+        else if (ui->action_Playlist->isChecked())
+            ui->action_This_File->trigger();
+        else if (ui->action_This_File->isChecked())
+            ui->action_Off->trigger();
+    });
+
+    connect(ui->shuffleButton, &QPushButton::clicked, ui->actionSh_uffle, &QAction::trigger);
+
+    connect(ui->addButton, &QPushButton::clicked, [=] {
+
     });
 
     connect(ui->refreshButton, &QPushButton::clicked, [=] {                         // Playlist: Refresh playlist button
         ui->playlistWidget->RefreshPlaylist();
-    });
-
-    connect(ui->inputLineEdit, &CustomLineEdit::submitted, [=] (QString s) {
-        baka->Command(s);
-        ui->inputLineEdit->setText("");
     });
 
     // add multimedia shortcuts
@@ -805,9 +800,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
 void MainWindow::leaveEvent(QEvent *event)
 {
-    mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
-                                   QCursor::pos(),
-                                   Qt::NoButton,Qt::NoButton,Qt::NoModifier));
+    ShowControls(false);
     QMainWindow::leaveEvent(event);
 }
 
@@ -864,14 +857,14 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                 QRect coldArea(ui->sidebarWidget->pos().x() - 10, ui->sidebarWidget->pos().y(), 10, ui->sidebarWidget->height());
                 if (!coldArea.contains(ui->mpvContainer->mapTo(this, event->pos()))) {
                     if (ui->sidebarWidget->isVisible())
-                        ShowSidebar(false);
+                        ShowSidebar(false, !isFullScreen());
                     if (gestures) {
                         baka->gesture->Begin(GestureHandler::HSEEK_VVOLUME, event->globalPos(), pos());
                         return true;
                     }
                 }
             } else if (event->button() == Qt::RightButton) {
-                if (!isFullScreenMode() && mpv->getPlayState() > 0) {
+                if (!isFullScreen() && mpv->getPlayState() > 0) {
                     mpv->PlayPause(ui->playlistWidget->CurrentItem());
                     return true;
                 }
@@ -879,6 +872,15 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
         }  else if (ev->type() == QEvent::MouseButtonRelease) {
             if (sidebarResizeStartX >= 0)
                 return false;
+#ifdef Q_OS_DARWIN
+            if (delayedFullScreen >= 0) {
+                if (delayedFullScreen)
+                    setWindowState(windowState() | Qt::WindowFullScreen);
+                else
+                    setWindowState(windowState() & ~Qt::WindowFullScreen);
+                delayedFullScreen = -1;
+            }
+#endif
             QMouseEvent *event = static_cast<QMouseEvent*>(ev);
             if (event->button() == Qt::LeftButton) {
                 baka->gesture->End();
@@ -891,22 +893,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
             if (baka->gesture->Process(event->globalPos())) {
                 return false;
             }
-            if (isFullScreenMode()) {
-                setCursor(QCursor(Qt::ArrowCursor)); // show the cursor
-                autohide->stop();
-
-                QRect playbackRect = geometry();
-                playbackRect.setTop(playbackRect.bottom() - 60);
-                bool showPlayback = playbackRect.contains(event->globalPos());
-                ui->controlsWidget->setVisible(showPlayback || ui->outputTextEdit->isVisible());
-
-                QRect playlistRect = geometry();
-                playlistRect.setLeft(playlistRect.right() - qCeil(playlistRect.width()/7.0));
-                bool showPlaylist = playlistRect.contains(event->globalPos());
-                ShowSidebar(showPlaylist);
-
-                if (!(showPlayback || showPlaylist) && autohide)
-                    autohide->start(500);
+        } else if (ev->type() == QEvent::MouseButtonDblClick) {
+            QMouseEvent *event = static_cast<QMouseEvent*>(ev);
+            if (event->button() == Qt::LeftButton) {
+                if (!isFullScreen() && ui->action_Full_Screen->isEnabled())
+                    FullScreen(true);
+                else
+                    FullScreen(false);
             }
         }
     } else if (obj == ui->centralwidget) {
@@ -940,6 +933,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                     sidebarWidth = newWidth;
                 }
             }
+            if (cursor().shape() == Qt::BlankCursor)
+                unsetCursor();
+            ShowControls(true);
+            autohide->stop();
+            if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
+                    sidebarResizeStartX < 0 && autohide)
+                autohide->start(3000);
         } else if (ev->type() == QEvent::Leave) {
             if (ui->sidebarWidget->isVisible())
                 unsetCursor();
@@ -962,10 +962,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     // keyboard shortcuts
     if (!baka->input.empty()) {
         QString key = QKeySequence(event->modifiers()|event->key()).toString();
-
-        // TODO: Add more protection/find a better way to protect edit boxes from executing commands
-        if (focusWidget() == ui->inputLineEdit && key == "Return")
-            return;
+        key.replace("Num+", "");
 
         // Escape exits fullscreen
         if (isFullScreen() && key == "Esc") {
@@ -995,13 +992,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton && ui->mpvContainer->geometry().contains(event->pos())) { // if mouse is in the mpvFrame
-        if (!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
-            FullScreen(true);
-        else // they can leave fullscreen even if it's disabled (eg. video ends while in full screen)
-            FullScreen(false);
-        event->accept();
-    }
     QMainWindow::mouseDoubleClickEvent(event);
 }
 
@@ -1056,56 +1046,30 @@ void MainWindow::SetPlaybackControls(bool enable)
     }
 }
 
-void MainWindow::HideAllControls(bool w, bool s)
-{
-    if (s) {
-        hideAllControls = w;
-        if (isFullScreen())
-            return;
-    }
-    if (w) {
-        if (s || !hideAllControls)
-            playlistState = ui->sidebarWidget->isVisible();
-        ui->controlsWidget->setVisible(false);
-        ui->menubar->setVisible(false);
-        setContextMenuPolicy(Qt::ActionsContextMenu);
-        mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
-                                       QCursor::pos(),
-                                       Qt::NoButton,Qt::NoButton,Qt::NoModifier));
-    } else {
-        if (menuVisible)
-            ui->menubar->setVisible(true);
-        ui->controlsWidget->setVisible(true);
-        setContextMenuPolicy(Qt::NoContextMenu);
-        setCursor(QCursor(Qt::ArrowCursor)); // show cursor
-        autohide->stop();
-        ShowSidebar(playlistState, false);
-    }
-}
-
 void MainWindow::FullScreen(bool fs)
 {
-    if (fs) {
-        if (baka->dimDialog && baka->dimDialog->isVisible())
-            baka->Dim(false);
+    if (fs && baka->dimDialog && baka->dimDialog->isVisible())
+        baka->Dim(false);
+
+    // fix bug: https://bugreports.qt.io/browse/QTBUG-46077
+#ifdef Q_OS_DARWIN
+    delayedFullScreen = fs;
+#else
+    if (fs)
         setWindowState(windowState() | Qt::WindowFullScreen);
-        if (!hideAllControls)
-            HideAllControls(true, false);
-    } else {
+    else
         setWindowState(windowState() & ~Qt::WindowFullScreen);
-        if (!hideAllControls)
-            HideAllControls(false, false);
-    }
+#endif
 }
 
-bool MainWindow::isPlaylistVisible()
+bool MainWindow::isSidebarVisible()
 {
     return ui->sidebarWidget->isVisible();
 }
 
-void MainWindow::TogglePlaylist()
+void MainWindow::ToggleSidebar()
 {
-    ShowSidebar(!isPlaylistVisible());
+    ShowSidebar(!isSidebarVisible(), !isFullScreen());
 }
 
 void MainWindow::ShowSidebar(bool visible, bool anim, int index)
@@ -1121,26 +1085,72 @@ void MainWindow::ShowSidebar(bool visible, bool anim, int index)
         ui->sidebarWidget->show();
         ui->sidebarWidget->setFocus();
         if (anim) {
-            QPropertyAnimation *anim = new QPropertyAnimation(ui->sidebarWidget, "pos");
-            anim->setDuration(100);
-            anim->setStartValue(QPoint(width(), 0));
-            anim->setEndValue(ui->sidebarWidget->pos());
-            anim->start();
+            QPropertyAnimation *a = new QPropertyAnimation(ui->sidebarWidget, "pos");
+            a->setDuration(200);
+            a->setStartValue(QPoint(width(), 0));
+            a->setEndValue(ui->sidebarWidget->pos());
+            a->start(QPropertyAnimation::DeleteWhenStopped);
         }
     } else {
         if (anim) {
-            QPropertyAnimation *anim = new QPropertyAnimation(ui->sidebarWidget, "pos");
-            anim->setDuration(100);
-            anim->setStartValue(ui->sidebarWidget->pos());
-            anim->setEndValue(QPoint(width(), 0));
-            connect(anim, &QAbstractAnimation::finished, [=] {
+            QPropertyAnimation *a = new QPropertyAnimation(ui->sidebarWidget, "pos");
+            a->setDuration(200);
+            a->setStartValue(ui->sidebarWidget->pos());
+            a->setEndValue(QPoint(width(), 0));
+            a->start(QPropertyAnimation::DeleteWhenStopped);
+            connect(a, &QAbstractAnimation::finished, [=] {
                 ui->sidebarWidget->hide();
+                activateWindow();
                 setFocus();
             });
-            anim->start();
         } else {
             ui->sidebarWidget->hide();
+            activateWindow();   // fix mac setFocus bug
             setFocus();
+        }
+    }
+}
+
+void MainWindow::ShowControls(bool visible, bool anim)
+{
+    if (visible == ui->controlsWidget->isVisible())
+        return;
+
+    if (visible) {
+        ui->controlsWidget->show();
+        if (anim) {
+            QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(this);
+            ui->controlsWidget->setGraphicsEffect(e);
+            QPropertyAnimation *a = new QPropertyAnimation(e, "opacity");
+            a->setDuration(200);
+            a->setStartValue(0);
+            a->setEndValue(1);
+            a->start(QPropertyAnimation::DeleteWhenStopped);
+#ifdef ENABLE_MPV_COCOA_WIDGET
+            connect(a, &QVariantAnimation::valueChanged, [=] (const QVariant &value) {
+                Util::SetLayerOpacity(ui->controlsWidget, value.toDouble());
+            });
+#endif
+        }
+    } else {
+        if (anim) {
+            QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(this);
+            ui->controlsWidget->setGraphicsEffect(e);
+            QPropertyAnimation *a = new QPropertyAnimation(e, "opacity");
+            a->setDuration(200);
+            a->setStartValue(1);
+            a->setEndValue(0);
+            a->start(QPropertyAnimation::DeleteWhenStopped);
+            connect(a, &QAbstractAnimation::finished, [=] {
+                ui->controlsWidget->hide();
+            });
+#ifdef ENABLE_MPV_COCOA_WIDGET
+            connect(a, &QVariantAnimation::valueChanged, [=] (const QVariant &value) {
+                Util::SetLayerOpacity(ui->controlsWidget, value.toDouble());
+            });
+#endif
+        } else {
+            ui->controlsWidget->hide();
         }
     }
 }

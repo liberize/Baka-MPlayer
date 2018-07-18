@@ -124,12 +124,17 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
 
     // add over mpv as label
     QLabel *label = new QLabel(baka->window->ui->mpvContainer);
-    label->setStyleSheet("background-color:rgb(0,0,0,0);background-image:url();");
-    label->setGeometry(pos.x(),
-                       pos.y(),
-                       canvas->width(),
-                       canvas->height());
     label->setPixmap(QPixmap::fromImage(*canvas));
+#ifdef ENABLE_MPV_COCOA_WIDGET
+    Util::SetWantsLayer(label, true);
+    Util::SetLayerBackgroundColor(label, 41, 41, 41, 255);
+    Util::SetLayerCornerRadius(label, 5);
+    label->setStyleSheet("padding:10px 10px 0 10px;");
+    label->setGeometry(pos.x() - 10, pos.y() - 5, canvas->width() + 15, canvas->height());
+#else
+    label->setStyleSheet("background-color:rgb(0,0,0,0);background-image:url();");
+    label->setGeometry(pos.x(), pos.y(), canvas->width(), canvas->height());
+#endif
     label->show();
 
     QTimer *timer;

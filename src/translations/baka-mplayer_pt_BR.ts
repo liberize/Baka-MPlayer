@@ -743,12 +743,12 @@
         <translation>&amp;Diminuir em 5%</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
-        <translation>&amp;Aumentar em 0.1%</translation>
+        <source>&amp;Increase by 10%</source>
+        <translation>&amp;Aumentar em 10%</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
-        <translation>&amp;Diminuir em 0.1%</translation>
+        <source>&amp;Decrease by 10%</source>
+        <translation>&amp;Diminuir em 10%</translation>
     </message>
     <message>
         <source>&amp;Mute</source>

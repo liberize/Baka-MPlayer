@@ -15,7 +15,7 @@ public:
     void AttachEngine(BakaEngine *baka);
 
 signals:
-    void mouseMoved();
+    void mouseMoved(QMouseEvent *event);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

@@ -23,6 +23,6 @@ void OnlineWidget::AttachEngine(BakaEngine *baka)
 
 void OnlineWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    emit mouseMoved();
+    emit mouseMoved(event);
     QListWidget::mouseMoveEvent(event);
 }

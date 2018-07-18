@@ -961,19 +961,19 @@ Hinweis: Wert muss zwischen %0 und %1 liegen</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
-        <translation type="unfinished">&amp;Erhöhe um 0.1% {5%?}</translation>
+        <translation type="unfinished">&amp;Erhöhe um 10% {5%?}</translation>
     </message>
     <message>
         <source>&amp;Decrease by 5%</source>
-        <translation type="unfinished">&amp;Verlangsame um 0.1% {5%?}</translation>
+        <translation type="unfinished">&amp;Verlangsame um 10% {5%?}</translation>
     </message>
     <message>
-        <source>&amp;Increase by 0.1%</source>
-        <translation>&amp;Erhöhe um 0.1%</translation>
+        <source>&amp;Increase by 10%</source>
+        <translation>&amp;Erhöhe um 10%</translation>
     </message>
     <message>
-        <source>&amp;Decrease by 0.1%</source>
-        <translation>&amp;Verlangsame um 0.1%</translation>
+        <source>&amp;Decrease by 10%</source>
+        <translation>&amp;Verlangsame um 10%</translation>
     </message>
     <message>
         <source>15&amp;0%</source>

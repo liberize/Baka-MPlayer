@@ -28,6 +28,16 @@ void ShowInFolder(QString path, QString file);
 
 QString MonospaceFont();
 
+#ifdef ENABLE_MPV_COCOA_WIDGET
+// mac only
+void SetWantsLayer(QWidget *widget, bool wants);
+void SetLayerOpaque(QWidget *widget, bool opaque);
+void SetLayerOpacity(QWidget *widget, double opacity);
+void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, double a);
+void SetLayerCornerRadius(QWidget *widget, double r);
+void SetCanDrawSubviewsIntoLayer(QWidget *widget);
+#endif
+
 // common
 bool IsValidUrl(QString url);
 

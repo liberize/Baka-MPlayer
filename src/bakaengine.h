@@ -57,13 +57,14 @@ public:
         {"Ctrl+M",          {"mute", tr("Toggle mute audio")}},
         {"Ctrl+T",          {"screenshot subtitles", tr("Take screenshot with subtitles")}},
         {"Ctrl+Shift+T",    {"screenshot", tr("Take screenshot without subtitles")}},
-        {"Ctrl+Down",       {"volume -5", tr("Decrease volume")}},
-        {"Ctrl+Up",         {"volume +5", tr("Increase volume")}},
-        {"Ctrl+Shift+Up",   {"speed +0.1", tr("Increase playback speed by %0").arg("10")}},
-        {"Ctrl+Shift+Down", {"speed -0.1", tr("Decrease playback speed by %0").arg("10")}},
+        {"Down",            {"volume -5", tr("Decrease volume")}},
+        {"Up",              {"volume +5", tr("Increase volume")}},
+        {"Ctrl+Shift+Up",   {"speed +0.1", tr("Increase playback speed by %0%").arg("10")}},
+        {"Ctrl+Shift+Down", {"speed -0.1", tr("Decrease playback speed by %0%").arg("10")}},
+        {"Ctrl+]",          {"speed 2.0", tr("Increase playback speed to 2.0x")}},
+        {"Ctrl+[",          {"speed 0.5", tr("Decrease playback speed to 0.5x")}},
         {"Ctrl+Shift+R",    {"speed 1.0", tr("Reset speed")}},
-        {"Alt+Return",      {"fullscreen", tr("Toggle fullscreen")}},
-        {"Ctrl+H",          {"hide_all_controls", tr("Toggle hide all controls mode")}},
+        {"Return",          {"fullscreen", tr("Toggle fullscreen")}},
         {"Ctrl+D",          {"dim", tr("Dim lights")}},
         {"Ctrl+E",          {"show_in_folder", tr("Show the file in its folder")}},
         {"Tab",             {"media_info", tr("View media information")}},
@@ -82,10 +83,10 @@ public:
         {"F1",              {"online_help", tr("Launch online help")}},
         {"Space",           {"play_pause", tr("Play/Pause")}},
         {"Esc",             {"boss", tr("Boss key")}},
-        {"Down",            {"playlist select +1", tr("Select next file on playlist")}},
-        {"Up",              {"playlist select -1", tr("Select previous file on playlist")}},
-        {"Return",          {"playlist play", tr("Play selected file on playlist")}},
-        {"Del",             {"playlist remove", tr("Remove selected file from playlist")}}
+        {"Ctrl+Down",       {"playlist select +1", tr("Select next file on playlist")}},
+        {"Ctrl+Up",         {"playlist select -1", tr("Select previous file on playlist")}},
+        {"Ctrl+Return",     {"playlist play", tr("Play selected file on playlist")}},
+        {"Ctrl+Del",        {"playlist remove", tr("Remove selected file from playlist")}}
     };
 
 public slots:
@@ -131,7 +132,6 @@ private:
         {"playlist",       {&BakaEngine::BakaPlaylist, {"[...]", tr("playlist options"), QString()}}},
         {"jump",           {&BakaEngine::BakaJump, {QString(), tr("opens jump dialog"), QString()}}},
         {"dim",            {&BakaEngine::BakaDim, {QString(), tr("toggles dim desktop"), QString()}}},
-        {"output",         {&BakaEngine::BakaOutput, {QString(), tr("toggles output textbox"), QString()}}},
         {"preferences",    {&BakaEngine::BakaPreferences, {QString(), tr("opens preferences dialog"), QString()}}},
         {"online_help",    {&BakaEngine::BakaOnlineHelp, {QString(), tr("launches online help"), QString()}}},
         {"update",         {&BakaEngine::BakaUpdate, {QString(), tr("opens the update dialog or updates youtube-dl"), QString()}}},
@@ -143,9 +143,7 @@ private:
         {"volume",         {&BakaEngine::BakaVolume, {tr("[level]"), tr("adjusts the volume"), QString()}}},
         {"speed",          {&BakaEngine::BakaSpeed, {tr("[ratio]"), tr("adjusts the speed"), QString()}}},
         {"fullscreen",     {&BakaEngine::BakaFullScreen, {QString(), tr("toggles fullscreen state"), QString()}}},
-        {"hide_all_controls", {&BakaEngine::BakaHideAllControls, {QString(), tr("toggles hide all controls state"), QString()}}},
         {"boss",           {&BakaEngine::BakaBoss, {QString(), tr("pause and hide the window"), QString()}}},
-        {"clear",          {&BakaEngine::BakaClear, {QString(), tr("clears the output textbox"), QString()}}},
         {"help",           {&BakaEngine::BakaHelp, {tr("[command]"), tr("internal help menu"), QString()}}},
         {"about",          {&BakaEngine::BakaAbout, {tr("[qt]"), tr("open about dialog"), QString()}}},
         {"msg_level",      {&BakaEngine::BakaMsgLevel, {tr("[level]"), tr("set mpv msg-level"), QString()}}},
@@ -166,7 +164,6 @@ private:
     void BakaPlaylist(QStringList&);
     void BakaJump(QStringList&);
     void BakaDim(QStringList&);
-    void BakaOutput(QStringList&);
     void BakaPreferences(QStringList&);
     void BakaOnlineHelp(QStringList&);
     void BakaUpdate(QStringList&);
@@ -179,9 +176,7 @@ private:
     void BakaVolume(QStringList&);
     void BakaSpeed(QStringList&);
     void BakaFullScreen(QStringList&);
-    void BakaHideAllControls(QStringList&);
     void BakaBoss(QStringList&);
-    void BakaClear(QStringList&);
     void BakaHelp(QStringList&);
     void BakaAbout(QStringList&);
     void BakaMsgLevel(QStringList&);
