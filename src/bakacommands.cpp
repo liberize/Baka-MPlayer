@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QFileDialog>
+#include <QFontDialog>
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QProcess>
@@ -83,6 +84,14 @@ void BakaEngine::BakaOpenClipboard(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
+void BakaEngine::BakaClose(QStringList &args)
+{
+    if (args.empty()) {
+        window->CloseFile();
+    } else
+        InvalidParameter(args.join(' '));
+}
+
 void BakaEngine::BakaShowInFolder(QStringList &args)
 {
     if (args.empty())
@@ -124,8 +133,13 @@ void BakaEngine::BakaScreenshot(QStringList &args)
     else {
         QString arg = args.front();
         args.pop_front();
-        if (args.empty() && arg == "subtitles")
-            Screenshot(true);
+        if (args.empty())
+            if (arg == "subtitles")
+                Screenshot(true);
+            else if (arg == "show")
+                Util::ShowInFolder(mpv->getScreenshotDir(), "");
+            else
+                InvalidParameter(arg);
         else
             InvalidParameter(arg);
     }
@@ -172,7 +186,7 @@ void BakaEngine::MediaInfo(bool show)
 void BakaEngine::BakaStop(QStringList &args)
 {
     if (args.empty())
-        mpv->Stop();
+        mpv->RestartPaused();
     else
         InvalidParameter(args.join(' '));
 }
@@ -212,12 +226,12 @@ void BakaEngine::BakaPlaylist(QStringList &args)
             }
         } else if (args.empty()) {
             if (arg == "remove") {
-                if (window->isSidebarVisible() && !window->ui->playlistSearchBox->hasFocus())
+                if (window->isSidebarVisible(0) && !window->ui->playlistSearchBox->hasFocus())
                     window->ui->playlistWidget->RemoveIndex(window->ui->playlistWidget->currentRow());
             } else if (arg == "shuffle")
                 window->ui->playlistWidget->Shuffle();
             else if (arg == "toggle")
-                window->ShowSidebar(!window->isSidebarVisible());
+                window->ToggleSidebar(0);
             else
                 InvalidParameter(arg);
         } else if (arg == "repeat") {
@@ -250,6 +264,19 @@ void BakaEngine::BakaPlaylist(QStringList &args)
             InvalidParameter(arg);
     } else
         RequiresParameters("baka playlist");
+}
+
+void BakaEngine::BakaOnline(QStringList &args)
+{
+    if (!args.empty()) {
+        QString arg = args.front();
+        args.pop_front();
+        if (args.empty())
+            window->ToggleSidebar(1);
+        else
+            InvalidParameter(args.join(' '));
+    } else
+        RequiresParameters("baka online");
 }
 
 void BakaEngine::BakaJump(QStringList &args)
@@ -357,7 +384,21 @@ void BakaEngine::PlayPause()
     mpv->PlayPause(window->ui->playlistWidget->CurrentItem());
 }
 
-void BakaEngine::FitWindow()
+void BakaEngine::BakaVideoSize(QStringList &args)
+{
+    if (args.empty())
+        FitWindow();
+    else {
+        QString arg = args.front();
+        args.pop_front();
+        if (args.empty())
+            FitWindow(arg.toInt());
+        else
+            InvalidParameter(args.join(' '));
+    }
+}
+
+void BakaEngine::FitWindow(int percent, bool msg)
 {
     if (window->isFullScreen() || window->isMaximized())
         return;
@@ -382,8 +423,17 @@ void BakaEngine::FitWindow()
     else
         a = double(vG.dwidth)/vG.dheight; // use display width and height for aspect ratio
 
-    w = vG.width;  // video width
-    h = vG.height; // video height
+    // calculate resulting display:
+    if (percent == 0) {
+        double w1 = aG.width() - (wfG.width() - mG.width()), h1 = w1 / a;
+        double h2 = aG.height() - (wfG.height() - mG.height()), w2 = h2 * a;
+        w = qMin(w1, w2);
+        h = qMin(h1, h2);
+    } else {
+        double scale = percent / 100.0; // get scale
+        w = vG.width * scale;  // get scaled width
+        h = vG.height * scale; // get scaled height
+    }
 
     double dW = w + (wfG.width() - mG.width()),   // calculate display width of the window
            dH = h + (wfG.height() - mG.height()); // calculate display height of the window
@@ -401,10 +451,6 @@ void BakaEngine::FitWindow()
         dW = w + (wfG.width() - mG.width());   // calculate new display width
     }
 
-    int gcd = Util::GCD(vG.width, vG.height);
-    if (gcd)
-        Util::SetAspectRatio(window, vG.width / gcd, vG.height / gcd);
-
     // get the centered rectangle we want
     QRect rect = QStyle::alignedRect(Qt::LeftToRight,
                                      Qt::AlignCenter,
@@ -420,6 +466,13 @@ void BakaEngine::FitWindow()
 
     // finally set the geometry of the window
     window->setGeometry(rect);
+
+    int gcd = Util::GCD(vG.width, vG.height);
+    if (gcd)
+        Util::SetAspectRatio(window, vG.width / gcd, vG.height / gcd);
+
+    if(msg)
+        mpv->ShowText(tr("Window Size: %0").arg(percent == 0 ? tr("Fit to Screen") : (QString::number(percent)+"%")));
 }
 
 void BakaEngine::BakaDeinterlace(QStringList &args)
@@ -460,6 +513,51 @@ void BakaEngine::BakaVolume(QStringList &args)
             InvalidParameter(args.join(' '));
     } else
         RequiresParameters("volume");
+}
+
+void BakaEngine::BakaAudioDelay(QStringList &args)
+{
+    if (!args.empty()) {
+        QString arg = args.front();
+        args.pop_front();
+        if (args.empty()) {
+            if (arg.startsWith('+') || arg.startsWith('-'))
+                mpv->AudioDelay(mpv->getAudioDelay()+arg.toDouble());
+            else
+                mpv->AudioDelay(arg.toDouble());
+            mpv->ShowText(tr("Audio Delay: %0").arg(QString::number(mpv->getAudioDelay(), 'f', 1)));
+        } else
+            InvalidParameter(args.join(' '));
+    } else
+        RequiresParameters("audio_delay");
+}
+
+void BakaEngine::BakaSubtitleDelay(QStringList &args)
+{
+    if (!args.empty()) {
+        QString arg = args.front();
+        args.pop_front();
+        if (args.empty()) {
+            if (arg.startsWith('+') || arg.startsWith('-'))
+                mpv->SubtitleDelay(mpv->getSubtitleDelay()+arg.toDouble());
+            else
+                mpv->SubtitleDelay(arg.toDouble());
+            mpv->ShowText(tr("Subtitle Delay: %0").arg(QString::number(mpv->getSubtitleDelay(), 'f', 1)));
+        } else
+            InvalidParameter(args.join(' '));
+    } else
+        RequiresParameters("subtitle_delay");
+}
+
+void BakaEngine::BakaSubtitleFont(QStringList &args)
+{
+    if (args.empty()) {
+        bool ok = false;
+        QFont font = QFontDialog::getFont(&ok, mpv->getSubtitleFont(), window, tr("Set Subtitle Font"));
+        if (ok)
+            mpv->SubtitleFont(font);
+    } else
+        InvalidParameter(args.join(' '));
 }
 
 void BakaEngine::BakaSpeed(QStringList &args)
@@ -554,7 +652,7 @@ void BakaEngine::BakaMsgLevel(QStringList &args)
 void BakaEngine::About(QString what)
 {
     if (what == QString())
-        AboutDialog::about(BAKA_MPLAYER_VERSION, window);
+        AboutDialog::about(APP_VERSION, window);
     else if (what == "qt")
         qApp->aboutQt();
     else

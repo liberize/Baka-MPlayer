@@ -77,11 +77,18 @@ public:
         {"Ctrl+S",          {"stop", tr("Stop playback")}},
         {"Ctrl+U",          {"open_location", tr("Show location dialog")}},
         {"Ctrl+V",          {"open_clipboard", tr("Open clipboard location")}},
-        {"Ctrl+F",          {"playlist toggle", tr("Toggle playlist visibility")}},
+        {"Alt+P",           {"playlist toggle", tr("Toggle playlist visibility")}},
+        {"Alt+O",           {"online toggle", tr("Toggle online visibility")}},
         {"Ctrl+Z",          {"open_recent 0", tr("Open the last played file")}},
         {"Ctrl+`",          {"output", tr("Access command-line")}},
         {"F1",              {"online_help", tr("Launch online help")}},
         {"Space",           {"play_pause", tr("Play/Pause")}},
+        {"Alt+1",           {"video_size", tr("Set video size to fit screen")}},
+        {"Alt+2",           {"video_size 50", tr("Set video size to %0%").arg("50")}},
+        {"Alt+3",           {"video_size 75", tr("Set video size to %0%").arg("75")}},
+        {"Alt+4",           {"video_size 100", tr("Set video size to %0%").arg("100")}},
+        {"Alt+5",           {"video_size 150", tr("Set video size to %0%").arg("150")}},
+        {"Alt+6",           {"video_size 200", tr("Set video size to %0%").arg("200")}},
         {"Esc",             {"boss", tr("Boss key")}},
         {"Ctrl+Down",       {"playlist select +1", tr("Select next file on playlist")}},
         {"Ctrl+Up",         {"playlist select -1", tr("Select previous file on playlist")}},
@@ -123,6 +130,7 @@ private:
         {"new",            {&BakaEngine::BakaNew, {QString(), tr("creates a new instance of baka-mplayer"), QString()}}},
         {"open_location",  {&BakaEngine::BakaOpenLocation, {QString(), tr("shows the open location dialog"), QString()}}},
         {"open_clipboard", {&BakaEngine::BakaOpenClipboard, {QString(), tr("opens the clipboard"), QString()}}},
+        {"close",          {&BakaEngine::BakaClose, {QString(), tr("close file"), QString()}}},
         {"show_in_folder", {&BakaEngine::BakaShowInFolder, {QString(), tr("shows the current file in folder"), QString()}}},
         {"add_subtitles",  {&BakaEngine::BakaAddSubtitles, {QString(), tr("add subtitles dialog"), QString()}}},
         {"add_audio",      {&BakaEngine::BakaAddAudio, {QString(), tr("add audio track dialog"), QString()}}},
@@ -130,6 +138,7 @@ private:
         {"media_info",     {&BakaEngine::BakaMediaInfo, {QString(), tr("toggles media info display"), QString()}}},
         {"stop",           {&BakaEngine::BakaStop, {QString(), tr("stops the current playback"), QString()}}},
         {"playlist",       {&BakaEngine::BakaPlaylist, {"[...]", tr("playlist options"), QString()}}},
+        {"online",         {&BakaEngine::BakaOnline, {"[...]", tr("online options"), QString()}}},
         {"jump",           {&BakaEngine::BakaJump, {QString(), tr("opens jump dialog"), QString()}}},
         {"dim",            {&BakaEngine::BakaDim, {QString(), tr("toggles dim desktop"), QString()}}},
         {"preferences",    {&BakaEngine::BakaPreferences, {QString(), tr("opens preferences dialog"), QString()}}},
@@ -137,10 +146,14 @@ private:
         {"update",         {&BakaEngine::BakaUpdate, {QString(), tr("opens the update dialog or updates youtube-dl"), QString()}}},
         {"open",           {&BakaEngine::BakaOpen, {tr("[file]"), tr("opens the open file dialog or the file specified"), QString()}}},
         {"play_pause",     {&BakaEngine::BakaPlayPause, {QString(), tr("toggle play/pause state"), QString()}}},
+        {"video_size",     {&BakaEngine::BakaVideoSize, {tr("[percent]"), tr("set video size"), QString()}}},
         {"deinterlace",    {&BakaEngine::BakaDeinterlace, {QString(), tr("toggle deinterlace"), QString()}}},
         {"interpolate",    {&BakaEngine::BakaInterpolate, {QString(), tr("toggle motion interpolation"), QString()}}},
         {"mute",           {&BakaEngine::BakaMute, {QString(), tr("mutes the audio"), QString()},}},
         {"volume",         {&BakaEngine::BakaVolume, {tr("[level]"), tr("adjusts the volume"), QString()}}},
+        {"audio_delay",    {&BakaEngine::BakaAudioDelay, {tr("[level]"), tr("adjusts audio delay"), QString()}}},
+        {"subtitle_delay", {&BakaEngine::BakaSubtitleDelay, {tr("[level]"), tr("adjusts subtitle delay"), QString()}}},
+        {"subtitle_font",  {&BakaEngine::BakaSubtitleFont, {tr("[level]"), tr("change subtitle font"), QString()}}},
         {"speed",          {&BakaEngine::BakaSpeed, {tr("[ratio]"), tr("adjusts the speed"), QString()}}},
         {"fullscreen",     {&BakaEngine::BakaFullScreen, {QString(), tr("toggles fullscreen state"), QString()}}},
         {"boss",           {&BakaEngine::BakaBoss, {QString(), tr("pause and hide the window"), QString()}}},
@@ -155,6 +168,7 @@ private:
     void BakaNew(QStringList&);
     void BakaOpenLocation(QStringList&);
     void BakaOpenClipboard(QStringList&);
+    void BakaClose(QStringList&);
     void BakaShowInFolder(QStringList&);
     void BakaAddSubtitles(QStringList&);
     void BakaAddAudio(QStringList&);
@@ -162,6 +176,7 @@ private:
     void BakaMediaInfo(QStringList&);
     void BakaStop(QStringList&);
     void BakaPlaylist(QStringList&);
+    void BakaOnline(QStringList&);
     void BakaJump(QStringList&);
     void BakaDim(QStringList&);
     void BakaPreferences(QStringList&);
@@ -169,11 +184,15 @@ private:
     void BakaUpdate(QStringList&);
     void BakaOpen(QStringList&);
     void BakaPlayPause(QStringList&);
+    void BakaVideoSize(QStringList&);
     void BakaAspect(QStringList&);
     void BakaDeinterlace(QStringList&);
     void BakaInterpolate(QStringList&);
     void BakaMute(QStringList&);
     void BakaVolume(QStringList&);
+    void BakaAudioDelay(QStringList&);
+    void BakaSubtitleDelay(QStringList&);
+    void BakaSubtitleFont(QStringList&);
     void BakaSpeed(QStringList&);
     void BakaFullScreen(QStringList&);
     void BakaBoss(QStringList&);
@@ -188,7 +207,7 @@ public:
     void MediaInfo(bool show);
     void PlayPause();
     void Jump();
-    void FitWindow();
+    void FitWindow(int percent = 0, bool msg = true);
     void Dim(bool dim);
     void About(QString what = QString());
     void Quit();

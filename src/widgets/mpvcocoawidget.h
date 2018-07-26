@@ -17,12 +17,10 @@ public:
     explicit MpvCocoaWidget(QWidget *parent = nullptr);
     ~MpvCocoaWidget();
 
-signals:
-    void firstDrawComplete();
-
 protected:
     QWidget *self();
     void setMpvHandler(MpvHandler *handler);
+    void setContentImage(const QImage &img);
 };
 
 #endif // MPVCOCOAWIDGET_H

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QImage>
 
 #include <mpv/client.h>
 #include <mpv/qthelper.hpp>
@@ -35,6 +36,8 @@ public:
     QString getScreenshotDir()              { return screenshotDir; }
     QString getVo()                         { return vo; }
     QString getMsgLevel()                   { return msgLevel; }
+    double getAudioDelay()                  { return audioDelay; }
+    double getSubtitleDelay()               { return subtitleDelay; }
     double getSpeed()                       { return speed; }
     int getTime()                           { return time; }
     int getVolume()                         { return volume; }
@@ -47,11 +50,21 @@ public:
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
 
+    int toScaledFontSize(int size)          { return fileInfo.video_params.dheight ? size * 720 / fileInfo.video_params.dheight : size; }
+    int fromScaledFontSize(int size)        { return fileInfo.video_params.dheight ? size * fileInfo.video_params.dheight / 720 : size; }
+
     QString getMediaInfo();
+    int64_t getCacheSize();
 
     QWidget *getWidget();
     mpv_render_context *createRenderContext(mpv_render_param *params);
     void destroyRenderContext(mpv_render_context *render);
+
+    QString formatTrackInfo(const Mpv::Track &track);
+
+    QString getAudioDevice();
+    QString getSubtitleEncoding();
+    QFont getSubtitleFont();
 
 protected:
     virtual bool event(QEvent*);
@@ -68,10 +81,11 @@ public slots:
 
     void Play();
     void Pause();
-    void Stop();
+    void RestartPaused();
     void PlayPause(QString fileIfStopped);
     void Restart();
     void Rewind();
+    void Stop();
     void Mute(bool);
 
     void Seek(int pos, bool relative = false, bool osd = false);
@@ -84,6 +98,8 @@ public slots:
     void PreviousChapter();
 
     void Volume(int, bool osd = false);
+    void AudioDelay(double);
+    void SubtitleDelay(double);
     void Speed(double);
     void Aspect(QString);
     void Vid(int);
@@ -119,6 +135,12 @@ public slots:
     void Command(const QStringList &strlist);
     void SetOption(QString key, QString val);
 
+    void LoadAudioDevices();
+    void AudioDevice(QString name);
+    void LoadSubtitleEncodings();
+    void SubtitleEncoding(QString encoding);
+    void SubtitleFont(const QFont &font);
+
 protected slots:
     void OpenFile(QString);
     QString PopulatePlaylist();
@@ -140,6 +162,8 @@ private slots:
     void setScreenshotDir(QString s)        { emit screenshotDirChanged(screenshotDir = s); }
     void setVo(QString s)                   { emit voChanged(vo = s); }
     void setMsgLevel(QString s)             { emit msgLevelChanged(msgLevel = s); }
+    void setAudioDelay(double d)            { emit audioDelayChanged(audioDelay = d); }
+    void setSubtitleDelay(double d)         { emit subtitleDelayChanged(subtitleDelay = d); }
     void setSpeed(double d)                 { emit speedChanged(speed = d); }
     void setTime(int i)                     { emit timeChanged(time = i); }
     void setVolume(int i)                   { emit volumeChanged(volume = i); }
@@ -166,6 +190,8 @@ signals:
     void screenshotDirChanged(QString);
     void voChanged(QString);
     void msgLevelChanged(QString);
+    void audioDelayChanged(double);
+    void subtitleDelayChanged(double);
     void speedChanged(double);
     void timeChanged(int);
     void volumeChanged(int);
@@ -175,6 +201,11 @@ signals:
     void sidChanged(int);
     void subtitleVisibilityChanged(bool);
     void muteChanged(bool);
+    void audioDeviceListChanged(const QList<Mpv::AudioDevice>&);
+    void audioDeviceChanged(QString);
+    void subtitleEncodingListChanged(const QList<QPair<QString, QString> >&);
+    void subtitleEncodingChanged(QString);
+    void renderContextCreated();
 
     void messageSignal(QString m);
 
@@ -194,6 +225,8 @@ private:
     QString suffix;
     QString vo;
     QString msgLevel;
+    double  audioDelay = 0;
+    double  subtitleDelay = 0;
     double  speed = 1;
     int     time = 0;
     int     lastTime = 0;
@@ -208,6 +241,9 @@ private:
     bool    mute = false;
     int     osdWidth;
     int     osdHeight;
+    bool    readyToRender = false;
+    bool    hasVideo = true;
+    QImage  defaultAlbumArt;
 };
 
 #endif // MPVHANDLER_H

@@ -11,7 +11,8 @@ Overlay::Overlay(QLabel *label, QImage *canvas, QTimer *timer, QObject *parent):
 Overlay::~Overlay()
 {
     delete label;
-    delete canvas;
+    if (canvas != nullptr)
+        delete canvas;
     if (timer != nullptr)
         delete timer;
 }

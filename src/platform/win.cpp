@@ -14,7 +14,7 @@ namespace Util {
 
 class WinNativeEventFilter : public QAbstractNativeEventFilter {
 private:
-    QMap<QPair<HWND, UINT>, std::function<void(MSG *)> > handlers;
+    QMap<QPair<HWND, UINT>, std::function<bool(MSG *)> > handlers;
 
 public:
     WinNativeEventFilter()
@@ -27,7 +27,7 @@ public:
         QAbstractEventDispatcher::instance()->removeNativeEventFilter(this);
     }
 
-    void installHandler(HWND hwnd, UINT message, std::function<void(MSG *)> handler)
+    void installHandler(HWND hwnd, UINT message, std::function<bool(MSG *)> handler)
     {
         QPair<HWND, UINT> key(hwnd, message);
         handlers[key] = handler;
@@ -46,7 +46,7 @@ public:
             QPair<HWND, UINT> key(msg->hwnd, msg->message);
             auto it = handlers.find(key);
             if (it != handlers.end())
-                it.value()(msg);
+                return it.value()(msg);
         }
         return false;
     }
@@ -64,6 +64,10 @@ bool DimLightsSupported()
     return true;
 }
 
+void InitWindow(QMainWindow *main)
+{
+}
+
 void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 {
     SetWindowPos((HWND)main->winId(),
@@ -72,38 +76,44 @@ void SetAlwaysOnTop(QMainWindow *main, bool ontop)
                  SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 }
 
-void SetAspectRatio(QMainWindow *main, int w, int h)
+void SetAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
 {
     if (!eventFilter) {
         eventFilter = new WinNativeEventFilter;
     }
-    eventFilter->installHandler(main->winId(), WM_RESIZING, [] (MSG *msg) {
-        int edge = int(msg->wParam);
-        RECT &rect = *reinterpret_cast<LPRECT>(msg->lParam);
-        switch (edge) {
-        case WMSZ_BOTTOM:
-        case WMSZ_TOP:
-            // TODO:
-            break;
-        case WMSZ_BOTTOMLEFT:
-            break;
-        case WMSZ_BOTTOMRIGHT:
-            break;
-        case WMSZ_LEFT:
-        case WMSZ_RIGHT:
-            break;
-        case WMSZ_TOPLEFT:
-            break;
-        case WMSZ_TOPRIGHT:
-            break;
-        }
-    });
-}
+    eventFilter->installHandler(main->winId(), WM_SIZING, [] (MSG *msg) -> bool {
+        RECT *rc = (RECT*)msg->lParam;
+        // get client area of the windows if it had the rect rc
+        // (subtracting the window borders)
+        RECT b = { 0, 0, 0, 0 };
+        AdjustWindowRect(&b, GetWindowLongPtrW(msg->hwnd, GWL_STYLE), 0);
+        rc->left -= b.left;
+        rc->top -= b.top;
+        rc->right -= b.right;
+        rc->bottom -= b.bottom;
 
-QString SettingsLocation()
-{
-    // saves to $(application directory)\${SETTINGS_FILE}.ini
-    return QString("%0\\%1.ini").arg(QApplication::applicationDirPath(), SETTINGS_FILE);
+        int c_w = rc->right - rc->left, c_h = rc->bottom - rc->top;
+        float aspect = o_dwidth / (float) qMax(o_dheight, 1);
+        int d_w = c_h * aspect - c_w;
+        int d_h = c_w / aspect - c_h;
+        int d_corners[4] = { d_w, d_h, -d_w, -d_h };
+        int corners[4] = { rc->left, rc->top, rc->right, rc->bottom };
+        int corner = -1;
+        switch (msg->wParam) {
+        case WMSZ_LEFT:         corner = 3; break;
+        case WMSZ_TOP:          corner = 2; break;
+        case WMSZ_RIGHT:        corner = 3; break;
+        case WMSZ_BOTTOM:       corner = 2; break;
+        case WMSZ_TOPLEFT:      corner = 1; break;
+        case WMSZ_TOPRIGHT:     corner = 1; break;
+        case WMSZ_BOTTOMLEFT:   corner = 3; break;
+        case WMSZ_BOTTOMRIGHT:  corner = 3; break;
+        }
+        if (corner >= 0)
+            corners[corner] -= d_corners[corner];
+        *rc = (RECT) { corners[0], corners[1], corners[2], corners[3] };
+        return true;
+    });
 }
 
 bool IsValidFile(QString path)
@@ -120,7 +130,8 @@ bool IsValidLocation(QString loc)
 
 void ShowInFolder(QString path, QString file)
 {
-    QProcess::startDetached("explorer.exe", QStringList{"/select,", path+file});
+    QString args = file.isEmpty() ? path : "/select," + path + file;
+    QProcess::startDetached("explorer.exe " + args);
 }
 
 QString MonospaceFont()

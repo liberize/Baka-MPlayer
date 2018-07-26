@@ -19,6 +19,7 @@ public:
 protected:
     QWidget *self();
     void setMpvHandler(MpvHandler *handler);
+    void setContentImage(const QImage &img);
 
 protected:
     void initializeGL();
@@ -30,12 +31,13 @@ private:
 
 private slots:
     void maybeUpdate();
-    void self_frameSwapped();
+    void onFrameSwapped();
 
 private:
     MpvHandler *mpv = nullptr;
     mpv_render_context *render = nullptr;
     int glWidth = 0, glHeight = 0;
+    QImage image;
 };
 
 #endif // MPVGLWIDGET_H

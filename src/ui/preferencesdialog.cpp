@@ -30,8 +30,8 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     else if (ontop == "always")
         ui->alwaysRadioButton->setChecked(true);
     ui->resumeCheckBox->setChecked(baka->window->getResume());
-    ui->groupBox_2->setChecked(baka->sysTrayIcon->isVisible());
-    ui->hidePopupCheckBox->setChecked(baka->window->getHidePopup());
+    ui->showTrayIconCheckBox->setChecked(baka->sysTrayIcon->isVisible());
+    ui->showNotificationCheckBox->setChecked(baka->window->getShowNotification());
     ui->gestureCheckBox->setChecked(baka->window->getGestures());
     ui->langComboBox->setCurrentText(baka->window->getLang());
     ui->gestureCheckBox->setChecked(baka->window->getGestures());
@@ -120,8 +120,8 @@ PreferencesDialog::~PreferencesDialog()
             baka->window->setOnTop("playing");
         else if (ui->alwaysRadioButton->isChecked())
             baka->window->setOnTop("always");
-        baka->sysTrayIcon->setVisible(ui->groupBox_2->isChecked());
-        baka->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
+        baka->sysTrayIcon->setVisible(ui->showTrayIconCheckBox->isChecked());
+        baka->window->setShowNotification(ui->showNotificationCheckBox->isChecked());
         baka->window->setGestures(ui->gestureCheckBox->isChecked());
         baka->window->setLang(ui->langComboBox->currentText());
         baka->window->setMaxRecent(ui->recentCheckBox->isChecked() ? ui->recentSpinBox->value() : 0);
@@ -147,7 +147,7 @@ void PreferencesDialog::showPreferences(BakaEngine *baka, QWidget *parent)
 void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
-    QDir root(BAKA_MPLAYER_LANG_PATH);
+    QDir root(APP_LANG_PATH);
     // get files in the directory with .qm extension
     QFileInfoList flist;
     flist = root.entryInfoList({"*.qm"}, QDir::Files);

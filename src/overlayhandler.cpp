@@ -18,7 +18,9 @@
 
 #define OVERLAY_INFO 62
 #define OVERLAY_STATUS 63
+#define OVERLAY_ALBUM_ART 64
 #define OVERLAY_REFRESH_RATE 1000
+
 
 OverlayHandler::OverlayHandler(QObject *parent):
     QObject(parent),
@@ -150,6 +152,43 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     if (overlays.find(id) != overlays.end())
         delete overlays[id];
     overlays[id] = new Overlay(label, canvas, timer, this);
+    overlay_mutex.unlock();
+}
+
+void OverlayHandler::showImage(const QPixmap &pixmap, QPoint pos, int duration, int id)
+{
+    overlay_mutex.lock();
+    // increase next overlay_id
+    if (id == -1) { // auto id
+        id = overlay_id;
+        if (overlay_id+1 > max_overlay)
+            overlay_id = min_overlay;
+        else
+            ++overlay_id;
+    }
+
+    // add over mpv as label
+    QLabel *label = new QLabel(baka->window->ui->mpvContainer);
+    label->setPixmap(pixmap);
+#ifdef ENABLE_MPV_COCOA_WIDGET
+    Util::SetWantsLayer(label, true);
+#endif
+    label->setGeometry(pos.x(), pos.y(), pixmap.width(), pixmap.height());
+    label->show();
+
+    QTimer *timer;
+    if (duration == 0)
+        timer = nullptr;
+    else {
+        timer = new QTimer(this);
+        timer->start(duration);
+        connect(timer, &QTimer::timeout, // on timeout
+                [=] { remove(id); });
+    }
+
+    if (overlays.find(id) != overlays.end())
+        delete overlays[id];
+    overlays[id] = new Overlay(label, nullptr, timer, this);
     overlay_mutex.unlock();
 }
 

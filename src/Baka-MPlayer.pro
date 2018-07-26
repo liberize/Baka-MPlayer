@@ -112,7 +112,7 @@ CONFIG(embed_translations) {
     # add file to build
     RESOURCES += translations.qrc
 
-    BAKA_LANG_PATH += :/translations
+    APP_LANG_PATH += :/translations
 
     # make sure translations are updated and released
     CONFIG *= update_translations release_translations
@@ -123,7 +123,7 @@ CONFIG(install_translations) {
     translations.files = $$TRANSLATIONS_COMPILED
     INSTALLS += translations
 
-    BAKA_LANG_PATH += $$BAKADIR/translations
+    APP_LANG_PATH += $$BAKADIR/translations
 
     # make sure translations are updated and released
     CONFIG *= update_translations release_translations
@@ -145,11 +145,11 @@ CONFIG(release_translations) {
 }
 
 
-isEmpty(SETTINGS_FILE):SETTINGS_FILE=bakamplayer
-DEFINES += "BAKA_MPLAYER_VERSION=\\\"$$VERSION\\\"" \
-           "SETTINGS_FILE=\\\"$$SETTINGS_FILE\\\"" \
-           "BAKA_MPLAYER_LANG_PATH=\\\"$$BAKA_LANG_PATH\\\""
-!isEmpty(BAKA_LANG):DEFINES += "BAKA_MPLAYER_LANG=\\\"$$BAKA_LANG\\\""
+isEmpty(APP_NAME):APP_NAME=bakamplayer
+DEFINES += "APP_VERSION=\\\"$$VERSION\\\"" \
+           "APP_NAME=\\\"$$APP_NAME\\\"" \
+           "APP_LANG_PATH=\\\"$$APP_LANG_PATH\\\""
+!isEmpty(APP_LANG):DEFINES += "APP_LANG=\\\"$$APP_LANG\\\""
 
 SOURCES += main.cpp\
     bakaengine.cpp \
@@ -166,8 +166,6 @@ SOURCES += main.cpp\
     widgets/customslider.cpp \
     widgets/customsplitter.cpp \
     widgets/dimdialog.cpp \
-    widgets/indexbutton.cpp \
-    widgets/openbutton.cpp \
     widgets/playlistwidget.cpp \
     widgets/seekbar.cpp \
     ui/aboutdialog.cpp \
@@ -181,7 +179,8 @@ SOURCES += main.cpp\
     ui/keydialog.cpp \
     overlay.cpp \
     widgets/mpvglwidget.cpp \
-    widgets/onlinewidget.cpp
+    widgets/onlinewidget.cpp \
+    widgets/custompushbutton.cpp
 
 HEADERS  += \
     bakaengine.h \
@@ -199,7 +198,6 @@ HEADERS  += \
     widgets/customsplitter.h \
     widgets/dimdialog.h \
     widgets/indexbutton.h \
-    widgets/openbutton.h \
     widgets/playlistwidget.h \
     widgets/seekbar.h \
     ui/aboutdialog.h \
@@ -215,7 +213,8 @@ HEADERS  += \
     widgets/mpvwidget.h \
     widgets/mpvglwidget.h \
     widgets/mpvcocoawidget.h \
-    widgets/onlinewidget.h
+    widgets/onlinewidget.h \
+    widgets/custompushbutton.h
 
 FORMS    += \
     ui/aboutdialog.ui \

@@ -17,13 +17,13 @@ BakaEngine::BakaEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
     mpv(new MpvHandler(window->ui->mpvContainer, this)),
-    settings(new Settings(Util::SettingsLocation(), this)),
+    settings(new Settings(Util::ConfigDir().filePath(QString(APP_NAME) + ".ini"), this)),
     gesture(new GestureHandler(this)),
     overlay(new OverlayHandler(this)),
     update(new UpdateManager(this)),
     // note: trayIcon does not work in my environment--known qt bug
     // see: https://bugreports.qt-project.org/browse/QTBUG-34364
-    sysTrayIcon(new QSystemTrayIcon(window->windowIcon(), this)),
+    sysTrayIcon(new QSystemTrayIcon(window->getTrayIcon(), this)),
     // todo: tray menu/tooltip
     translator(nullptr),
     qtTranslator(nullptr)

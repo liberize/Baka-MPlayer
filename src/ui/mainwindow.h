@@ -39,7 +39,7 @@ public:
     QString getLang()          { return lang; }
     QString getOnTop()         { return onTop; }
     int getMaxRecent()         { return maxRecent; }
-    bool getHidePopup()        { return hidePopup; }
+    bool getShowNotification() { return showNotification; }
     bool getRemaining()        { return remaining; }
     bool getScreenshotDialog() { return screenshotDialog; }
     bool getGestures()         { return gestures; }
@@ -51,9 +51,11 @@ public:
     int getSidebarWidth() { return sidebarWidth; }
     void setSidebarWidth(int width) { sidebarWidth = width; updateSidebarWidth(); }
     void updateSidebarWidth();
+    QIcon getTrayIcon();
 
     Ui::MainWindow  *ui;
     QImage albumArt;
+
 public slots:
     void Load(QString f = QString());
     void MapShortcuts();
@@ -70,19 +72,25 @@ protected:
     void wheelEvent(QWheelEvent *event);            // the mouse wheel is used
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void SetIndexLabels(bool enable);
-    void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
-    void ToggleSidebar();                          // toggles playlist visibility
-    bool isSidebarVisible();                       // is the playlist visible?
 
-private slots:
-    void FullScreen(bool fs);                       // makes window fullscreen
+public:
+    void SetIndexLabels(bool enable);
+    void EnablePlaybackControls(bool enable);          // macro to enable/disable playback controls
+    void EnableTrackOperations(bool enable);
+    void EnableAudioFunctions(bool enable);
+    void EnableVideoFunctions(bool enable);
+    void ToggleSidebar(int index = -1);                          // toggles playlist visibility
+    bool isSidebarVisible(int index = -1);                       // is the playlist visible?
+    void ShowStartupPage(bool visible);
+    void CloseFile();
+
+    void FullScreen(bool fullScreen, bool doubleClick = false);           // makes window fullscreen
     void ShowControls(bool visible, bool anim = true);
     void ShowSidebar(bool visible, bool anim = true, int index = -1);     // sets the playlist visibility
     void UpdateRecentFiles();                       // populate recentFiles menu
     void SetPlayButtonIcon(bool play);
-    void SetNextButtonEnabled(bool enable);
-    void SetPreviousButtonEnabled(bool enable);
+    void EnableNextButton(bool enable);
+    void EnablePreviousButton(bool enable);
     void SetRemainingLabels(int time);
 
 private:
@@ -108,7 +116,7 @@ private:
     QString lang;
     QString onTop;
     int maxRecent = false;
-    bool hidePopup = false;
+    bool showNotification = false;
     bool remaining = false;
     bool screenshotDialog = false;
     bool gestures = false;
@@ -127,7 +135,7 @@ public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }
     void setOnTop(QString s)         { emit onTopChanged(onTop = s); }
     void setMaxRecent(int i)         { emit maxRecentChanged(maxRecent = i); }
-    void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
+    void setShowNotification(bool b) { emit showNotificationChanged(showNotification = b); }
     void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
     void setScreenshotDialog(bool b) { emit screenshotDialogChanged(screenshotDialog = b); }
     void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
@@ -137,7 +145,7 @@ signals:
     void langChanged(QString);
     void onTopChanged(QString);
     void maxRecentChanged(int);
-    void hidePopupChanged(bool);
+    void showNotificationChanged(bool);
     void remainingChanged(bool);
     void screenshotDialogChanged(bool);
     void gesturesChanged(bool);

@@ -107,7 +107,7 @@ void UpdateDialog::ShowInfo()
 {
     auto &info = baka->update->getInfo();
     ui->plainTextEdit->setPlainText(info["bugfixes"]);
-    if (info["version"].trimmed() == BAKA_MPLAYER_VERSION) {
+    if (info["version"].trimmed() == APP_VERSION) {
 #if defined(Q_OS_WIN)
         ui->updateButton->setEnabled(false);
 #endif

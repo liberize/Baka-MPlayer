@@ -11,6 +11,8 @@
 #include <QMouseEvent>
 #include <QMetaObject>
 #include <QDebug>
+#include <QPainter>
+
 #include <cmath>
 #include <stdexcept>
 #include <mpv/qthelper.hpp>
@@ -78,7 +80,7 @@ MpvGlWidget::MpvGlWidget(QWidget *parent) :
     QOpenGLWidget(parent)
 {
     connect(this, &QOpenGLWidget::frameSwapped,
-            this, &MpvGlWidget::self_frameSwapped);
+            this, &MpvGlWidget::onFrameSwapped);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 }
@@ -101,6 +103,12 @@ QWidget *MpvGlWidget::self()
 void MpvGlWidget::setMpvHandler(MpvHandler *handler)
 {
     mpv = handler;
+}
+
+void MpvGlWidget::setContentImage(const QImage &img)
+{
+    image = img;
+    update();
 }
 
 void MpvGlWidget::initializeGL()
@@ -137,14 +145,19 @@ void MpvGlWidget::initializeGL()
 
 void MpvGlWidget::paintGL()
 {
-    // qDebug() << "[glwidget] paintGL";
-    bool yes = true;
-    mpv_opengl_fbo fbo { (int)defaultFramebufferObject(), glWidth, glHeight, 0 };
-    mpv_render_param params[] {
-        {MPV_RENDER_PARAM_OPENGL_FBO, (void*)&fbo },
-        {MPV_RENDER_PARAM_FLIP_Y, &yes}
-    };
-    mpv_render_context_render(render, params);
+    if (image.isNull()) {
+        bool yes = true;
+        mpv_opengl_fbo fbo { (int)defaultFramebufferObject(), glWidth, glHeight, 0 };
+        mpv_render_param params[] {
+            {MPV_RENDER_PARAM_OPENGL_FBO, (void*)&fbo },
+            {MPV_RENDER_PARAM_FLIP_Y, &yes}
+        };
+        mpv_render_context_render(render, params);
+    } else {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
+        painter.drawImage(QRect(0, 0, width(), height()), image);
+    }
 }
 
 void MpvGlWidget::resizeGL(int w, int h)
@@ -165,14 +178,15 @@ void MpvGlWidget::maybeUpdate()
         makeCurrent();
         paintGL();
         context()->swapBuffers(context()->surface());
-        self_frameSwapped();
+        onFrameSwapped();
         doneCurrent();
     } else {
         update();
     }
 }
 
-void MpvGlWidget::self_frameSwapped()
+void MpvGlWidget::onFrameSwapped()
 {
-    mpv_render_context_report_swap(render);
+    if (render && image.isNull())
+        mpv_render_context_report_swap(render);
 }

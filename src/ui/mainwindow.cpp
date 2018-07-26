@@ -18,16 +18,17 @@
 #include "inputdialog.h"
 #include "screenshotdialog.h"
 
-#ifdef ENABLE_MPV_COCOA_WIDGET
-#include "widgets/mpvcocoawidget.h"
-#endif
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    Util::InitWindow(this);
     ui->sidebarWidget->hide();
+    autohide = new QTimer(this);
+    ShowStartupPage(true);
 
     // initialize managers/handlers
     baka = new BakaEngine(this);
@@ -36,13 +37,11 @@ MainWindow::MainWindow(QWidget *parent):
 #ifdef ENABLE_MPV_COCOA_WIDGET
     Util::SetWantsLayer(ui->controlsWidget, true);
     Util::SetLayerOpaque(ui->controlsWidget, true);
+    Util::SetCanDrawSubviewsIntoLayer(ui->controlsWidget);
     Util::SetLayerCornerRadius(ui->controlsWidget, 5);
     Util::SetWantsLayer(ui->sidebarWidget, true);
     Util::SetLayerOpaque(ui->sidebarWidget, true);
-    connect(dynamic_cast<MpvCocoaWidget *>(mpv->getWidget()), &MpvCocoaWidget::firstDrawComplete, [=] {
-        Util::SetCanDrawSubviewsIntoLayer(ui->controlsWidget);
-        Util::SetCanDrawSubviewsIntoLayer(ui->sidebarWidget);
-    });
+    Util::SetCanDrawSubviewsIntoLayer(ui->sidebarWidget);
 #endif
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
@@ -51,8 +50,11 @@ MainWindow::MainWindow(QWidget *parent):
 #endif
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
-    ui->playlistSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(12, 12));
-    ui->onlineSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(12, 12));
+    ui->playlistSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(16, 16));
+    ui->onlineSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(16, 16));
+    ui->openFileButton->SetIcon(QIcon(":/img/default_open.svg"), QSize(16, 16), 12);
+    ui->openUrlButton->SetIcon(QIcon(":/img/link.svg"), QSize(16, 16), 12);
+    ui->viewOnlineButton->SetIcon(QIcon(":/img/online.svg"), QSize(16, 16), 12);
 
     ui->playlistWidget->AttachEngine(baka);
     ui->onlineWidget->AttachEngine(baka);
@@ -60,13 +62,15 @@ MainWindow::MainWindow(QWidget *parent):
     auto fixCursor = [=] (QMouseEvent *event) {          // fix tab widget intercept MouseMove event
         if (sidebarResizeStartX < 0)
             unsetCursor();
-        if (cursor().shape() == Qt::BlankCursor)
-            unsetCursor();
-        ShowControls(true);
-        autohide->stop();
-        if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
-                sidebarResizeStartX < 0 && autohide)
-            autohide->start(3000);
+        if (mpv->getPlayState() > 0) {
+            if (cursor().shape() == Qt::BlankCursor)
+                unsetCursor();
+            ShowControls(true);
+            autohide->stop();
+            if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
+                    sidebarResizeStartX < 0 && autohide)
+                autohide->start(3000);
+        }
     };
     connect(ui->playlistWidget, &PlaylistWidget::mouseMoved, fixCursor);
     connect(ui->onlineWidget, &OnlineWidget::mouseMoved, fixCursor);
@@ -79,7 +83,6 @@ MainWindow::MainWindow(QWidget *parent):
     for (auto &widget : widgetList) {
         widget->setMouseTracking(true);
     }
-    autohide = new QTimer(this);
 
     // command action mappings (action (right) performs command (left))
     commandActionMap = {
@@ -97,8 +100,15 @@ MainWindow::MainWindow(QWidget *parent):
         {"mute", ui->action_Mute},
         {"screenshot subtitles", ui->actionWith_Subtitles},
         {"screenshot", ui->actionWithout_Subtitles},
+        {"screenshot show", ui->actionOpen_Screenshot_Folder},
         {"add_subtitles", ui->action_Add_Subtitle_File},
         {"add_audio", ui->action_Add_Audio_File},
+        {"video_size", ui->actionFit_Screen},
+        {"video_size 50", ui->action50},
+        {"video_size 75", ui->action75},
+        {"video_size 100", ui->action100},
+        {"video_size 150", ui->action150},
+        {"video_size 200", ui->action200},
         {"fullscreen", ui->action_Full_Screen},
         {"jump", ui->action_Jump_to_Time},
         {"media_info", ui->actionMedia_Info},
@@ -106,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent):
         {"open", ui->action_Open_File},
         {"open_clipboard", ui->actionOpen_Path_from_Clipboard},
         {"open_location", ui->actionOpen_URL},
+        {"close", ui->actionClose},
         {"playlist play +1", ui->actionPlay_Next_File},
         {"playlist play -1", ui->actionPlay_Previous_File},
         {"playlist repeat off", ui->action_Off},
@@ -113,6 +124,7 @@ MainWindow::MainWindow(QWidget *parent):
         {"playlist repeat this", ui->action_This_File},
         {"playlist shuffle", ui->actionSh_uffle},
         {"playlist toggle", ui->action_Show_Playlist},
+        {"online toggle", ui->action_Show_Online},
         {"dim", ui->action_Dim_Lights},
         {"play_pause", ui->action_Play},
         {"quit", ui->actionE_xit},
@@ -120,6 +132,13 @@ MainWindow::MainWindow(QWidget *parent):
         {"stop", ui->action_Stop},
         {"volume +5", ui->action_Increase_Volume},
         {"volume -5", ui->action_Decrease_Volume},
+        {"audio_delay +0.5", ui->action_Increase_Audio_Delay},
+        {"audio_delay -0.5", ui->action_Decrease_Audio_Delay},
+        {"audio_delay 0", ui->action_Reset_Audio_Delay},
+        {"subtitle_delay +0.5", ui->action_Increase_Subtitle_Delay},
+        {"subtitle_delay -0.5", ui->action_Decrease_Subtitle_Delay},
+        {"subtitle_delay 0", ui->action_Reset_Subtitle_Delay},
+        {"subtitle_font", ui->action_Subtitle_Font},
         {"speed +0.1", ui->action_Increase},
         {"speed -0.1", ui->action_Decrease},
         {"speed 2.0", ui->action_Double_Speed},
@@ -160,7 +179,7 @@ MainWindow::MainWindow(QWidget *parent):
             // load the application translations
             tmp = baka->translator;
             baka->translator = new QTranslator();
-            baka->translator->load(QString("baka-mplayer_%0").arg(lang), BAKA_MPLAYER_LANG_PATH);
+            baka->translator->load(QString("baka-mplayer_%0").arg(lang), APP_LANG_PATH);
             qApp->installTranslator(baka->translator);
             if (tmp != nullptr)
                 delete tmp;
@@ -201,7 +220,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     connect(baka->sysTrayIcon, &QSystemTrayIcon::activated, [=] (QSystemTrayIcon::ActivationReason reason) {
         if (reason == QSystemTrayIcon::Trigger) {
-            if (!hidePopup) {
+            if (showNotification) {
                 if (mpv->getPlayState() == Mpv::Playing)
                     baka->sysTrayIcon->showMessage("Baka MPlayer", tr("Playing"), QSystemTrayIcon::NoIcon, 4000);
                 else if (mpv->getPlayState() == Mpv::Paused)
@@ -210,9 +229,6 @@ MainWindow::MainWindow(QWidget *parent):
             baka->PlayPause();
         }
     });
-
-    // connect(this, &MainWindow::hidePopupChanged, [=] (bool b) {
-    // });
 
     connect(autohide, &QTimer::timeout, [=] {  // cursor autohide
         if (ui->mpvContainer->geometry().contains(ui->mpvContainer->mapFromGlobal(cursor().pos())))
@@ -224,7 +240,6 @@ MainWindow::MainWindow(QWidget *parent):
 
     // dimDialog
     connect(baka->dimDialog, &DimDialog::visbilityChanged, [=] (bool dim) {
-        ui->action_Dim_Lights->setChecked(dim);
         if (dim)
             Util::SetAlwaysOnTop(this, true);
         else if (onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
@@ -237,7 +252,7 @@ MainWindow::MainWindow(QWidget *parent):
         if (list.length() > 1) {
             ui->actionSh_uffle->setEnabled(true);
             ui->actionStop_after_Current->setEnabled(true);
-            ShowSidebar(true, false, 0);
+            //ShowSidebar(true, false, 0);
         } else {
             ui->actionSh_uffle->setEnabled(false);
             ui->actionStop_after_Current->setEnabled(false);
@@ -295,98 +310,92 @@ MainWindow::MainWindow(QWidget *parent):
         }
     });
 
+    connect(ui->action_none, &QAction::triggered, [=] {
+        if (mpv->getSid() != 0)
+            mpv->Sid(0);
+        else
+            ui->action_none->setChecked(true);
+    });
+
+    connect(ui->action_none_3, &QAction::triggered, [=] {
+        if (mpv->getAid() != 0)
+            mpv->Aid(0);
+        else
+            ui->action_none_3->setChecked(true);
+    });
+
+    connect(ui->action_none_5, &QAction::triggered, [=] {
+        if (mpv->getVid() != 0)
+            mpv->Vid(0);
+        else
+            ui->action_none_5->setChecked(true);
+    });
+
     connect(mpv, &MpvHandler::trackListChanged, [=] (const QList<Mpv::Track> &trackList) {
+        ui->menuSubtitle_Track->clear();
+        ui->menuSubtitle_Track->addAction(ui->action_none);
+        ui->menuAudio_Track->clear();
+        ui->menuAudio_Track->addAction(ui->action_none_3);
+        ui->menuVideo_Track->clear();
+        ui->menuVideo_Track->addAction(ui->action_none_5);
+
         if (mpv->getPlayState() > 0) {
             QAction *action;
-            bool video = false,
-                 albumArt = false;
-
-            ui->menuSubtitle_Track->clear();
-            ui->menuSubtitle_Track->addAction(ui->action_Add_Subtitle_File);
-            ui->menuAudio_Tracks->clear();
-            ui->menuAudio_Tracks->addAction(ui->action_Add_Audio_File);
+            QString title;
+            bool hasAudio = false, hasVideo = false;
             for (auto &track : trackList) {
                 if (track.type == "sub") {
-                    action = ui->menuSubtitle_Track->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")).replace("&", "&&"));
+                    title = mpv->formatTrackInfo(track);
+                    action = ui->menuSubtitle_Track->addAction(title);
                     connect(action, &QAction::triggered, [=] {
-                                // basically, if you uncheck the selected subtitle id, we hide subtitles
-                                // when you check a subtitle id, we make sure subtitles are showing and set it
-                                if (mpv->getSid() == track.id) {
-                                    if (mpv->getSubtitleVisibility()) {
-                                        mpv->ShowSubtitles(false);
-                                        return;
-                                    } else
-                                        mpv->ShowSubtitles(true);
-                                } else if (!mpv->getSubtitleVisibility())
-                                    mpv->ShowSubtitles(true);
-                                mpv->Sid(track.id);
-                                mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Sub"), QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")));
-                            });
+                        if (mpv->getSid() != track.id) {
+                            mpv->Sid(track.id);
+                            mpv->ShowText(QString("%0 %1").arg(tr("Sub"), title));
+                        } else
+                            action->setChecked(true);
+                    });
                 } else if (track.type == "audio") {
-                    action = ui->menuAudio_Tracks->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace("&", "&&"));
+                    hasAudio = true;
+                    title = mpv->formatTrackInfo(track);
+                    action = ui->menuAudio_Track->addAction(title);
                     connect(action, &QAction::triggered, [=] {
-                                if (mpv->getAid() != track.id) { // don't allow selection of the same track
-                                    mpv->Aid(track.id);
-                                    mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
-                                } else
-                                    action->setChecked(true); // recheck the track
-                            });
+                        if (mpv->getAid() != track.id) {
+                            mpv->Aid(track.id);
+                            mpv->ShowText(QString("%0 %1").arg(tr("Audio"), title));
+                        } else
+                            action->setChecked(true);
+                    });
                 } else if (track.type == "video") { // video track
                     if (!track.albumart) // isn't album art
-                        video = true;
-                    else
-                        albumArt = true;
-                }
-            }
-            if (video) {
-                // if we were hiding album art, show it--we've gone to a video
-                if (ui->mpvContainer->styleSheet() != QString()) // remove filler album art
-                    ui->mpvContainer->setStyleSheet("");
-
-                ui->menuSubtitle_Track->setEnabled(true);
-                if (ui->menuSubtitle_Track->actions().count() > 1) {
-                    ui->menuFont_Si_ze->setEnabled(true);
-                    ui->actionShow_Subtitles->setEnabled(true);
-                    ui->actionShow_Subtitles->setChecked(mpv->getSubtitleVisibility());
-                } else {
-                    ui->menuFont_Si_ze->setEnabled(false);
-                    ui->actionShow_Subtitles->setEnabled(false);
-                    ui->actionShow_Subtitles->setChecked(false);
-                }
-                ui->menuTake_Screenshot->setEnabled(true);
-                ui->action_Frame_Step->setEnabled(true);
-                ui->actionFrame_Back_Step->setEnabled(true);
-                ui->action_Deinterlace->setEnabled(true);
-                ui->action_Motion_Interpolation->setEnabled(true);
-            } else {
-                if (!albumArt) {
-                    // put in filler albumArt
-                    if (ui->mpvContainer->styleSheet() == QString())
-                        ui->mpvContainer->setStyleSheet("background-image:url(:/img/album-art.png);background-repeat:no-repeat;background-position:center;");
-                }
-                ui->menuSubtitle_Track->setEnabled(false);
-                ui->menuFont_Si_ze->setEnabled(false);
-                ui->actionShow_Subtitles->setEnabled(false);
-                ui->actionShow_Subtitles->setChecked(false);
-                ui->menuTake_Screenshot->setEnabled(false);
-                ui->action_Frame_Step->setEnabled(false);
-                ui->actionFrame_Back_Step->setEnabled(false);
-                ui->action_Deinterlace->setEnabled(false);
-                ui->action_Motion_Interpolation->setEnabled(false);
-
-                if (baka->sysTrayIcon->isVisible() && !hidePopup) {
-                    // todo: use {artist} - {title}
-                    baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
+                        hasVideo = true;
+                    title = mpv->formatTrackInfo(track);
+                    action = ui->menuVideo_Track->addAction(title);
+                    connect(action, &QAction::triggered, [=] {
+                        if (mpv->getVid() != track.id) {
+                            mpv->Vid(track.id);
+                            mpv->ShowText(QString("%0 %1").arg(tr("Video"), title));
+                        } else
+                            action->setChecked(true);
+                    });
                 }
             }
 
-            if (ui->menuAudio_Tracks->actions().count() == 1)
-                ui->menuAudio_Tracks->actions().first()->setEnabled(false);
+            EnableTrackOperations(true);
+            EnableAudioFunctions(hasAudio);
+            EnableVideoFunctions(hasVideo);
+            if (hasAudio && !hasVideo && baka->sysTrayIcon->isVisible() && showNotification) {
+                // todo: use {artist} - {title}
+                baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
+            }
 
             if (pathChanged) {
-                baka->FitWindow();
+                baka->FitWindow(100, false);
                 pathChanged = false;
             }
+        } else {
+            EnableTrackOperations(false);
+            EnableAudioFunctions(false);
+            EnableVideoFunctions(false);
         }
     });
 
@@ -435,10 +444,13 @@ MainWindow::MainWindow(QWidget *parent):
                 playpause_toolbutton->setEnabled(true);
 #endif
                 ui->action_Show_Playlist->setEnabled(true);
-                ui->menuAudio_Tracks->setEnabled(true);
+                ui->action_Show_Online->setEnabled(true);
+                ui->menuSubtitle_Track->setEnabled(true);
+                ui->menuAudio_Track->setEnabled(true);
+                ui->menuVideo_Track->setEnabled(true);
                 init = true;
             }
-            SetPlaybackControls(true);
+            EnablePlaybackControls(true);
             mpv->Play();
             baka->overlay->showStatusText(QString(), 0);
         case Mpv::Playing:
@@ -447,14 +459,17 @@ MainWindow::MainWindow(QWidget *parent):
                 Util::SetAlwaysOnTop(this, true);
             break;
 
-        case Mpv::Paused:
         case Mpv::Stopped:
+            current = nullptr;
+            UpdateRecentFiles();
+        case Mpv::Paused:
             SetPlayButtonIcon(true);
             if (onTop == "playing")
                 Util::SetAlwaysOnTop(this, false);
             break;
 
         case Mpv::Idle:
+            bool stop = false;
             if (init) {
                 if (ui->action_This_File->isChecked()) // repeat this file
                     ui->playlistWidget->PlayIndex(0, true); // restart file
@@ -465,16 +480,18 @@ MainWindow::MainWindow(QWidget *parent):
                         ui->playlistWidget->count() > 0) { // playlist isn't empty
                         ui->playlistWidget->PlayIndex(0); // restart playlist
                     } else // stop
-                    {
-                        setWindowTitle("Baka MPlayer");
-                        SetPlaybackControls(false);
-                        ui->seekBar->setTracking(0);
-                        ui->actionStop_after_Current->setChecked(false);
-                        if (ui->mpvContainer->styleSheet() != QString()) // remove filler album art
-                            ui->mpvContainer->setStyleSheet("");
-                    }
+                        stop = true;
                 } else
                     ui->playlistWidget->PlayIndex(1, true);
+            } else
+                stop = true;
+
+            if (stop) {
+                setWindowTitle("Baka MPlayer");
+                EnablePlaybackControls(false);
+                ui->seekBar->setTracking(0);
+                ui->actionStop_after_Current->setChecked(false);
+                ShowStartupPage(true);
             }
             break;
         }
@@ -485,13 +502,14 @@ MainWindow::MainWindow(QWidget *parent):
     });
 
     connect(mpv, &MpvHandler::fileChanging, [=] (int t, int l) {
-          if (current != nullptr) {
-              if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
-                  current->time = t;
-              else
-                  current->time = 0;
-          }
-      });
+        if (current != nullptr) {
+            if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+                current->time = t;
+            else
+                current->time = 0;
+        }
+        ShowStartupPage(false);
+    });
 
     // connect(mpv, &MpvHandler::fileChanged, [=] (QString f) {
     // });
@@ -531,7 +549,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(mpv, &MpvHandler::sidChanged, [=] (int sid) {
         QList<QAction*> actions = ui->menuSubtitle_Track->actions();
         for (auto &action : actions) {
-            if (action->text().startsWith(QString::number(sid))) {
+            if ((!sid && action == ui->action_none) || (sid && action->text().startsWith(QString::number(sid)))) {
                 action->setCheckable(true);
                 action->setChecked(true);
             } else
@@ -540,9 +558,22 @@ MainWindow::MainWindow(QWidget *parent):
     });
 
     connect(mpv, &MpvHandler::aidChanged, [=] (int aid) {
-        QList<QAction*> actions = ui->menuAudio_Tracks->actions();
+        QList<QAction*> actions = ui->menuAudio_Track->actions();
         for (auto &action : actions) {
-            if (action->text().startsWith(QString::number(aid))) {
+            if (mpv->getPlayState() > 0 && ((!aid && action == ui->action_none_3) ||
+                                            (aid && action->text().startsWith(QString::number(aid))))) {
+                action->setCheckable(true);
+                action->setChecked(true);
+            } else
+                action->setChecked(false);
+        }
+    });
+
+    connect(mpv, &MpvHandler::vidChanged, [=] (int vid) {
+        QList<QAction*> actions = ui->menuVideo_Track->actions();
+        for (auto &action : actions) {
+            if (mpv->getPlayState() > 0 && ((!vid && action == ui->action_none_5) ||
+                                            (vid && action->text().startsWith(QString::number(vid))))) {
                 action->setCheckable(true);
                 action->setChecked(true);
             } else
@@ -568,29 +599,80 @@ MainWindow::MainWindow(QWidget *parent):
     connect(mpv, &MpvHandler::voChanged, [=] (QString vo) {
         ui->action_Motion_Interpolation->setChecked(vo.contains("interpolation"));
     });
+
+    connect(mpv, &MpvHandler::audioDeviceChanged, [=] (QString device) {
+        QList<QAction*> actions = ui->menuAudio_Device->actions();
+        for (auto &action : actions) {
+            if (action->text().endsWith(device)) {
+                action->setCheckable(true);
+                action->setChecked(true);
+            } else
+                action->setChecked(false);
+        }
+    });
+
+    connect(mpv, &MpvHandler::audioDeviceListChanged, [=] (const QList<Mpv::AudioDevice> &deviceList) {
+        ui->menuAudio_Device->clear();
+        for (const auto &device : deviceList) {
+            QString title = QString("[%0] %1").arg(device.description, device.name);
+            QAction *action = ui->menuAudio_Device->addAction(title);
+            connect(action, &QAction::triggered, [=] {
+                if (mpv->getAudioDevice() != device.name)
+                    mpv->AudioDevice(device.name);
+                else
+                    action->setChecked(true);
+            });
+        }
+    });
+
+    connect(mpv, &MpvHandler::subtitleEncodingChanged, [=] (QString encoding) {
+        QString title = Util::GetCharEncodingTitle(encoding);
+        QList<QAction*> actions = ui->menuSubtitle_Encoding->actions();
+        for (auto &action : actions) {
+            if (action->text() == title) {
+                action->setCheckable(true);
+                action->setChecked(true);
+            } else
+                action->setChecked(false);
+        }
+    });
+
+    connect(mpv, &MpvHandler::subtitleEncodingListChanged, [=] (const QList<QPair<QString, QString> > &encodingList) {
+        ui->menuSubtitle_Encoding->clear();
+        for (const auto &pair : encodingList) {
+            QAction *action = ui->menuSubtitle_Encoding->addAction(pair.second);
+            connect(action, &QAction::triggered, [=] {
+                if (mpv->getSubtitleEncoding() != pair.first)
+                    mpv->SubtitleEncoding(pair.first);
+                else
+                    action->setChecked(true);
+            });
+        }
+    });
+
     // ui
 
     connect(ui->seekBar, &SeekBar::valueChanged, [=] (int i) {              // Playback: Seekbar clicked
         mpv->Seek(mpv->Relative(((double)i/ui->seekBar->maximum())*mpv->getFileInfo().length), true);
     });
 
-    // connect(ui->openButton, &OpenButton::LeftClick, [=] {                  // Playback: Open button (left click)
-    //     baka->Open();
-    // });
-    //
-    // connect(ui->openButton, &OpenButton::MiddleClick, [=] {                // Playback: Open button (middle click)
-    //     baka->Jump();
-    // });
+    connect(ui->openFileButton, &QPushButton::clicked, [=] {
+        baka->Open();
+    });
 
-    // connect(ui->openButton, &OpenButton::RightClick, [=] {                 // Playback: Open button (right click)    
-    //     baka->OpenLocation();
-    // });
+    connect(ui->openUrlButton, &QPushButton::clicked, [=] {
+        baka->OpenLocation();
+    });
 
-    // connect(ui->rewindButton, &QPushButton::clicked, [=] {                // Playback: Rewind button
-    //     mpv->Rewind();
-    // });
+    connect(ui->viewOnlineButton, &QPushButton::clicked, [=] {
+        ShowSidebar(true, true, 1);
+    });
 
-    connect(ui->previousButton, &IndexButton::clicked, [=] {                // Playback: Previous button
+//    connect(ui->rewindButton, &QPushButton::clicked, [=] {                // Playback: Rewind button
+//        mpv->Rewind();
+//    });
+
+    connect(ui->previousButton, &QPushButton::clicked, [=] {                // Playback: Previous button
         ui->playlistWidget->PlayIndex(-1, true);
     });
 
@@ -598,7 +680,7 @@ MainWindow::MainWindow(QWidget *parent):
         baka->PlayPause();
     });
 
-    connect(ui->nextButton, &IndexButton::clicked, [=] {                    // Playback: Next button
+    connect(ui->nextButton, &QPushButton::clicked, [=] {                    // Playback: Next button
         ui->playlistWidget->PlayIndex(1, true);
     });
 
@@ -650,14 +732,7 @@ MainWindow::MainWindow(QWidget *parent):
 
 MainWindow::~MainWindow()
 {
-    if (current != nullptr) {
-        int t = mpv->getTime(),
-            l = mpv->getFileInfo().length;
-        if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
-            current->time = t;
-        else
-            current->time = 0;
-    }
+    CloseFile();
     baka->SaveSettings();
 
     // Note: child objects _should_ not need to be deleted because
@@ -715,6 +790,8 @@ void MainWindow::Load(QString file)
 #endif
     baka->LoadSettings();
     mpv->Initialize();
+    mpv->LoadAudioDevices();
+    mpv->LoadSubtitleEncodings();
     mpv->LoadFile(file);
 }
 
@@ -738,6 +815,17 @@ void MainWindow::updateSidebarWidth()
     int width = ui->sidebarWidget->width();
     int newWidth = qMax(qMin(sidebarWidth, parentWidth / 2), 100);
     ui->sidebarWidget->setGeometry(parentWidth - newWidth, 0, newWidth, parentHeight);
+}
+
+QIcon MainWindow::getTrayIcon()
+{
+#ifdef Q_OS_DARWIN
+    QIcon icon(":/img/logo_mask.svg");
+    icon.setIsMask(true);
+    return icon;
+#else
+    return windowIcon();
+#endif
 }
 
 void MainWindow::MapShortcuts()
@@ -814,13 +902,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                     setRemaining(!remaining); // todo: use a bakacommand
                     return true;
                 } else {
-                    QRect coldArea(ui->sidebarWidget->pos().x() - 10, ui->sidebarWidget->pos().y(), 10, ui->sidebarWidget->height());
+                    QRect coldArea(ui->sidebarWidget->pos().x() - 4, ui->sidebarWidget->pos().y(), 4, ui->sidebarWidget->height());
                     if (!coldArea.contains(ui->controlsWidget->mapTo(this, event->pos()))) {
-                        if (ui->sidebarWidget->isVisible())
-                            ShowSidebar(false);
                         controlsMoveStartPos = event->pos();
                         setCursor(Qt::ClosedHandCursor);
-                        return true;
                     }
                 }
             }
@@ -832,7 +917,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                 if (controlsMoveStartPos.x() >= 0 && controlsMoveStartPos.y() >= 0) {
                     controlsMoveStartPos = QPoint(-1, -1);
                     unsetCursor();
-                    return true;
                 }
             }
         } else if (ev->type() == QEvent::MouseMove) {
@@ -854,14 +938,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
         if (ev->type() == QEvent::MouseButtonPress) {
             QMouseEvent *event = static_cast<QMouseEvent*>(ev);
             if (event->button() == Qt::LeftButton) {
-                QRect coldArea(ui->sidebarWidget->pos().x() - 10, ui->sidebarWidget->pos().y(), 10, ui->sidebarWidget->height());
+                QRect coldArea(ui->sidebarWidget->pos().x() - 4, ui->sidebarWidget->pos().y(), 4, ui->sidebarWidget->height());
                 if (!coldArea.contains(ui->mpvContainer->mapTo(this, event->pos()))) {
-                    if (ui->sidebarWidget->isVisible())
-                        ShowSidebar(false, !isFullScreen());
-                    if (gestures) {
+                    if (gestures)
                         baka->gesture->Begin(GestureHandler::HSEEK_VVOLUME, event->globalPos(), pos());
-                        return true;
-                    }
                 }
             } else if (event->button() == Qt::RightButton) {
                 if (!isFullScreen() && mpv->getPlayState() > 0) {
@@ -874,10 +954,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                 return false;
 #ifdef Q_OS_DARWIN
             if (delayedFullScreen >= 0) {
-                if (delayedFullScreen)
-                    setWindowState(windowState() | Qt::WindowFullScreen);
-                else
-                    setWindowState(windowState() & ~Qt::WindowFullScreen);
+                FullScreen(delayedFullScreen);
                 delayedFullScreen = -1;
             }
 #endif
@@ -897,9 +974,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
             QMouseEvent *event = static_cast<QMouseEvent*>(ev);
             if (event->button() == Qt::LeftButton) {
                 if (!isFullScreen() && ui->action_Full_Screen->isEnabled())
-                    FullScreen(true);
+                    FullScreen(true, true);
                 else
-                    FullScreen(false);
+                    FullScreen(false, true);
             }
         }
     } else if (obj == ui->centralwidget) {
@@ -910,6 +987,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                     QRect hotArea(ui->sidebarWidget->pos().x() - 4, ui->sidebarWidget->pos().y(), 4, ui->sidebarWidget->height());
                     if (hotArea.contains(ui->centralwidget->mapTo(this, event->pos())))
                         sidebarResizeStartX = ui->sidebarWidget->width() + event->pos().x();
+                    else
+                        ShowSidebar(false, !isFullScreen());
                 }
             }
         } else if (ev->type() == QEvent::MouseButtonRelease) {
@@ -928,21 +1007,22 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                     unsetCursor();
                 if (sidebarResizeStartX >= 0) {
                     int newWidth = sidebarResizeStartX - event->pos().x();
-                    newWidth = qMax(qMin(newWidth, width() / 2), 0);
+                    newWidth = qMax(qMin(newWidth, width() / 2), 100);
                     ui->sidebarWidget->setGeometry(ui->centralwidget->width() - newWidth, 0, newWidth, ui->centralwidget->height());
                     sidebarWidth = newWidth;
                 }
             }
-            if (cursor().shape() == Qt::BlankCursor)
-                unsetCursor();
-            ShowControls(true);
-            autohide->stop();
-            if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
-                    sidebarResizeStartX < 0 && autohide)
-                autohide->start(3000);
+            if (mpv->getPlayState() > 0) {
+                if (cursor().shape() == Qt::BlankCursor)
+                    unsetCursor();
+                ShowControls(true);
+                autohide->stop();
+                if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
+                        sidebarResizeStartX < 0 && autohide)
+                    autohide->start(3000);
+            }
         } else if (ev->type() == QEvent::Leave) {
-            if (ui->sidebarWidget->isVisible())
-                unsetCursor();
+            unsetCursor();
         }
     }
     return false;
@@ -982,6 +1062,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     int width = event->size().width();
     int height = event->size().height();
     ui->mpvContainer->setGeometry(0, 0, width, height);
+    ui->startupPage->setGeometry(0, 0, width, height);
     updateControlsPos();
     updateSidebarWidth();
 
@@ -1001,19 +1082,16 @@ void MainWindow::SetIndexLabels(bool enable)
         index = ui->playlistWidget->CurrentIndex();
 
     // next file
-    if (enable && index+1 < ui->playlistWidget->count()) { // not the last entry
-        SetNextButtonEnabled(true);
-        ui->nextButton->setIndex(index+2); // starting at 1 instead of at 0 like actual index
-
-    } else
-        SetNextButtonEnabled(false);
+    if (enable && index+1 < ui->playlistWidget->count())
+        EnableNextButton(true);
+    else
+        EnableNextButton(false);
 
     // previous file
-    if (enable && index-1 >= 0) { // not the first entry
-        SetPreviousButtonEnabled(true);
-        ui->previousButton->setIndex(-index); // we use a negative index value for the left button
-    } else
-        SetPreviousButtonEnabled(false);
+    if (enable && index-1 >= 0)
+        EnablePreviousButton(true);
+    else
+        EnablePreviousButton(false);
 
     if (i == -1) { // no selection
         ui->indexLabel->setText(tr("No selection"));
@@ -1024,20 +1102,22 @@ void MainWindow::SetIndexLabels(bool enable)
     }
 }
 
-void MainWindow::SetPlaybackControls(bool enable)
+void MainWindow::EnablePlaybackControls(bool enable)
 {
     // playback controls
     ui->seekBar->setEnabled(enable);
-    // ui->rewindButton->setEnabled(enable);
 
     SetIndexLabels(enable);
 
     // menubar
+    ui->action_Play->setEnabled(enable);
     ui->action_Stop->setEnabled(enable);
     ui->action_Restart->setEnabled(enable);
+    ui->actionStop_after_Current->setEnabled(enable);
     ui->menuS_peed->setEnabled(enable);
     ui->action_Jump_to_Time->setEnabled(enable);
     ui->actionMedia_Info->setEnabled(enable);
+    ui->actionClose->setEnabled(enable && baka->mpv->getPath() != QString());
     ui->actionShow_in_Folder->setEnabled(enable && baka->mpv->getPath() != QString());
     ui->action_Full_Screen->setEnabled(enable);
     if (!enable) {
@@ -1046,39 +1126,121 @@ void MainWindow::SetPlaybackControls(bool enable)
     }
 }
 
-void MainWindow::FullScreen(bool fs)
+void MainWindow::EnableTrackOperations(bool enable)
 {
-    if (fs && baka->dimDialog && baka->dimDialog->isVisible())
+    if (enable && ui->menuSubtitle_Track->actions().count() > 1) {
+        ui->menuSubtitle_Track->setEnabled(true);
+        ui->action_none->setEnabled(true);
+    } else
+        ui->menuSubtitle_Track->setEnabled(false);
+    ui->action_Add_Subtitle_File->setEnabled(enable);
+
+    if (enable && ui->menuAudio_Track->actions().count() > 1) {
+        ui->menuAudio_Track->setEnabled(true);
+        ui->action_none_3->setEnabled(true);
+    } else
+        ui->menuAudio_Track->setEnabled(false);
+    ui->action_Add_Audio_File->setEnabled(enable);
+
+    if (enable && ui->menuVideo_Track->actions().count() > 1) {
+        ui->menuVideo_Track->setEnabled(true);
+        ui->action_none_5->setEnabled(true);
+    } else
+        ui->menuVideo_Track->setEnabled(false);
+}
+
+void MainWindow::EnableAudioFunctions(bool enable)
+{
+    ui->menuAudio_Delay->setEnabled(enable);
+}
+
+void MainWindow::EnableVideoFunctions(bool enable)
+{
+    ui->menuSubtitle_Track->setEnabled(enable);
+    bool enableSub = (enable && ui->menuSubtitle_Track->actions().count() > 1);
+    ui->menuFont_Si_ze->setEnabled(enableSub);
+    ui->actionShow_Subtitles->setEnabled(enableSub);
+    ui->actionShow_Subtitles->setChecked(enableSub && mpv->getSubtitleVisibility());
+    ui->action_Subtitle_Font->setEnabled(enableSub);
+    ui->menuSubtitle_Delay->setEnabled(enableSub);
+    ui->menuSubtitle_Encoding->setEnabled(enableSub);
+
+    ui->menuScreenshot->setEnabled(enable);
+    ui->menuVideo_Size->setEnabled(enable);
+    ui->action_Frame_Step->setEnabled(enable);
+    ui->actionFrame_Back_Step->setEnabled(enable);
+    ui->action_Deinterlace->setEnabled(enable);
+    ui->action_Motion_Interpolation->setEnabled(enable);
+}
+
+void MainWindow::FullScreen(bool fullScreen, bool doubleClick)
+{
+    if (fullScreen && baka->dimDialog && baka->dimDialog->isVisible())
         baka->Dim(false);
 
     // fix bug: https://bugreports.qt.io/browse/QTBUG-46077
 #ifdef Q_OS_DARWIN
-    delayedFullScreen = fs;
+    if (doubleClick) {
+        delayedFullScreen = fullScreen;
+        return;
+    }
 #else
-    if (fs)
+    Q_UNUSED(doubleClick);
+#endif
+
+    if (fullScreen)
         setWindowState(windowState() | Qt::WindowFullScreen);
     else
         setWindowState(windowState() & ~Qt::WindowFullScreen);
-#endif
 }
 
-bool MainWindow::isSidebarVisible()
+void MainWindow::ShowStartupPage(bool visible)
 {
+    if (visible) {
+        ui->startupPage->show();
+        ui->mpvContainer->hide();
+        ui->controlsWidget->hide();
+        autohide->stop();
+    } else {
+        ui->startupPage->hide();
+        ui->mpvContainer->show();
+    }
+}
+
+void MainWindow::CloseFile()
+{
+    if (current != nullptr) {
+        int t = mpv->getTime(),
+            l = mpv->getFileInfo().length;
+        if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+            current->time = t;
+        else
+            current->time = 0;
+    }
+    mpv->Stop();
+    init = false;
+}
+
+bool MainWindow::isSidebarVisible(int index)
+{
+    if (index >= 0)
+        return ui->sidebarWidget->isVisible() && ui->tabWidget->currentIndex() == index;
+
     return ui->sidebarWidget->isVisible();
 }
 
-void MainWindow::ToggleSidebar()
+void MainWindow::ToggleSidebar(int index)
 {
-    ShowSidebar(!isSidebarVisible(), !isFullScreen());
+    ShowSidebar(!isSidebarVisible(index), !isFullScreen(), index);
 }
 
 void MainWindow::ShowSidebar(bool visible, bool anim, int index)
 {
-    if (visible == ui->sidebarWidget->isVisible())
-        return;
-
     if (index >= 0)
         ui->tabWidget->setCurrentIndex(index);
+
+    if (visible == ui->sidebarWidget->isVisible())
+        return;
 
     if (visible) {
         updateSidebarWidth();
@@ -1171,7 +1333,7 @@ void MainWindow::UpdateRecentFiles()
     }
 }
 
-void MainWindow::SetNextButtonEnabled(bool enable)
+void MainWindow::EnableNextButton(bool enable)
 {
     ui->nextButton->setEnabled(enable);
     ui->actionPlay_Next_File->setEnabled(enable);
@@ -1180,7 +1342,7 @@ void MainWindow::SetNextButtonEnabled(bool enable)
 #endif
 }
 
-void MainWindow::SetPreviousButtonEnabled(bool enable)
+void MainWindow::EnablePreviousButton(bool enable)
 {
     ui->previousButton->setEnabled(enable);
     ui->actionPlay_Previous_File->setEnabled(enable);

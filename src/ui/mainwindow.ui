@@ -10,6 +10,12 @@
     <height>434</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
@@ -115,19 +121,16 @@ QListView {
 #refreshButton {
   padding: 2px;
   margin: 1px;
+  border: none;
 }
-#repeatButton:flat,
-#shuffleButton:flat,
-#addButton:flat,
-#refreshButton:flat {
-    border: none; /* no border for a flat push button */
-}
-#repeatButton:flat:pressed,
-#shuffleButton:flat:pressed,
-#addButton:flat:pressed,
-#refreshButton:flat:pressed {
-  background: #515151;
-  border-radius: 2px;
+
+#openFileButton,
+#openUrlButton,
+#viewOnlineButton {
+  padding: 5px 10px 5px 10px;
+  color: #E5E5E5;
+  text-align: left;
+  border: none;
 }
 
 /* QScrollBar */
@@ -349,7 +352,7 @@ QSlider::handle:horizontal {
         </spacer>
        </item>
        <item>
-        <widget class="IndexButton" name="previousButton">
+        <widget class="QPushButton" name="previousButton">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -457,7 +460,7 @@ QSlider::handle:horizontal {
         </spacer>
        </item>
        <item>
-        <widget class="IndexButton" name="nextButton">
+        <widget class="QPushButton" name="nextButton">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -885,15 +888,15 @@ QTabBar::tab:!selected {
               <property name="toolTip">
                <string>Repeat</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton:pressed {
+	background: #515151;
+	border-radius: 2px;
+}</string>
+              </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
                 <normaloff>:/img/repeat_off.svg</normaloff>:/img/repeat_off.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -911,15 +914,15 @@ QTabBar::tab:!selected {
               <property name="toolTip">
                <string>Shuffle Playlist</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton:pressed {
+	background: #515151;
+	border-radius: 2px;
+}</string>
+              </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
                 <normaloff>:/img/shuffle.svg</normaloff>:/img/shuffle.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -976,15 +979,15 @@ QTabBar::tab:!selected {
               <property name="toolTip">
                <string>Add File to Playlist</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton:pressed {
+	background: #515151;
+	border-radius: 2px;
+}</string>
+              </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
                 <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>12</width>
-                <height>12</height>
-               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -1002,15 +1005,15 @@ QTabBar::tab:!selected {
               <property name="toolTip">
                <string>Refresh Playlist</string>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton:pressed {
+	background: #515151;
+	border-radius: 2px;
+}</string>
+              </property>
               <property name="icon">
                <iconset resource="../rsclist.qrc">
                 <normaloff>:/img/refresh_view.svg</normaloff>:/img/refresh_view.svg</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>12</width>
-                <height>12</height>
-               </size>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -1086,6 +1089,192 @@ QTabBar::tab:!selected {
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="startupPage" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>301</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #353535;</string>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>86</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>17</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="logoImage">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../rsclist.qrc">:/img/logo.svg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="CustomPushButton" name="openFileButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover {
+	background: #272727;
+	border-radius: 3px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Open File...</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CustomPushButton" name="openUrlButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover {
+	background: #272727;
+	border-radius: 3px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Open URL...</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CustomPushButton" name="viewOnlineButton">
+         <property name="styleSheet">
+          <string notr="true">QPushButton:hover {
+	background: #272727;
+	border-radius: 3px;
+}</string>
+         </property>
+         <property name="text">
+          <string>View Online...</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>147</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>85</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <zorder>mpvContainer</zorder>
+   <zorder>controlsWidget</zorder>
+   <zorder>startupPage</zorder>
+   <zorder>sidebarWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1112,6 +1301,7 @@ QTabBar::tab:!selected {
     <addaction name="actionOpen_URL"/>
     <addaction name="actionOpen_Path_from_Clipboard"/>
     <addaction name="menu_Recently_Opened"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionShow_in_Folder"/>
     <addaction name="separator"/>
@@ -1119,54 +1309,6 @@ QTabBar::tab:!selected {
     <addaction name="actionPlay_Previous_File"/>
     <addaction name="separator"/>
     <addaction name="actionE_xit"/>
-   </widget>
-   <widget class="QMenu" name="menu_View">
-    <property name="title">
-     <string>&amp;View</string>
-    </property>
-    <widget class="QMenu" name="menuSubtitle_Track">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Subtitle &amp;Track</string>
-     </property>
-     <addaction name="action_Add_Subtitle_File"/>
-     <addaction name="separator"/>
-     <addaction name="action_none"/>
-    </widget>
-    <widget class="QMenu" name="menuFont_Si_ze">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Font Si&amp;ze</string>
-     </property>
-     <addaction name="action_Size"/>
-     <addaction name="actionS_ize"/>
-     <addaction name="action_Reset_Size"/>
-    </widget>
-    <widget class="QMenu" name="menuTake_Screenshot">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Take &amp;Screenshot</string>
-     </property>
-     <addaction name="actionWith_Subtitles"/>
-     <addaction name="actionWithout_Subtitles"/>
-    </widget>
-    <addaction name="action_Full_Screen"/>
-    <addaction name="menuTake_Screenshot"/>
-    <addaction name="separator"/>
-    <addaction name="actionShow_Subtitles"/>
-    <addaction name="menuSubtitle_Track"/>
-    <addaction name="menuFont_Si_ze"/>
-    <addaction name="separator"/>
-    <addaction name="action_Motion_Interpolation"/>
-    <addaction name="action_Deinterlace"/>
-    <addaction name="separator"/>
-    <addaction name="actionMedia_Info"/>
    </widget>
    <widget class="QMenu" name="menu_Playback">
     <property name="title">
@@ -1180,17 +1322,6 @@ QTabBar::tab:!selected {
      <addaction name="separator"/>
      <addaction name="action_Playlist"/>
      <addaction name="action_This_File"/>
-    </widget>
-    <widget class="QMenu" name="menuAudio_Tracks">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>Audio &amp;Tracks</string>
-     </property>
-     <addaction name="action_Add_Audio_File"/>
-     <addaction name="separator"/>
-     <addaction name="action_none_3"/>
     </widget>
     <widget class="QMenu" name="menuS_peed">
      <property name="enabled">
@@ -1207,30 +1338,6 @@ QTabBar::tab:!selected {
      <addaction name="separator"/>
      <addaction name="action_Reset"/>
     </widget>
-    <widget class="QMenu" name="menu_Volume">
-     <property name="title">
-      <string>&amp;Volume</string>
-     </property>
-     <addaction name="action_Increase_Volume"/>
-     <addaction name="action_Decrease_Volume"/>
-     <addaction name="action_Mute"/>
-    </widget>
-    <addaction name="action_Play"/>
-    <addaction name="action_Stop"/>
-    <addaction name="action_Restart"/>
-    <addaction name="menuS_peed"/>
-    <addaction name="separator"/>
-    <addaction name="actionSh_uffle"/>
-    <addaction name="menuR_epeat"/>
-    <addaction name="actionStop_after_Current"/>
-    <addaction name="separator"/>
-    <addaction name="menuAudio_Tracks"/>
-    <addaction name="menu_Volume"/>
-   </widget>
-   <widget class="QMenu" name="menu_Navigate">
-    <property name="title">
-     <string>&amp;Navigate</string>
-    </property>
     <widget class="QMenu" name="menu_Chapters">
      <property name="enabled">
       <bool>false</bool>
@@ -1240,6 +1347,16 @@ QTabBar::tab:!selected {
      </property>
      <addaction name="action_none_2"/>
     </widget>
+    <addaction name="action_Play"/>
+    <addaction name="action_Stop"/>
+    <addaction name="action_Restart"/>
+    <addaction name="separator"/>
+    <addaction name="menuS_peed"/>
+    <addaction name="separator"/>
+    <addaction name="actionSh_uffle"/>
+    <addaction name="menuR_epeat"/>
+    <addaction name="actionStop_after_Current"/>
+    <addaction name="separator"/>
     <addaction name="action_Next_Chapter"/>
     <addaction name="action_Previous_Chapter"/>
     <addaction name="menu_Chapters"/>
@@ -1248,14 +1365,164 @@ QTabBar::tab:!selected {
     <addaction name="actionFrame_Back_Step"/>
     <addaction name="separator"/>
     <addaction name="action_Jump_to_Time"/>
-   </widget>
-   <widget class="QMenu" name="menu_Settings">
-    <property name="title">
-     <string>&amp;Settings</string>
-    </property>
+    <addaction name="separator"/>
     <addaction name="action_Show_Playlist"/>
+    <addaction name="action_Show_Online"/>
+   </widget>
+   <widget class="QMenu" name="menuVideo">
+    <property name="title">
+     <string>Video</string>
+    </property>
+    <widget class="QMenu" name="menuVideo_Track">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Video &amp;Track</string>
+     </property>
+     <addaction name="action_none_5"/>
+    </widget>
+    <widget class="QMenu" name="menuVideo_Size">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Video Size</string>
+     </property>
+     <addaction name="action50"/>
+     <addaction name="action75"/>
+     <addaction name="action100"/>
+     <addaction name="action150"/>
+     <addaction name="action200"/>
+     <addaction name="separator"/>
+     <addaction name="actionFit_Screen"/>
+    </widget>
+    <addaction name="menuVideo_Track"/>
+    <addaction name="separator"/>
+    <addaction name="menuVideo_Size"/>
+    <addaction name="action_Full_Screen"/>
+    <addaction name="separator"/>
+    <addaction name="action_Motion_Interpolation"/>
+    <addaction name="action_Deinterlace"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuAudio">
+    <property name="title">
+     <string>Audio</string>
+    </property>
+    <widget class="QMenu" name="menuAudio_Track">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Audio &amp;Track</string>
+     </property>
+     <addaction name="action_none_3"/>
+    </widget>
+    <widget class="QMenu" name="menu_Volume">
+     <property name="title">
+      <string>&amp;Volume</string>
+     </property>
+     <addaction name="action_Increase_Volume"/>
+     <addaction name="action_Decrease_Volume"/>
+    </widget>
+    <widget class="QMenu" name="menuAudio_Delay">
+     <property name="title">
+      <string>Audio &amp;Delay</string>
+     </property>
+     <addaction name="action_Increase_Audio_Delay"/>
+     <addaction name="action_Decrease_Audio_Delay"/>
+     <addaction name="action_Reset_Audio_Delay"/>
+    </widget>
+    <widget class="QMenu" name="menuAudio_Device">
+     <property name="title">
+      <string>Audio De&amp;vice</string>
+     </property>
+    </widget>
+    <addaction name="menuAudio_Track"/>
+    <addaction name="action_Add_Audio_File"/>
+    <addaction name="separator"/>
+    <addaction name="menu_Volume"/>
+    <addaction name="action_Mute"/>
+    <addaction name="separator"/>
+    <addaction name="menuAudio_Delay"/>
+    <addaction name="separator"/>
+    <addaction name="menuAudio_Device"/>
+   </widget>
+   <widget class="QMenu" name="menuSubtitles">
+    <property name="title">
+     <string>Subtitles</string>
+    </property>
+    <widget class="QMenu" name="menuSubtitle_Track">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Subtitle &amp;Track</string>
+     </property>
+     <addaction name="action_none"/>
+    </widget>
+    <widget class="QMenu" name="menuFont_Si_ze">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Font Si&amp;ze</string>
+     </property>
+     <addaction name="action_Size"/>
+     <addaction name="actionS_ize"/>
+     <addaction name="action_Reset_Size"/>
+    </widget>
+    <widget class="QMenu" name="menuSubtitle_Encoding">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Encoding</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuSubtitle_Delay">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Subtitle &amp;Delay</string>
+     </property>
+     <addaction name="action_Increase_Subtitle_Delay"/>
+     <addaction name="action_Decrease_Subtitle_Delay"/>
+     <addaction name="action_Reset_Subtitle_Delay"/>
+    </widget>
+    <addaction name="actionShow_Subtitles"/>
+    <addaction name="menuSubtitle_Track"/>
+    <addaction name="action_Add_Subtitle_File"/>
+    <addaction name="separator"/>
+    <addaction name="action_Subtitle_Font"/>
+    <addaction name="menuFont_Si_ze"/>
+    <addaction name="menuSubtitle_Encoding"/>
+    <addaction name="separator"/>
+    <addaction name="menuSubtitle_Delay"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <widget class="QMenu" name="menuScreenshot">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Screenshot</string>
+     </property>
+     <addaction name="actionWith_Subtitles"/>
+     <addaction name="actionWithout_Subtitles"/>
+     <addaction name="separator"/>
+     <addaction name="actionOpen_Screenshot_Folder"/>
+    </widget>
+    <addaction name="menuScreenshot"/>
     <addaction name="separator"/>
     <addaction name="action_Dim_Lights"/>
+    <addaction name="separator"/>
+    <addaction name="actionMedia_Info"/>
     <addaction name="separator"/>
     <addaction name="action_Preferences"/>
    </widget>
@@ -1271,10 +1538,11 @@ QTabBar::tab:!selected {
     <addaction name="actionAbout_Baka_MPlayer"/>
    </widget>
    <addaction name="menu_File"/>
-   <addaction name="menu_View"/>
    <addaction name="menu_Playback"/>
-   <addaction name="menu_Navigate"/>
-   <addaction name="menu_Settings"/>
+   <addaction name="menuVideo"/>
+   <addaction name="menuAudio"/>
+   <addaction name="menuSubtitles"/>
+   <addaction name="menuTools"/>
    <addaction name="menu_Help"/>
   </widget>
   <action name="action_New_Player">
@@ -1298,6 +1566,14 @@ QTabBar::tab:!selected {
   <action name="actionOpen_Path_from_Clipboard">
    <property name="text">
     <string>Open &amp;Copied Link</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Clos&amp;e</string>
    </property>
   </action>
   <action name="actionShow_in_Folder">
@@ -1443,9 +1719,6 @@ QTabBar::tab:!selected {
    </property>
   </action>
   <action name="action_Show_Playlist">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1453,10 +1726,15 @@ QTabBar::tab:!selected {
     <string>&amp;Show Playlist</string>
    </property>
   </action>
-  <action name="action_Dim_Lights">
-   <property name="checkable">
-    <bool>true</bool>
+  <action name="action_Show_Online">
+   <property name="enabled">
+    <bool>false</bool>
    </property>
+   <property name="text">
+    <string>&amp;Show Online</string>
+   </property>
+  </action>
+  <action name="action_Dim_Lights">
    <property name="text">
     <string>&amp;Dim Lights</string>
    </property>
@@ -1481,12 +1759,50 @@ QTabBar::tab:!selected {
     <string>About &amp;Baka MPlayer</string>
    </property>
   </action>
+  <action name="action50">
+   <property name="text">
+    <string>&amp;50%</string>
+   </property>
+  </action>
+  <action name="action75">
+   <property name="text">
+    <string>&amp;75%</string>
+   </property>
+  </action>
+  <action name="action100">
+   <property name="text">
+    <string>&amp;100%</string>
+   </property>
+  </action>
+  <action name="action150">
+   <property name="text">
+    <string>15&amp;0%</string>
+   </property>
+  </action>
+  <action name="action200">
+   <property name="text">
+    <string>&amp;200%</string>
+   </property>
+  </action>
+  <action name="actionFit_Screen">
+   <property name="text">
+    <string>&amp;Fit to Screen</string>
+   </property>
+  </action>
   <action name="action_Add_Subtitle_File">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>&amp;Add Subtitle File...</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Font">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Font...</string>
    </property>
   </action>
   <action name="action_none">
@@ -1557,6 +1873,36 @@ QTabBar::tab:!selected {
     <string>&amp;Decrease by 5%</string>
    </property>
   </action>
+  <action name="action_Increase_Audio_Delay">
+   <property name="text">
+    <string>&amp;Increase by 0.5s</string>
+   </property>
+  </action>
+  <action name="action_Decrease_Audio_Delay">
+   <property name="text">
+    <string>&amp;Decrease by 0.5s</string>
+   </property>
+  </action>
+  <action name="action_Reset_Audio_Delay">
+   <property name="text">
+    <string>&amp;Reset Delay</string>
+   </property>
+  </action>
+  <action name="action_Increase_Subtitle_Delay">
+   <property name="text">
+    <string>&amp;Increase by 0.5s</string>
+   </property>
+  </action>
+  <action name="action_Decrease_Subtitle_Delay">
+   <property name="text">
+    <string>&amp;Decrease by 0.5s</string>
+   </property>
+  </action>
+  <action name="action_Reset_Subtitle_Delay">
+   <property name="text">
+    <string>&amp;Reset Delay</string>
+   </property>
+  </action>
   <action name="actionWith_Subtitles">
    <property name="text">
     <string>With &amp;Subtitles...</string>
@@ -1567,12 +1913,25 @@ QTabBar::tab:!selected {
     <string>&amp;Without Subtitles...</string>
    </property>
   </action>
+  <action name="actionOpen_Screenshot_Folder">
+   <property name="text">
+    <string>&amp;Open Screenshot Folder</string>
+   </property>
+  </action>
   <action name="action_Preferences">
    <property name="text">
     <string>&amp;Preferences...</string>
    </property>
   </action>
   <action name="action_none_3">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>[ &amp;none ]</string>
+   </property>
+  </action>
+  <action name="action_none_5">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1655,6 +2014,9 @@ QTabBar::tab:!selected {
    <property name="text">
     <string>&amp;Add Audio File...</string>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
   </action>
  </widget>
  <customwidgets>
@@ -1662,11 +2024,6 @@ QTabBar::tab:!selected {
    <class>CustomSlider</class>
    <extends>QSlider</extends>
    <header>widgets/customslider.h</header>
-  </customwidget>
-  <customwidget>
-   <class>IndexButton</class>
-   <extends>QPushButton</extends>
-   <header>widgets/indexbutton.h</header>
   </customwidget>
   <customwidget>
    <class>SeekBar</class>
@@ -1687,6 +2044,11 @@ QTabBar::tab:!selected {
    <class>OnlineWidget</class>
    <extends>QListWidget</extends>
    <header>widgets/onlinewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomPushButton</class>
+   <extends>QPushButton</extends>
+   <header>widgets/custompushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

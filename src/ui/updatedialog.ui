@@ -15,81 +15,81 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
-	font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #1A1A1A;
-	color: whitesmoke;
+  font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
+  background: #4B4B4B;
+  color: whitesmoke;
 }
 
 /* QPushButton */
 
 QPushButton {
-	background: #454A4D;
-	border: 1px solid #000;
-	border-radius: 2px;
-	color: whitesmoke;
-	min-width: 76px;
-	min-height: 17px;
-	padding: 4px 6px;
+  background: #848484;
+  border: none;
+  border-radius: 4px;
+  color: whitesmoke;
+  min-width: 76px;
+  min-height: 15px;
+  padding: 3px 6px;
 }
 QPushButton:focus {
-	border: 1px solid #008098;
-	outline: none;
+  border: 1px solid #D6D6D6;
+  outline: none;
 }
 QPushButton:pressed {
-	background: #2E3133;
+  background: #676767;
 }
 QPushButton:disabled {
-	background: transparent;
-	border: 1px solid #454A4D;
-	color: #6F6F6F;
+  background: transparent;
+  border: 1px solid #6E6E6E;
+  color: #6F6F6F;
 }
 
 /* QScrollBar */
 
 QScrollBar:vertical {
-	padding-left: 1px;
-	width: 6px;
+  padding-left: 1px;
+  width: 6px;
 }
 QScrollBar::handle:vertical {
-	background: #008098;
-	border-radius: 2px;
-	min-height: 10px;
+  background: #A0A0A0;
+  border-radius: 2px;
+  min-height: 10px;
 }
 QScrollBar::add-line:vertical,
 QScrollBar::sub-line:vertical {
-	border: none;
+  border: none;
 }
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical  {
-	background: #383838;
-	margin: 0 2px;
+  background: #4B4B4B;
+  margin: 0 2px;
 }
 QScrollBar::up-arrow:vertical,
 QScrollBar::down-arrow:vertical {
-	background: transparent;
+  background: transparent;
 }
 
 QScrollBar:horizontal {
-	height: 6px;
-	padding-top: 1px;
+  height: 6px;
+  padding-top: 1px;
 }
 QScrollBar::handle:horizontal {
-	background: #008098;
-	border-radius: 2px;
-	min-width: 10px;
+  background: #A0A0A0;
+  border-radius: 2px;
+  min-width: 10px;
 }
 QScrollBar::add-line:horizontal,
 QScrollBar::sub-line:horizontal {
-	border: none;
+  border: none;
 }
 QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
-	background: #383838;
-	margin: 2px 0;
+  background: #4B4B4B;
+  margin: 2px 0;
 }
 QScrollBar::left-arrow:horizontal,
 QScrollBar::right-arrow:horizontal {
-	background: transparent;
+  background: transparent;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">

@@ -51,16 +51,21 @@ namespace Mpv
         unsigned external : 1;
         QString external_filename;
         QString codec;
+        int demux_w;
+        int demux_h;
+        double demux_fps;
+        int demux_channel_count;
+        int demux_samplerate;
+        QString decoder_desc;
 
         bool operator==(const Track &t) { return (id == t.id); }
     };
     struct VideoParams {
         QString codec;
-        int width = 0,
-            height = 0,
-            dwidth = 0,
-            dheight = 0;
-        double aspect = 0;
+        int width = 0;
+        int height = 0;
+        int dwidth = 0;
+        int dheight = 0;
     };
     struct AudioParams {
         QString codec;
@@ -76,6 +81,11 @@ namespace Mpv
         AudioParams audio_params;
         QList<Track> tracks; // audio, video, and subs
         QList<Chapter> chapters;
+    };
+
+    struct AudioDevice {
+        QString name;
+        QString description;
     };
 }
 Q_DECLARE_METATYPE(Mpv::PlayState) // so we can pass it with signals & slots

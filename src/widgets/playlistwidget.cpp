@@ -3,6 +3,7 @@
 #include "bakaengine.h"
 #include "mpvhandler.h"
 #include "ui/mainwindow.h"
+#include "util.h"
 
 #include <QListWidgetItem>
 #include <QMenu>
@@ -323,6 +324,9 @@ void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event)
         });
         connect(menu->addAction(tr("&Delete from Disk")), &QAction::triggered, [=] {        // Playlist: Delete from Disk (right-click)
             DeleteFromDisk(item);
+        });
+        connect(menu->addAction(tr("&Show in Folder")), &QAction::triggered, [=] {        // Playlist: Show in Folder (right-click)
+            Util::ShowInFolder(baka->mpv->getPath(), item->text());
         });
         connect(menu->addAction(tr("&Refresh")), &QAction::triggered, [=] {                 // Playlist: Refresh (right-click)
             RefreshPlaylist();

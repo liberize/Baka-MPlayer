@@ -2,7 +2,6 @@
 #include "settings.h"
 
 #include <QRegExp>
-#include <QStandardPaths>
 #include <QDesktopServices>
 #include <QDir>
 #include <QUrl>
@@ -31,8 +30,13 @@ bool DimLightsSupported()
     return false;
 }
 
+void InitWindow(QMainWindow *main)
+{
+}
+
 void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 {
+    // TODO: support wayland
     Display *display = QX11Info::display();
     XEvent event;
     event.xclient.type = ClientMessage;
@@ -55,28 +59,20 @@ void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 
 void SetAspectRatio(QMainWindow *main, int w, int h)
 {
+    // TODO: support wayland
     Display *display = QX11Info::display();
-    XSizeHints *sizeHints = XAllocSizeHints();
-    if (sizeHints == NULL)
+    XSizeHints *hint = XAllocSizeHints();
+    if (hint == NULL)
         return;
 
-    sizeHints->flags = USPosition | PAspect;
-    sizeHints->min_aspect.x = w;
-    sizeHints->max_aspect.x = w;
-    sizeHints->min_aspect.y = h;
-    sizeHints->max_aspect.y = h;
+    hint->flags = PAspect;
+    hint->min_aspect.x = w;
+    hint->max_aspect.x = w;
+    hint->min_aspect.y = h;
+    hint->max_aspect.y = h;
 
-    XSetWMNormalHints(display, main->winId(), sizeHints);
-}
-
-QString SettingsLocation()
-{
-    // saves to  ~/.config/${SETTINGS_FILE}.ini
-    QString s1  = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
-    QString s2 = SETTINGS_FILE;
-    return QString("%0/%1.ini").arg(
-            QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-            SETTINGS_FILE);
+    XSetWMNormalHints(display, main->winId(), hint);
+    XFree(hint);
 }
 
 bool IsValidFile(QString path)

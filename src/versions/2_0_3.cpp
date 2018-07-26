@@ -55,7 +55,7 @@ void BakaEngine::Load2_0_3()
     QJsonObject root = settings->getRoot();
     window->setOnTop(QJsonValueRef2(root["onTop"]).toString("never"));
     sysTrayIcon->setVisible(QJsonValueRef2(root["trayIcon"]).toBool(false));
-    window->setHidePopup(QJsonValueRef2(root["hidePopup"]).toBool(false));
+    window->setShowNotification(QJsonValueRef2(root["showNotification"]).toBool(false));
     window->setRemaining(QJsonValueRef2(root["remaining"]).toBool(true));
 
     int sidebarWidth = QJsonValueRef2(root["sidebarWidth"]).toInt(200);
@@ -126,7 +126,7 @@ void BakaEngine::SaveSettings()
     QJsonObject root = settings->getRoot();
     root["onTop"] = window->onTop;
     root["trayIcon"] = sysTrayIcon->isVisible();
-    root["hidePopup"] = window->hidePopup;
+    root["showNotification"] = window->showNotification;
     root["remaining"] = window->remaining;
     root["sidebarWidth"] = window->getSidebarWidth();
     root["controlsCenterX"] = window->getControlsCenterPos().x();

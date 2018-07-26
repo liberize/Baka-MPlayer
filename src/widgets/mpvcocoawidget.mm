@@ -1,6 +1,9 @@
 #include "mpvcocoawidget.h"
 #include "mpvhandler.h"
 
+#include <QOpenGLTexture>
+#include <QDebug>
+
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <AppKit/AppKit.h>
@@ -14,7 +17,9 @@
 @property (nonatomic, assign) MpvHandler *mpvHandler;
 @property (nonatomic, assign) mpv_render_context *mpvRenderContext;
 @property (nonatomic, strong) NSLock *uninitLock;
-@property (nonatomic, assign) std::function<void()> firstDrawCallback;
+@property (nonatomic, assign) QImage image;
+@property (nonatomic, assign) GLuint framebuffer;
+@property (nonatomic, assign) GLuint texture;
 
 @end
 
@@ -56,12 +61,15 @@ void mpvUpdateCallback(void *ctx) {
         _mpvHandler = NULL;
         _mpvRenderContext = NULL;
         _uninitLock = [[NSLock alloc] init];
+        _framebuffer = 0;
+        _texture = 0;
     }
     return self;
 }
 
 - (void)dealloc {
     [_uninitLock lock];
+    [self destroyGL];
     if (_mpvRenderContext) {
         _mpvHandler->destroyRenderContext(_mpvRenderContext);
         _mpvRenderContext = NULL;
@@ -79,6 +87,32 @@ void mpvUpdateCallback(void *ctx) {
     };
     _mpvRenderContext = _mpvHandler->createRenderContext(params);
     mpv_render_context_set_update_callback(_mpvRenderContext, mpvUpdateCallback, (__bridge void *)self);
+}
+
+- (void)setImage:(QImage)img {
+    _image = img.mirrored(false, true).convertToFormat(QImage::Format_RGB888);
+    [self setNeedsDisplay];
+}
+
+- (void)initGL {
+    glGenFramebuffers(1, &_framebuffer);
+
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, _image.width(), _image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, (const GLvoid *)_image.bits());
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+- (void)destroyGL {
+    if (_framebuffer) {
+        glDeleteFramebuffers(1, &_framebuffer);
+        _framebuffer = 0;
+    }
+    if (_texture) {
+        glDeleteTextures(1, &_texture);
+        _texture = 0;
+    }
 }
 
 - (void)ignoreGLError {
@@ -148,35 +182,48 @@ void mpvUpdateCallback(void *ctx) {
 
     glClear(GLbitfield(GL_COLOR_BUFFER_BIT));
 
-    GLint i = 0;
-    glGetIntegerv(GLenum(GL_DRAW_FRAMEBUFFER_BINDING), &i);
     GLint dims[] = {0, 0, 0, 0};
     glGetIntegerv(GLenum(GL_VIEWPORT), dims);
 
     if (_mpvRenderContext) {
-        bool yes = true;
-        mpv_opengl_fbo fbo { i, dims[2], dims[3], 0 };
-        mpv_render_param params[] {
-            { MPV_RENDER_PARAM_OPENGL_FBO, (void*)&fbo },
-            { MPV_RENDER_PARAM_FLIP_Y, &yes }
-        };
-        mpv_render_context_render(_mpvRenderContext, params);
-        [self ignoreGLError];
+        if (_image.isNull()) {
+            [self destroyGL];
+
+            GLint i = 0;
+            glGetIntegerv(GLenum(GL_DRAW_FRAMEBUFFER_BINDING), &i);
+
+            bool yes = true;
+            mpv_opengl_fbo fbo { i, dims[2], dims[3], 0 };
+            mpv_render_param params[] {
+                { MPV_RENDER_PARAM_OPENGL_FBO, (void*)&fbo },
+                { MPV_RENDER_PARAM_FLIP_Y, &yes }
+            };
+            mpv_render_context_render(_mpvRenderContext, params);
+            [self ignoreGLError];
+        } else {
+            if (!_texture)
+                [self initGL];
+
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, _framebuffer);
+            glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                   GL_TEXTURE_2D, _texture, 0);
+            glBlitFramebuffer(0, 0, _image.width(), _image.height(),
+                              0, 0, dims[2], dims[3],
+                              GL_COLOR_BUFFER_BIT, GL_LINEAR);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+        }
     } else {
         glClearColor(0, 0, 0, 1);
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT));
         [self initMpv];
-        if (_firstDrawCallback)
-            _firstDrawCallback();
     }
     glFlush();
 
     CGLUnlockContext(glContext);
     [_uninitLock unlock];
 
-    if (_mpvRenderContext) {
+    if (_mpvRenderContext && _image.isNull())
         mpv_render_context_report_swap(_mpvRenderContext);
-    }
 }
 
 - (void)draw {
@@ -207,9 +254,9 @@ void mpvUpdateCallback(void *ctx) {
     return self;
 }
 
-- (BOOL)mouseDownCanMoveWindow {
-    return YES;
-}
+//- (BOOL)mouseDownCanMoveWindow {
+//    return YES;
+//}
 
 - (BOOL)isOpaque {
     return YES;
@@ -218,9 +265,9 @@ void mpvUpdateCallback(void *ctx) {
 - (void)draw:(NSRect)dirtyRect {
 }
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)event {
-    return YES;
-}
+//- (BOOL)acceptsFirstMouse:(NSEvent *)event {
+//    return YES;
+//}
 
 @end
 
@@ -228,13 +275,8 @@ MpvCocoaWidget::MpvCocoaWidget(QWidget *parent) :
     QMacCocoaViewContainer(0, parent)
 {
     @autoreleasepool {
-        VideoView *view = [[VideoView alloc] initWithFrame:NSMakeRect(0, 0, width(), height())];
+        VideoView *view = [[VideoView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
         setCocoaView(view);
-
-        ViewLayer *layer = (ViewLayer *)view.layer;
-        layer.firstDrawCallback = [=] {
-            emit firstDrawComplete();
-        };
     }
 }
 
@@ -257,6 +299,17 @@ void MpvCocoaWidget::setMpvHandler(MpvHandler *handler)
         if (view) {
             ViewLayer *layer = (ViewLayer *)view.layer;
             layer.mpvHandler = handler;
+        }
+    }
+}
+
+void MpvCocoaWidget::setContentImage(const QImage &img)
+{
+    @autoreleasepool {
+        VideoView *view = (VideoView *)cocoaView();
+        if (view) {
+            ViewLayer *layer = (ViewLayer *)view.layer;
+            [layer setImage:img];
         }
     }
 }

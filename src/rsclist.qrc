@@ -3,7 +3,6 @@
         <file>img/gesture_seek.svg</file>
         <file>img/gesture_volume.svg</file>
         <file>img/add.svg</file>
-        <file>img/album-art.png</file>
         <file>img/checked.svg</file>
         <file>img/default_mute.svg</file>
         <file>img/default_next.svg</file>
@@ -21,7 +20,6 @@
         <file>img/disabled_playlist.svg</file>
         <file>img/disabled_previous.svg</file>
         <file>img/disabled_reverse.svg</file>
-        <file>img/down-arrow.svg</file>
         <file>img/download.svg</file>
         <file>img/edit.svg</file>
         <file>img/enabled_hide_files.svg</file>
@@ -36,10 +34,17 @@
         <file>img/select_current.svg</file>
         <file>img/selected.svg</file>
         <file>img/shuffle.svg</file>
-        <file>img/up-arrow.svg</file>
         <file>img/blank.svg</file>
         <file>img/search.svg</file>
         <file>img/repeat_off.svg</file>
         <file>img/repeat_one.svg</file>
+        <file>img/logo_mask.svg</file>
+        <file>img/link.svg</file>
+        <file>img/online.svg</file>
+        <file>img/down_arrow.svg</file>
+        <file>img/left_arrow.svg</file>
+        <file>img/right_arrow.svg</file>
+        <file>img/up_arrow.svg</file>
+        <file>img/album_art.png</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@
 // not needed as SetAlwaysOnTop was stubbed for now
 //#include <QWindow>
 #include <QMainWindow>
+#include <QProcess>
 
 #import <AppKit/Appkit.h>
 
@@ -30,6 +31,12 @@ bool DimLightsSupported()
     return true;
 }
 
+void InitWindow(QMainWindow *main)
+{
+    [NSWindow setAllowsAutomaticWindowTabbing:NO];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
+}
+
 void SetAlwaysOnTop(QMainWindow *main, bool ontop)
 {
   if (ontop){
@@ -49,16 +56,6 @@ void SetAspectRatio(QMainWindow *main, int w, int h)
     view.window.contentAspectRatio = NSMakeSize(w, h);
 }
 
-QString SettingsLocation()
-{
-    // saves to  ~/.config/${SETTINGS_FILE}.ini
-    QString s1  = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
-    QString s2 = SETTINGS_FILE;
-    return QString("%0/%1.ini").arg(
-            QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-            SETTINGS_FILE);
-}
-
 bool IsValidFile(QString path)
 {
     QRegExp rx("^\\.{1,2}|/", Qt::CaseInsensitive); // relative path, network location, drive
@@ -71,17 +68,26 @@ bool IsValidLocation(QString loc)
     return (rx.indexIn(loc) != -1);
 }
 
-void ShowInFolder(QString path, QString)
+void ShowInFolder(QString path, QString file)
 {
-    QDesktopServices::openUrl(QString("file:///%0").arg(path));
+    if (file.isEmpty())
+        QDesktopServices::openUrl(QString("file:///%0").arg(path));
+    else {
+        QStringList scriptArgs;
+        scriptArgs << QLatin1String("-e")
+                   << QString::fromLatin1("tell application \"Finder\"\n"
+                                          "  reveal POSIX file \"%1\"\n"
+                                          "  activate\n"
+                                          "end tell")
+                                         .arg(path + file);
+        QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    }
 }
 
 QString MonospaceFont()
 {
     return "Monospace";
 }
-
-#ifdef ENABLE_MPV_COCOA_WIDGET
 
 void SetWantsLayer(QWidget *widget, bool wants)
 {
@@ -121,5 +127,4 @@ void SetCanDrawSubviewsIntoLayer(QWidget *widget)
     view.canDrawSubviewsIntoLayer = YES;
 }
 
-#endif
 }
