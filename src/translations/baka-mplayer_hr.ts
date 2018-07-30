@@ -71,18 +71,6 @@
         <translation type="unfinished">Za zatamnjenje osvjetljenja, kompozitor radne površine mora biti omogućen. Možete ga omogućiti u Upravitelju radne površine.</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation type="unfinished">Prilagodi prozor: %0</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation type="unfinished">Povećaj podnalov</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation type="unfinished">Smanji podnaslov</translation>
-    </message>
-    <message>
         <source>Restart playback</source>
         <translation type="unfinished">Ponovno pokreni repordukciju</translation>
     </message>
@@ -127,20 +115,8 @@
         <translation type="unfinished">Smanji glasnoću zvuka</translation>
     </message>
     <message>
-        <source>Increase playback speed by %0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Toggle fullscreen</source>
         <translation type="unfinished">Cjelozalonski prikaz</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dim lights</source>
@@ -169,10 +145,6 @@
     <message>
         <source>Toggle playlist visibility</source>
         <translation type="unfinished">Prilagodi vidljivost popisa izvođenja</translation>
-    </message>
-    <message>
-        <source>Fit the window to the video</source>
-        <translation type="unfinished">Prliagodi prozor prema video snimci</translation>
     </message>
     <message>
         <source>Boss key</source>
@@ -227,10 +199,6 @@
         <translation type="unfinished">Reprodukcija/Pauza</translation>
     </message>
     <message>
-        <source>Fit window to %0%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Select previous file on playlist</source>
         <translation type="unfinished">Odaberi prijašnju datoteku na popisu izvođenja</translation>
     </message>
@@ -263,19 +231,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>To Current Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation type="unfinished">Brzina: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -316,10 +276,6 @@
     </message>
     <message>
         <source>executes system shell command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -371,10 +327,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -403,10 +355,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>fit the window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>[level]</source>
         <translation type="unfinished"></translation>
     </message>
@@ -427,15 +375,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -459,10 +399,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Toggle mute audio</source>
         <translation type="unfinished"></translation>
     </message>
@@ -476,6 +412,134 @@
     </message>
     <message>
         <source>mutes the audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -495,6 +559,10 @@
     </message>
     <message>
         <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -590,32 +658,16 @@
         <translation>Baka MPlayer</translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation>&gt;</translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation type="unfinished">Pretraži popis izvođenja</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation type="unfinished">Odaberi trenutnu datoteku</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation type="unfinished">Osvježi popis izvođenja</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lijevi klik za otvaranje datoteke&lt;br&gt;Klik kotačićem miša za skok u vremenu&lt;br&gt;Desni klik za otvaranje URL-a&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
         <translation>0:00:00</translation>
-    </message>
-    <message>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <source>Click to change between total and remaining time</source>
@@ -638,24 +690,8 @@
         <translation type="unfinished">&amp;Prikaz</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation type="unfinished">Prilagodi &amp;prozor</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation type="unfinished">Omjer &amp;slike</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation type="unfinished">Zapis &amp;podnaslova</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation type="unfinished">Veličina sl&amp;ova</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation type="unfinished">&amp;Snimak zaslona</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -666,10 +702,6 @@
         <translation type="unfinished">P&amp;onovi</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation type="unfinished">Zapis &amp;zvuka</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation type="unfinished"></translation>
     </message>
@@ -678,20 +710,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Navigate</source>
-        <translation type="unfinished">&amp;Upravljanje</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation type="unfinished">&amp;Poglavlja</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation type="unfinished">&amp;Postavke</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -790,26 +810,6 @@
         <translation type="unfinished">O &amp;Baka MPlayeru</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation type="unfinished">Na &amp;trenutnu veličinu</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation type="unfinished">&amp;Automatsko otkrivanje</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation type="unfinished">Prisli &amp;4:3</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation type="unfinished">Prisili 16:&amp;9</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation type="unfinished">Prisili &amp;2.35.1</translation>
-    </message>
-    <message>
         <source>&amp;Add Subtitle File...</source>
         <translation type="unfinished">&amp;Dodaj datoteku podnaslova...</translation>
     </message>
@@ -836,10 +836,6 @@
     <message>
         <source>&amp;This File</source>
         <translation type="unfinished">&amp;Ovu datoteka</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation type="unfinished">Prikaži &amp;naredbeni redak</translation>
     </message>
     <message>
         <source>With &amp;Subtitles...</source>
@@ -880,16 +876,6 @@
     <message>
         <source>Speed: %0x</source>
         <translation type="unfinished">Brzina: %0x</translation>
-    </message>
-    <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation type="unfinished">Upišite broj datoteke koju želite reproducirati:
-Napomena: vrijednost mora biti %0 - %1</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation type="unfinished">Upišite broj datoteke</translation>
     </message>
     <message>
         <source>No selection</source>
@@ -933,10 +919,6 @@ Napomena: vrijednost mora biti %0 - %1</translation>
     </message>
     <message>
         <source>Pla&amp;y Next File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide &amp;Album Art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1012,15 +994,171 @@ Napomena: vrijednost mora biti %0 - %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Click to play a specific file by index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>0 / 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%0 / %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">Video</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1107,10 +1245,6 @@ Napomena: vrijednost mora biti %0 - %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1138,6 +1272,26 @@ Napomena: vrijednost mora biti %0 - %1</translation>
         <source>Motion Interpolation: %0</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1163,6 +1317,17 @@ Napomena: vrijednost mora biti %0 - %1</translation>
     </message>
     <message>
         <source>Delete external sub-file?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1193,32 +1358,8 @@ Napomena: vrijednost mora biti %0 - %1</translation>
         <translation type="unfinished">Ikona trake sustava</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation type="unfinished">&amp;Sakrij skočne prozore</translation>
-    </message>
-    <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation type="unfinished">&amp;Automatska prilagodba prozora:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1241,23 +1382,11 @@ Napomena: vrijednost mora biti %0 - %1</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>History</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1394,6 +1523,37 @@ Napomena: vrijednost mora biti %0 - %1</translation>
     </message>
     <message>
         <source>Are you sure you want to reset all shortcut keys to its original bindings?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

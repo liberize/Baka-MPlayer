@@ -1,3 +1,4 @@
+#include "pluginmanager.h"
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 
@@ -5,6 +6,10 @@
 #include "ui/mainwindow.h"
 #include "mpvhandler.h"
 #include "ui/keydialog.h"
+#include "util.h"
+#include "delegates/pluginitemdelegate.h"
+#include "models/pluginmodel.h"
+#include "ui/pluginconfigdialog.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -43,6 +48,40 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     screenshotDir = QDir::toNativeSeparators(baka->mpv->getScreenshotDir());
     ui->templateLineEdit->setText(baka->mpv->getScreenshotTemplate());
     ui->msgLvlComboBox->setCurrentText(baka->mpv->getMsgLevel());
+
+    pluginModel = new PluginModel(this);
+    QList<Pi::Plugin> plugins = baka->pluginManager->GetAllPlugins();
+    for (const auto &p : plugins) {
+        QStandardItem *item = new QStandardItem;
+        item->setData(QVariant::fromValue(p), Qt::UserRole);
+        pluginModel->appendRow(item);
+    }
+    pluginItemDelegate = new PluginItemDelegate(this);
+    ui->pluginListView->setItemDelegate(pluginItemDelegate);
+    ui->pluginListView->setModel(pluginModel);
+
+    connect(pluginModel, &PluginModel::pluginEnableStateChanged, [=] (QString name, bool enable) {
+        baka->pluginManager->EnablePlugin(name, enable);
+    });
+    connect(ui->openPluginFolderButton, &QPushButton::clicked, [=] {
+        QModelIndex index = ui->pluginListView->currentIndex();
+        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
+        Util::ShowInFolder(plugin.path, "");
+    });
+    connect(ui->pluginConfigButton, &QPushButton::clicked, [=] {
+        QModelIndex index = ui->pluginListView->currentIndex();
+        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
+        if (!plugin.config.empty())
+            if (PluginConfigDialog::open(plugin.name, plugin.config, this)) {
+                pluginModel->setData(index, QVariant::fromValue(plugin), Qt::UserRole);
+                baka->pluginManager->UpdatePluginConfig(plugin.name, plugin.config);
+            }
+    });
+    connect(ui->pluginListView->selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
+        Pi::Plugin plugin = current.data(Qt::UserRole).value<Pi::Plugin>();
+        ui->pluginConfigButton->setEnabled(!plugin.config.empty());
+        ui->openPluginFolderButton->setEnabled(true);
+    });
 
     // add shortcuts
     saved = baka->input;
@@ -147,7 +186,7 @@ void PreferencesDialog::showPreferences(BakaEngine *baka, QWidget *parent)
 void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
-    QDir root(APP_LANG_PATH);
+    QDir root(Util::TranslationsPath());
     // get files in the directory with .qm extension
     QFileInfoList flist;
     flist = root.entryInfoList({"*.qm"}, QDir::Files);

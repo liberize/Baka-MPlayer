@@ -250,6 +250,80 @@ void MpvHandler::SubtitleFont(const QFont &font)
     }
 }
 
+QColor MpvHandler::fromColorString(QString colorStr)
+{
+    QColor color;
+    if (colorStr[0] == '#')
+        color.setNamedColor(colorStr);
+    else {
+        QList<qreal> c;
+        for (const auto &v : colorStr.split('/'))
+            c.push_back(v.toDouble());
+        if (c.length() == 4)
+            color.setRgbF(c[0], c[1], c[2], c[3]);
+        else if (c.length() == 3)
+            color.setRgbF(c[0], c[1], c[2]);
+        else if (c.length() == 2)
+            color.setRgbF(c[0], c[0], c[0], c[1]);
+    }
+    return color;
+}
+
+QString MpvHandler::toColorString(const QColor &color)
+{
+    return color.name(QColor::HexArgb);
+}
+
+QColor MpvHandler::getSubtitleColor()
+{
+    QString subColor = mpv_get_property_string(mpv, "sub-color");
+    return fromColorString(subColor);
+}
+
+void MpvHandler::SubtitleColor(const QColor &color)
+{
+    QString colorStr = toColorString(color);
+    QByteArray tmp = colorStr.toUtf8();
+    mpv_set_property_string(mpv, "sub-color", tmp.constData());
+}
+
+QColor MpvHandler::getSubtitleBackColor()
+{
+    QString subBackColor = mpv_get_property_string(mpv, "sub-back-color");
+    return fromColorString(subBackColor);
+}
+
+void MpvHandler::SubtitleBackColor(const QColor &color)
+{
+    QString colorStr = toColorString(color);
+    QByteArray tmp = colorStr.toUtf8();
+    mpv_set_property_string(mpv, "sub-back-color", tmp.constData());
+}
+
+void MpvHandler::SubtitleBlur(double factor)
+{
+    mpv_set_property(mpv, "sub-blur", MPV_FORMAT_DOUBLE, &factor);
+}
+
+void MpvHandler::SubtitleShadowOffset(int size)
+{
+    int64_t offset = toScaledFontSize(size);
+    mpv_set_property(mpv, "sub-shadow-offset", MPV_FORMAT_INT64, &offset);
+}
+
+QColor MpvHandler::getSubtitleShadowColor()
+{
+    QString subShadowColor = mpv_get_property_string(mpv, "sub-shadow-color");
+    return fromColorString(subShadowColor);
+}
+
+void MpvHandler::SubtitleShadowColor(const QColor &color)
+{
+    QString colorStr = toColorString(color);
+    QByteArray tmp = colorStr.toUtf8();
+    mpv_set_property_string(mpv, "sub-shadow-color", tmp.constData());
+}
+
 QString MpvHandler::getMediaInfo()
 {
     QFileInfo fi(path+file);

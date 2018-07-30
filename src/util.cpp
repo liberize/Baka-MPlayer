@@ -4,6 +4,7 @@
 #include <QStringListIterator>
 #include <QDir>
 #include <QStandardPaths>
+#include <QCoreApplication>
 
 namespace Util {
 
@@ -749,22 +750,63 @@ const QList<QPair<QString, QString> > charEncodingMap = {
     {"LATIN-9", "Western European (LATIN-9)"}
 };
 
-QDir ConfigDir()
+
+QString Path(QString dir, QString file)
 {
-    QDir dir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-             QDir::separator() + APP_NAME);
-    if (!dir.exists())
-        dir.mkpath(".");
-    return dir;
+    return dir + QDir::separator() + file;
 }
 
-QDir DataDir()
+QString EnsureDirExists(QString dir)
 {
-    QDir dir(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-             QDir::separator() + APP_NAME);
-    if (!dir.exists())
-        dir.mkpath(".");
-    return dir;
+    QDir d(dir);
+    if (!d.exists())
+        d.mkpath(".");
+    return d.absolutePath();
+}
+
+QString ConfigDir()
+{
+    return EnsureDirExists(Path(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation), APP_NAME));
+}
+
+QString DataDir()
+{
+    return EnsureDirExists(Path(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), APP_NAME));
+}
+
+QString AppDataDir()
+{
+    QString dir(APP_DATA_DIR);
+    if (dir[0] == '.')
+        dir = Path(QCoreApplication::applicationDirPath(), dir);
+    return QDir(dir).absolutePath();
+}
+
+QString SettingsPath()
+{
+    return Path(ConfigDir(), QString(APP_NAME) + ".ini");
+}
+
+QString TranslationsPath()
+{
+    QString dir(":/translations");
+    if (QDir(dir).exists())
+        return dir;
+    return Path(AppDataDir(), "translations");
+}
+
+QString ScriptsPath()
+{
+    return Path(AppDataDir(), "scripts");
+}
+
+QList<QString> PluginsPaths()
+{
+    QList<QString> paths = {
+        Path(ScriptsPath(), "plugins"),
+        EnsureDirExists(Path(DataDir(), "plugins"))
+    };
+    return paths;
 }
 
 bool IsValidUrl(QString url)

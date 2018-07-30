@@ -46,5 +46,8 @@
         <file>img/right_arrow.svg</file>
         <file>img/up_arrow.svg</file>
         <file>img/album_art.png</file>
+        <file>img/plugin.svg</file>
+        <file>img/settings.svg</file>
+        <file>img/open_folder.svg</file>
     </qresource>
 </RCC>

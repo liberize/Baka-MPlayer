@@ -87,24 +87,12 @@
         <translation>ყველა ფაილი</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation>ფანჯარაზე მორგება: %0</translation>
-    </message>
-    <message>
-        <source>To Current Size</source>
-        <translation>მიმდინარე ზომაზე</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>სიჩქარე: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
         <translation>სრული ეკრანიდან გამოსასვლელად დააჭირეთ ESC-ს ან ორჯერ დააწკაპეთ</translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>ყველა სამართავი ღილაკის ისევ საჩვენებლად სადააჭირეთ %0-ს</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -137,14 +125,6 @@
     <message>
         <source>&apos;%0&apos; requires parameters</source>
         <translation>&apos;%0&apos; მოითხოვს პარამეტრებს</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>სუბტიტრების ზომის გაზრდა</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>სუბტიტრების ზომის შემცირება</translation>
     </message>
     <message>
         <source>Toggle subtitle visibility</source>
@@ -199,24 +179,12 @@
         <translation>ხმის გაზრდა</translation>
     </message>
     <message>
-        <source>Increase playback speed by %0</source>
-        <translation>დაკვრის სიჩქარის გაზრდა %0-ით</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>დაკვრის სიჩქარის შემცირება %0-ით</translation>
-    </message>
-    <message>
         <source>Reset speed</source>
         <translation>სიჩქარის ჩამოგდება</translation>
     </message>
     <message>
         <source>Toggle fullscreen</source>
         <translation>სრული ეკრანის ბერკეტი</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation>ყველა სამართავი ღილაკის დამალვის ბერკეტი</translation>
     </message>
     <message>
         <source>Dim lights</source>
@@ -287,14 +255,6 @@
         <translation>დაკვრა/შეჩერება</translation>
     </message>
     <message>
-        <source>Fit the window to the video</source>
-        <translation>ფანჯრის მორგება ვიდეოზე</translation>
-    </message>
-    <message>
-        <source>Fit window to %0%</source>
-        <translation>ფანჯრის მორგება %0%-ზე</translation>
-    </message>
-    <message>
         <source>Boss key</source>
         <translation>ბოს ღილაკი</translation>
     </message>
@@ -321,10 +281,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>executes system shell command</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>creates a new instance of baka-mplayer</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -375,10 +331,6 @@
         <translation>toggles dim desktop</translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation>toggles output textbox</translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation>opens preferences dialog</translation>
     </message>
@@ -405,10 +357,6 @@
     <message>
         <source>[percent]</source>
         <translation>[percent]</translation>
-    </message>
-    <message>
-        <source>fit the window</source>
-        <translation>fit the window</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
@@ -443,16 +391,8 @@
         <translation>toggles fullscreen state</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation>toggles hide all controls state</translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>pause and hide the window</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>clears the output textbox</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -475,8 +415,132 @@
         <translation>set mpv msg-level</translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>quit baka-mplayer</translation>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">დაკვრის სიჩქარის გაზრდა %0%-ით</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">დაკვრის სიჩქარის შემცირება %0%-ით</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -496,6 +560,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>&amp;გაუქმება</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -590,32 +658,16 @@
         <translation>Baka MPlayer</translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation>&gt;</translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>დასაკრავ სიაში ძებნა</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>მიმდინარე ფაილის არჩევა</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation>დასაკრავი სიის განახლება</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;მარცხენა წკაპი ფაილის გასახსნელად&lt;br&gt;თაგვის რგოლი გადასახტომად&lt;br&gt;მარჯვენა წკაპი URL-ს გასახსნელად&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
         <translation>0:00:00</translation>
-    </message>
-    <message>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <source>Click to change between total and remaining time</source>
@@ -638,24 +690,8 @@
         <translation>&amp;ხედი</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>ფანჯარაზე &amp;მორგება</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>&amp;თანაფარდობა</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>სუბტიტრების &amp;კვალი</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>შრიფტის &amp;ზომა</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation>&amp;ეკრანის ასლის გადაღება</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -666,10 +702,6 @@
         <translation>&amp;გამეორება</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>აუდიო &amp;კვალები</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation>სიჩქა&amp;რე</translation>
     </message>
@@ -678,16 +710,8 @@
         <translation>&amp;ხმა</translation>
     </message>
     <message>
-        <source>&amp;Navigate</source>
-        <translation>&amp;ნავიგაცია</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>&amp;თავები</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;პარამეტრები</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -782,10 +806,6 @@
         <translation>დასაკრავი სიის &amp;ჩვენება</translation>
     </message>
     <message>
-        <source>Hide &amp;Album Art</source>
-        <translation>&amp;ალბომის გარეკნის დამალვა</translation>
-    </message>
-    <message>
         <source>&amp;Dim Lights</source>
         <translation>სინათლის ჩა&amp;ქრობა</translation>
     </message>
@@ -806,10 +826,6 @@
         <translation>&amp;Baka MPlayer-ის შესახებ</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>&amp;მიმდინარე ზომაზე</translation>
-    </message>
-    <message>
         <source>&amp;50%</source>
         <translation>&amp;50%</translation>
     </message>
@@ -824,22 +840,6 @@
     <message>
         <source>&amp;200%</source>
         <translation>&amp;200%</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>&amp;ავტო-დადგენა</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>&amp;4:3-ის იძულება</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>16:&amp;9-ის იძულება</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>&amp;2.35:1-ის იძულება</translation>
     </message>
     <message>
         <source>&amp;Add Subtitle File...</source>
@@ -872,10 +872,6 @@
     <message>
         <source>&amp;This File</source>
         <translation>&amp;ამ ფაილის</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>&amp;ბრძანებების ზოლის ჩვენება</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
@@ -938,10 +934,6 @@
         <translation>აუდიო ფაილის &amp;დამატება...</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation>სამართავი ღილაკების &amp;დამალვა</translation>
-    </message>
-    <message>
         <source>Playing</source>
         <translation>იკვრება</translation>
     </message>
@@ -978,16 +970,6 @@
         <translation>დაუდუმებელია</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>შეიყვანეთ ფაილის ნომერი, რომლის დაკვრაც გსურთ:
-შენიშვნა: მნიშვნელობა უნდა იყოს %0 - %1</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>შეიყვანეთ ფაილის ნომერი</translation>
-    </message>
-    <message>
         <source>Previous</source>
         <translation>წინა</translation>
     </message>
@@ -1012,15 +994,171 @@ Note: Value must be from %0 - %1</source>
         <translation>შეჩერება</translation>
     </message>
     <message>
-        <source>Click to play a specific file by index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>0 / 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%0 / %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">ვიდეო</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished">10%-ით &amp;გაზრდა {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished">10%-ით &amp;შემცირება {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1099,10 +1237,6 @@ Note: Value must be from %0 - %1</source>
         <translation>მეტამონაცემები</translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation>ბუფერიზაცია...</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>თქვენი ქსელი ნელია ან გაიჭედა, გთხოვთ მოიცადოთ</translation>
     </message>
@@ -1138,6 +1272,26 @@ Note: Value must be from %0 - %1</source>
         <source>Motion Interpolation: %0</source>
         <translation>მოძრაობის ინტერპოლაცია: %0</translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">შეჩერება</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1164,6 +1318,17 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;Refresh</source>
         <translation>&amp;განახლება</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1197,10 +1362,6 @@ Note: Value must be from %0 - %1</source>
         <translation>ხატულა ტრეიში</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>ამომხტარი ფანჯრის &amp;დამალვა</translation>
-    </message>
-    <message>
         <source>Language</source>
         <translation>ენა</translation>
     </message>
@@ -1209,24 +1370,12 @@ Note: Value must be from %0 - %1</source>
         <translation>თაგვით ჟესტიკულაცია</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>ხმის ჩეცვლა</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>პოზიციის შეცვლა</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation>თაგვის &amp;&amp; შეხების &amp;ჟესტები</translation>
     </message>
     <message>
         <source>History</source>
         <translation>ისტორია</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>დამახსოვრებული &amp;ბოლოს გახსნილი ფაილების რაოდენობა</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1259,26 +1408,6 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Video</source>
         <translation>ვიდეო</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>&amp;ავტო-მორგება ფანჯარაზე:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1395,6 +1524,37 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>%0 is already being used. Would you like to change its function?</source>
         <translation>%0 უკვე გამოიყენება. გსურთ მისი ფუნქციის შეცვლა?</translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -52,6 +52,8 @@ public:
 
     int toScaledFontSize(int size)          { return fileInfo.video_params.dheight ? size * 720 / fileInfo.video_params.dheight : size; }
     int fromScaledFontSize(int size)        { return fileInfo.video_params.dheight ? size * fileInfo.video_params.dheight / 720 : size; }
+    QColor fromColorString(QString colorStr);
+    QString toColorString(const QColor &color);
 
     QString getMediaInfo();
     int64_t getCacheSize();
@@ -65,6 +67,9 @@ public:
     QString getAudioDevice();
     QString getSubtitleEncoding();
     QFont getSubtitleFont();
+    QColor getSubtitleColor();
+    QColor getSubtitleBackColor();
+    QColor getSubtitleShadowColor();
 
 protected:
     virtual bool event(QEvent*);
@@ -140,6 +145,11 @@ public slots:
     void LoadSubtitleEncodings();
     void SubtitleEncoding(QString encoding);
     void SubtitleFont(const QFont &font);
+    void SubtitleColor(const QColor &color);
+    void SubtitleBackColor(const QColor &color);
+    void SubtitleBlur(double factor);
+    void SubtitleShadowOffset(int size);
+    void SubtitleShadowColor(const QColor &color);
 
 protected slots:
     void OpenFile(QString);

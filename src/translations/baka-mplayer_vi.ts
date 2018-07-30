@@ -87,24 +87,12 @@
         <translation>Tất cả các loại tập tin</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation>Làm cửa sổ: %0</translation>
-    </message>
-    <message>
-        <source>To Current Size</source>
-        <translation>vừa kích thước hiện tại</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>Tốc độ: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
         <translation>Bấm ESC hoặc nhấp đôi để rời toàn màn hình</translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>Bấm %0 để hiện lại tất cả các điều khiển</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -137,14 +125,6 @@
     <message>
         <source>&apos;%0&apos; requires parameters</source>
         <translation>&apos;%0&apos; yêu cầu tham số</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>Tăng kích thước phụ đề</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>Giảm kích thước phụ đề</translation>
     </message>
     <message>
         <source>Toggle subtitle visibility</source>
@@ -199,24 +179,12 @@
         <translation>Giảm âm lượng</translation>
     </message>
     <message>
-        <source>Increase playback speed by %0</source>
-        <translation>Tăng tốc độ phát lại thêm %0</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>Giảm tốc độ phát lại bớt %0</translation>
-    </message>
-    <message>
         <source>Reset speed</source>
         <translation>Đặt lại tốc độ phát</translation>
     </message>
     <message>
         <source>Toggle fullscreen</source>
         <translation>Bật tắt toàn màn hình</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation>Bật tắt chế độ ẩn các điều khiển</translation>
     </message>
     <message>
         <source>Dim lights</source>
@@ -287,14 +255,6 @@
         <translation>Phát/Dừng</translation>
     </message>
     <message>
-        <source>Fit the window to the video</source>
-        <translation>Làm khít cửa sổ vừa video</translation>
-    </message>
-    <message>
-        <source>Fit window to %0%</source>
-        <translation>Làm khít cửa sổ tới %0%</translation>
-    </message>
-    <message>
         <source>Boss key</source>
         <translation>Boss key</translation>
     </message>
@@ -321,10 +281,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>chạy câu lệnh shell của hệ thống</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>mở thêm một cửa sổ baka-mplayer</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -375,10 +331,6 @@
         <translation>bật tắt làm tối màn hình</translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation>bật tắt hộp văn bản đầu ra</translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation>mở hộp thoại tùy chỉnh</translation>
     </message>
@@ -406,10 +358,6 @@
     <message>
         <source>[percent]</source>
         <translation>[phần trăm]</translation>
-    </message>
-    <message>
-        <source>fit the window</source>
-        <translation>vừa khít cửa sổ</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
@@ -444,16 +392,8 @@
         <translation>bật tắt trạng thái toàn màn hình</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation>bật tắt trạng thái hiển thị các điều khiển</translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>dừng và ẩn cửa sổ</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>xoá trống văn bản xuất ra</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -476,8 +416,132 @@
         <translation>Đặt cấp độ thông báo của mpv</translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>thoát baka-mplayer</translation>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">Tăng tốc độ phát lại thêm %0%</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">Giảm tốc độ phát lại bớt %0%</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -497,6 +561,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>&amp;Huỷ</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -591,20 +659,8 @@
         <translation></translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>Tìm trong danh sách</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>Chọn tập tin hiện tại</translation>
-    </message>
-    <message>
-        <source>Click to play a specific file by index</source>
-        <translation>Bấm để phát một tập tin chỉ định theo chỉ mục</translation>
     </message>
     <message>
         <source>0 / 0</source>
@@ -615,15 +671,7 @@
         <translation>Làm mới danh sách</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Chuột trái để mở tập tin&lt;br&gt;Chuột giữa để nhảy tới&lt;br&gt;Chuột phải để mở URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>/</source>
         <translation></translation>
     </message>
     <message>
@@ -647,24 +695,8 @@
         <translation>&amp;Xem</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>Vừa &amp;khít cửa sổ</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>Tỉ &amp;lệ hiển thị</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>&amp;Phụ đề</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>Kích thước phôn&amp;g</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation>&amp;Chụp hình</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -675,10 +707,6 @@
         <translation>&amp;Lặp</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>Â&amp;m thanh</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation>&amp;Tốc độ</translation>
     </message>
@@ -687,16 +715,8 @@
         <translation>Âm &amp;lượng</translation>
     </message>
     <message>
-        <source>&amp;Navigate</source>
-        <translation>Điều &amp;hướng</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>&amp;Chương</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Cài đặt</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -791,10 +811,6 @@
         <translation>Hiện &amp;danh sách phát</translation>
     </message>
     <message>
-        <source>Hide &amp;Album Art</source>
-        <translation>Hiện ảnh &amp;bìa album</translation>
-    </message>
-    <message>
         <source>&amp;Dim Lights</source>
         <translation>Làm &amp;tối</translation>
     </message>
@@ -815,10 +831,6 @@
         <translation>Giới thiệu về &amp;Baka Mplayer</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>Đến kích thước &amp;hiện tại</translation>
-    </message>
-    <message>
         <source>&amp;50%</source>
         <translation></translation>
     </message>
@@ -833,22 +845,6 @@
     <message>
         <source>&amp;200%</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>&amp;Tự động phát hiện</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>Buộc &amp;4:3</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>Buộc 16:&amp;9</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>Buộc &amp;2.35:1</translation>
     </message>
     <message>
         <source>&amp;Add Subtitle File...</source>
@@ -881,10 +877,6 @@
     <message>
         <source>&amp;This File</source>
         <translation>Tập tin &amp;hiện tại</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>Hiện dòng &amp;lệnh</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
@@ -947,10 +939,6 @@
         <translation>Thêm &amp;tập tin âm thanh...</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation>Ẩn tất cả điều k&amp;hiển</translation>
-    </message>
-    <message>
         <source>Playing</source>
         <translation>Đang phát</translation>
     </message>
@@ -987,16 +975,6 @@
         <translation>Mở tiếng</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>Nhập số thứ tự của tập tin bạn muốn phát:
-Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>Nhập thứ tự của tập tin</translation>
-    </message>
-    <message>
         <source>Previous</source>
         <translation>Trước</translation>
     </message>
@@ -1023,6 +1001,166 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
     <message>
         <source>Pause</source>
         <translation>Tạm dừng</translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">Video</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished">Tăng 0.&amp;1% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished">Giảm &amp;10% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1100,10 +1238,6 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
         <translation>Siêu dữ liệu</translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation>Đang lấy đệm...</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>Kết nối mạng của bạn bị chậm hoặc treo, vui lòng chờ giây lát</translation>
     </message>
@@ -1139,6 +1273,26 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
         <source>Motion Interpolation: %0</source>
         <translation>Chuyển động nội suy: %0</translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">Tạm dừng</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1165,6 +1319,17 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
     <message>
         <source>&amp;Refresh</source>
         <translation>&amp;Làm mới</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1198,10 +1363,6 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
         <translation>Biểu tượng khay</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>Ẩ&amp;n thông báo</translation>
-    </message>
-    <message>
         <source>Language</source>
         <translation>Ngôn ngữ</translation>
     </message>
@@ -1210,24 +1371,12 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
         <translation>Chuyển động trỏ chuột</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>Thay đổi âm lượng</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>Chuyển điểm phát</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation>&amp;Sử dụng chuyển động trỏ chuột và cử chỉ chạm</translation>
     </message>
     <message>
         <source>History</source>
         <translation>Lịch sử</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>&amp;Ghi nhớ số tập tin vừa được mở tối đa</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1260,26 +1409,6 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
     <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>&amp;Tự động làm khít cửa sổ:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1396,6 +1525,37 @@ Lưu ý: Giá trị phải trong khoảng từ %0 - %1</translation>
     <message>
         <source>%0 is already being used. Would you like to change its function?</source>
         <translation>%0 đã được sử dụng. Bạn có muốn thay đổi chức năng của nó?</translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

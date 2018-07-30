@@ -16,6 +16,7 @@ class GestureHandler;
 class OverlayHandler;
 class UpdateManager;
 class DimDialog;
+class PluginManager;
 
 class BakaEngine : public QObject {
     Q_OBJECT
@@ -30,6 +31,7 @@ public:
     OverlayHandler *overlay;
     UpdateManager  *update;
     DimDialog      *dimDialog;
+    PluginManager  *pluginManager;
 
     QSystemTrayIcon *sysTrayIcon;
     QMenu           *trayIconMenu;
@@ -44,8 +46,10 @@ public:
     // they are loaded into the input before parsing the settings file
     // when saving the settings file we don't save things that appear here
     const QHash<QString, QPair<QString, QString>> default_input = {
-        {"Ctrl++",          {"mpv add sub-scale +0.1", tr("Increase sub size")}},
-        {"Ctrl+-",          {"mpv add sub-scale -0.1", tr("Decrease sub size")}},
+        {"Ctrl+Alt++",      {"mpv add sub-scale +0.1", tr("Increase subtitle size")}},
+        {"Ctrl+Alt+-",      {"mpv add sub-scale -0.1", tr("Decrease subtitle size")}},
+        {"Ctrl+Alt+Up",     {"mpv add sub-pos -3", tr("Move subtitle up")}},
+        {"Ctrl+Alt+Down",   {"mpv add sub-pos +3", tr("Move subtitle down")}},
         {"Ctrl+W",          {"mpv cycle sub-visibility", tr("Toggle subtitle visibility")}},
         {"Ctrl+R",          {"mpv set time-pos 0", tr("Restart playback")}},
         {"PgDown",          {"mpv add chapter +1", tr("Go to next chapter")}},
@@ -127,7 +131,7 @@ private:
     const QHash<QString, QPair<BakaCommandFPtr, QStringList>> BakaCommandMap = {
         {"mpv",            {&BakaEngine::BakaMpv, {QString(), tr("executes mpv command"), QString()}}},
         {"sh",             {&BakaEngine::BakaSh, {QString(), tr("executes system shell command"), QString()}}},
-        {"new",            {&BakaEngine::BakaNew, {QString(), tr("creates a new instance of baka-mplayer"), QString()}}},
+        {"new",            {&BakaEngine::BakaNew, {QString(), tr("creates a new instance of upv"), QString()}}},
         {"open_location",  {&BakaEngine::BakaOpenLocation, {QString(), tr("shows the open location dialog"), QString()}}},
         {"open_clipboard", {&BakaEngine::BakaOpenClipboard, {QString(), tr("opens the clipboard"), QString()}}},
         {"close",          {&BakaEngine::BakaClose, {QString(), tr("close file"), QString()}}},
@@ -154,13 +158,14 @@ private:
         {"audio_delay",    {&BakaEngine::BakaAudioDelay, {tr("[level]"), tr("adjusts audio delay"), QString()}}},
         {"subtitle_delay", {&BakaEngine::BakaSubtitleDelay, {tr("[level]"), tr("adjusts subtitle delay"), QString()}}},
         {"subtitle_font",  {&BakaEngine::BakaSubtitleFont, {tr("[level]"), tr("change subtitle font"), QString()}}},
+        {"subtitle_style", {&BakaEngine::BakaSubtitleStyle, {tr("[level]"), tr("change subtitle style"), QString()}}},
         {"speed",          {&BakaEngine::BakaSpeed, {tr("[ratio]"), tr("adjusts the speed"), QString()}}},
         {"fullscreen",     {&BakaEngine::BakaFullScreen, {QString(), tr("toggles fullscreen state"), QString()}}},
         {"boss",           {&BakaEngine::BakaBoss, {QString(), tr("pause and hide the window"), QString()}}},
         {"help",           {&BakaEngine::BakaHelp, {tr("[command]"), tr("internal help menu"), QString()}}},
         {"about",          {&BakaEngine::BakaAbout, {tr("[qt]"), tr("open about dialog"), QString()}}},
         {"msg_level",      {&BakaEngine::BakaMsgLevel, {tr("[level]"), tr("set mpv msg-level"), QString()}}},
-        {"quit",           {&BakaEngine::BakaQuit, {QString(), tr("quit baka-mplayer"), QString()}}}
+        {"quit",           {&BakaEngine::BakaQuit, {QString(), tr("quit upv"), QString()}}}
     };
     // Baka Command Functions
     void BakaMpv(QStringList&);
@@ -193,6 +198,7 @@ private:
     void BakaAudioDelay(QStringList&);
     void BakaSubtitleDelay(QStringList&);
     void BakaSubtitleFont(QStringList&);
+    void BakaSubtitleStyle(QStringList&);
     void BakaSpeed(QStringList&);
     void BakaFullScreen(QStringList&);
     void BakaBoss(QStringList&);

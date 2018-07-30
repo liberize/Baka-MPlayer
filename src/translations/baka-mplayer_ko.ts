@@ -63,24 +63,12 @@
         <translation>오디오 파일</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation>창 크기: %0</translation>
-    </message>
-    <message>
         <source>Dim Lights</source>
         <translation>불 끄기</translation>
     </message>
     <message>
         <source>In order to dim the lights, the desktop compositor has to be enabled. This can be done through Window Manager Desktop.</source>
         <translation>불 끄기 기는은 Desktop Compositor가 필요합니다. Window Manager Desktop을 통에서 키실수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>자막 크기 키우기</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>자막 크기 줄이</translation>
     </message>
     <message>
         <source>Restart playback</source>
@@ -163,10 +151,6 @@
         <translation>재생 목록 보임/숨김</translation>
     </message>
     <message>
-        <source>Fit the window to the video</source>
-        <translation>창 크기 맞추기</translation>
-    </message>
-    <message>
         <source>Boss key</source>
         <translation>보스 키</translation>
     </message>
@@ -181,18 +165,6 @@
     <message>
         <source>Seek backwards by %0 sec</source>
         <translation>%0초 뒤로 이동</translation>
-    </message>
-    <message>
-        <source>Increase playback speed by %0</source>
-        <translation>재생 속도 키움: %0</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>재생 속도 감소: %0</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation>재생 컨트롤 숨기기/보이기</translation>
     </message>
     <message>
         <source>Open a new window</source>
@@ -231,10 +203,6 @@
         <translation>재생 / 일시 정지</translation>
     </message>
     <message>
-        <source>Fit window to %0%</source>
-        <translation>창 크기를 %0에 맞추기</translation>
-    </message>
-    <message>
         <source>Select previous file on playlist</source>
         <translation>재생 목록의 이전 파일 선택</translation>
     </message>
@@ -267,20 +235,12 @@
         <translation>모든 파일</translation>
     </message>
     <message>
-        <source>To Current Size</source>
-        <translation>현재 크기로</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>속도: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
         <translation>전체 화면을 떠나기위해 ESC 키를 누르든지 화면을 더블클릭</translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>재생 컨트롤 보이기위해 %0을 누르세요</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -321,10 +281,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>executes system shell command</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>creates a new instance of baka-mplayer</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -375,10 +331,6 @@
         <translation>불 끄기/키기</translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation>명령 프롬프트 보이기/숨기기</translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation>환경설정 보이기</translation>
     </message>
@@ -405,10 +357,6 @@
     <message>
         <source>[percent]</source>
         <translation>[퍼센트]</translation>
-    </message>
-    <message>
-        <source>fit the window</source>
-        <translation>창 크기 맞추기</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
@@ -443,16 +391,8 @@
         <translation>toggles fullscreen state</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation>toggles hide all controls state</translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>pause and hide the window</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>clears the output textbox</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -475,8 +415,132 @@
         <translation>set mpv msg-level</translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>quit baka-mplayer</translation>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">재생 속도 키움: %0%</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">재생 속도 감소: %0%</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -496,6 +560,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>취소(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -590,32 +658,16 @@
         <translation>Baka MPlayer</translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation>&gt;</translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>검색</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>현재 파일 선택</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation>재생 목록 다시 불러오기</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;왼쪽 클릭: 파일 열기&lt;br&gt;마우스 휠 클릭: 특정 시간으로 이동&lt;br&gt;오른쪽 클릭: 주소 열기&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
         <translation>0:00:00</translation>
-    </message>
-    <message>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <source>Click to change between total and remaining time</source>
@@ -638,24 +690,8 @@
         <translation>보기(&amp;V)</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>창 크기 맞추기 (&amp;W)</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>화면 비율(&amp;R)</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>자막(&amp;T)</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>자막 크기(&amp;Z)</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation>스크린 찍기(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -666,10 +702,6 @@
         <translation>반복(&amp;E)</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>오디오 트랙(&amp;T)</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation>속도(&amp;d)</translation>
     </message>
@@ -678,24 +710,12 @@
         <translation>오디오 파인 추가(&amp;A)...</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation>재생 컨트롤 숨기기(&amp;H)</translation>
-    </message>
-    <message>
         <source>&amp;Volume</source>
         <translation>볼륨(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Navigate</source>
-        <translation>이동(&amp;N)</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>챕터(&amp;C)</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>설정(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -712,10 +732,6 @@
     <message>
         <source>Pla&amp;y Next File</source>
         <translation>다음 파일 열기(&amp;Y)</translation>
-    </message>
-    <message>
-        <source>Hide &amp;Album Art</source>
-        <translation>앨범아트 숨기기(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
@@ -776,10 +792,6 @@
     <message>
         <source>[ &amp;none ]</source>
         <translation>[ 없음 ]</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>명령 줄 인터페이스 보이기(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;New Player</source>
@@ -870,26 +882,6 @@
         <translation>Baka MPlayer 정보(&amp;B)</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>현재 크기로(&amp;C)</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>자동 (&amp;A)</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>&amp;4:3 으로</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>16:&amp;9 으로</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>&amp;2.35:1 으로</translation>
-    </message>
-    <message>
         <source>&amp;Add Subtitle File...</source>
         <translation>자막 파일 추가(&amp;A)...</translation>
     </message>
@@ -970,12 +962,6 @@
         <translation>일시중지(&amp;P)</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>원하신 파일 번호를 입력해주세요:
-%0 - %1만 입력이 가능합니다.</translation>
-    </message>
-    <message>
         <source>Previous</source>
         <translation>이전</translation>
     </message>
@@ -986,10 +972,6 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Next</source>
         <translation>다음</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>파일 번호</translation>
     </message>
     <message>
         <source>No selection</source>
@@ -1012,15 +994,171 @@ Note: Value must be from %0 - %1</source>
         <translation>재생 정보 보이기(&amp;I)</translation>
     </message>
     <message>
-        <source>Click to play a specific file by index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>0 / 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%0 / %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">비디오</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished">자막 크기 키우기 10%(&amp;I) {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished">자막 크기 줄이기 10%(&amp;D) {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1091,10 +1229,6 @@ Note: Value must be from %0 - %1</source>
         <translation>메타데이터</translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation>버퍼링...</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>버퍼링...</translation>
     </message>
@@ -1138,6 +1272,26 @@ Note: Value must be from %0 - %1</source>
         <source>File no longer exists</source>
         <translation>파일이 존재하지 않습니다</translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">일시정지</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1164,6 +1318,17 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;Refresh</source>
         <translation>다시 불러오기 (&amp;R)</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1193,36 +1358,12 @@ Note: Value must be from %0 - %1</source>
         <translation>시스템 트레이 아이콘</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>파프업 숨기기(&amp;H)</translation>
-    </message>
-    <message>
         <source>Key Bindings</source>
         <translation>키보드 단축키</translation>
     </message>
     <message>
         <source>Video</source>
         <translation>비디오</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>자동 창 크기 맞추기 (&amp;A):</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1245,24 +1386,12 @@ Note: Value must be from %0 - %1</source>
         <translation>언어</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>볼륨 병동</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>이동</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation>마우스와 터치 제스처 사용(&amp;U)</translation>
     </message>
     <message>
         <source>History</source>
         <translation>재생 기록</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>재생 기록을 기역하기(&amp;R):</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1395,6 +1524,37 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;Cancel</source>
         <translation>취소(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

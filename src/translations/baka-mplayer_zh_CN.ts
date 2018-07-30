@@ -47,10 +47,6 @@
         <translation>音频文件</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation>适应窗口: %0</translation>
-    </message>
-    <message>
         <source>Open Subtitle File</source>
         <translation>打开字幕文件</translation>
     </message>
@@ -73,14 +69,6 @@
     <message>
         <source>In order to dim the lights, the desktop compositor has to be enabled. This can be done through Window Manager Desktop.</source>
         <translation>为了开启黯淡桌面功能,桌面混成需要开启，可以通过窗口管理进行设置。</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>增大字幕大小</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>减小字幕大小</translation>
     </message>
     <message>
         <source>Restart playback</source>
@@ -135,10 +123,6 @@
         <translation>切换全屏</translation>
     </message>
     <message>
-        <source>Toggle hide all controls mode</source>
-        <translation>切换隐藏所有控制项模式</translation>
-    </message>
-    <message>
         <source>Dim lights</source>
         <translation>昏暗灯光</translation>
     </message>
@@ -165,10 +149,6 @@
     <message>
         <source>Toggle playlist visibility</source>
         <translation>切换播放列表可见</translation>
-    </message>
-    <message>
-        <source>Fit the window to the video</source>
-        <translation>根据视频适应窗口大小</translation>
     </message>
     <message>
         <source>Boss key</source>
@@ -231,18 +211,6 @@
         <translation>快退 %0 秒</translation>
     </message>
     <message>
-        <source>Increase playback speed by %0</source>
-        <translation>提高 %0 播放速度</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>降低 %0 播放速度</translation>
-    </message>
-    <message>
-        <source>Fit window to %0%</source>
-        <translation>适应窗口到 %0%</translation>
-    </message>
-    <message>
         <source>Play selected file on playlist</source>
         <translation>播放在播放列表选中的文件</translation>
     </message>
@@ -267,20 +235,12 @@
         <translation>所有文件</translation>
     </message>
     <message>
-        <source>To Current Size</source>
-        <translation>到目前大小</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>速度: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
         <translation>按下 ESC 或 双击 以离开全屏</translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>按下 %0 以显示所有控制项</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -321,10 +281,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>执行系统shell命令</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>打开一个新的baka-mplayer实例</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -375,10 +331,6 @@
         <translation>暗淡桌面</translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation>切换输出文本框</translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation>打开首选项对话框</translation>
     </message>
@@ -405,10 +357,6 @@
     <message>
         <source>[percent]</source>
         <translation>[百分比]</translation>
-    </message>
-    <message>
-        <source>fit the window</source>
-        <translation>适应窗口</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
@@ -443,16 +391,8 @@
         <translation>切换全屏</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation>切换隐藏所有控制项</translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>暂停并隐藏窗口</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>清空输出文本框</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -475,8 +415,132 @@
         <translation>设置 mpv 日志等级</translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>退出baka-mplayer</translation>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">提高 %0% 播放速度</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">降低 %0% 播放速度</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -496,6 +560,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -590,32 +658,16 @@
         <translation>Baka MPlayer</translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation>&gt;</translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>搜索播放列表</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>选择当前文件</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation>刷新播放列表</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;鼠标左键打开文件&lt;br&gt;中键跳转&lt;br&gt;右键打开URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
         <translation>0:00:00</translation>
-    </message>
-    <message>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <source>Click to change between total and remaining time</source>
@@ -638,24 +690,8 @@
         <translation>视图(&amp;V)</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>适应窗口大小(&amp;W)</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>高宽比(&amp;R)</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>字幕轨道(&amp;T)</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>字体大小(&amp;Z)</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation>截图(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -666,10 +702,6 @@
         <translation>重复(&amp;E)</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>音频轨道(&amp;T)</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation>速度</translation>
     </message>
@@ -678,24 +710,12 @@
         <translation>添加音频文件</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation>隐藏所有控制项</translation>
-    </message>
-    <message>
         <source>&amp;Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <source>&amp;Navigate</source>
-        <translation>导航(&amp;N)</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>章节(&amp;C)</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>设置(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -712,10 +732,6 @@
     <message>
         <source>Pla&amp;y Next File</source>
         <translation>播放下一个文件</translation>
-    </message>
-    <message>
-        <source>Hide &amp;Album Art</source>
-        <translation>隐藏专辑封面</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
@@ -776,10 +792,6 @@
     <message>
         <source>[ &amp;none ]</source>
         <translation>[无]</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>显示命令行</translation>
     </message>
     <message>
         <source>&amp;New Player</source>
@@ -870,26 +882,6 @@
         <translation>关于 Baka MPlayer (&amp;B)</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>到当前尺寸(&amp;C)</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>自动探测(&amp;A)</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>强制 &amp;4:3</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>强制 16:&amp;9</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>强制 &amp;2.35:1</translation>
-    </message>
-    <message>
         <source>&amp;Add Subtitle File...</source>
         <translation>添加字幕文件(&amp;A)...</translation>
     </message>
@@ -970,16 +962,6 @@
         <translation>暂停(&amp;P)</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>输入你想要播放的文件编号:
-注意: 编号必须在以下范围%0 - %1</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>输入文件编号</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>无选择</translation>
     </message>
@@ -1012,15 +994,171 @@ Note: Value must be from %0 - %1</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <source>Click to play a specific file by index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>0 / 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%0 / %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">视频</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished">提高 10% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished">降低 10% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1091,10 +1229,6 @@ Note: Value must be from %0 - %1</source>
         <translation>元数据</translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation>正在缓冲</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>你的网络速度较慢，请稍后片刻</translation>
     </message>
@@ -1138,6 +1272,26 @@ Note: Value must be from %0 - %1</source>
         <source>Volume: %0%</source>
         <translation>音量: %0%</translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">暂停</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1164,6 +1318,17 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;Refresh</source>
         <translation>刷新(&amp;R)</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1193,36 +1358,12 @@ Note: Value must be from %0 - %1</source>
         <translation>托盘图标</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>&amp;隐藏弹出</translation>
-    </message>
-    <message>
         <source>Key Bindings</source>
         <translation>快捷键</translation>
     </message>
     <message>
         <source>Video</source>
         <translation>视频</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>&amp;自动适应窗口:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1253,24 +1394,12 @@ Note: Value must be from %0 - %1</source>
         <translation>语言</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>改变音量</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>改变播放位置</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation>启用鼠标手势支持</translation>
     </message>
     <message>
         <source>History</source>
         <translation>历史</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>记住最近播放的文件个数</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1395,6 +1524,37 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;Cancel</source>
         <translation>取消</translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

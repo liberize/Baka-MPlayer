@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QColorDialog>
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QProcess>
@@ -18,6 +19,7 @@
 #include "ui/preferencesdialog.h"
 #include "ui/updatedialog.h"
 #include "ui/screenshotdialog.h"
+#include "ui/inputdialog.h"
 #include "widgets/dimdialog.h"
 #include "mpvhandler.h"
 #include "overlayhandler.h"
@@ -558,6 +560,52 @@ void BakaEngine::BakaSubtitleFont(QStringList &args)
             mpv->SubtitleFont(font);
     } else
         InvalidParameter(args.join(' '));
+}
+
+void BakaEngine::BakaSubtitleStyle(QStringList &args)
+{
+    if (!args.empty()) {
+        QString arg = args.front();
+        args.pop_front();
+        if (args.empty()) {
+            if (arg == "color") {
+                QColor color = QColorDialog::getColor(mpv->getSubtitleColor(), window, tr("Set Subtitle Color"), QColorDialog::ShowAlphaChannel);
+                if (color.isValid())
+                    mpv->SubtitleColor(color);
+            } else if (arg == "back-color") {
+                QColor color = QColorDialog::getColor(mpv->getSubtitleBackColor(), window, tr("Set Subtitle Background Color"), QColorDialog::ShowAlphaChannel);
+                if (color.isValid())
+                    mpv->SubtitleBackColor(color);
+            } else if (arg == "blur") {
+                QString input = InputDialog::getInput(tr("Input Blur Factor (0-20.0), 0 to Disable:"), tr("Set Blur Factor"), [=] (QString input) {
+                    double v = input.toDouble();
+                    return v >= 0 && v <= 20.0;
+                }, window);
+                if (!input.isEmpty()) {
+                    double factor = input.toDouble();
+                    mpv->SubtitleBlur(factor);
+                    window->ui->action_Subtitle_Blur->setChecked(factor);
+                }
+            } else if (arg == "shadow-offset") {
+                QString input = InputDialog::getInput(tr("Input Offset Value (0-20), 0 to Disable:"), tr("Set Shadow Offset"), [=] (QString input) {
+                    int v = input.toInt();
+                    return v >= 0 && v <= 20;
+                }, window);
+                if (!input.isEmpty()) {
+                    int offset = input.toInt();
+                    mpv->SubtitleShadowOffset(offset);
+                    window->ui->action_Subtitle_Shadow_Offset->setChecked(offset);
+                }
+            } else if (arg == "shadow-color") {
+                QColor color = QColorDialog::getColor(mpv->getSubtitleShadowColor(), window, tr("Set Shadow Color"), QColorDialog::ShowAlphaChannel);
+                if (color.isValid())
+                    mpv->SubtitleShadowColor(color);
+            } else
+                InvalidParameter(arg);
+        } else
+            InvalidParameter(args.join(' '));
+    } else
+        RequiresParameters("subtitle_style");
 }
 
 void BakaEngine::BakaSpeed(QStringList &args)

@@ -6,12 +6,15 @@
 #include <QPair>
 #include <QMutex>
 #include <QTableWidget>
+#include <QStandardItemModel>
 
 namespace Ui {
 class PreferencesDialog;
 }
 
 class BakaEngine;
+class PluginModel;
+class PluginItemDelegate;
 
 class PreferencesDialog : public QDialog {
     Q_OBJECT
@@ -46,6 +49,9 @@ private:
     private:
         QTableWidget *parent;
     } *sortLock;
+
+    PluginModel *pluginModel = nullptr;
+    PluginItemDelegate *pluginItemDelegate = nullptr;
 };
 
 #endif // PREFERENCESDIALOG_H

@@ -8,10 +8,11 @@ VERSION   = 2.0.4
 QT       += core gui network svg gui-private
 CODECFORSRC = UTF-8
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-TARGET = baka-mplayer
+TARGET = upv
 TEMPLATE = app
 
 CONFIG += c++11 link_pkgconfig
+CONFIG += install_translations install_scripts
 
 DESTDIR = build
 OBJECTS_DIR = $${DESTDIR}/obj
@@ -19,12 +20,17 @@ MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
+PKGCONFIG += mpv python3
+
+
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig /usr/local/bin/pkg-config
-    CONFIG += objective_c
-    QT_CONFIG -= no-pkg-config
-    OBJECTIVE_SOURCES += platform/osx.mm widgets/mpvcocoawidget.mm
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+
+    APP_DATA_DIR = ../Resources
     ICON = img/logo.icns
+
+    CONFIG += objective_c
+    OBJECTIVE_SOURCES += platform/osx.mm widgets/mpvcocoawidget.mm
     QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
     LIBS += -framework AppKit -framework Foundation -framework OpenGL -framework QuartzCore
     DEFINES += "ENABLE_MPV_COCOA_WIDGET"
@@ -34,14 +40,42 @@ unix:!macx {
     QT += x11extras
     PKGCONFIG += x11
 
-    SOURCES += platform/linux.cpp
-}
+    APP_DATA_DIR = /usr/share/upv
 
-PKGCONFIG += mpv
+    SOURCES += platform/linux.cpp
+
+    # INSTROOT is the installation root directory, leave empty if not using a package management system
+    isEmpty(BINDIR):BINDIR=/usr/bin
+    isEmpty(MEDIADIR):MEDIADIR=/usr/share/pixmaps
+    isEmpty(ICONDIR):ICONDIR=/usr/share/icons/hicolor/scalable/apps
+    isEmpty(APPDIR):APPDIR=/usr/share/applications
+    isEmpty(DOCDIR):DOCDIR=/usr/share/doc
+    isEmpty(MANDIR):MANDIR=/usr/share/man
+    isEmpty(LICENSEDIR):LICENSEDIR=/usr/share/licenses
+
+    target.path = $$INSTROOT$$BINDIR
+    logo.path = $$INSTROOT$$MEDIADIR
+    icon.path = $$INSTROOT$$ICONDIR
+    desktop.path = $$INSTROOT$$APPDIR
+    manual.path = $$INSTROOT$$DOCDIR/upv
+    man.path = $$INSTROOT$$MANDIR/man1
+    license.path = $$INSTROOT$$LICENSEDIR/upv
+
+    logo.files = ../etc/logo/upv.svg
+    icon.files = ../etc/logo/upv.svg
+    desktop.files = ../etc/upv.desktop
+    manual.files = ../DOCS/upv.md
+    man.files = ../DOCS/upv.1.gz
+    license.files = ../LICENSE
+
+    INSTALLS += target icon logo desktop manual man license
+}
 
 win32 {
     QT += winextras
     PKGCONFIG += libzip
+
+    APP_DATA_DIR = .
 
     # mxe fix:
     CONFIG -= windows
@@ -66,33 +100,6 @@ win32 {
     contains(QMAKE_HOST.arch, x86_64): SOURCES += platform/win64.cpp
 }
 
-# INSTROOT is the installation root directory, leave empty if not using a package management system
-isEmpty(BINDIR):BINDIR=/usr/bin
-isEmpty(MEDIADIR):MEDIADIR=/usr/share/pixmaps
-isEmpty(ICONDIR):ICONDIR=/usr/share/icons/hicolor/scalable/apps
-isEmpty(APPDIR):APPDIR=/usr/share/applications
-isEmpty(DOCDIR):DOCDIR=/usr/share/doc
-isEmpty(MANDIR):MANDIR=/usr/share/man
-isEmpty(LICENSEDIR):LICENSEDIR=/usr/share/licenses
-isEmpty(BAKADIR):BAKADIR=/usr/share/baka-mplayer
-
-target.path = $$INSTROOT$$BINDIR
-logo.path = $$INSTROOT$$MEDIADIR
-icon.path = $$INSTROOT$$ICONDIR
-desktop.path = $$INSTROOT$$APPDIR
-manual.path = $$INSTROOT$$DOCDIR/baka-mplayer
-man.path = $$INSTROOT$$MANDIR/man1
-license.path = $$INSTROOT$$LICENSEDIR/baka-mplayer
-translations.path = $$INSTROOT$$BAKADIR/translations
-
-logo.files = ../etc/logo/baka-mplayer.svg
-icon.files = ../etc/logo/baka-mplayer.svg
-desktop.files = ../etc/baka-mplayer.desktop
-manual.files = ../DOCS/baka-mplayer.md
-man.files = ../DOCS/baka-mplayer.1.gz
-license.files = ../LICENSE
-
-INSTALLS += target icon logo desktop manual man license
 
 RESOURCES += rsclist.qrc
 
@@ -112,8 +119,6 @@ CONFIG(embed_translations) {
     # add file to build
     RESOURCES += translations.qrc
 
-    APP_LANG_PATH += :/translations
-
     # make sure translations are updated and released
     CONFIG *= update_translations release_translations
 }
@@ -121,9 +126,19 @@ CONFIG(embed_translations) {
 CONFIG(install_translations) {
     # install translation files
     translations.files = $$TRANSLATIONS_COMPILED
-    INSTALLS += translations
 
-    APP_LANG_PATH += $$BAKADIR/translations
+    macx {
+        translations.path = Contents/Resources/translations
+        QMAKE_BUNDLE_DATA += translations
+    }
+    unix:!macx {
+        translations.path = $$INSTROOT$$APP_DATA_DIR/translations
+        INSTALLS += translations
+    }
+    win32 {
+        translations.path = $$DESTDIR/translations
+        INSTALLS += translations
+    }
 
     # make sure translations are updated and released
     CONFIG *= update_translations release_translations
@@ -145,76 +160,131 @@ CONFIG(release_translations) {
 }
 
 
-isEmpty(APP_NAME):APP_NAME=bakamplayer
+CONFIG(install_scripts) {
+    scripts.files += scripts
+
+    macx {
+        scripts.path = Contents/Resources
+        QMAKE_BUNDLE_DATA += scripts
+    }
+    unix:!macx {
+        scripts.path = $$INSTROOT$$APP_DATA_DIR
+        INSTALLS += scripts
+    }
+    win32 {
+        scripts.path = $$DESTDIR
+        INSTALLS += scripts
+    }
+}
+
+APP_NAME = upv
+
 DEFINES += "APP_VERSION=\\\"$$VERSION\\\"" \
            "APP_NAME=\\\"$$APP_NAME\\\"" \
-           "APP_LANG_PATH=\\\"$$APP_LANG_PATH\\\""
+           "APP_DATA_DIR=\\\"$$APP_DATA_DIR\\\""
+
 !isEmpty(APP_LANG):DEFINES += "APP_LANG=\\\"$$APP_LANG\\\""
 
-SOURCES += main.cpp\
-    bakaengine.cpp \
+
+SOURCES += \
     bakacommands.cpp \
-    mpvhandler.cpp \
-    updatemanager.cpp \
+    bakaengine.cpp \
     gesturehandler.cpp \
+    main.cpp\
+    mpvhandler.cpp \
+    overlay.cpp \
     overlayhandler.cpp \
-    util.cpp \
+    pluginmanager.cpp \
     settings.cpp \
-    versions/2_0_3.cpp \
-    widgets/customlabel.cpp \
-    widgets/customlineedit.cpp \
-    widgets/customslider.cpp \
-    widgets/customsplitter.cpp \
-    widgets/dimdialog.cpp \
-    widgets/playlistwidget.cpp \
-    widgets/seekbar.cpp \
     ui/aboutdialog.cpp \
     ui/inputdialog.cpp \
     ui/jumpdialog.cpp \
+    ui/keydialog.cpp \
     ui/locationdialog.cpp \
     ui/mainwindow.cpp \
     ui/preferencesdialog.cpp \
     ui/screenshotdialog.cpp \
     ui/updatedialog.cpp \
-    ui/keydialog.cpp \
-    overlay.cpp \
+    updatemanager.cpp \
+    util.cpp \
+    versions/2_0_3.cpp \
+    widgets/customlabel.cpp \
+    widgets/customlineedit.cpp \
+    widgets/custompushbutton.cpp \
+    widgets/customslider.cpp \
+    widgets/customsplitter.cpp \
+    widgets/dimdialog.cpp \
     widgets/mpvglwidget.cpp \
     widgets/onlinewidget.cpp \
-    widgets/custompushbutton.cpp
+    widgets/playlistwidget.cpp \
+    widgets/seekbar.cpp \
+    delegates/pluginitemdelegate.cpp \
+    models/pluginmodel.cpp \
+    ui/pluginconfigdialog.cpp
+
 
 HEADERS  += \
     bakaengine.h \
+    gesturehandler.h \
     mpvhandler.h \
     mpvtypes.h \
-    updatemanager.h \
-    gesturehandler.h \
-    overlayhandler.h \
     overlay.h \
-    util.h \
+    overlayhandler.h \
+    pluginmanager.h \
+    plugintypes.h \
+    pybind11/attr.h \
+    pybind11/buffer_info.h \
+    pybind11/cast.h \
+    pybind11/chrono.h \
+    pybind11/common.h \
+    pybind11/complex.h \
+    pybind11/detail/class.h \
+    pybind11/detail/common.h \
+    pybind11/detail/descr.h \
+    pybind11/detail/init.h \
+    pybind11/detail/internals.h \
+    pybind11/detail/typeid.h \
+    pybind11/eigen.h \
+    pybind11/embed.h \
+    pybind11/eval.h \
+    pybind11/functional.h \
+    pybind11/iostream.h \
+    pybind11/numpy.h \
+    pybind11/operators.h \
+    pybind11/options.h \
+    pybind11/pybind11.h \
+    pybind11/pytypes.h \
+    pybind11/stl.h \
+    pybind11/stl_bind.h \
+    recent.h \
     settings.h \
-    widgets/customlabel.h \
-    widgets/customlineedit.h \
-    widgets/customslider.h \
-    widgets/customsplitter.h \
-    widgets/dimdialog.h \
-    widgets/indexbutton.h \
-    widgets/playlistwidget.h \
-    widgets/seekbar.h \
     ui/aboutdialog.h \
     ui/inputdialog.h \
     ui/jumpdialog.h \
+    ui/keydialog.h \
     ui/locationdialog.h \
     ui/mainwindow.h \
     ui/preferencesdialog.h \
     ui/screenshotdialog.h \
     ui/updatedialog.h \
-    ui/keydialog.h \
-    recent.h \
-    widgets/mpvwidget.h \
-    widgets/mpvglwidget.h \
+    updatemanager.h \
+    util.h \
+    widgets/customlabel.h \
+    widgets/customlineedit.h \
+    widgets/custompushbutton.h \
+    widgets/customslider.h \
+    widgets/customsplitter.h \
+    widgets/dimdialog.h \
     widgets/mpvcocoawidget.h \
+    widgets/mpvglwidget.h \
+    widgets/mpvwidget.h \
     widgets/onlinewidget.h \
-    widgets/custompushbutton.h
+    widgets/playlistwidget.h \
+    widgets/seekbar.h \
+    delegates/pluginitemdelegate.h \
+    models/pluginmodel.h \
+    ui/pluginconfigdialog.h
+
 
 FORMS    += \
     ui/aboutdialog.ui \
@@ -225,4 +295,5 @@ FORMS    += \
     ui/preferencesdialog.ui \
     ui/screenshotdialog.ui \
     ui/updatedialog.ui \
-    ui/keydialog.ui
+    ui/keydialog.ui \
+    ui/pluginconfigdialog.ui

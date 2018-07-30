@@ -83,24 +83,12 @@
         <translation>Druk op ESC of dubbelklik om volledig scherm te verlaten</translation>
     </message>
     <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>Druk op %0 om de besturingen opnieuw weer te geven</translation>
-    </message>
-    <message>
         <source>Audio Files</source>
         <translation>Audiobestanden</translation>
     </message>
     <message>
         <source>All Files</source>
         <translation>Alle Bestanden</translation>
-    </message>
-    <message>
-        <source>Fit Window: %0</source>
-        <translation>Vult Venster: %0</translation>
-    </message>
-    <message>
-        <source>To Current Size</source>
-        <translation>Naar Huidige Grootte</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -133,14 +121,6 @@
     <message>
         <source>&apos;%0&apos; requires parameters</source>
         <translation>&apos;%0&apos; vereist parameters</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>Vergroot ondertiteling</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>Verklein ondertiteling</translation>
     </message>
     <message>
         <source>Toggle subtitle visibility</source>
@@ -259,10 +239,6 @@
         <translation>Play/Pauze</translation>
     </message>
     <message>
-        <source>Fit the window to the video</source>
-        <translation>Vul het venster met de video</translation>
-    </message>
-    <message>
         <source>Boss key</source>
         <translation>Hoofdtoets</translation>
     </message>
@@ -289,10 +265,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>voer systeem-shellcommando uit</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>creëert een nieuwe instantie van baka-mplayer</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -335,22 +307,6 @@
         <translation>Zoek achteruit bij %0 sec</translation>
     </message>
     <message>
-        <source>Increase playback speed by %0</source>
-        <translation>Verhoog afspeelsnelheid met %0</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>Verlaag afspeelsnelheid met %0</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fit window to %0%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>add audio track dialog</source>
         <translation>voeg audio track dialoog toe</translation>
     </message>
@@ -365,10 +321,6 @@
     <message>
         <source>toggles dim desktop</source>
         <translation>schakel dim-desktop in/uit</translation>
-    </message>
-    <message>
-        <source>toggles output textbox</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>opens preferences dialog</source>
@@ -399,10 +351,6 @@
         <translation>[percentage]</translation>
     </message>
     <message>
-        <source>fit the window</source>
-        <translation>vul het venster</translation>
-    </message>
-    <message>
         <source>[level]</source>
         <translation>[niveau]</translation>
     </message>
@@ -423,16 +371,8 @@
         <translation>schakel volledig scherm in/uit</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>pauzeer en verberg het venster</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>leegt de output tekstbox</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -455,10 +395,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>Sluit baka-mplayer</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>Snelheid: %0x</translation>
     </message>
@@ -478,6 +414,134 @@
         <source>mutes the audio</source>
         <translation>dempt het geluid</translation>
     </message>
+    <message>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">Verhoog afspeelsnelheid met %0%</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">Verlaag afspeelsnelheid met %0%</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InputDialog</name>
@@ -496,6 +560,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>&amp;Annuleren</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -590,31 +658,15 @@
         <translation></translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>Zoek Afspeellijst</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>Selecteer het Huidige Bestand</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation>Ververs Afspeellijst</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Links Klikken om Bestand te Openen&lt;br&gt;Muiswiel drukken om te Springen&lt;br&gt;Rechtermuisknop om URL te openen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>/</source>
         <translation></translation>
     </message>
     <message>
@@ -638,24 +690,8 @@
         <translation>&amp;Weergave</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>Vul &amp;Venster</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>&amp;Beeldverhouding</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>&amp;Ondertitelingsspoor</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>&amp;Lettergrootte</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translation>Maak &amp;Schermafdruk</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -666,10 +702,6 @@
         <translation>H&amp;erhalen</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>Audio en &amp;Sporen</translation>
-    </message>
-    <message>
         <source>Spee&amp;d</source>
         <translation>Snelhei&amp;d</translation>
     </message>
@@ -678,20 +710,8 @@
         <translation>Voeg Audio Bestand Toe...</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Navigate</source>
-        <translation>&amp;Navigatie</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>&amp;Hoofdstukken</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Instellingen</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -798,26 +818,6 @@
         <translation>Over &amp;Baka MPlayer</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>Naar &amp;Huidige Grootte</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>&amp;Automatische Detectie</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>Forceer &amp;4:3</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>Forceer 16:&amp;9</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>Forceer &amp;2.35:1</translation>
-    </message>
-    <message>
         <source>&amp;Add Subtitle File...</source>
         <translation>&amp;Voeg Ondertitelingsbestand toe...</translation>
     </message>
@@ -844,10 +844,6 @@
     <message>
         <source>&amp;This File</source>
         <translation>&amp;Dit Bestand</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>&amp;Weergeef Opdrachtprompt</translation>
     </message>
     <message>
         <source>With &amp;Subtitles...</source>
@@ -902,16 +898,6 @@
         <translation>Snelheid: %0x</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>Voer het bestandsnummer dat u wilt afspelen in:
-Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>Voer Bestandsnummer in</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Geen selectie</translation>
     </message>
@@ -933,10 +919,6 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
     </message>
     <message>
         <source>Pla&amp;y Next File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide &amp;Album Art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1012,15 +994,171 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Click to play a specific file by index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>0 / 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%0 / %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1107,10 +1245,6 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translation>Bufferen...</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>Je netwerk is sloom, wacht even</translation>
     </message>
@@ -1138,6 +1272,26 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <source>Motion Interpolation: %0</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">Pauze</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1164,6 +1318,17 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
     <message>
         <source>Delete external sub-file?</source>
         <translation>Verwijder extern sub-bestand</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1193,10 +1358,6 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation>Balk Icoon</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>&amp;Verberg Melding</translation>
-    </message>
-    <message>
         <source>Language</source>
         <translation>Taal</translation>
     </message>
@@ -1221,26 +1382,6 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation></translation>
     </message>
     <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>&amp;Vul Venster Automatisch:</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Screenshot</source>
         <translation>Schermafbeelding</translation>
     </message>
@@ -1261,24 +1402,12 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
         <translation>Bestandsnaam Template:</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>Verander Volume</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>Zoek Positie</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>History</source>
         <translation>Geschiedenis</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>Onthoud &amp;recent geopende bestanden tot</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1394,6 +1523,37 @@ Opmerking: Waarde moet tussen %0 en %1 zijn</translation>
     </message>
     <message>
         <source>Are you sure you want to reset all shortcut keys to its original bindings?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

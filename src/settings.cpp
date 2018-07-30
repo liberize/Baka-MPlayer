@@ -53,7 +53,7 @@ void Settings::LoadIni()
                 int     ival = val.toInt(&iok);
                 bool    dok;
                 double  dval = val.toDouble(&dok);
-                if (group == "baka-mplayer")
+                if (group == "upv")
                     root[key] = b ? QJsonValue(val=="true") : (iok ? (dok ? QJsonValue(dval) : QJsonValue(ival)) : QJsonValue(val));
                 else
                     group_obj[key] = b ? QJsonValue(val=="true") : (iok ? (dok ? QJsonValue(dval) : QJsonValue(ival)) : QJsonValue(val));
@@ -64,8 +64,8 @@ void Settings::LoadIni()
         if (group != QString())
             root[group] = group_obj;
 
-        // remove excess baka-mplayer group
-        root.remove("baka-mplayer");
+        // remove excess upv group
+        root.remove("upv");
 
         // fix input
         if (root.find("input") != root.end()) {

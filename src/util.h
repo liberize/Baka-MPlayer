@@ -21,8 +21,17 @@ bool DimLightsSupported();
 void InitWindow(QMainWindow *main);
 void SetAlwaysOnTop(QMainWindow *main, bool);
 void SetAspectRatio(QMainWindow *main, int w, int h);
-QDir ConfigDir();
-QDir DataDir();
+
+QString Path(QString dir, QString file);
+QString EnsureDirExists(QString dir);
+QString ConfigDir();
+QString DataDir();
+QString AppDataDir();
+QString SettingsPath();
+QString TranslationsPath();
+QString ScriptsPath();
+QList<QString> PluginsPaths();
+
 bool IsValidFile(QString path);
 bool IsValidLocation(QString loc); // combined file and url
 
@@ -37,7 +46,6 @@ void SetLayerOpacity(QWidget *widget, double opacity);
 void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, double a);
 void SetLayerCornerRadius(QWidget *widget, double r);
 void SetCanDrawSubviewsIntoLayer(QWidget *widget);
-
 
 // common
 bool IsValidUrl(QString url);

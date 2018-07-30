@@ -17,30 +17,25 @@ private:
     QMap<QPair<HWND, UINT>, std::function<bool(MSG *)> > handlers;
 
 public:
-    WinNativeEventFilter()
-    {
+    WinNativeEventFilter() {
         QAbstractEventDispatcher::instance()->installNativeEventFilter(this);
     }
 
-    ~WinNativeEventFilter()
-    {
+    ~WinNativeEventFilter() {
         QAbstractEventDispatcher::instance()->removeNativeEventFilter(this);
     }
 
-    void installHandler(HWND hwnd, UINT message, std::function<bool(MSG *)> handler)
-    {
+    void installHandler(HWND hwnd, UINT message, std::function<bool(MSG *)> handler) {
         QPair<HWND, UINT> key(hwnd, message);
         handlers[key] = handler;
     }
 
-    void removeHandler(HWND hwnd, UINT message)
-    {
+    void removeHandler(HWND hwnd, UINT message) {
         QPair<HWND, UINT> key(hwnd, message);
         handlers.remove(key);
     }
 
-    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *)
-    {
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *) {
         if (eventType == "windows_generic_MSG" || eventType == "windows_dispatcher_MSG") {
             MSG *msg = (MSG *)message;
             QPair<HWND, UINT> key(msg->hwnd, msg->message);

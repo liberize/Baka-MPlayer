@@ -1319,7 +1319,6 @@ QTabBar::tab:!selected {
       <string>R&amp;epeat</string>
      </property>
      <addaction name="action_Off"/>
-     <addaction name="separator"/>
      <addaction name="action_Playlist"/>
      <addaction name="action_This_File"/>
     </widget>
@@ -1365,9 +1364,6 @@ QTabBar::tab:!selected {
     <addaction name="actionFrame_Back_Step"/>
     <addaction name="separator"/>
     <addaction name="action_Jump_to_Time"/>
-    <addaction name="separator"/>
-    <addaction name="action_Show_Playlist"/>
-    <addaction name="action_Show_Online"/>
    </widget>
    <widget class="QMenu" name="menuVideo">
     <property name="title">
@@ -1397,10 +1393,24 @@ QTabBar::tab:!selected {
      <addaction name="separator"/>
      <addaction name="actionFit_Screen"/>
     </widget>
+    <widget class="QMenu" name="menuScreenshot">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Screenshot</string>
+     </property>
+     <addaction name="actionWith_Subtitles"/>
+     <addaction name="actionWithout_Subtitles"/>
+     <addaction name="separator"/>
+     <addaction name="actionOpen_Screenshot_Folder"/>
+    </widget>
     <addaction name="menuVideo_Track"/>
     <addaction name="separator"/>
     <addaction name="menuVideo_Size"/>
     <addaction name="action_Full_Screen"/>
+    <addaction name="separator"/>
+    <addaction name="menuScreenshot"/>
     <addaction name="separator"/>
     <addaction name="action_Motion_Interpolation"/>
     <addaction name="action_Deinterlace"/>
@@ -1467,11 +1477,37 @@ QTabBar::tab:!selected {
       <bool>false</bool>
      </property>
      <property name="title">
-      <string>Font Si&amp;ze</string>
+      <string>Si&amp;ze</string>
      </property>
      <addaction name="action_Size"/>
      <addaction name="actionS_ize"/>
      <addaction name="action_Reset_Size"/>
+    </widget>
+    <widget class="QMenu" name="menuSubtitle_Pos">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Position</string>
+     </property>
+     <addaction name="action_Subtitle_Up"/>
+     <addaction name="action_Subtitle_Down"/>
+     <addaction name="action_Reset_Subtitle_Pos"/>
+    </widget>
+    <widget class="QMenu" name="menuSubtitle_Style">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Style</string>
+     </property>
+     <addaction name="action_Subtitle_Color"/>
+     <addaction name="action_Subtitle_Back_Color"/>
+     <addaction name="separator"/>
+     <addaction name="action_Subtitle_Shadow_Offset"/>
+     <addaction name="action_Subtitle_Shadow_Color"/>
+     <addaction name="separator"/>
+     <addaction name="action_Subtitle_Blur"/>
     </widget>
     <widget class="QMenu" name="menuSubtitle_Encoding">
      <property name="enabled">
@@ -1498,27 +1534,19 @@ QTabBar::tab:!selected {
     <addaction name="separator"/>
     <addaction name="action_Subtitle_Font"/>
     <addaction name="menuFont_Si_ze"/>
+    <addaction name="menuSubtitle_Pos"/>
+    <addaction name="menuSubtitle_Style"/>
+    <addaction name="separator"/>
     <addaction name="menuSubtitle_Encoding"/>
     <addaction name="separator"/>
     <addaction name="menuSubtitle_Delay"/>
    </widget>
-   <widget class="QMenu" name="menuTools">
+   <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>&amp;Tools</string>
+     <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuScreenshot">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="title">
-      <string>&amp;Screenshot</string>
-     </property>
-     <addaction name="actionWith_Subtitles"/>
-     <addaction name="actionWithout_Subtitles"/>
-     <addaction name="separator"/>
-     <addaction name="actionOpen_Screenshot_Folder"/>
-    </widget>
-    <addaction name="menuScreenshot"/>
+    <addaction name="action_Show_Playlist"/>
+    <addaction name="action_Show_Online"/>
     <addaction name="separator"/>
     <addaction name="action_Dim_Lights"/>
     <addaction name="separator"/>
@@ -1533,7 +1561,6 @@ QTabBar::tab:!selected {
     <addaction name="actionOnline_Help"/>
     <addaction name="action_Check_for_Updates"/>
     <addaction name="actionUpdate_Streaming_Support"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout_Qt"/>
     <addaction name="actionAbout_Baka_MPlayer"/>
    </widget>
@@ -1542,7 +1569,7 @@ QTabBar::tab:!selected {
    <addaction name="menuVideo"/>
    <addaction name="menuAudio"/>
    <addaction name="menuSubtitles"/>
-   <addaction name="menuTools"/>
+   <addaction name="menuView"/>
    <addaction name="menu_Help"/>
   </widget>
   <action name="action_New_Player">
@@ -1826,6 +1853,52 @@ QTabBar::tab:!selected {
   <action name="action_Reset_Size">
    <property name="text">
     <string>&amp;Reset Size</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Up">
+   <property name="text">
+    <string>Move &amp;Up</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Down">
+   <property name="text">
+    <string>Move &amp;Down</string>
+   </property>
+  </action>
+  <action name="action_Reset_Subtitle_Pos">
+   <property name="text">
+    <string>&amp;Reset Position</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Color">
+   <property name="text">
+    <string>&amp;Color</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Back_Color">
+   <property name="text">
+    <string>&amp;Background Color</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Blur">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Bl&amp;ur</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Shadow_Offset">
+    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Shadow Offset</string>
+   </property>
+  </action>
+  <action name="action_Subtitle_Shadow_Color">
+   <property name="text">
+    <string>S&amp;hadow Color</string>
    </property>
   </action>
   <action name="action_Off">

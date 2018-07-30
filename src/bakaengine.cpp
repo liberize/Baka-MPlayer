@@ -1,3 +1,4 @@
+#include "pluginmanager.h"
 #include "bakaengine.h"
 
 #include <QMessageBox>
@@ -11,16 +12,19 @@
 #include "overlayhandler.h"
 #include "updatemanager.h"
 #include "widgets/dimdialog.h"
+
+
 #include "util.h"
 
 BakaEngine::BakaEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
     mpv(new MpvHandler(window->ui->mpvContainer, this)),
-    settings(new Settings(Util::ConfigDir().filePath(QString(APP_NAME) + ".ini"), this)),
+    settings(new Settings(Util::SettingsPath(), this)),
     gesture(new GestureHandler(this)),
     overlay(new OverlayHandler(this)),
     update(new UpdateManager(this)),
+    pluginManager(new PluginManager(this)),
     // note: trayIcon does not work in my environment--known qt bug
     // see: https://bugreports.qt-project.org/browse/QTBUG-34364
     sysTrayIcon(new QSystemTrayIcon(window->getTrayIcon(), this)),
@@ -41,6 +45,8 @@ BakaEngine::BakaEngine(QObject *parent):
     connect(update, &UpdateManager::messageSignal, [=] (QString msg) {
         Print(msg, "update");
     });
+
+    pluginManager->LoadPlugins(QList<QString>());
 }
 
 BakaEngine::~BakaEngine()

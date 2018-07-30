@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+#ifndef Q_OS_DARWIN
+    ui->menu_Help->insertSeparator(ui->actionAbout_Qt);
+#endif
 
     Util::InitWindow(this);
     ui->sidebarWidget->hide();
@@ -132,13 +135,21 @@ MainWindow::MainWindow(QWidget *parent):
         {"stop", ui->action_Stop},
         {"volume +5", ui->action_Increase_Volume},
         {"volume -5", ui->action_Decrease_Volume},
-        {"audio_delay +0.5", ui->action_Increase_Audio_Delay},
-        {"audio_delay -0.5", ui->action_Decrease_Audio_Delay},
-        {"audio_delay 0", ui->action_Reset_Audio_Delay},
-        {"subtitle_delay +0.5", ui->action_Increase_Subtitle_Delay},
-        {"subtitle_delay -0.5", ui->action_Decrease_Subtitle_Delay},
-        {"subtitle_delay 0", ui->action_Reset_Subtitle_Delay},
+        {"audio_delay +0.5", ui->action_Increase_Audio_Delay},       // "mpv add audio-delay +0.5"
+        {"audio_delay -0.5", ui->action_Decrease_Audio_Delay},       // "mpv add audio-delay -0.5"
+        {"audio_delay 0", ui->action_Reset_Audio_Delay},             // "mpv set audio-delay 0"
+        {"subtitle_delay +0.5", ui->action_Increase_Subtitle_Delay}, // "mpv add sub-delay +0.5"
+        {"subtitle_delay -0.5", ui->action_Decrease_Subtitle_Delay}, // "mpv add sub-delay -0.5"
+        {"subtitle_delay 0", ui->action_Reset_Subtitle_Delay},       // "mpv set sub-delay 0"
         {"subtitle_font", ui->action_Subtitle_Font},
+        {"mpv add sub-pos -3", ui->action_Subtitle_Up},
+        {"mpv add sub-pos +3", ui->action_Subtitle_Down},
+        {"mpv set sub-pos 100", ui->action_Reset_Subtitle_Pos},
+        {"subtitle_style color", ui->action_Subtitle_Color},
+        {"subtitle_style back-color", ui->action_Subtitle_Back_Color},
+        {"subtitle_style blur", ui->action_Subtitle_Blur},
+        {"subtitle_style shadow-offset", ui->action_Subtitle_Shadow_Offset},
+        {"subtitle_style shadow-color", ui->action_Subtitle_Shadow_Color},
         {"speed +0.1", ui->action_Increase},
         {"speed -0.1", ui->action_Decrease},
         {"speed 2.0", ui->action_Double_Speed},
@@ -179,7 +190,7 @@ MainWindow::MainWindow(QWidget *parent):
             // load the application translations
             tmp = baka->translator;
             baka->translator = new QTranslator();
-            baka->translator->load(QString("baka-mplayer_%0").arg(lang), APP_LANG_PATH);
+            baka->translator->load(QString("baka-mplayer_%0").arg(lang), Util::TranslationsPath());
             qApp->installTranslator(baka->translator);
             if (tmp != nullptr)
                 delete tmp;
@@ -354,6 +365,10 @@ MainWindow::MainWindow(QWidget *parent):
                         } else
                             action->setChecked(true);
                     });
+                    if (mpv->getSid() == track.id) {
+                        action->setCheckable(true);
+                        action->setChecked(true);
+                    }
                 } else if (track.type == "audio") {
                     hasAudio = true;
                     title = mpv->formatTrackInfo(track);
@@ -365,6 +380,10 @@ MainWindow::MainWindow(QWidget *parent):
                         } else
                             action->setChecked(true);
                     });
+                    if (mpv->getAid() == track.id) {
+                        action->setCheckable(true);
+                        action->setChecked(true);
+                    }
                 } else if (track.type == "video") { // video track
                     if (!track.albumart) // isn't album art
                         hasVideo = true;
@@ -377,6 +396,10 @@ MainWindow::MainWindow(QWidget *parent):
                         } else
                             action->setChecked(true);
                     });
+                    if (mpv->getVid() == track.id) {
+                        action->setCheckable(true);
+                        action->setChecked(true);
+                    }
                 }
             }
 
@@ -1164,6 +1187,8 @@ void MainWindow::EnableVideoFunctions(bool enable)
     ui->action_Subtitle_Font->setEnabled(enableSub);
     ui->menuSubtitle_Delay->setEnabled(enableSub);
     ui->menuSubtitle_Encoding->setEnabled(enableSub);
+    ui->menuSubtitle_Pos->setEnabled(enableSub);
+    ui->menuSubtitle_Style->setEnabled(enableSub);
 
     ui->menuScreenshot->setEnabled(enable);
     ui->menuVideo_Size->setEnabled(enable);

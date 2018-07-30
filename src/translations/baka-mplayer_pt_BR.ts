@@ -72,18 +72,6 @@
         <translation>Para escurecer o ambiente, a Composição da Área de Trabalho deve estar habilitada. Habilite-a usando o programa &quot;SystemPropertiesPerformance.exe&quot; do Windows.</translation>
     </message>
     <message>
-        <source>Fit Window: %0</source>
-        <translation>Ajustar a Janela: %0</translation>
-    </message>
-    <message>
-        <source>Increase sub size</source>
-        <translation>Aumentar legenda</translation>
-    </message>
-    <message>
-        <source>Decrease sub size</source>
-        <translation>Diminuir legenda</translation>
-    </message>
-    <message>
         <source>Restart playback</source>
         <translation>Reiniciar reprodução</translation>
     </message>
@@ -164,10 +152,6 @@
         <translation>Alternar visibilidade da lista de reprodução</translation>
     </message>
     <message>
-        <source>Fit the window to the video</source>
-        <translation>Ajustar tamanho da janela ao vídeo</translation>
-    </message>
-    <message>
         <source>Boss key</source>
         <translatorcomment>I&apos;m not sure of what boss key means, so I&apos;m improvising. :p</translatorcomment>
         <translation>Tecla mestra</translation>
@@ -183,18 +167,6 @@
     <message>
         <source>Seek backwards by %0 sec</source>
         <translation>Retroceder %0 segundos</translation>
-    </message>
-    <message>
-        <source>Increase playback speed by %0</source>
-        <translation>Aumentar velocidade de reprodução em %0</translation>
-    </message>
-    <message>
-        <source>Decrease playback speed by %0</source>
-        <translation>Diminuir velocidade de reprodução em %0</translation>
-    </message>
-    <message>
-        <source>Toggle hide all controls mode</source>
-        <translation>Alternar modo Ocultar Controles</translation>
     </message>
     <message>
         <source>Open a new window</source>
@@ -233,10 +205,6 @@
         <translation>Reproduzir/Pausar</translation>
     </message>
     <message>
-        <source>Fit window to %0%</source>
-        <translation>Ajustar janela em %0%</translation>
-    </message>
-    <message>
         <source>Select previous file on playlist</source>
         <translation>Selecionar arquivo anterior na lista de reprodução</translation>
     </message>
@@ -269,20 +237,12 @@
         <translation>Todos os Arquivos</translation>
     </message>
     <message>
-        <source>To Current Size</source>
-        <translation>Ao Tamanho Atual</translation>
-    </message>
-    <message>
         <source>Speed: %0x</source>
         <translation>Velocidade: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
         <translation>Pressione ESC ou clique duas vezes para sair da Tela Cheia</translation>
-    </message>
-    <message>
-        <source>Press %0 to show all controls again</source>
-        <translation>Pressione %0 para exibir os controles novamente</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
@@ -323,10 +283,6 @@
     <message>
         <source>executes system shell command</source>
         <translation>executa um comando shell do sistema</translation>
-    </message>
-    <message>
-        <source>creates a new instance of baka-mplayer</source>
-        <translation>cria uma nova instância do baka-mplayer</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -377,10 +333,6 @@
         <translation>alterna o modo escurecer ambiente</translation>
     </message>
     <message>
-        <source>toggles output textbox</source>
-        <translation>alterna o modo de saída para caixa de texto</translation>
-    </message>
-    <message>
         <source>opens preferences dialog</source>
         <translation>abre o diálogo de preferências</translation>
     </message>
@@ -407,10 +359,6 @@
     <message>
         <source>[percent]</source>
         <translation>[por cento]</translation>
-    </message>
-    <message>
-        <source>fit the window</source>
-        <translation>ajustar a janela</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
@@ -445,16 +393,8 @@
         <translation>alterna o modo de tela cheia</translation>
     </message>
     <message>
-        <source>toggles hide all controls state</source>
-        <translation>alterna o modo de ocultar controles</translation>
-    </message>
-    <message>
         <source>pause and hide the window</source>
         <translation>pausar e ocultar a janela</translation>
-    </message>
-    <message>
-        <source>clears the output textbox</source>
-        <translation>limpa a caixa de texto de saída</translation>
     </message>
     <message>
         <source>[command]</source>
@@ -477,8 +417,132 @@
         <translation>definir o msg-level do mpv</translation>
     </message>
     <message>
-        <source>quit baka-mplayer</source>
-        <translation>sair do baka-mplayer</translation>
+        <source>Window Size: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Delay: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Subtitle Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Blur Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Shadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease subtitle size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move subtitle down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0%</source>
+        <translation type="unfinished">Aumentar velocidade de reprodução em %0%</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0%</source>
+        <translation type="unfinished">Diminuir velocidade de reprodução em %0%</translation>
+    </message>
+    <message>
+        <source>Increase playback speed to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decrease playback speed to 0.5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle online visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to fit screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set video size to %0%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>creates a new instance of upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>close file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>online options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set video size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts audio delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>adjusts subtitle delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change subtitle style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>quit upv</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -499,6 +563,10 @@
     <message>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
+    </message>
+    <message>
+        <source>Config item title:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -594,32 +662,16 @@
         <translation>Baka MPlayer</translation>
     </message>
     <message>
-        <source>&gt;</source>
-        <translation>&gt;</translation>
-    </message>
-    <message>
         <source>Search Playlist</source>
         <translation>Procurar Lista de Reprodução</translation>
-    </message>
-    <message>
-        <source>Select the Current File</source>
-        <translation>Selecionar Arquivo Atual</translation>
     </message>
     <message>
         <source>Refresh Playlist</source>
         <translation>Atualizar Lista de Reprodução</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Left Click to Open File&lt;br&gt;Mouse Wheel Click to Jump&lt;br&gt;Right Click to Open URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use o Botão Esquerdo do Mouse para Abrir o Arquivo&lt;br&gt;Pressione a Roda do Mouse para Ir Para o Tempo&lt;br&gt;Use o Botão Direito do Mouse para Abrir um URL&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>0:00:00</source>
         <translation>0:00:00</translation>
-    </message>
-    <message>
-        <source>/</source>
-        <translation>/</translation>
     </message>
     <message>
         <source>Click to change between total and remaining time</source>
@@ -642,25 +694,8 @@
         <translation>&amp;Exibir</translation>
     </message>
     <message>
-        <source>Fit &amp;Window</source>
-        <translation>Ajustar a &amp;Janela</translation>
-    </message>
-    <message>
-        <source>Aspect &amp;Ratio</source>
-        <translation>Proporção de &amp;Tela</translation>
-    </message>
-    <message>
         <source>Subtitle &amp;Track</source>
         <translation>Faixa de &amp;Legenda</translation>
-    </message>
-    <message>
-        <source>Font Si&amp;ze</source>
-        <translation>&amp;Tamanho da Fonte</translation>
-    </message>
-    <message>
-        <source>Take &amp;Screenshot</source>
-        <translatorcomment>Not sure if there&apos;s a better translation for screenshot. UPDATE: The &quot;official&quot; translation is &quot;captura de tela&quot;. Fun fact: most brazilians (that don&apos;t speak english at all), just call it a &quot;print&quot;, but with our very special way to pronounce english words, of course.</translatorcomment>
-        <translation>Capturar a &amp;Tela</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
@@ -671,24 +706,12 @@
         <translation>R&amp;epetição</translation>
     </message>
     <message>
-        <source>Audio &amp;Tracks</source>
-        <translation>&amp;Faixa de Áudio</translation>
-    </message>
-    <message>
         <source>&amp;Volume</source>
         <translation>&amp;Volume</translation>
     </message>
     <message>
-        <source>&amp;Navigate</source>
-        <translation>&amp;Navegação</translation>
-    </message>
-    <message>
         <source>&amp;Chapters</source>
         <translation>&amp;Capítulos</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>Con&amp;figurações</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -705,10 +728,6 @@
     <message>
         <source>E&amp;xit</source>
         <translation>&amp;Sair</translation>
-    </message>
-    <message>
-        <source>Hide &amp;Album Art</source>
-        <translation>&amp;Ocultar Arte do Álbum</translation>
     </message>
     <message>
         <source>&amp;50%</source>
@@ -729,10 +748,6 @@
     <message>
         <source>[ &amp;none ]</source>
         <translation>[ &amp;nenhum ]</translation>
-    </message>
-    <message>
-        <source>Show &amp;Command Line</source>
-        <translation>Exibir Linha de &amp;Comando</translation>
     </message>
     <message>
         <source>&amp;Increase by 5%</source>
@@ -771,17 +786,8 @@
         <translation>&amp;Adicionar Arquivo de Áudio...</translation>
     </message>
     <message>
-        <source>&amp;Hide All Controls</source>
-        <translation>&amp;Ocultar Controles</translation>
-    </message>
-    <message>
         <source>&amp;New Player</source>
         <translation>&amp;Nova Janela</translation>
-    </message>
-    <message>
-        <source>Click to play a specific file by index</source>
-        <translatorcomment>I&apos;m not 100% sure what this one does, so the translation _might_ not be accurate.</translatorcomment>
-        <translation>Clique para reproduzir um arquivo por índice</translation>
     </message>
     <message>
         <source>0 / 0</source>
@@ -877,26 +883,6 @@
         <translation>Sobre o &amp;Baka MPlayer</translation>
     </message>
     <message>
-        <source>To &amp;Current Size</source>
-        <translation>Ao Tamanho &amp;Atual</translation>
-    </message>
-    <message>
-        <source>&amp;Auto Detect</source>
-        <translation>Detecção &amp;Automática</translation>
-    </message>
-    <message>
-        <source>Force &amp;4:3</source>
-        <translation>&amp;4:3 (Forçar)</translation>
-    </message>
-    <message>
-        <source>Force 16:&amp;9</source>
-        <translation>16:&amp;9 (Forçar)</translation>
-    </message>
-    <message>
-        <source>Force &amp;2.35:1</source>
-        <translation>&amp;2.35:1 (Forçar)</translation>
-    </message>
-    <message>
         <source>&amp;Add Subtitle File...</source>
         <translation>&amp;Adicionar Legenda...</translation>
     </message>
@@ -981,16 +967,6 @@
         <translation>&amp;Pausar</translation>
     </message>
     <message>
-        <source>Enter the file number you want to play:
-Note: Value must be from %0 - %1</source>
-        <translation>Informe a posição do arquivo que você quer reproduzir:
-Aviso: O valor deve estar entre %0 - %1</translation>
-    </message>
-    <message>
-        <source>Enter File Number</source>
-        <translation>Informe a Posição do Arquivo</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Nenhuma seleção</translation>
     </message>
@@ -1029,6 +1005,166 @@ Aviso: O valor deve estar entre %0 - %1</translation>
     <message>
         <source>Pause</source>
         <translation>Pausar</translation>
+    </message>
+    <message>
+        <source>PLAYLIST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shuffle Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add File to Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ONLINE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open URL...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Online...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished">Vídeo</translation>
+    </message>
+    <message>
+        <source>Video &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio De&amp;vice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si&amp;ze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle &amp;Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clos&amp;e</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Fit to Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Font...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bl&amp;ur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Shadow Offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&amp;hadow Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Increase by 0.5s</source>
+        <translation type="unfinished">&amp;Aumentar em 10% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Decrease by 0.5s</source>
+        <translation type="unfinished">&amp;Diminuir em 10% {0.5s?}</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Open Screenshot Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Up to 2.0x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Down to 0.5x</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1099,11 +1235,6 @@ Aviso: O valor deve estar entre %0 - %1</translation>
         <translation>Metadados</translation>
     </message>
     <message>
-        <source>Buffering...</source>
-        <translatorcomment>We don&apos;t have a proper translation for this one</translatorcomment>
-        <translation>Armazenando em buffer...</translation>
-    </message>
-    <message>
         <source>Your network is slow or stuck, please wait a bit</source>
         <translation>Sua rede está lenta ou congestionada, por favor, aguarde um pouco</translation>
     </message>
@@ -1147,6 +1278,26 @@ Aviso: O valor deve estar entre %0 - %1</translation>
         <source>File no longer exists</source>
         <translation>Arquivo não existe mais</translation>
     </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Device: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle Encoding: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">Pausar</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
@@ -1173,6 +1324,17 @@ Aviso: O valor deve estar entre %0 - %1</translation>
     <message>
         <source>&amp;Refresh</source>
         <translation>Atualiza&amp;r</translation>
+    </message>
+    <message>
+        <source>&amp;Show in Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginConfigDialog</name>
+    <message>
+        <source>Edit Config for Plugin: %0</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,36 +1365,12 @@ Aviso: O valor deve estar entre %0 - %1</translation>
         <translation>Ícone da Bandeja</translation>
     </message>
     <message>
-        <source>&amp;Hide Popup</source>
-        <translation>&amp;Ocultar Notificações</translation>
-    </message>
-    <message>
         <source>Key Bindings</source>
         <translation>Atalhos</translation>
     </message>
     <message>
         <source>Video</source>
         <translation>Vídeo</translation>
-    </message>
-    <message>
-        <source>&amp;Auto-Fit Window:</source>
-        <translation>Ajustar a &amp;Janela Automaticamente</translation>
-    </message>
-    <message>
-        <source>50%</source>
-        <translation>50%</translation>
-    </message>
-    <message>
-        <source>75%</source>
-        <translation>75%</translation>
-    </message>
-    <message>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <source>200%</source>
-        <translation>200%</translation>
     </message>
     <message>
         <source>Screenshot</source>
@@ -1255,24 +1393,12 @@ Aviso: O valor deve estar entre %0 - %1</translation>
         <translation>Idioma</translation>
     </message>
     <message>
-        <source>Change Volume</source>
-        <translation>Alterar Volume</translation>
-    </message>
-    <message>
-        <source>Seek Position</source>
-        <translation>Buscar Posição</translation>
-    </message>
-    <message>
         <source>&amp;Use Mouse &amp;&amp; Touch Gestures</source>
         <translation>&amp;Usar o Mouse &amp;&amp; Gestos de Toque</translation>
     </message>
     <message>
         <source>History</source>
         <translation>Histórico</translation>
-    </message>
-    <message>
-        <source>Remember &amp;recently opened files up to</source>
-        <translation>Quantidade de arquivos na lista de ar&amp;quivos recentes</translation>
     </message>
     <message>
         <source>Remember playback &amp;position</source>
@@ -1407,6 +1533,37 @@ Aviso: O valor deve estar entre %0 - %1</translation>
     <message>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
+    </message>
+    <message>
+        <source>Show Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>←/→: seek position, ↑/↓: change volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember &amp;recently opened files up to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uncheck plugin to disable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -175,7 +175,7 @@ void UpdateManager::ApplyUpdate(const QString &file)
             "cd ..\r\n"                                                 // go up
             "rmdir /Q /S \"%2\"\r\n"                                    // remove the tmp directory
             "del /Q \"%3\"\r\n"                                         // delete the zip file
-            "start /b \"\" \"%4\"\r\n"                                  // start the new baka-mplayer
+            "start /b \"\" \"%4\"\r\n"                                  // start the new upv
             "start /b \"\" cmd /c del \"%~f0\"&exit /b\"\"\r\n").arg(   // remove the script itself and exit
             tr("Updating..."),
             path,
