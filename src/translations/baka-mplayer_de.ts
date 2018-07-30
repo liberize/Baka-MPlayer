@@ -561,10 +561,6 @@
         <source>&amp;Cancel</source>
         <translation type="unfinished">&amp;Abbrechen</translation>
     </message>
-    <message>
-        <source>Config item title:</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>JumpDialog</name>
@@ -1330,6 +1326,22 @@
     <message>
         <source>Edit Config for Plugin: %0</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished">Dialog</translation>
+    </message>
+    <message>
+        <source>Edit config items below, leave empty means unchanged</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="unfinished">&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">&amp;Abbrechen</translation>
     </message>
 </context>
 <context>

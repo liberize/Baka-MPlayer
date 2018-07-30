@@ -1,3 +1,4 @@
+#include "pluginmanager.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -812,10 +813,50 @@ void MainWindow::Load(QString file)
     thumbnail_toolbar->addButton(next_toolbutton);
 #endif
     baka->LoadSettings();
+    baka->LoadPlugins();
     mpv->Initialize();
     mpv->LoadAudioDevices();
     mpv->LoadSubtitleEncodings();
     mpv->LoadFile(file);
+}
+
+void MainWindow::LoadSubtitlePlugins()
+{
+    QAction *first = nullptr;
+    QList<Pi::Plugin> subtitlePlugins = baka->pluginManager->GetSubtitlePlugins();
+    for (auto &plugin : subtitlePlugins) {
+        QString name = plugin.name;
+        QAction *action = ui->menuSubtitles->addAction(tr("Download Subtitles from \"%0\"...").arg(name));
+        connect(action, &QAction::triggered, [=] {
+            QString word = mpv->fileInfo.media_title;
+            if (word.isEmpty()) {
+                QFileInfo info(mpv->file);
+                QString name = info.completeBaseName();
+                if (mpv->path.isEmpty() || info.suffix().isEmpty() ||
+                        name.length() <= 3 || QRegExp("\\d*").exactMatch(name)) {
+                    word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
+                        return text.length() >= 2;
+                    }, this);
+                    if (word.isEmpty())
+                        return;
+                } else
+                    word = name;
+            }
+            if (baka->pluginManager->SearchSubtitle(name, word))
+                connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, [=] {
+
+                }, Qt::QueuedConnection);
+        });
+        if (!first)
+            first = action;
+    }
+    if (first)
+        ui->menuSubtitles->insertSeparator(first);
+}
+
+void MainWindow::LoadMediaPlugins()
+{
+
 }
 
 void MainWindow::updateControlsPos()

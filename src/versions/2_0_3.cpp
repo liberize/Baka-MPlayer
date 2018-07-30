@@ -1,3 +1,4 @@
+#include "pluginmanager.h"
 #include "bakaengine.h"
 
 #include "ui/mainwindow.h"
@@ -19,28 +20,21 @@
 #endif
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 2)
-class QJsonValueRef2
-{
+class QJsonValueRef2 {
 public:
     QJsonValueRef2(const QJsonValueRef &v):
-        val(v)
-    {
+        val(v) {
     }
-
-    QString toString(const QString &defaultValue) const
-    {
+    QString toString(const QString &defaultValue) const {
         return val.isString() ? val.toString() : defaultValue;
     }
-    bool toBool(bool defaultValue = false) const
-    {
+    bool toBool(bool defaultValue = false) const {
         return val.isBool() ? val.toBool() : defaultValue;
     }
-    double toDouble(double defaultValue = 0) const
-    {
+    double toDouble(double defaultValue = 0) const {
         return val.isDouble() ? val.toDouble() : defaultValue;
     }
-    int toInt(int defaultValue = 0) const
-    {
+    int toInt(int defaultValue = 0) const {
         return val.isDouble() && val.toDouble() == val.toInt() ? val.toInt() : defaultValue;
     }
 private:
@@ -65,12 +59,10 @@ void BakaEngine::Load2_0_3()
     double controlsCenterY = QJsonValueRef2(root["controlsCenterY"]).toDouble(0.2);
     window->setControlsCenterPos(QPointF(controlsCenterX, controlsCenterY));
 
-    //window->ui->hideFilesButton->setChecked(!QJsonValueRef2(root["showAll"]).toBool(true));
     root["showAll"] = true;
     window->setScreenshotDialog(QJsonValueRef2(root["screenshotDialog"]).toBool(true));
     window->recent.clear();
-    for (auto entry : root["recent"].toArray())
-    {
+    for (auto entry : root["recent"].toArray()) {
         QJsonObject entry_json = entry.toObject();
         window->recent.append(Recent(entry_json["path"].toString(), entry_json["title"].toString(), QJsonValueRef2(entry_json["time"]).toInt(0)));
     }
@@ -118,6 +110,10 @@ void BakaEngine::Load2_0_3()
     for (auto &key : mpv_json.keys())
         if (key != QString() && mpv_json[key].toString() != QString())
             mpv->SetOption(key, mpv_json[key].toString());
+
+    pluginManager->disableList.clear();
+    for (auto entry : root["disabledPlugins"].toArray())
+        pluginManager->disableList.insert(entry.toString());
 }
 
 void BakaEngine::SaveSettings()
@@ -178,6 +174,11 @@ void BakaEngine::SaveSettings()
     mpv_json["screenshot-directory"] = QDir::fromNativeSeparators(mpv->screenshotDir);
     mpv_json["msg-level"] = mpv->msgLevel;
     root["mpv"] = mpv_json;
+
+    QJsonArray disable_list_json;
+    for (auto &entry : pluginManager->disableList)
+        disable_list_json.append(entry);
+    root["disabledPlugins"] = disable_list_json;
 
     settings->setRoot(root);
     settings->Save();

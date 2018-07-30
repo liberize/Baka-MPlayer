@@ -103,6 +103,7 @@ public:
 public slots:
     void LoadSettings();
     void SaveSettings();
+    void LoadPlugins();
 
     void Command(QString command);
 

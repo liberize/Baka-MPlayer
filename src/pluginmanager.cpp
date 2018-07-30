@@ -5,10 +5,12 @@
 
 using namespace Pi;
 
+#define SAFE_RUN()
+
 PluginManager::PluginManager(QObject *parent)
     : QObject(parent)
 {
-    try {
+    SafeRun([=] {
         py::initialize_interpreter();
 
         py::module sys = py::module::import("sys");
@@ -16,110 +18,130 @@ PluginManager::PluginManager(QObject *parent)
         sys.attr("path").cast<py::list>().append(scriptsPath);
 
         wrapper = py::module::import("upvwrapper");
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
+    });
 }
 
 PluginManager::~PluginManager()
 {
-    try {
+    SafeRun([=] {
         wrapper.release();
         py::finalize_interpreter();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
+    });
 }
 
-void PluginManager::LoadPlugins(const QList<QString> &disableList)
+void PluginManager::RunWorker(std::function<void()> func)
 {
-    try {
-        wrapper.attr("load_plugins")(Util::PluginsPaths(), disableList);
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
+    qDebug() << "main thread: " << QThread::currentThreadId();
+    workerThread = new QThread;
+    connect(workerThread, &QThread::started, [=] {
+        qDebug() << "started() thread: " << QThread::currentThreadId();
+        SafeRun(func);
+        workerThread->exit();
+    });
+    connect(workerThread, &QThread::finished, [=] {
+        qDebug() << "finished() thread: " << QThread::currentThreadId();
+        delete workerThread;
+        workerThread = nullptr;
+    }, Qt::QueuedConnection);
+    workerThread.start();
+}
+
+void PluginManager::LoadPlugins()
+{
+    SafeRun([=] {
+        wrapper.attr("load_plugins")(Util::PluginsPaths(), disableList.toList());
+        pluginsLoaded = true;
+    });
 }
 
 QList<Pi::Plugin> PluginManager::GetAllPlugins()
 {
-    try {
+    if (!pluginsLoaded)
+        return QList<Plugin>();
+    return SafeRun([=] {
         return wrapper.attr("get_all_plugins")().cast<QList<Plugin>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<Plugin>();
+    });
 }
 
 QList<Plugin> PluginManager::GetSubtitlePlugins()
 {
-    try {
+    if (!pluginsLoaded)
+        return QList<Plugin>();
+    return SafeRun([=] {
         return wrapper.attr("get_subtitle_plugins")().cast<QList<Plugin>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<Plugin>();
+    });
 }
 
 QList<Plugin> PluginManager::GetMediaPlugins()
 {
-    try {
+    if (!pluginsLoaded)
+        return QList<Plugin>();
+    return SafeRun([=] {
         return wrapper.attr("get_media_plugins")().cast<QList<Plugin>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<Plugin>();
+    });
 }
 
 void PluginManager::EnablePlugin(QString name, bool enable)
 {
-    try {
+    if (enable)
+        disableList.remove(name);
+    else
+        disableList.insert(name);
+
+    if (!pluginsLoaded)
+        return;
+    SafeRun([=] {
         if (enable)
             wrapper.attr("enable_plugin")(name);
         else
             wrapper.attr("disable_plugin")(name);
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
+    });
 }
 
 void PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config)
 {
-    try {
+    if (!pluginsLoaded)
+        return;
+    SafeRun([=] {
         QMap<QString, QString> conf;
         for (const auto &i : config)
             conf[i.name] = i.value;
         wrapper.attr("update_plugin_config")(name, conf);
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
+    });
 }
 
-QList<SubtitleEntry> PluginManager::SearchSubtitle(QString name, QString word, int count)
+bool PluginManager::SearchSubtitle(QString name, QString word, int count)
 {
-    try {
-        return wrapper.attr("search_subtitle")(name, word, count).cast<QList<SubtitleEntry>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<SubtitleEntry>();
+    if (!pluginsLoaded || workerThread)
+        return false;
+
+    RunWorker([=] {
+        QList<SubtitleEntry> result = wrapper.attr("search_subtitle")(name, word, count).cast<QList<SubtitleEntry>>();
+        emit SearchSubtitleFinished(name, std::move(result));
+    });
+    return true;
 }
 
-QList<MediaEntry> PluginManager::FetchMedia(QString name, int count)
+bool PluginManager::FetchMedia(QString name, int count)
 {
-    try {
-        return wrapper.attr("fetch_media")(name, count).cast<QList<MediaEntry>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<MediaEntry>();
+    if (!pluginsLoaded || workerThread)
+        return false;
+
+    RunWorker([=] {
+        QList<MediaEntry> result = wrapper.attr("fetch_media")(name, count).cast<QList<MediaEntry>>();
+        emit FetchMediaFinished(name, std::move(result));
+    });
+    return true;
 }
 
-QList<MediaEntry> PluginManager::SearchMedia(QString name, QString word, int count)
+bool PluginManager::SearchMedia(QString name, QString word, int count)
 {
-    try {
-        return wrapper.attr("search_media")(name, word, count).cast<QList<MediaEntry>>();
-    } catch (std::runtime_error e) {
-        qDebug() << e.what();
-    }
-    return QList<MediaEntry>();
+    if (!pluginsLoaded || workerThread)
+        return false;
+
+    RunWorker([=] {
+        QList<MediaEntry> result = wrapper.attr("search_media")(name, word, count).cast<QList<MediaEntry>>();
+        emit SearchMediaFinished(name, std::move(result));
+    });
+    return true;
 }

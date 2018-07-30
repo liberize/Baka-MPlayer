@@ -56,13 +56,13 @@ class PluginManager:
             if name not in self.__plugins:
                 _logger.warning("enable_plugins: plugin '%s' not loaded, ignored.", name)
                 continue
-            self.__plugins[name].enabled = True
+            self.__plugins[name].enable()
 
     def disable_plugins(self, names):
         for name in names:
             if name not in self.__plugins:
                 _logger.warning("disable_plugins: plugin '%s' not loaded, ignored.", name)
                 continue
-            self.__plugins[name].enabled = False
+            self.__plugins[name].disable()
 
 plugin_manager = PluginManager()

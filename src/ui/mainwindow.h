@@ -30,7 +30,7 @@ class BakaEngine;
 class MpvHandler;
 
 class MainWindow : public QMainWindow {
-friend class BakaEngine;
+    friend class BakaEngine;
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -54,7 +54,6 @@ public:
     QIcon getTrayIcon();
 
     Ui::MainWindow  *ui;
-    QImage albumArt;
 
 public slots:
     void Load(QString f = QString());
@@ -92,6 +91,9 @@ public:
     void EnableNextButton(bool enable);
     void EnablePreviousButton(bool enable);
     void SetRemainingLabels(int time);
+
+    void LoadSubtitlePlugins();
+    void LoadMediaPlugins();
 
 private:
     BakaEngine      *baka;

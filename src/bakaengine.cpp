@@ -45,8 +45,6 @@ BakaEngine::BakaEngine(QObject *parent):
     connect(update, &UpdateManager::messageSignal, [=] (QString msg) {
         Print(msg, "update");
     });
-
-    pluginManager->LoadPlugins(QList<QString>());
 }
 
 BakaEngine::~BakaEngine()
@@ -68,6 +66,13 @@ void BakaEngine::LoadSettings()
 {
     settings->Load();
     Load2_0_3();
+}
+
+void BakaEngine::LoadPlugins()
+{
+    pluginManager->LoadPlugins();
+    window->LoadSubtitlePlugins();
+    window->LoadMediaPlugins();
 }
 
 void BakaEngine::Command(QString command)

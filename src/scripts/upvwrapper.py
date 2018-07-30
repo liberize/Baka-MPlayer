@@ -59,7 +59,7 @@ def update_plugin_config(plugin_name, conf):
 
 def search_subtitle(plugin_name, word, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
-    if not plugin or not plugin.is_type(SubtitleProvider):
+    if not plugin or not plugin.enabled or not plugin.is_type(SubtitleProvider):
         return None
 
     result = []
@@ -80,7 +80,7 @@ def search_subtitle(plugin_name, word, count, **kwargs):
 
 def fetch_media(plugin_name, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
-    if not plugin or not plugin.is_type(MediaProvider):
+    if not plugin or not plugin.enabled or not plugin.is_type(MediaProvider):
         return None
 
     result = []
@@ -101,7 +101,7 @@ def fetch_media(plugin_name, count, **kwargs):
 
 def search_media(plugin_name, word, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
-    if not plugin or not plugin.is_type(MediaProvider):
+    if not plugin or not plugin.enabled or not plugin.is_type(MediaProvider):
         return None
 
     result = []

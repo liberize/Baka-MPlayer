@@ -24,7 +24,7 @@ PKGCONFIG += mpv python3
 
 
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
 
     APP_DATA_DIR = ../Resources
     ICON = img/logo.icns
