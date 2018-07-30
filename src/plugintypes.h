@@ -23,7 +23,7 @@ struct ConfigItem {
     enum Type { UNKNOWN, STR, INT, BOOL, FLOAT };
     QString name;
     QString title;
-    Type type;
+    Type type = STR;
     std::function<bool(QString)> validator;
     QString value;
 
@@ -55,7 +55,7 @@ struct Plugin {
     QString description;
     QList<ConfigItem> config;
     QString path;
-    bool enabled;
+    bool enabled = true;
 
     Plugin &operator =(const py::object &obj) {
         name = obj.attr("name").cast<QString>();

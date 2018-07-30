@@ -1162,6 +1162,22 @@
         <source>&amp;Down to 0.5x</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Download Subtitles from &quot;%0&quot;...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input a word to search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles from &quot;%0&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>

@@ -22,6 +22,8 @@ public:
     QList<Pi::Plugin> GetAllPlugins();
     QList<Pi::Plugin> GetSubtitlePlugins();
     QList<Pi::Plugin> GetMediaPlugins();
+    bool IsSubtitlePlugin(QString name);
+    bool IsMediaPlugin(QString name);
     void EnablePlugin(QString name, bool enable);
     void UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config);
     bool SearchSubtitle(QString name, QString word, int count = 10);
@@ -29,6 +31,7 @@ public:
     bool SearchMedia(QString name, QString word, int count = 50);
 
 signals:
+    void PluginStateChanged(QString name, bool enable);
     void SearchSubtitleFinished(QString name, QList<Pi::SubtitleEntry> result);
     void FetchMediaFinished(QString name, QList<Pi::MediaEntry> result);
     void SearchMediaFinished(QString name, QList<Pi::MediaEntry> result);

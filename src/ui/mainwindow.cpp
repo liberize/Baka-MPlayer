@@ -828,11 +828,11 @@ void MainWindow::LoadSubtitlePlugins()
         QString name = plugin.name;
         QAction *action = ui->menuSubtitles->addAction(tr("Download Subtitles from \"%0\"...").arg(name));
         connect(action, &QAction::triggered, [=] {
-            QString word = mpv->fileInfo.media_title;
+            QString word = mpv->getFileInfo().media_title;
             if (word.isEmpty()) {
-                QFileInfo info(mpv->file);
+                QFileInfo info(mpv->getFile());
                 QString name = info.completeBaseName();
-                if (mpv->path.isEmpty() || info.suffix().isEmpty() ||
+                if (mpv->getPath().isEmpty() || info.suffix().isEmpty() ||
                         name.length() <= 3 || QRegExp("\\d*").exactMatch(name)) {
                     word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
                         return text.length() >= 2;
@@ -843,8 +843,24 @@ void MainWindow::LoadSubtitlePlugins()
                     word = name;
             }
             if (baka->pluginManager->SearchSubtitle(name, word))
-                connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, [=] {
+                connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, this, [=] (QString name, QList<Pi::SubtitleEntry> result) {
+                    QMenu *menu = nullptr;
+                    for (auto &act : ui->menuSubtitles->actions())
+                        if (act->menu() && act->text().endsWith(QString("\"%0\"").arg(name))) {
+                            menu = act->menu();
+                            menu->clear();
+                            break;
+                        }
+                    if (!menu) {
+                        menu = new QMenu(tr("Subtitles from \"%0\"").arg(name), ui->menuSubtitles);
+                        ui->menuSubtitles->insertMenu(ui->action_Add_Subtitle_File, menu);
+                    }
+                    for (auto &entry : result) {
+                        QAction *act = menu->addAction(entry.name);
+                        connect(act, &QAction::triggered, [=] {
 
+                        });
+                    }
                 }, Qt::QueuedConnection);
         });
         if (!first)

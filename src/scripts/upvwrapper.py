@@ -29,6 +29,20 @@ def get_media_plugins():
     return plugin_manager.get_plugins_by_type(MediaProvider)
 
 
+def is_subtitle_plugin(plugin_name):
+    plugin = plugin_manager.get_plugin_by_name(plugin_name)
+    if not plugin:
+        return False
+    return plugin.is_type(SubtitleProvider)
+
+
+def is_media_plugin(plugin_name):
+    plugin = plugin_manager.get_plugin_by_name(plugin_name)
+    if not plugin:
+        return False
+    return plugin.is_type(MediaProvider)
+
+
 def enable_plugin(plugin_name):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
     if not plugin:

@@ -10,7 +10,7 @@ using namespace Pi;
 PluginManager::PluginManager(QObject *parent)
     : QObject(parent)
 {
-    SafeRun([=] {
+    SafeRun<void>([=] {
         py::initialize_interpreter();
 
         py::module sys = py::module::import("sys");
@@ -23,7 +23,7 @@ PluginManager::PluginManager(QObject *parent)
 
 PluginManager::~PluginManager()
 {
-    SafeRun([=] {
+    SafeRun<void>([=] {
         wrapper.release();
         py::finalize_interpreter();
     });
@@ -31,24 +31,21 @@ PluginManager::~PluginManager()
 
 void PluginManager::RunWorker(std::function<void()> func)
 {
-    qDebug() << "main thread: " << QThread::currentThreadId();
     workerThread = new QThread;
     connect(workerThread, &QThread::started, [=] {
-        qDebug() << "started() thread: " << QThread::currentThreadId();
-        SafeRun(func);
+        SafeRun<void>(func);
         workerThread->exit();
     });
-    connect(workerThread, &QThread::finished, [=] {
-        qDebug() << "finished() thread: " << QThread::currentThreadId();
+    connect(workerThread, &QThread::finished, this, [=] {
         delete workerThread;
         workerThread = nullptr;
     }, Qt::QueuedConnection);
-    workerThread.start();
+    workerThread->start();
 }
 
 void PluginManager::LoadPlugins()
 {
-    SafeRun([=] {
+    SafeRun<void>([=] {
         wrapper.attr("load_plugins")(Util::PluginsPaths(), disableList.toList());
         pluginsLoaded = true;
     });
@@ -58,7 +55,8 @@ QList<Pi::Plugin> PluginManager::GetAllPlugins()
 {
     if (!pluginsLoaded)
         return QList<Plugin>();
-    return SafeRun([=] {
+
+    return SafeRun<QList<Plugin>>([=] {
         return wrapper.attr("get_all_plugins")().cast<QList<Plugin>>();
     });
 }
@@ -67,7 +65,8 @@ QList<Plugin> PluginManager::GetSubtitlePlugins()
 {
     if (!pluginsLoaded)
         return QList<Plugin>();
-    return SafeRun([=] {
+
+    return SafeRun<QList<Plugin>>([=] {
         return wrapper.attr("get_subtitle_plugins")().cast<QList<Plugin>>();
     });
 }
@@ -76,8 +75,29 @@ QList<Plugin> PluginManager::GetMediaPlugins()
 {
     if (!pluginsLoaded)
         return QList<Plugin>();
-    return SafeRun([=] {
+
+    return SafeRun<QList<Plugin>>([=] {
         return wrapper.attr("get_media_plugins")().cast<QList<Plugin>>();
+    });
+}
+
+bool PluginManager::IsSubtitlePlugin(QString name)
+{
+    if (!pluginsLoaded)
+        return false;
+
+    return SafeRun<bool>([=] {
+        return wrapper.attr("is_subtitle_plugin")().cast<bool>();
+    });
+}
+
+bool PluginManager::IsMediaPlugin(QString name)
+{
+    if (!pluginsLoaded)
+        return false;
+
+    return SafeRun<bool>([=] {
+        return wrapper.attr("is_media_plugin")().cast<bool>();
     });
 }
 
@@ -88,21 +108,23 @@ void PluginManager::EnablePlugin(QString name, bool enable)
     else
         disableList.insert(name);
 
-    if (!pluginsLoaded)
-        return;
-    SafeRun([=] {
-        if (enable)
-            wrapper.attr("enable_plugin")(name);
-        else
-            wrapper.attr("disable_plugin")(name);
-    });
+    if (pluginsLoaded)
+        SafeRun<void>([=] {
+            if (enable)
+                wrapper.attr("enable_plugin")(name);
+            else
+                wrapper.attr("disable_plugin")(name);
+        });
+
+    emit PluginStateChanged(name, enable);
 }
 
 void PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config)
 {
     if (!pluginsLoaded)
         return;
-    SafeRun([=] {
+
+    SafeRun<void>([=] {
         QMap<QString, QString> conf;
         for (const auto &i : config)
             conf[i.name] = i.value;
