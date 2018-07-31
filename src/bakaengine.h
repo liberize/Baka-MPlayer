@@ -8,6 +8,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QTranslator>
+#include <QTemporaryDir>
 
 class MainWindow;
 class MpvHandler;
@@ -17,6 +18,7 @@ class OverlayHandler;
 class UpdateManager;
 class DimDialog;
 class PluginManager;
+class RequestManager;
 
 class BakaEngine : public QObject {
     Q_OBJECT
@@ -31,7 +33,9 @@ public:
     OverlayHandler *overlay;
     UpdateManager  *update;
     DimDialog      *dimDialog;
+    QTemporaryDir  *tempDir;
     PluginManager  *pluginManager;
+    RequestManager *requestManager;
 
     QSystemTrayIcon *sysTrayIcon;
     QMenu           *trayIconMenu;

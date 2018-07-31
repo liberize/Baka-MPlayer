@@ -544,6 +544,26 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">erreur de &apos;fopen&apos;</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">erreur de &apos;write&apos;</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Téléchargement terminé</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Redirection...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1173,6 +1193,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1690,23 +1714,6 @@ Version : %0</translation>
     <message>
         <source>Downloading update...</source>
         <translation>Téléchargement des mises à jour...</translation>
-    </message>
-    <message>
-        <source>fopen error
-</source>
-        <translation>erreur de &apos;fopen&apos;</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>erreur de &apos;write&apos;</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Téléchargement terminé</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>Redirection...</translation>
     </message>
     <message>
         <source>Extracting...</source>

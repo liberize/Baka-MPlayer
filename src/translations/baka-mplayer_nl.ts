@@ -544,6 +544,26 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">schrijffout</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Download voltooid</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Omgeschakeld...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1173,6 +1193,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1689,23 +1713,6 @@ Version: %0</source>
     <message>
         <source>Downloading update...</source>
         <translation>Update downloaden...</translation>
-    </message>
-    <message>
-        <source>fopen error
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>schrijffout</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Download voltooid</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>Omgeschakeld...</translation>
     </message>
     <message>
         <source>Extracting...</source>

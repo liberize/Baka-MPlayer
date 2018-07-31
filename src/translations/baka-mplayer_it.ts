@@ -544,6 +544,27 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">errore fopen
+</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">errore in scrittura</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Scaricamento completato</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Rediretto...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1173,6 +1194,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1684,12 +1709,6 @@ Versione: %0</translation>
 <context>
     <name>UpdateManager</name>
     <message>
-        <source>fopen error
-</source>
-        <translation>errore fopen
-</translation>
-    </message>
-    <message>
         <source>Could not open file for writing...</source>
         <translation>Impossibile aprire il file in scrittura...</translation>
     </message>
@@ -1704,18 +1723,6 @@ Versione: %0</translation>
     <message>
         <source>Downloading update...</source>
         <translation>Scaricamento aggiornamento in corso...</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>errore in scrittura</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Scaricamento completato</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>Rediretto...</translation>
     </message>
     <message>
         <source>Extracting...</source>

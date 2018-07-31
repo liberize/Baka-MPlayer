@@ -12,6 +12,7 @@
 #include "overlayhandler.h"
 #include "updatemanager.h"
 #include "widgets/dimdialog.h"
+#include "requestmanager.h"
 
 
 #include "util.h"
@@ -24,7 +25,9 @@ BakaEngine::BakaEngine(QObject *parent):
     gesture(new GestureHandler(this)),
     overlay(new OverlayHandler(this)),
     update(new UpdateManager(this)),
+    tempDir(new QTemporaryDir),
     pluginManager(new PluginManager(this)),
+    requestManager(new RequestManager(this)),
     // note: trayIcon does not work in my environment--known qt bug
     // see: https://bugreports.qt-project.org/browse/QTBUG-34364
     sysTrayIcon(new QSystemTrayIcon(window->getTrayIcon(), this)),
@@ -55,6 +58,9 @@ BakaEngine::~BakaEngine()
         delete qtTranslator;
     if (dimDialog != nullptr)
         delete dimDialog;
+    delete requestManager;
+    delete pluginManager;
+    delete tempDir;
     delete update;
     delete overlay;
     delete gesture;

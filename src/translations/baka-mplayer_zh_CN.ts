@@ -544,6 +544,26 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">打开文件失败</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">写入错误</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">下载完成</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">重定向...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1173,6 +1193,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1684,11 +1708,6 @@ Version: %0</source>
 <context>
     <name>UpdateManager</name>
     <message>
-        <source>fopen error
-</source>
-        <translation>打开文件失败</translation>
-    </message>
-    <message>
         <source>Extracting...</source>
         <translation>正在解压</translation>
     </message>
@@ -1707,18 +1726,6 @@ Version: %0</source>
     <message>
         <source>Downloading update...</source>
         <translation>正在下载更新...</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>写入错误</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>下载完成</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>重定向...</translation>
     </message>
     <message>
         <source>Creating updater script...</source>

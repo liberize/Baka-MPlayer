@@ -9,6 +9,7 @@
 #include <QSet>
 #include <QThread>
 
+class BakaEngine;
 
 class PluginManager : public QObject {
     Q_OBJECT
@@ -48,6 +49,7 @@ private:
     void RunWorker(std::function<void()> func);
 
 private:
+    BakaEngine *baka = nullptr;
     py::module wrapper;
     bool pluginsLoaded = false;
     QSet<QString> disableList;

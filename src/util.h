@@ -34,7 +34,8 @@ QList<QString> PluginsPaths();
 
 bool IsValidFile(QString path);
 bool IsValidLocation(QString loc); // combined file and url
-
+bool IsValidUrl(QString url);
+QString ToLocalFile(QString s);
 void ShowInFolder(QString path, QString file);
 
 QString MonospaceFont();
@@ -47,8 +48,6 @@ void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, doub
 void SetLayerCornerRadius(QWidget *widget, double r);
 void SetCanDrawSubviewsIntoLayer(QWidget *widget);
 
-// common
-bool IsValidUrl(QString url);
 
 QString FormatTime(int time, int totalTime);
 QString FormatRelativeTime(int time);

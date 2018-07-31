@@ -545,6 +545,26 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">Ошибка записи</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Скачивание завершено</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Перенаправление...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1174,6 +1194,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1685,11 +1709,6 @@ Version: %0</source>
 <context>
     <name>UpdateManager</name>
     <message>
-        <source>fopen error
-</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Could not open file for writing...</source>
         <translation>Не удалось открыть файл для записи...</translation>
     </message>
@@ -1704,18 +1723,6 @@ Version: %0</source>
     <message>
         <source>Downloading update...</source>
         <translation>Скачиваем обновление...</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>Ошибка записи</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Скачивание завершено</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>Перенаправление...</translation>
     </message>
     <message>
         <source>Extracting...</source>

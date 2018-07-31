@@ -544,6 +544,27 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">
+</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">yazma hatası</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">İndirme tamamlandı</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1173,6 +1194,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1684,12 +1709,6 @@ Sürüm: %0</translation>
 <context>
     <name>UpdateManager</name>
     <message>
-        <source>fopen error
-</source>
-        <translation>
-</translation>
-    </message>
-    <message>
         <source>Could not open file for writing...</source>
         <translation></translation>
     </message>
@@ -1703,18 +1722,6 @@ Sürüm: %0</translation>
     </message>
     <message>
         <source>Downloading update...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>yazma hatası</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>İndirme tamamlandı</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
         <translation></translation>
     </message>
     <message>

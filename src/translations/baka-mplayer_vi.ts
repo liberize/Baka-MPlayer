@@ -545,6 +545,26 @@
     </message>
 </context>
 <context>
+    <name>FetchRequest</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">mở file lỗi (fopen)</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">ghi file lỗi</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Hoàn thành tải về</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Đã chuyển hướng...</translation>
+    </message>
+</context>
+<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1174,6 +1194,10 @@
         <source>Subtitles from &quot;%0&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloading %0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1691,23 +1715,6 @@ Phiên bản: %0</translation>
     <message>
         <source>Downloading update...</source>
         <translation>Đang tải các cập nhật...</translation>
-    </message>
-    <message>
-        <source>fopen error
-</source>
-        <translation>mở file lỗi (fopen)</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation>ghi file lỗi</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation>Hoàn thành tải về</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation>Đã chuyển hướng...</translation>
     </message>
     <message>
         <source>Extracting...</source>

@@ -221,7 +221,8 @@ SOURCES += \
     delegates/pluginitemdelegate.cpp \
     models/pluginmodel.cpp \
     ui/pluginconfigdialog.cpp \
-    contentfetcher.cpp
+    fetchrequest.cpp \
+    requestmanager.cpp
 
 
 HEADERS  += \
@@ -285,7 +286,8 @@ HEADERS  += \
     delegates/pluginitemdelegate.h \
     models/pluginmodel.h \
     ui/pluginconfigdialog.h \
-    contentfetcher.h
+    fetchrequest.h \
+    requestmanager.h
 
 
 FORMS    += \

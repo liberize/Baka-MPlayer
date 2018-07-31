@@ -18,6 +18,8 @@
 #include "widgets/dimdialog.h"
 #include "inputdialog.h"
 #include "screenshotdialog.h"
+#include "requestmanager.h"
+#include "fetchrequest.h"
 
 
 MainWindow::MainWindow(QWidget *parent):
@@ -786,7 +788,22 @@ MainWindow::MainWindow(QWidget *parent):
                             for (auto &entry : result) {
                                 QAction *act = menu->addAction(entry.name);
                                 connect(act, &QAction::triggered, [=] {
-
+                                    QString localFile = Util::ToLocalFile(entry.url);
+                                    if (!localFile.isEmpty())
+                                        mpv->AddSubtitleTrack(localFile);
+                                    else {
+                                        FetchRequest *req = baka->requestManager->newRequest(entry.url);
+                                        connect(req, &FetchRequest::error, [=] (QString msg) {
+                                            mpv->ShowText(tr("Download failed with error: %0").arg(msg));
+                                            req->deleteLater();
+                                        });
+                                        connect(req, &FetchRequest::saved, [=] (QString filePath) {
+                                            mpv->AddSubtitleTrack(filePath);
+                                            req->deleteLater();
+                                        });
+                                        mpv->ShowText(tr("Downloading %0...").arg(entry.name));
+                                        req->fetch(true);
+                                    }
                                 });
                             }
                             menu->setEnabled(mpv->hasVideo());

@@ -9,6 +9,10 @@
 #include <QStringList>
 #include <QFile>
 #include <QProcess>
+#include <QtGlobal>
+
+#include "fetchrequest.h"
+#include "requestmanager.h"
 
 #if defined(Q_OS_WIN)
 #include <QDir>
@@ -20,112 +24,70 @@
 
 UpdateManager::UpdateManager(QObject *parent) :
     QObject(parent),
-    baka(static_cast<BakaEngine*>(parent)),
-    manager(new QNetworkAccessManager(this)),
-    busy(false)
+    baka(static_cast<BakaEngine*>(parent))
 {
-
 }
 
 UpdateManager::~UpdateManager()
 {
-    delete manager;
 }
 
 bool UpdateManager::CheckForUpdates()
 {
-    if (busy)
-        return false;
-    busy = true;
     emit messageSignal(tr("Checking for updates..."));
-    emit progressSignal(0);
-    QNetworkRequest request(Util::VersionFileUrl());
-    QNetworkReply *reply = manager->get(request);
 
-    connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
-        emit progressSignal((int)(50.0*received/total));
+    FetchRequest *req = baka->requestManager->newRequest(Util::VersionFileUrl());
+    connect(req, &FetchRequest::progress, [=] (double percent) {
+        emit progressSignal((int)(50.0 * percent));
     });
-
-    connect(reply, &QNetworkReply::finished, [=] {
-        if (reply->error())
-            emit messageSignal(reply->errorString());
-        else {
-            QList<QByteArray> lines = reply->readAll().split('\n');
-            QList<QByteArray> pair;
-            QString lastPair;
-            // go through the next 50% incrementally during parsing
-            double amnt = 50.0/lines.length(),
-                   cur = 50+amnt;
-            for (auto line : lines) {
-                if ((pair = line.split('=')).size() != 2)
-                    info[lastPair].append(line);
-                else
-                    info[(lastPair = pair[0])] = QString(pair[1]);
-                emit progressSignal((int)(cur += amnt));
-            }
-            emit progressSignal(100);
-            busy = false;
+    connect(req, &FetchRequest::error, [=] (QString msg) {
+        emit messageSignal(msg);
+        req->deleteLater();
+    });
+    connect(req, &FetchRequest::message, [=] (QString msg) {
+        emit messageSignal(msg);
+    });
+    connect(req, &FetchRequest::fetched, [=] (QByteArray bytes) {
+        QList<QByteArray> lines = bytes.split('\n');
+        QList<QByteArray> pair;
+        QString lastPair;
+        // go through the next 50% incrementally during parsing
+        double amnt = 50.0 / lines.length();
+        double cur = 50 + amnt;
+        for (auto line : lines) {
+            if ((pair = line.split('=')).size() != 2)
+                info[lastPair].append(line);
+            else
+                info[(lastPair = pair[0])] = QString(pair[1]);
+            emit progressSignal((int)(cur += amnt));
         }
-        reply->deleteLater();
+        req->deleteLater();
     });
-    return true;
+    return req->fetch();
 }
-
 #if defined(Q_OS_WIN)
 bool UpdateManager::DownloadUpdate(const QString &url)
 {
-    if (busy)
-        return false;
-    busy = true;
     emit messageSignal(tr("Downloading update..."));
-    emit progressSignal(0);
-    QNetworkRequest request(url);
-    QString filename = QDir::toNativeSeparators(QString("%0/Baka-MPlayer.zip").arg(QCoreApplication::applicationDirPath()));
-    QFile *file = new QFile(filename);
-    if (!file->open(QFile::WriteOnly | QFile::Truncate)) {
-        emit messageSignal(tr("fopen error\n"));
-        delete file;
-        busy = false;
-        return false;
-    }
 
-    QNetworkReply *reply = manager->get(request);
-
-    connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
-        emit progressSignal((int)(99.0*received/total));
+    FetchRequest *req = baka->requestManager->newRequest(url);
+    connect(req, &FetchRequest::progress, [=] (double percent) {
+        emit progressSignal((int)(99.0 * percent));
+    });
+    connect(req, &FetchRequest::error, [=] (QString msg) {
+        emit messageSignal(msg);
+        req->deleteLater();
+    });
+    connect(req, &FetchRequest::message, [=] (QString msg) {
+        emit messageSignal(msg);
+    });
+    connect(req, &FetchRequest::saved, [=] (QString filePath) {
+        ApplyUpdate(filePath);
+        req->deleteLater();
     });
 
-    connect(reply, &QNetworkReply::readyRead, [=] {
-        if (reply->error())
-            emit messageSignal(reply->errorString());
-        else if (file->write(reply->read(reply->bytesAvailable()), reply->bytesAvailable()) == -1)
-            emit messageSignal(tr("write error"));
-    });
-
-    connect(reply, &QNetworkReply::finished, [=] {
-        if (reply->error()) {
-            emit messageSignal(reply->errorString());
-            file->close();
-            delete file;
-        } else {
-            file->flush();
-            file->close();
-            delete file;
-            QUrl redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-            if (redirect.isEmpty()) {
-                busy = false;
-                emit messageSignal(tr("Download complete"));
-                ApplyUpdate(filename);
-                emit progressSignal(100);
-            } else {
-                emit messageSignal(tr("Redirected..."));
-                busy = false;
-                DownloadUpdate(redirect.toString());
-            }
-        }
-        reply->deleteLater();
-    });
-    return true;
+    QString filePath = QDir::toNativeSeparators(QString("%0/Baka-MPlayer.zip").arg(QCoreApplication::applicationDirPath()));
+    return req->fetch(true, filePath);
 }
 
 void UpdateManager::ApplyUpdate(const QString &file)

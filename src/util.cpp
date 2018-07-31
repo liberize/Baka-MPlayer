@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QCoreApplication>
+#include <QUrl>
 
 namespace Util {
 
@@ -813,6 +814,20 @@ bool IsValidUrl(QString url)
 {
     QRegExp rx("^[a-z]{2,}://", Qt::CaseInsensitive); // url
     return (rx.indexIn(url) != -1);
+}
+
+QString ToLocalFile(QString s)
+{
+    QUrl url(s);
+    if (url.isValid()) {
+        QString local = url.toLocalFile();
+        if (!local.isEmpty())
+            return local;
+    } else {
+        if (QFile::exists(s))
+            return s;
+    }
+    return "";
 }
 
 QString FormatTime(int _time, int _totalTime)

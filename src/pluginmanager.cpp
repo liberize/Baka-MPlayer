@@ -1,5 +1,6 @@
 #include "pluginmanager.h"
 #include "util.h"
+#include "bakaengine.h"
 
 #include <QDebug>
 
@@ -8,7 +9,8 @@ using namespace Pi;
 #define SAFE_RUN()
 
 PluginManager::PluginManager(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      baka(static_cast<BakaEngine*>(parent))
 {
     SafeRun<void>([=] {
         py::initialize_interpreter();
@@ -16,6 +18,9 @@ PluginManager::PluginManager(QObject *parent)
         py::module sys = py::module::import("sys");
         const char *scriptsPath = Util::ScriptsPath().toUtf8().constData();
         sys.attr("path").cast<py::list>().append(scriptsPath);
+
+        py::module os = py::module::import("os");
+        os.attr("environ").cast<py::dict>()["UPV_TEMP_DIR"] = baka->tempDir->path();
 
         wrapper = py::module::import("upvwrapper");
     });

@@ -30,10 +30,7 @@ signals:
 
 private:
     BakaEngine *baka;
-
-    QNetworkAccessManager *manager;
     QMap<QString, QString> info;
-    bool busy;
 };
 
 #endif // UPDATEMANAGER_H
