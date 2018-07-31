@@ -119,10 +119,10 @@ void PluginManager::EnablePlugin(QString name, bool enable)
     emit PluginStateChanged(name, enable);
 }
 
-void PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config)
+bool PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config)
 {
-    if (!pluginsLoaded)
-        return;
+    if (!pluginsLoaded || workerThread)
+        return false;
 
     SafeRun<void>([=] {
         QMap<QString, QString> conf;
@@ -130,6 +130,7 @@ void PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem>
             conf[i.name] = i.value;
         wrapper.attr("update_plugin_config")(name, conf);
     });
+    return true;
 }
 
 bool PluginManager::SearchSubtitle(QString name, QString word, int count)

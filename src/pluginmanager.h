@@ -24,7 +24,7 @@ public:
     bool IsSubtitlePlugin(QString name);
     bool IsMediaPlugin(QString name);
     void EnablePlugin(QString name, bool enable);
-    void UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config);
+    bool UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config);
     bool SearchSubtitle(QString name, QString word, int count = 10);
     bool FetchMedia(QString name, int count = 50);
     bool SearchMedia(QString name, QString word, int count = 50);

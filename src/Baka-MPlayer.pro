@@ -220,7 +220,8 @@ SOURCES += \
     widgets/seekbar.cpp \
     delegates/pluginitemdelegate.cpp \
     models/pluginmodel.cpp \
-    ui/pluginconfigdialog.cpp
+    ui/pluginconfigdialog.cpp \
+    contentfetcher.cpp
 
 
 HEADERS  += \
@@ -283,7 +284,8 @@ HEADERS  += \
     widgets/seekbar.h \
     delegates/pluginitemdelegate.h \
     models/pluginmodel.h \
-    ui/pluginconfigdialog.h
+    ui/pluginconfigdialog.h \
+    contentfetcher.h
 
 
 FORMS    += \
