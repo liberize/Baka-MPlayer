@@ -46,6 +46,7 @@ public:
     int getSid()                            { return sid; }
     bool getSubtitleVisibility()            { return subtitleVisibility; }
     bool getMute()                          { return mute; }
+    bool hasVideo()                         { return hasVideoTrack; }
 
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
@@ -252,7 +253,7 @@ private:
     int     osdWidth;
     int     osdHeight;
     bool    readyToRender = false;
-    bool    hasVideo = true;
+    bool    hasVideoTrack = true;
     QImage  defaultAlbumArt;
 };
 

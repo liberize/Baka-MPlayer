@@ -11,7 +11,6 @@
 
 
 class PluginManager : public QObject {
-    friend class BakaEngine;
     Q_OBJECT
 public:
     explicit PluginManager(QObject *parent = 0);

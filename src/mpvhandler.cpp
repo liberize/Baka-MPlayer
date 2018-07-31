@@ -949,7 +949,7 @@ void MpvHandler::LoadFileInfo()
 void MpvHandler::LoadTracks()
 {
     fileInfo.tracks.clear();
-    hasVideo = false;
+    hasVideoTrack = false;
     if (playState < 0)
         widget->setContentImage(QImage());
     else {
@@ -1011,12 +1011,12 @@ void MpvHandler::LoadTracks()
                         }
                     }
                     if (track.type == "video")
-                        hasVideo = true;
+                        hasVideoTrack = true;
                     fileInfo.tracks.push_back(track);
                 }
             }
         }
-        widget->setContentImage(hasVideo ? QImage() : defaultAlbumArt);
+        widget->setContentImage(hasVideoTrack ? QImage() : defaultAlbumArt);
     }
     emit trackListChanged(fileInfo.tracks);
 }
@@ -1054,7 +1054,7 @@ void MpvHandler::LoadVideoParams()
         fileInfo.video_params.codec.clear();
         fileInfo.video_params.width = fileInfo.video_params.dwidth = 0;
         fileInfo.video_params.height = fileInfo.video_params.dheight = 0;
-    } else if (hasVideo) {
+    } else if (hasVideoTrack) {
         fileInfo.video_params.codec = mpv_get_property_string(mpv, "video-codec");
 
         int64_t width = 0, height = 0, dwidth = 0, dheight = 0;

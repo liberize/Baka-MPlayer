@@ -111,9 +111,11 @@ void BakaEngine::Load2_0_3()
         if (key != QString() && mpv_json[key].toString() != QString())
             mpv->SetOption(key, mpv_json[key].toString());
 
-    pluginManager->disableList.clear();
+    QSet<QString> disabledPlugins;
     for (auto entry : root["disabledPlugins"].toArray())
-        pluginManager->disableList.insert(entry.toString());
+        disabledPlugins.insert(entry.toString());
+    for (auto &plugin : pluginManager->GetAllPlugins())
+        pluginManager->EnablePlugin(plugin.name, !disabledPlugins.contains(plugin.name));
 }
 
 void BakaEngine::SaveSettings()
@@ -176,7 +178,7 @@ void BakaEngine::SaveSettings()
     root["mpv"] = mpv_json;
 
     QJsonArray disable_list_json;
-    for (auto &entry : pluginManager->disableList)
+    for (auto &entry : pluginManager->GetDisableList())
         disable_list_json.append(entry);
     root["disabledPlugins"] = disable_list_json;
 

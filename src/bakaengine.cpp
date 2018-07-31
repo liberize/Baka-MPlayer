@@ -71,8 +71,6 @@ void BakaEngine::LoadSettings()
 void BakaEngine::LoadPlugins()
 {
     pluginManager->LoadPlugins();
-    window->LoadSubtitlePlugins();
-    window->LoadMediaPlugins();
 }
 
 void BakaEngine::Command(QString command)

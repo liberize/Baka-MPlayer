@@ -92,9 +92,6 @@ public:
     void EnablePreviousButton(bool enable);
     void SetRemainingLabels(int time);
 
-    void LoadSubtitlePlugins();
-    void LoadMediaPlugins();
-
 private:
     BakaEngine      *baka;
     MpvHandler      *mpv;
@@ -132,6 +129,8 @@ private:
 #ifdef Q_OS_DARWIN
     int delayedFullScreen = -1;      // 0: normal, 1: fullscreen
 #endif
+
+    QMap<QString, QAction*> subtitlePluginActions;
 
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }

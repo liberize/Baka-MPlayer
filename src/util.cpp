@@ -970,10 +970,7 @@ QString Ratio(int w, int h)
 
 QString GetLangName(QString code)
 {
-    auto it = iso639CodeMap.find(code);
-    if (it == iso639CodeMap.end())
-        return "";
-    return it.value();
+    return iso639CodeMap.value(code, "");
 }
 
 QString GetCharEncodingTitle(QString name)

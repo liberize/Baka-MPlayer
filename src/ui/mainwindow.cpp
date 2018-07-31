@@ -747,6 +747,76 @@ MainWindow::MainWindow(QWidget *parent):
         ui->playlistWidget->RefreshPlaylist();
     });
 
+    connect(baka->pluginManager, &PluginManager::PluginStateChanged, [=] (QString name, bool enable) {
+        if (baka->pluginManager->IsSubtitlePlugin(name)) {
+            if (enable) {
+                if (subtitlePluginActions.empty())
+                    ui->menuSubtitles->addSeparator();
+
+                QAction *action = new QAction(tr("Download Subtitles from \"%0\"...").arg(name), this);
+                ui->menuSubtitles->addAction(action);
+                subtitlePluginActions[name] = action;
+                connect(action, &QAction::triggered, [=] {
+                    QString word = mpv->getFileInfo().media_title;
+                    if (word.isEmpty()) {
+                        QFileInfo info(mpv->getFile());
+                        QString name = info.completeBaseName();
+                        if (mpv->getPath().isEmpty() || info.suffix().isEmpty() ||
+                                name.length() <= 3 || QRegExp("\\d*").exactMatch(name)) {
+                            word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
+                                return text.length() >= 2;
+                            }, this);
+                            if (word.isEmpty())
+                                return;
+                        } else
+                            word = name;
+                    }
+                    if (baka->pluginManager->SearchSubtitle(name, word))
+                        connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, this, [=] (QString name, QList<Pi::SubtitleEntry> result) {
+                            QMenu *menu = nullptr;
+                            QAction *act = subtitlePluginActions.value(name + " Result", nullptr);
+                            if (act) {
+                                menu = act->menu();
+                                menu->clear();
+                            } else {
+                                menu = new QMenu(tr("Subtitles from \"%0\"").arg(name), this);
+                                ui->menuSubtitles->insertMenu(ui->action_Add_Subtitle_File, menu);
+                                subtitlePluginActions[name + " Result"] = menu->menuAction();
+                            }
+                            for (auto &entry : result) {
+                                QAction *act = menu->addAction(entry.name);
+                                connect(act, &QAction::triggered, [=] {
+
+                                });
+                            }
+                            menu->setEnabled(mpv->hasVideo());
+                        }, Qt::QueuedConnection);
+                });
+                action->setEnabled(mpv->hasVideo());
+            } else {
+                if (QAction *action = subtitlePluginActions.value(name, nullptr)) {
+                    ui->menuSubtitles->removeAction(action);
+                    subtitlePluginActions.remove(name);
+                    action->deleteLater();
+                }
+                if (QAction *action = subtitlePluginActions.value(name + " Result", nullptr)) {
+                    ui->menuSubtitles->removeAction(action);
+                    subtitlePluginActions.remove(name + " Result");
+                    action->menu()->deleteLater();
+                }
+                auto actions = ui->menuSubtitles->actions();
+                if (subtitlePluginActions.empty() && actions.back()->isSeparator())
+                    ui->menuSubtitles->removeAction(actions.back());
+            }
+        } else if (baka->pluginManager->IsMediaPlugin(name)) {
+            if (enable) {
+
+            } else {
+
+            }
+        }
+    });
+
     // add multimedia shortcuts
     ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
     ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
@@ -812,67 +882,12 @@ void MainWindow::Load(QString file)
     thumbnail_toolbar->addButton(playpause_toolbutton);
     thumbnail_toolbar->addButton(next_toolbutton);
 #endif
-    baka->LoadSettings();
     baka->LoadPlugins();
+    baka->LoadSettings();
     mpv->Initialize();
     mpv->LoadAudioDevices();
     mpv->LoadSubtitleEncodings();
     mpv->LoadFile(file);
-}
-
-void MainWindow::LoadSubtitlePlugins()
-{
-    QAction *first = nullptr;
-    QList<Pi::Plugin> subtitlePlugins = baka->pluginManager->GetSubtitlePlugins();
-    for (auto &plugin : subtitlePlugins) {
-        QString name = plugin.name;
-        QAction *action = ui->menuSubtitles->addAction(tr("Download Subtitles from \"%0\"...").arg(name));
-        connect(action, &QAction::triggered, [=] {
-            QString word = mpv->getFileInfo().media_title;
-            if (word.isEmpty()) {
-                QFileInfo info(mpv->getFile());
-                QString name = info.completeBaseName();
-                if (mpv->getPath().isEmpty() || info.suffix().isEmpty() ||
-                        name.length() <= 3 || QRegExp("\\d*").exactMatch(name)) {
-                    word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
-                        return text.length() >= 2;
-                    }, this);
-                    if (word.isEmpty())
-                        return;
-                } else
-                    word = name;
-            }
-            if (baka->pluginManager->SearchSubtitle(name, word))
-                connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, this, [=] (QString name, QList<Pi::SubtitleEntry> result) {
-                    QMenu *menu = nullptr;
-                    for (auto &act : ui->menuSubtitles->actions())
-                        if (act->menu() && act->text().endsWith(QString("\"%0\"").arg(name))) {
-                            menu = act->menu();
-                            menu->clear();
-                            break;
-                        }
-                    if (!menu) {
-                        menu = new QMenu(tr("Subtitles from \"%0\"").arg(name), ui->menuSubtitles);
-                        ui->menuSubtitles->insertMenu(ui->action_Add_Subtitle_File, menu);
-                    }
-                    for (auto &entry : result) {
-                        QAction *act = menu->addAction(entry.name);
-                        connect(act, &QAction::triggered, [=] {
-
-                        });
-                    }
-                }, Qt::QueuedConnection);
-        });
-        if (!first)
-            first = action;
-    }
-    if (first)
-        ui->menuSubtitles->insertSeparator(first);
-}
-
-void MainWindow::LoadMediaPlugins()
-{
-
 }
 
 void MainWindow::updateControlsPos()
@@ -892,7 +907,6 @@ void MainWindow::updateSidebarWidth()
 {
     int parentWidth = ui->centralwidget->width();
     int parentHeight = ui->centralwidget->height();
-    int width = ui->sidebarWidget->width();
     int newWidth = qMax(qMin(sidebarWidth, parentWidth / 2), 100);
     ui->sidebarWidget->setGeometry(parentWidth - newWidth, 0, newWidth, parentHeight);
 }
@@ -1237,6 +1251,10 @@ void MainWindow::EnableAudioFunctions(bool enable)
 void MainWindow::EnableVideoFunctions(bool enable)
 {
     ui->menuSubtitle_Track->setEnabled(enable);
+    ui->action_Add_Subtitle_File->setEnabled(enable);
+    for (auto &action : subtitlePluginActions)
+        action->setEnabled(enable);
+
     bool enableSub = (enable && ui->menuSubtitle_Track->actions().count() > 1);
     ui->menuFont_Si_ze->setEnabled(enableSub);
     ui->actionShow_Subtitles->setEnabled(enableSub);

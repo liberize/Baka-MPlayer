@@ -87,7 +87,7 @@ bool PluginManager::IsSubtitlePlugin(QString name)
         return false;
 
     return SafeRun<bool>([=] {
-        return wrapper.attr("is_subtitle_plugin")().cast<bool>();
+        return wrapper.attr("is_subtitle_plugin")(name).cast<bool>();
     });
 }
 
@@ -97,7 +97,7 @@ bool PluginManager::IsMediaPlugin(QString name)
         return false;
 
     return SafeRun<bool>([=] {
-        return wrapper.attr("is_media_plugin")().cast<bool>();
+        return wrapper.attr("is_media_plugin")(name).cast<bool>();
     });
 }
 
