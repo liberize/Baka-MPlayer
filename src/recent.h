@@ -4,7 +4,7 @@
 #include <QString>
 
 struct Recent {
-    Recent(QString s = QString(), QString t = QString(), int p = 0):
+    Recent(QString s = QString(), QString t = QString(), double p = 0):
         path(s), title(t), time(p) {}
 
     operator QString() const { return path; }
@@ -12,7 +12,7 @@ struct Recent {
 
     QString path;
     QString title;
-    int time;
+    double time;
 };
 
 #endif // RECENT_H

@@ -50,41 +50,13 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->msgLvlComboBox->setCurrentText(baka->mpv->getMsgLevel());
 
     pluginModel = new PluginModel(this);
-    QList<Pi::Plugin> plugins = baka->pluginManager->GetAllPlugins();
-    for (const auto &p : plugins) {
-        QStandardItem *item = new QStandardItem;
-        item->setData(QVariant::fromValue(p), Qt::UserRole);
-        pluginModel->appendRow(item);
-    }
     pluginItemDelegate = new PluginItemDelegate(this);
     ui->pluginListView->setItemDelegate(pluginItemDelegate);
     ui->pluginListView->setModel(pluginModel);
-
-    connect(pluginModel, &PluginModel::pluginEnableStateChanged, [=] (QString name, bool enable) {
-        baka->pluginManager->EnablePlugin(name, enable);
-    });
-    connect(ui->openPluginFolderButton, &QPushButton::clicked, [=] {
-        QModelIndex index = ui->pluginListView->currentIndex();
-        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
-        Util::ShowInFolder(plugin.path, "");
-    });
-    connect(ui->pluginConfigButton, &QPushButton::clicked, [=] {
-        QModelIndex index = ui->pluginListView->currentIndex();
-        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
-        if (!plugin.config.empty())
-            if (PluginConfigDialog::open(plugin.name, plugin.config, this)) {
-                pluginModel->setData(index, QVariant::fromValue(plugin), Qt::UserRole);
-                baka->pluginManager->UpdatePluginConfig(plugin.name, plugin.config);
-            }
-    });
-    connect(ui->pluginListView->selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
-        Pi::Plugin plugin = current.data(Qt::UserRole).value<Pi::Plugin>();
-        ui->pluginConfigButton->setEnabled(!plugin.config.empty());
-        ui->openPluginFolderButton->setEnabled(true);
-    });
+    PopulatePlugins();
 
     // add shortcuts
-    saved = baka->input;
+    input = baka->input;
     PopulateShortcuts();
 
     connect(ui->changeButton, &QPushButton::clicked, [=] {
@@ -110,7 +82,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
     connect(ui->resetKeyButton, &QPushButton::clicked, [=] {
         if (QMessageBox::question(this, tr("Reset All Key Bindings?"), tr("Are you sure you want to reset all shortcut keys to its original bindings?")) == QMessageBox::Yes) {
-            baka->input = baka->default_input;
+            input = baka->default_input;
             while (numberOfShortcuts > 0)
                 RemoveRow(numberOfShortcuts-1);
             PopulateShortcuts();
@@ -122,7 +94,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
         if (row == -1)
             return;
 
-        baka->input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
+        input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
         RemoveRow(row);
     });
 
@@ -141,6 +113,28 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
     connect(ui->recentCheckBox, SIGNAL(toggled(bool)),
             ui->recentSpinBox, SLOT(setEnabled(bool)));
+
+    connect(ui->openPluginFolderButton, &QPushButton::clicked, [=] {
+        QModelIndex index = ui->pluginListView->currentIndex();
+        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
+        Util::ShowInFolder(plugin.path, "");
+    });
+
+    connect(ui->pluginConfigButton, &QPushButton::clicked, [=] {
+        QModelIndex index = ui->pluginListView->currentIndex();
+        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
+        if (!plugin.config.empty())
+            if (PluginConfigDialog::open(plugin.name, plugin.config, this)) {
+                pluginModel->setData(index, QVariant::fromValue(plugin), Qt::UserRole);
+                configChangedPlugins.insert(plugin.name);
+            }
+    });
+
+    connect(ui->pluginListView->selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
+        Pi::Plugin plugin = current.data(Qt::UserRole).value<Pi::Plugin>();
+        ui->pluginConfigButton->setEnabled(!plugin.config.empty());
+        ui->openPluginFolderButton->setEnabled(true);
+    });
 
     connect(ui->okButton, SIGNAL(clicked()),
             this, SLOT(accept()));
@@ -170,9 +164,10 @@ PreferencesDialog::~PreferencesDialog()
         baka->mpv->ScreenshotDirectory(screenshotDir);
         baka->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
         baka->mpv->MsgLevel(ui->msgLvlComboBox->currentText());
+        baka->input = input;
         baka->window->MapShortcuts();
-    } else
-        baka->input = saved;
+        UpdatePlugins();
+    }
     delete sortLock;
     delete ui;
 }
@@ -203,13 +198,35 @@ void PreferencesDialog::PopulateShortcuts()
 {
     sortLock->lock();
     numberOfShortcuts = 0;
-    for (auto iter = baka->input.begin(); iter != baka->input.end(); ++iter) {
+    for (auto iter = input.begin(); iter != input.end(); ++iter) {
         QPair<QString, QString> p = iter.value();
         if (p.first == QString() || p.second == QString())
             continue;
         AddRow(iter.key(), p.first, p.second);
     }
     sortLock->unlock();
+}
+
+void PreferencesDialog::PopulatePlugins()
+{
+    QList<Pi::Plugin> plugins = baka->pluginManager->GetAllPlugins();
+    for (const auto &p : plugins) {
+        QStandardItem *item = new QStandardItem;
+        item->setData(QVariant::fromValue(p), Qt::UserRole);
+        pluginModel->appendRow(item);
+    }
+}
+
+void PreferencesDialog::UpdatePlugins()
+{
+    for (int i = 0; i < pluginModel->rowCount(); i++) {
+        QModelIndex index = pluginModel->index(i, 0);
+        Pi::Plugin plugin = pluginModel->data(index, Qt::UserRole).value<Pi::Plugin>();
+        if (plugin.enabled != !baka->pluginManager->GetDisableList().contains(plugin.name))
+            baka->pluginManager->EnablePlugin(plugin.name, plugin.enabled);
+        if (configChangedPlugins.contains(plugin.name))
+            baka->pluginManager->UpdatePluginConfig(plugin.name, plugin.config);
+    }
 }
 
 void PreferencesDialog::AddRow(QString first, QString second, QString third)
@@ -263,7 +280,7 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
                        tr("Existing keybinding"),
                        tr("%0 is already being used. Would you like to change its function?").arg(
                            result.first)) == QMessageBox::Yes) {
-                    baka->input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
+                    input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
                     RemoveRow(i);
                     status = 0;
                 } else {
@@ -278,10 +295,10 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
                 AddRow(result.first, result.second.first, result.second.second);
             else { // change
                 if (result.first != init.first)
-                    baka->input[init.first] = {QString(), QString()};
+                    input[init.first] = {QString(), QString()};
                 ModifyRow(ui->infoWidget->currentRow(), result.first, result.second.first, result.second.second);
             }
-            baka->input[result.first] = result.second;
+            input[result.first] = result.second;
             status = 2;
         } else
             status = 0;

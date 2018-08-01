@@ -830,7 +830,7 @@ QString ToLocalFile(QString s)
     return "";
 }
 
-QString FormatTime(int _time, int _totalTime)
+QString FormatTime(double _time, double _totalTime)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
     if (_totalTime >= 3600) // hours
@@ -840,7 +840,7 @@ QString FormatTime(int _time, int _totalTime)
     return time.toString("00:ss");   // seconds
 }
 
-QString FormatRelativeTime(int _time)
+QString FormatRelativeTime(double _time)
 {
     QString prefix;
     if (_time < 0) {

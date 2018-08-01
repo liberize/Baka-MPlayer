@@ -49,8 +49,8 @@ void SetLayerCornerRadius(QWidget *widget, double r);
 void SetCanDrawSubviewsIntoLayer(QWidget *widget);
 
 
-QString FormatTime(int time, int totalTime);
-QString FormatRelativeTime(int time);
+QString FormatTime(double time, double totalTime);
+QString FormatRelativeTime(double time);
 QString FormatNumber(int val, int length);
 QString FormatNumberWithAmpersand(int val, int length);
 QString HumanSize(qint64);

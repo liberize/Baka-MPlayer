@@ -44,8 +44,8 @@ private:
     struct {
         QPoint mousePos;
         QPoint windowPos;
-        int    time;
-        int    volume;
+        double time;
+        int volume;
     } start;
 };
 

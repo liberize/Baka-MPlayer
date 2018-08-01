@@ -14,9 +14,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
-
-signals:
-    void pluginEnableStateChanged(QString name, bool enable);
 };
 
 #endif // PLUGINMODEL_H

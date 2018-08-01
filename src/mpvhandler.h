@@ -39,7 +39,7 @@ public:
     double getAudioDelay()                  { return audioDelay; }
     double getSubtitleDelay()               { return subtitleDelay; }
     double getSpeed()                       { return speed; }
-    int getTime()                           { return time; }
+    double getTime()                        { return time; }
     int getVolume()                         { return volume; }
     int getVid()                            { return vid; }
     int getAid()                            { return aid; }
@@ -94,8 +94,8 @@ public slots:
     void Stop();
     void Mute(bool);
 
-    void Seek(int pos, bool relative = false, bool osd = false);
-    int Relative(int pos);
+    void Seek(double pos, bool relative = false, bool osd = false);
+    double Relative(double pos);
     void FrameStep();
     void FrameBackStep();
 
@@ -176,7 +176,7 @@ private slots:
     void setAudioDelay(double d)            { emit audioDelayChanged(audioDelay = d); }
     void setSubtitleDelay(double d)         { emit subtitleDelayChanged(subtitleDelay = d); }
     void setSpeed(double d)                 { emit speedChanged(speed = d); }
-    void setTime(int i)                     { emit timeChanged(time = i); }
+    void setTime(double i)                  { emit timeChanged(time = i); }
     void setVolume(int i)                   { emit volumeChanged(volume = i); }
     void setIndex(int i)                    { emit indexChanged(index = i); }
     void setVid(int i)                      { emit vidChanged(vid = i); }
@@ -193,7 +193,7 @@ signals:
     void videoParamsChanged(const Mpv::VideoParams&);
     void audioParamsChanged(const Mpv::AudioParams&);
     void playStateChanged(Mpv::PlayState);
-    void fileChanging(int, int);
+    void fileChanging(double, double);
     void fileChanged(QString);
     void pathChanged(QString);
     void screenshotFormatChanged(QString);
@@ -204,7 +204,7 @@ signals:
     void audioDelayChanged(double);
     void subtitleDelayChanged(double);
     void speedChanged(double);
-    void timeChanged(int);
+    void timeChanged(double);
     void volumeChanged(int);
     void indexChanged(int);
     void vidChanged(int);
@@ -239,8 +239,8 @@ private:
     double  audioDelay = 0;
     double  subtitleDelay = 0;
     double  speed = 1;
-    int     time = 0;
-    int     lastTime = 0;
+    double  time = 0;
+    double  lastTime = 0;
     int     volume = 100;
     int     index = 0;
     int     vid;

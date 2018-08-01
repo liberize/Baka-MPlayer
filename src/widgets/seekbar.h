@@ -13,19 +13,19 @@ public:
     explicit SeekBar(QWidget *parent = 0);
 
 public slots:
-    void setTracking(int _totalTime);
-    void setTicks(QList<int> values);
+    void setTracking(double _totalTime);
+    void setTicks(const QList<double> &values);
+    void updateBufferedRanges(const QList<QPair<double, double>> &values);
 
 protected:
-    QString formatTrackingTime(int _time);
-
     void mouseMoveEvent(QMouseEvent* event);
     void paintEvent(QPaintEvent *event);
 
 private:
-    QList<int> ticks;
+    QList<double> ticks;
     bool tickReady;
-    int totalTime;
+    double totalTime;
+    QList<QPair<double, double>> ranges;
 };
 
 #endif // SEEKBAR_H

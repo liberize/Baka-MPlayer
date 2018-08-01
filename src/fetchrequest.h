@@ -5,14 +5,22 @@
 #include <QFile>
 #include <QUrl>
 #include <QNetworkReply>
+#include <QMap>
+#include <QByteArray>
 
 class BakaEngine;
 
-class FetchRequest : public QObject  {
+class FetchRequest : public QObject {
     Q_OBJECT
 public:
     explicit FetchRequest(QString url, BakaEngine *baka, QObject *parent = nullptr);
     ~FetchRequest();
+
+    const QUrl &getUrl() const { return url; }
+    QByteArray &getPostData() { return postData; }
+    QMap<QByteArray, QByteArray> &getHeaders() { return headers; }
+    void setPostData(const QByteArray &d) { postData = d; }
+    void setHeaders(const QMap<QByteArray, QByteArray> &h) { headers = h; }
 
     bool fetch(bool saveToFile = false, QString savePath = QString(), bool overwrite = false);
     void abort();
@@ -25,12 +33,14 @@ signals:
     void error(QString msg);
 
 private:
-    void doFetch(QUrl currentUrl);
+    void doFetch();
     bool openFile(QString path, bool overwrite);
     void closeFile();
 
 private:
     QUrl url;
+    QByteArray postData;
+    QMap<QByteArray, QByteArray> headers;
     QFile *file = nullptr;
     BakaEngine *baka = nullptr;
     QNetworkReply *currentReply = nullptr;

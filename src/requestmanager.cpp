@@ -19,12 +19,21 @@ RequestManager::~RequestManager()
     delete manager;
 }
 
-FetchRequest *RequestManager::newRequest(QString url)
+FetchRequest *RequestManager::newRequest(QString url, const QByteArray &postData, const QMap<QByteArray, QByteArray> &headers)
 {
-    return new FetchRequest(url, baka, this);
+    FetchRequest *req = new FetchRequest(url, baka, this);
+    req->setHeaders(headers);
+    req->setPostData(postData);
+    return req;
 }
 
-QNetworkReply *RequestManager::getReply(QUrl url)
+QNetworkReply *RequestManager::sendRequest(FetchRequest *req)
 {
-    return manager->get(QNetworkRequest(url));
+    QNetworkRequest request(req->getUrl());
+    for (auto it = req->getHeaders().begin(); it != req->getHeaders().end(); ++it)
+        request.setRawHeader(it.key(), *it);
+
+    if (!req->getPostData().isEmpty())
+        return manager->post(request, req->getPostData());
+    return manager->get(request);
 }

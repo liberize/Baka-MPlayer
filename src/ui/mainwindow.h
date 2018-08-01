@@ -90,7 +90,7 @@ public:
     void SetPlayButtonIcon(bool play);
     void EnableNextButton(bool enable);
     void EnablePreviousButton(bool enable);
-    void SetRemainingLabels(int time);
+    void SetRemainingLabels(double time);
 
 private:
     BakaEngine      *baka;

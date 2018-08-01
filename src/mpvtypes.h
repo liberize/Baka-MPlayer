@@ -38,7 +38,7 @@ namespace Mpv
     };
     struct Chapter {
         QString title;
-        int time;
+        double time;
     };
     struct Track {
         int id;
@@ -75,7 +75,7 @@ namespace Mpv
 
     struct FileInfo {
         QString media_title;
-        int length = 0;
+        double length = 0;
         QMap<QString, QString> metadata;
         VideoParams video_params;
         AudioParams audio_params;

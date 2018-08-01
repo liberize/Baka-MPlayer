@@ -41,7 +41,6 @@ bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
     if (gesture_type == MOVE)
         start.windowPos = windowPos;
     else /* if (gesture_type == HSEEK_VVOLUME) */ {
-        QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
         start.time = baka->mpv->getTime();
         start.volume = baka->mpv->getVolume();
     }
@@ -66,7 +65,7 @@ bool GestureHandler::Process(QPoint mousePos)
                 break;
             case SEEKING:
             {
-                int relative = delta.x() * hRatio;
+                double relative = delta.x() * hRatio;
                 baka->mpv->Seek(start.time + relative, false, true);
                 break;
             }

@@ -424,7 +424,7 @@ bool MpvHandler::event(QEvent *event)
                 mpv_event_property *prop = (mpv_event_property*)event->data;
                 if (QString(prop->name) == "playback-time") {   // playback-time does the same thing as time-pos but works for streaming media
                     if (prop->format == MPV_FORMAT_DOUBLE) {
-                        setTime((int)*(double*)prop->data);
+                        setTime(*(double*)prop->data);
                         lastTime = time;
                     }
                 } else if (QString(prop->name) == "volume") {
@@ -676,7 +676,7 @@ void MpvHandler::Mute(bool m)
         setMute(m);
 }
 
-void MpvHandler::Seek(int pos, bool relative, bool osd)
+void MpvHandler::Seek(double pos, bool relative, bool osd)
 {
     if (playState > 0) {
         if (relative) {
@@ -701,9 +701,9 @@ void MpvHandler::Seek(int pos, bool relative, bool osd)
     }
 }
 
-int MpvHandler::Relative(int pos)
+double MpvHandler::Relative(double pos)
 {
-    int ret = pos - lastTime;
+    double ret = pos - lastTime;
     lastTime = pos;
     return ret;
 }
@@ -934,7 +934,7 @@ void MpvHandler::LoadFileInfo()
         // get length
         double len;
         mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &len);
-        fileInfo.length = (int)len;
+        fileInfo.length = len;
     }
 
     LoadTracks();
@@ -1037,7 +1037,7 @@ void MpvHandler::LoadChapters()
                                 ch.title = node.u.list->values[i].u.list->values[n].u.string;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "time") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_DOUBLE)
-                                ch.time = (int)node.u.list->values[i].u.list->values[n].u.double_;
+                                ch.time = node.u.list->values[i].u.list->values[n].u.double_;
                         }
                     }
                     fileInfo.chapters.push_back(ch);

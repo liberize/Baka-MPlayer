@@ -7,6 +7,7 @@
 #include <QMutex>
 #include <QTableWidget>
 #include <QStandardItemModel>
+#include <QSet>
 
 namespace Ui {
 class PreferencesDialog;
@@ -27,6 +28,8 @@ public:
 protected:
     void PopulateLangs();
     void PopulateShortcuts();
+    void PopulatePlugins();
+    void UpdatePlugins();
     void AddRow(QString first, QString second, QString third);
     void ModifyRow(int row, QString first, QString second, QString third);
     void RemoveRow(int row);
@@ -35,7 +38,7 @@ protected:
 private:
     Ui::PreferencesDialog *ui;
     BakaEngine *baka;
-    QHash<QString, QPair<QString, QString>> saved;
+    QHash<QString, QPair<QString, QString>> input;
 
     QString screenshotDir;
     int numberOfShortcuts;
@@ -52,6 +55,7 @@ private:
 
     PluginModel *pluginModel = nullptr;
     PluginItemDelegate *pluginItemDelegate = nullptr;
+    QSet<QString> configChangedPlugins;
 };
 
 #endif // PREFERENCESDIALOG_H

@@ -7,6 +7,7 @@
 namespace py = pybind11;
 
 #include <QString>
+#include <QByteArray>
 #include <QMap>
 #include <QHash>
 #include <QVector>
@@ -135,6 +136,36 @@ template <> struct type_caster<QString> {
     }
 
     PYBIND11_TYPE_CASTER(QString, _("str"));
+};
+
+template <> struct type_caster<QByteArray> {
+
+    bool load(handle src, bool/* convert*/) {
+        if (!isinstance<str>(src))
+            return false;
+        auto s = reinterpret_borrow<str>(src);
+
+        object temp = s;
+        if (PyUnicode_Check(s.ptr())) {
+            temp = reinterpret_steal<object>(PyUnicode_AsUTF8String(s.ptr()));
+            if (!temp)
+                pybind11_fail("Unable to extract string contents! (encoding issue)");
+        }
+        char *buffer;
+        ssize_t length;
+        if (PYBIND11_BYTES_AS_STRING_AND_SIZE(temp.ptr(), &buffer, &length))
+            pybind11_fail("Unable to extract string contents! (invalid type)");
+
+        value = QByteArray(buffer, length);
+        return true;
+    }
+
+    static handle cast(const QByteArray &src, return_value_policy/* policy*/, handle/* parent*/) {
+        str s(src.constData(), src.size());
+        return s.release();
+    }
+
+    PYBIND11_TYPE_CASTER(QByteArray, _("str"));
 };
 
 template <typename Type, typename Key, typename Value> struct qmap_caster {

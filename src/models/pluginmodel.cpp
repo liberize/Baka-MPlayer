@@ -33,7 +33,6 @@ bool PluginModel::setData(const QModelIndex &index, const QVariant &value, int r
         Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
         plugin.enabled = (value == Qt::Checked);
         QStandardItemModel::setData(index, QVariant::fromValue(plugin), Qt::UserRole);
-        emit pluginEnableStateChanged(plugin.name, plugin.enabled);
         return true;
     }
     return QStandardItemModel::setData(index, value, role);

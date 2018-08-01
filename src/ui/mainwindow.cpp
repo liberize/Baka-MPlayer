@@ -287,23 +287,20 @@ MainWindow::MainWindow(QWidget *parent):
             else
                 setWindowTitle(fileInfo.media_title);
 
-            QString f = mpv->getFile(), file = mpv->getPath()+f;
+            QString f = mpv->getFile(), file = mpv->getPath() + f;
             if (f != QString() && maxRecent > 0) {
                 int i = recent.indexOf(file);
                 if (i >= 0) {
-                    int t = recent.at(i).time;
+                    double t = recent.at(i).time;
                     if (t > 0 && resume)
                         mpv->Seek(t);
                     recent.removeAt(i);
                 }
                 if (recent.isEmpty() || recent.front() != file) {
                     UpdateRecentFiles(); // update after initialization and only if the current file is different from the first recent
-                    while (recent.length() > maxRecent-1)
+                    while (recent.length() > maxRecent - 1)
                         recent.removeLast();
-                    recent.push_front(
-                        Recent(file,
-                               (mpv->getPath() == QString() || !Util::IsValidFile(file)) ?
-                                   fileInfo.media_title : QString()));
+                    recent.push_front(Recent(file, (mpv->getPath().isEmpty() || !Util::IsValidFile(file)) ? fileInfo.media_title : QString()));
                     current = &recent.front();
                 }
             }
@@ -428,17 +425,16 @@ MainWindow::MainWindow(QWidget *parent):
     connect(mpv, &MpvHandler::chaptersChanged, [=] (const QList<Mpv::Chapter> &chapters) {
         if (mpv->getPlayState() > 0) {
             QAction *action;
-            QList<int> ticks;
-            int n = 1,
-                N = chapters.length();
+            QList<double> ticks;
+            int n = 1, N = chapters.length();
             ui->menu_Chapters->clear();
             for (auto &ch : chapters) {
                 action = ui->menu_Chapters->addAction(QString("%0: %1").arg(Util::FormatNumberWithAmpersand(n, N), ch.title));
                 if (n <= 9)
-                    action->setShortcut(QKeySequence("Ctrl+"+QString::number(n)));
+                    action->setShortcut(QKeySequence("Ctrl+" + QString::number(n)));
                 connect(action, &QAction::triggered, [=] {
-                            mpv->Seek(ch.time);
-                        });
+                    mpv->Seek(ch.time);
+                });
                 ticks.push_back(ch.time);
                 n++;
             }
@@ -527,9 +523,9 @@ MainWindow::MainWindow(QWidget *parent):
         pathChanged = true;
     });
 
-    connect(mpv, &MpvHandler::fileChanging, [=] (int t, int l) {
+    connect(mpv, &MpvHandler::fileChanging, [=] (double t, double l) {
         if (current != nullptr) {
-            if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+            if (t > 0.05 * l && t < 0.95 * l) // only save if within the middle 90%
                 current->time = t;
             else
                 current->time = 0;
@@ -540,11 +536,11 @@ MainWindow::MainWindow(QWidget *parent):
     // connect(mpv, &MpvHandler::fileChanged, [=] (QString f) {
     // });
 
-    connect(mpv, &MpvHandler::timeChanged, [=] (int i) {
+    connect(mpv, &MpvHandler::timeChanged, [=] (double i) {
         const Mpv::FileInfo &fi = mpv->getFileInfo();
         // set the seekBar's location with NoSignal function so that it doesn't trigger a seek
         // the formula is a simple ratio seekBar's max * time/totalTime
-        ui->seekBar->setValueNoSignal(ui->seekBar->maximum()*((double)i/fi.length));
+        ui->seekBar->setValueNoSignal(ui->seekBar->maximum() * (i / fi.length));
 
         SetRemainingLabels(i);
 
@@ -679,7 +675,7 @@ MainWindow::MainWindow(QWidget *parent):
     // ui
 
     connect(ui->seekBar, &SeekBar::valueChanged, [=] (int i) {              // Playback: Seekbar clicked
-        mpv->Seek(mpv->Relative(((double)i/ui->seekBar->maximum())*mpv->getFileInfo().length), true);
+        mpv->Seek(mpv->Relative(((double)i / ui->seekBar->maximum()) * mpv->getFileInfo().length), true);
     });
 
     connect(ui->openFileButton, &QPushButton::clicked, [=] {
@@ -1327,9 +1323,8 @@ void MainWindow::ShowStartupPage(bool visible)
 void MainWindow::CloseFile()
 {
     if (current != nullptr) {
-        int t = mpv->getTime(),
-            l = mpv->getFileInfo().length;
-        if (t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+        double t = mpv->getTime(), l = mpv->getFileInfo().length;
+        if (t > 0.05 * l && t < 0.95 * l) // only save if within the middle 90%
             current->time = t;
         else
             current->time = 0;
@@ -1487,29 +1482,27 @@ void MainWindow::SetPlayButtonIcon(bool play)
     }
 }
 
-void MainWindow::SetRemainingLabels(int time)
+void MainWindow::SetRemainingLabels(double time)
 {
     // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
     const Mpv::FileInfo &fi = mpv->getFileInfo();
     if (fi.length == 0) {
         ui->durationLabel->setText(Util::FormatTime(time, time));
-        //ui->remainingLabel->setVisible(false);
     } else {
-        //ui->remainingLabel->setVisible(true);
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if (remaining) {
-            int remainingTime = fi.length - time;
+            double remainingTime = fi.length - time;
             QString text = "-" + Util::FormatTime(remainingTime, fi.length);
             if (mpv->getSpeed() != 1) {
                 double speed = mpv->getSpeed();
-                text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
+                text += QString("  (-%0)").arg(Util::FormatTime(remainingTime / speed, fi.length / speed));
             }
             ui->remainingLabel->setText(text);
         } else {
             QString text = Util::FormatTime(fi.length, fi.length);
             if (mpv->getSpeed() != 1) {
                 double speed = mpv->getSpeed();
-                text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
+                text += QString("  (%0)").arg(Util::FormatTime(fi.length / speed, fi.length / speed));
             }
             ui->remainingLabel->setText(text);
         }

@@ -29,7 +29,7 @@ bool FetchRequest::fetch(bool saveToFile, QString savePath, bool overwrite)
             return false;
         }
     }
-    doFetch(url);
+    doFetch();
     return true;
 }
 
@@ -41,9 +41,9 @@ void FetchRequest::abort()
     }
 }
 
-void FetchRequest::doFetch(QUrl currentUrl)
+void FetchRequest::doFetch()
 {
-    QNetworkReply *reply = baka->requestManager->getReply(currentUrl);
+    QNetworkReply *reply = baka->requestManager->sendRequest(this);
     currentReply = reply;
 
     connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
@@ -70,16 +70,18 @@ void FetchRequest::doFetch(QUrl currentUrl)
             if (redirect.isEmpty()) {
                 emit message(tr("Download complete"));
                 emit progress(1);
-                if (file)
-                    emit saved(file->fileName());
-                else
+                if (file) {
+                    QString path = file->fileName();
+                    closeFile();
+                    emit saved(path);
+                } else
                     emit fetched(reply->readAll());
-                closeFile();
             } else {
                 emit message(tr("Redirected..."));
                 if (file)
                     file->seek(0);
-                doFetch(std::move(redirect));
+                url = redirect;
+                doFetch();
             }
         }
         reply->deleteLater();

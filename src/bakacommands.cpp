@@ -663,8 +663,7 @@ void BakaEngine::BakaHelp(QStringList &args)
         args.pop_front();
         if (args.empty()) {
             auto command = BakaCommandMap.find(arg);
-            if (command != BakaCommandMap.end()) //found
-            {
+            if (command != BakaCommandMap.end()) { //found
                 Print(tr("usage: %0 %1").arg(arg, command->second[0]));
                 Print(tr("description:"));
                 Print(QString("  %0").arg(command->second[1]));

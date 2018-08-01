@@ -1199,6 +1199,10 @@
         <source>Downloading %0...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Download failed with error: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>

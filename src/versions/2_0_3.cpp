@@ -64,7 +64,7 @@ void BakaEngine::Load2_0_3()
     window->recent.clear();
     for (auto entry : root["recent"].toArray()) {
         QJsonObject entry_json = entry.toObject();
-        window->recent.append(Recent(entry_json["path"].toString(), entry_json["title"].toString(), QJsonValueRef2(entry_json["time"]).toInt(0)));
+        window->recent.append(Recent(entry_json["path"].toString(), entry_json["title"].toString(), QJsonValueRef2(entry_json["time"]).toDouble(0)));
     }
     window->setMaxRecent(QJsonValueRef2(root["maxRecent"]).toInt(5));
     window->setGestures(QJsonValueRef2(root["gestures"]).toBool(true));
