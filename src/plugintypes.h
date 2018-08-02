@@ -79,12 +79,14 @@ struct MediaEntry {
     QString url;
     QString cover;
     QString description;
+    QString downloader;
 
     MediaEntry &operator =(const py::object &obj) {
         name = obj.attr("name").cast<QString>();
         url = obj.attr("url").cast<QString>();
         cover = obj.attr("cover").cast<QString>();
         description = obj.attr("description").cast<QString>();
+        downloader = obj.attr("downloader").cast<QString>();
         return *this;
     }
 };
@@ -92,10 +94,12 @@ struct MediaEntry {
 struct SubtitleEntry {
     QString name;
     QString url;
+    QString downloader;
 
     SubtitleEntry &operator =(const py::object &obj) {
         name = obj.attr("name").cast<QString>();
         url = obj.attr("url").cast<QString>();
+        downloader = obj.attr("downloader").cast<QString>();
         return *this;
     }
 };

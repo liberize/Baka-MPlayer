@@ -26,15 +26,19 @@ public:
     bool IsMediaPlugin(QString name);
     void EnablePlugin(QString name, bool enable);
     bool UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config);
-    bool SearchSubtitle(QString name, QString word, int count = 10);
-    bool FetchMedia(QString name, int count = 50);
-    bool SearchMedia(QString name, QString word, int count = 50);
+    bool SearchSubtitle(QString name, QString word, int count);
+    bool DownloadSubtitle(QString name, const Pi::SubtitleEntry &entry);
+    bool FetchMedia(QString name, int start, int count);
+    bool SearchMedia(QString name, QString word, int count);
+    bool DownloadMedia(QString name, const Pi::MediaEntry &entry);
 
 signals:
     void PluginStateChanged(QString name, bool enable);
     void SearchSubtitleFinished(QString name, QList<Pi::SubtitleEntry> result);
+    void DownloadSubtitleFinished(QString name, Pi::SubtitleEntry entry);
     void FetchMediaFinished(QString name, QList<Pi::MediaEntry> result);
     void SearchMediaFinished(QString name, QList<Pi::MediaEntry> result);
+    void DownloadMediaFinished(QString name, Pi::MediaEntry entry);
 
 private:
     template <typename T>

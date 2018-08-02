@@ -769,7 +769,7 @@ MainWindow::MainWindow(QWidget *parent):
                         } else
                             word = name;
                     }
-                    if (baka->pluginManager->SearchSubtitle(name, word))
+                    if (baka->pluginManager->SearchSubtitle(name, word, 10))
                         connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, this, [=] (QString name, QList<Pi::SubtitleEntry> result) {
                             QMenu *menu = nullptr;
                             QAction *act = subtitlePluginActions.value(name + " Result", nullptr);

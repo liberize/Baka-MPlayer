@@ -11,6 +11,12 @@ _logger = logging.getLogger(__name__)
 # ConfigItem, Plugin, SubtitleEntry, MediaEntry
 
 
+def init_env(temp_dir):
+    os.environ["TMPDIR"] = temp_dir
+    os.environ["TEMP"] = temp_dir
+    os.chdir(temp_dir)
+
+
 def load_plugins(plugin_dirs, disable_list=[]):
     plugin_manager.load_plugins(plugin_dirs)
     if disable_list:
@@ -75,63 +81,35 @@ def search_subtitle(plugin_name, word, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
     if not plugin or not plugin.enabled or not plugin.is_type(SubtitleProvider):
         return None
-
-    result = []
-    try:
-        for entries in plugin.search(word, count, **kwargs):
-            if isinstance(entries, SubtitleEntry):
-                result.append(entries)
-            else:
-                for entry in entries:
-                    if isinstance(entry, SubtitleEntry):
-                        result.append(entry)
-            if len(result) >= count:
-                break
-    except Exception as e:
-        _logger.error('search_subtitle: error: %s', e)
-    return result
+    return plugin.search(word, count, **kwargs):
 
 
-def fetch_media(plugin_name, count, **kwargs):
+def download_subtitle(plugin_name, entry):
+    plugin = plugin_manager.get_plugin_by_name(plugin_name)
+    if not plugin or not plugin.enabled or not plugin.is_type(SubtitleProvider):
+        return None
+    return plugin.download(entry):
+
+
+def fetch_media(plugin_name, start, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
     if not plugin or not plugin.enabled or not plugin.is_type(MediaProvider):
         return None
-
-    result = []
-    try:
-        for entries in plugin.fetch(count, **kwargs):
-            if isinstance(entries, MediaEntry):
-                result.append(entries)
-            else:
-                for entry in entries:
-                    if isinstance(entry, MediaEntry):
-                        result.append(entry)
-            if len(result) >= count:
-                break
-    except Exception as e:
-        _logger.error('fetch_media: error: %s', e)
-    return result
+    return plugin.fetch(start, count, **kwargs):
 
 
 def search_media(plugin_name, word, count, **kwargs):
     plugin = plugin_manager.get_plugin_by_name(plugin_name)
     if not plugin or not plugin.enabled or not plugin.is_type(MediaProvider):
         return None
+    return plugin.search(word, count, **kwargs):
 
-    result = []
-    try:
-        for entries in plugin.search(word, count, **kwargs):
-            if isinstance(entries, MediaEntry):
-                result.append(entries)
-            else:
-                for entry in entries:
-                    if isinstance(entry, MediaEntry):
-                        result.append(entry)
-            if len(result) >= count:
-                break
-    except Exception as e:
-        _logger.error('search_media: error: %s', e)
-    return result
+
+def download_media(plugin_name, entry):
+    plugin = plugin_manager.get_plugin_by_name(plugin_name)
+    if not plugin or not plugin.enabled or not plugin.is_type(MediaProvider):
+        return None
+    return plugin.download(entry):
 
 
 if __name__ == '__main__':

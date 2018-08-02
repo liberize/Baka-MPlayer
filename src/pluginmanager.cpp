@@ -17,12 +17,10 @@ PluginManager::PluginManager(QObject *parent)
 
         py::module sys = py::module::import("sys");
         const char *scriptsPath = Util::ScriptsPath().toUtf8().constData();
-        sys.attr("path").cast<py::list>().append(scriptsPath);
-
-        py::module os = py::module::import("os");
-        os.attr("environ").cast<py::dict>()["UPV_TEMP_DIR"] = baka->tempDir->path();
+        sys.attr("path").attr("insert")(0, scriptsPath);
 
         wrapper = py::module::import("upvwrapper");
+        wrapper.attr("init_env")(baka->tempDir->path());
     });
 }
 
@@ -130,7 +128,7 @@ bool PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem>
         return false;
 
     SafeRun<void>([=] {
-        QMap<QString, QString> conf;
+        py::dict conf;
         for (const auto &i : config)
             conf[i.name] = i.value;
         wrapper.attr("update_plugin_config")(name, conf);
@@ -150,13 +148,26 @@ bool PluginManager::SearchSubtitle(QString name, QString word, int count)
     return true;
 }
 
-bool PluginManager::FetchMedia(QString name, int count)
+bool PluginManager::DownloadSubtitle(QString name, const Pi::SubtitleEntry &entry)
 {
     if (!pluginsLoaded || workerThread)
         return false;
 
     RunWorker([=] {
-        QList<MediaEntry> result = wrapper.attr("fetch_media")(name, count).cast<QList<MediaEntry>>();
+        py::object obj = wrapper.attr("SubtitleEntry")(entry.name, entry.url, entry.downloader);
+        SubtitleEntry result = wrapper.attr("download_subtitle")(name, obj).cast<SubtitleEntry>();
+        emit DownloadSubtitleFinished(name, result);
+    });
+    return true;
+}
+
+bool PluginManager::FetchMedia(QString name, int start, int count)
+{
+    if (!pluginsLoaded || workerThread)
+        return false;
+
+    RunWorker([=] {
+        QList<MediaEntry> result = wrapper.attr("fetch_media")(name, start, count).cast<QList<MediaEntry>>();
         emit FetchMediaFinished(name, std::move(result));
     });
     return true;
@@ -170,6 +181,19 @@ bool PluginManager::SearchMedia(QString name, QString word, int count)
     RunWorker([=] {
         QList<MediaEntry> result = wrapper.attr("search_media")(name, word, count).cast<QList<MediaEntry>>();
         emit SearchMediaFinished(name, std::move(result));
+    });
+    return true;
+}
+
+bool PluginManager::DownloadMedia(QString name, const Pi::MediaEntry &entry)
+{
+    if (!pluginsLoaded || workerThread)
+        return false;
+
+    RunWorker([=] {
+        py::object obj = wrapper.attr("MediaEntry")(entry.name, entry.url, entry.cover, entry.description, entry.downloader);
+        MediaEntry result = wrapper.attr("download_media")(name, obj).cast<MediaEntry>();
+        emit DownloadMediaFinished(name, result);
     });
     return true;
 }
