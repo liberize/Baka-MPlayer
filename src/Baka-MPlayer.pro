@@ -24,7 +24,7 @@ PKGCONFIG += mpv python3
 
 
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
 
     APP_DATA_DIR = ../Resources
     ICON = img/logo.icns
@@ -219,10 +219,13 @@ SOURCES += \
     widgets/playlistwidget.cpp \
     widgets/seekbar.cpp \
     delegates/pluginitemdelegate.cpp \
-    models/pluginmodel.cpp \
     ui/pluginconfigdialog.cpp \
-    fetchrequest.cpp \
-    requestmanager.cpp
+    requestmanager.cpp \
+    request.cpp \
+    plugin.cpp \
+    subtitleprovider.cpp \
+    mediaprovider.cpp \
+    worker.cpp
 
 
 HEADERS  += \
@@ -284,10 +287,14 @@ HEADERS  += \
     widgets/playlistwidget.h \
     widgets/seekbar.h \
     delegates/pluginitemdelegate.h \
-    models/pluginmodel.h \
     ui/pluginconfigdialog.h \
-    fetchrequest.h \
-    requestmanager.h
+    requestmanager.h \
+    request.h \
+    pycast.h \
+    plugin.h \
+    subtitleprovider.h \
+    mediaprovider.h \
+    worker.h
 
 
 FORMS    += \

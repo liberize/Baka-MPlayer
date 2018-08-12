@@ -111,4 +111,10 @@ class Plugin:
         _logger.info("unload plugin %s", self.name)
 
     def is_type(self, PluginSubClass):
-        return isinstance(self, PluginSubClass)
+        if isinstance(PluginSubClass, type):
+            return isinstance(self, PluginSubClass)
+        if isinstance(PluginSubClass, str):
+            for base in self.__class__.__bases__:
+                if base.__name__ == PluginSubClass:
+                    return True
+        return False

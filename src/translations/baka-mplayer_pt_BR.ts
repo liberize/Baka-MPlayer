@@ -546,27 +546,6 @@
     </message>
 </context>
 <context>
-    <name>FetchRequest</name>
-    <message>
-        <source>fopen error
-</source>
-        <translation type="unfinished">fopen(): erro
-</translation>
-    </message>
-    <message>
-        <source>write error</source>
-        <translation type="unfinished">erro de escrita</translation>
-    </message>
-    <message>
-        <source>Download complete</source>
-        <translation type="unfinished">Download finalizado</translation>
-    </message>
-    <message>
-        <source>Redirected...</source>
-        <translation type="unfinished">Redirecionado...</translation>
-    </message>
-</context>
-<context>
     <name>InputDialog</name>
     <message>
         <source>Dialog</source>
@@ -1207,6 +1186,14 @@
         <source>Download failed with error: %0</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Plugin is busy, please try later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid subtitle path: %0</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1621,6 +1608,27 @@
     <message>
         <source>Auto Detect</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Request</name>
+    <message>
+        <source>fopen error
+</source>
+        <translation type="unfinished">fopen(): erro
+</translation>
+    </message>
+    <message>
+        <source>write error</source>
+        <translation type="unfinished">erro de escrita</translation>
+    </message>
+    <message>
+        <source>Download complete</source>
+        <translation type="unfinished">Download finalizado</translation>
+    </message>
+    <message>
+        <source>Redirected...</source>
+        <translation type="unfinished">Redirecionado...</translation>
     </message>
 </context>
 <context>

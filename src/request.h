@@ -1,5 +1,5 @@
-#ifndef FETCHREQUEST_H
-#define FETCHREQUEST_H
+#ifndef REQUEST_H
+#define REQUEST_H
 
 #include <QObject>
 #include <QFile>
@@ -8,13 +8,13 @@
 #include <QMap>
 #include <QByteArray>
 
-class BakaEngine;
+class RequestManager;
 
-class FetchRequest : public QObject {
+class Request : public QObject {
     Q_OBJECT
 public:
-    explicit FetchRequest(QString url, BakaEngine *baka, QObject *parent = nullptr);
-    ~FetchRequest();
+    explicit Request(QString url, QObject *parent = nullptr);
+    ~Request();
 
     const QUrl &getUrl() const { return url; }
     QByteArray &getPostData() { return postData; }
@@ -42,8 +42,8 @@ private:
     QByteArray postData;
     QMap<QByteArray, QByteArray> headers;
     QFile *file = nullptr;
-    BakaEngine *baka = nullptr;
+    RequestManager *manager = nullptr;
     QNetworkReply *currentReply = nullptr;
 };
 
-#endif // FETCHREQUEST_H
+#endif // REQUEST_H

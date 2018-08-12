@@ -1,5 +1,5 @@
 #include "requestmanager.h"
-#include "fetchrequest.h"
+#include "request.h"
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -19,15 +19,15 @@ RequestManager::~RequestManager()
     delete manager;
 }
 
-FetchRequest *RequestManager::newRequest(QString url, const QByteArray &postData, const QMap<QByteArray, QByteArray> &headers)
+Request *RequestManager::newRequest(QString url, const QByteArray &postData, const QMap<QByteArray, QByteArray> &headers)
 {
-    FetchRequest *req = new FetchRequest(url, baka, this);
+    Request *req = new Request(url, this);
     req->setHeaders(headers);
     req->setPostData(postData);
     return req;
 }
 
-QNetworkReply *RequestManager::sendRequest(FetchRequest *req)
+QNetworkReply *RequestManager::send(Request *req)
 {
     QNetworkRequest request(req->getUrl());
     for (auto it = req->getHeaders().begin(); it != req->getHeaders().end(); ++it)
@@ -36,4 +36,9 @@ QNetworkReply *RequestManager::sendRequest(FetchRequest *req)
     if (!req->getPostData().isEmpty())
         return manager->post(request, req->getPostData());
     return manager->get(request);
+}
+
+QString RequestManager::getSaveDir()
+{
+    return baka->tempDir->path();
 }

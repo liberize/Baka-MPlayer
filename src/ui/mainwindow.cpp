@@ -1,4 +1,3 @@
-#include "pluginmanager.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -19,7 +18,10 @@
 #include "inputdialog.h"
 #include "screenshotdialog.h"
 #include "requestmanager.h"
-#include "fetchrequest.h"
+#include "request.h"
+#include "pluginmanager.h"
+#include "subtitleprovider.h"
+#include "mediaprovider.h"
 
 
 MainWindow::MainWindow(QWidget *parent):
@@ -33,7 +35,8 @@ MainWindow::MainWindow(QWidget *parent):
 
     Util::InitWindow(this);
     ui->sidebarWidget->hide();
-    autohide = new QTimer(this);
+    autoHideControls = new QTimer(this);
+    updateBufferRange = new QTimer(this);
     ShowStartupPage(true);
 
     // initialize managers/handlers
@@ -72,10 +75,10 @@ MainWindow::MainWindow(QWidget *parent):
             if (cursor().shape() == Qt::BlankCursor)
                 unsetCursor();
             ShowControls(true);
-            autohide->stop();
+            autoHideControls->stop();
             if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
-                    sidebarResizeStartX < 0 && autohide)
-                autohide->start(3000);
+                    sidebarResizeStartX < 0 && autoHideControls)
+                autoHideControls->start(3000);
         }
     };
     connect(ui->playlistWidget, &PlaylistWidget::mouseMoved, fixCursor);
@@ -244,12 +247,21 @@ MainWindow::MainWindow(QWidget *parent):
         }
     });
 
-    connect(autohide, &QTimer::timeout, [=] {  // cursor autohide
+    connect(autoHideControls, &QTimer::timeout, [=] {  // cursor autohide
         if (ui->mpvContainer->geometry().contains(ui->mpvContainer->mapFromGlobal(cursor().pos())))
             setCursor(Qt::BlankCursor);
         ShowControls(false);
-        if (autohide)
-            autohide->stop();
+        if (autoHideControls)
+            autoHideControls->stop();
+    });
+
+    connect(updateBufferRange, &QTimer::timeout, [=] {
+        double current = mpv->getTime();
+        double cached = mpv->getCacheTime();
+        if (cached) {
+            QList<QPair<double, double>> ranges = {{current, current + cached}};
+            ui->seekBar->updateBufferedRanges(ranges);
+        }
     });
 
     // dimDialog
@@ -312,7 +324,7 @@ MainWindow::MainWindow(QWidget *parent):
                 if (mpv->getSpeed() != 1)
                     mpv->Speed(1);
 
-            ui->seekBar->setTracking(fileInfo.length);
+            ui->seekBar->setTotalTime(fileInfo.length);
 
             if (ui->actionMedia_Info->isChecked())
                 baka->MediaInfo(true);
@@ -448,7 +460,7 @@ MainWindow::MainWindow(QWidget *parent):
                 ui->action_Previous_Chapter->setEnabled(true);
             }
 
-            ui->seekBar->setTicks(ticks);
+            ui->seekBar->setChapterTicks(ticks);
         }
     });
 
@@ -511,7 +523,7 @@ MainWindow::MainWindow(QWidget *parent):
             if (stop) {
                 setWindowTitle("Baka MPlayer");
                 EnablePlaybackControls(false);
-                ui->seekBar->setTracking(0);
+                ui->seekBar->setTotalTime(0);
                 ui->actionStop_after_Current->setChecked(false);
                 ShowStartupPage(true);
             }
@@ -541,7 +553,6 @@ MainWindow::MainWindow(QWidget *parent):
         // set the seekBar's location with NoSignal function so that it doesn't trigger a seek
         // the formula is a simple ratio seekBar's max * time/totalTime
         ui->seekBar->setValueNoSignal(ui->seekBar->maximum() * (i / fi.length));
-
         SetRemainingLabels(i);
 
         // set next/previous chapter's enabled state
@@ -745,91 +756,6 @@ MainWindow::MainWindow(QWidget *parent):
         ui->playlistWidget->RefreshPlaylist();
     });
 
-    connect(baka->pluginManager, &PluginManager::PluginStateChanged, [=] (QString name, bool enable) {
-        if (baka->pluginManager->IsSubtitlePlugin(name)) {
-            if (enable) {
-                if (subtitlePluginActions.empty())
-                    ui->menuSubtitles->addSeparator();
-
-                QAction *action = new QAction(tr("Download Subtitles from \"%0\"...").arg(name), this);
-                ui->menuSubtitles->addAction(action);
-                subtitlePluginActions[name] = action;
-                connect(action, &QAction::triggered, [=] {
-                    QString word = mpv->getFileInfo().media_title;
-                    if (word.isEmpty()) {
-                        QFileInfo info(mpv->getFile());
-                        QString name = info.completeBaseName();
-                        if (mpv->getPath().isEmpty() || info.suffix().isEmpty() ||
-                                name.length() <= 3 || QRegExp("\\d*").exactMatch(name)) {
-                            word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
-                                return text.length() >= 2;
-                            }, this);
-                            if (word.isEmpty())
-                                return;
-                        } else
-                            word = name;
-                    }
-                    if (baka->pluginManager->SearchSubtitle(name, word, 10))
-                        connect(baka->pluginManager, &PluginManager::SearchSubtitleFinished, this, [=] (QString name, QList<Pi::SubtitleEntry> result) {
-                            QMenu *menu = nullptr;
-                            QAction *act = subtitlePluginActions.value(name + " Result", nullptr);
-                            if (act) {
-                                menu = act->menu();
-                                menu->clear();
-                            } else {
-                                menu = new QMenu(tr("Subtitles from \"%0\"").arg(name), this);
-                                ui->menuSubtitles->insertMenu(ui->action_Add_Subtitle_File, menu);
-                                subtitlePluginActions[name + " Result"] = menu->menuAction();
-                            }
-                            for (auto &entry : result) {
-                                QAction *act = menu->addAction(entry.name);
-                                connect(act, &QAction::triggered, [=] {
-                                    QString localFile = Util::ToLocalFile(entry.url);
-                                    if (!localFile.isEmpty())
-                                        mpv->AddSubtitleTrack(localFile);
-                                    else {
-                                        FetchRequest *req = baka->requestManager->newRequest(entry.url);
-                                        connect(req, &FetchRequest::error, [=] (QString msg) {
-                                            mpv->ShowText(tr("Download failed with error: %0").arg(msg));
-                                            req->deleteLater();
-                                        });
-                                        connect(req, &FetchRequest::saved, [=] (QString filePath) {
-                                            mpv->AddSubtitleTrack(filePath);
-                                            req->deleteLater();
-                                        });
-                                        mpv->ShowText(tr("Downloading %0...").arg(entry.name));
-                                        req->fetch(true);
-                                    }
-                                });
-                            }
-                            menu->setEnabled(mpv->hasVideo());
-                        }, Qt::QueuedConnection);
-                });
-                action->setEnabled(mpv->hasVideo());
-            } else {
-                if (QAction *action = subtitlePluginActions.value(name, nullptr)) {
-                    ui->menuSubtitles->removeAction(action);
-                    subtitlePluginActions.remove(name);
-                    action->deleteLater();
-                }
-                if (QAction *action = subtitlePluginActions.value(name + " Result", nullptr)) {
-                    ui->menuSubtitles->removeAction(action);
-                    subtitlePluginActions.remove(name + " Result");
-                    action->menu()->deleteLater();
-                }
-                auto actions = ui->menuSubtitles->actions();
-                if (subtitlePluginActions.empty() && actions.back()->isSeparator())
-                    ui->menuSubtitles->removeAction(actions.back());
-            }
-        } else if (baka->pluginManager->IsMediaPlugin(name)) {
-            if (enable) {
-
-            } else {
-
-            }
-        }
-    });
-
     // add multimedia shortcuts
     ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
     ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
@@ -855,6 +781,126 @@ MainWindow::~MainWindow()
 #endif
     delete baka;
     delete ui;
+}
+
+void MainWindow::RegisterPlugin(Plugin *plugin)
+{
+    if (plugin->isSubtitleProvider()) {
+        SubtitleProvider *provider = static_cast<SubtitleProvider*>(plugin);
+        QString name = provider->getName();
+
+        connect(provider, &Plugin::enableStateChanged, [=] (bool enable) {
+            if (enable) {
+                if (subtitlePluginActions.empty())
+                    ui->menuSubtitles->addSeparator();
+
+                QAction *action = new QAction(tr("Download Subtitles from \"%0\"...").arg(name), this);
+                ui->menuSubtitles->addAction(action);
+                subtitlePluginActions[name] = action;
+                connect(action, &QAction::triggered, [=] {
+                    QString word = mpv->getFileInfo().media_title;
+                    if (word.isEmpty()) {
+                        QFileInfo info(mpv->getFile());
+                        QString base = info.completeBaseName();
+                        if (mpv->getPath().isEmpty() || info.suffix().isEmpty() ||
+                                base.length() <= 3 || QRegExp("\\d*").exactMatch(base)) {
+                            word = InputDialog::getInput(tr("Input a word to search"), tr("Search Subtitles"), [=] (QString text) {
+                                return text.length() >= 2;
+                            }, this);
+                            if (word.isEmpty())
+                                return;
+                        } else
+                            word = base;
+                    }
+                    if (!provider->search(word, 10))
+                        mpv->ShowText(tr("Plugin is busy, please try later"));
+                });
+                action->setEnabled(mpv->hasVideo());
+            } else {
+                if (QAction *action = subtitlePluginActions.value(name, nullptr)) {
+                    ui->menuSubtitles->removeAction(action);
+                    subtitlePluginActions.remove(name);
+                    action->deleteLater();
+                }
+                if (QAction *action = subtitlePluginActions.value(name + " Result", nullptr)) {
+                    ui->menuSubtitles->removeAction(action);
+                    subtitlePluginActions.remove(name + " Result");
+                    action->menu()->deleteLater();
+                }
+                auto actions = ui->menuSubtitles->actions();
+                if (subtitlePluginActions.empty() && actions.back()->isSeparator())
+                    ui->menuSubtitles->removeAction(actions.back());
+            }
+        });
+
+        connect(provider, &SubtitleProvider::searchFinished, this, [=] (const QList<SubtitleEntry> &result) {
+            QMenu *menu = nullptr;
+            QAction *act = subtitlePluginActions.value(name + " Result", nullptr);
+            if (act) {
+                menu = act->menu();
+                menu->clear();
+            } else {
+                menu = new QMenu(tr("Subtitles from \"%0\"").arg(name), this);
+                ui->menuSubtitles->insertMenu(ui->action_Add_Subtitle_File, menu);
+                subtitlePluginActions[name + " Result"] = menu->menuAction();
+            }
+            for (auto &entry : result) {
+                QAction *act = menu->addAction(entry.name);
+                connect(act, &QAction::triggered, [=] {
+                    QString localFile = Util::ToLocalFile(entry.url);
+                    if (!localFile.isEmpty())
+                        mpv->AddSubtitleTrack(localFile);
+                    else if (entry.downloader == "self") {
+                        if (!provider->download(entry))
+                            mpv->ShowText(tr("Plugin is busy, please try later"));
+                    } else if (entry.downloader == "default") {
+                        Request *req = baka->requestManager->newRequest(entry.url);
+                        connect(req, &Request::error, [=] (QString msg) {
+                            mpv->ShowText(tr("Download failed with error: %0").arg(msg));
+                            req->deleteLater();
+                        });
+                        connect(req, &Request::saved, [=] (QString filePath) {
+                            mpv->AddSubtitleTrack(filePath);
+                            req->deleteLater();
+                        });
+                        mpv->ShowText(tr("Downloading %0...").arg(entry.name));
+                        req->fetch(true);
+                    }
+                });
+            }
+            menu->setEnabled(mpv->hasVideo());
+        });
+
+        connect(provider, &SubtitleProvider::downloadFinished, this, [=] (const SubtitleEntry &entry) {
+            QString localFile = Util::ToLocalFile(entry.url);
+            if (!localFile.isEmpty())
+                mpv->AddSubtitleTrack(localFile);
+            else
+                mpv->ShowText(tr("Invalid subtitle path: %0").arg(entry.url));
+        });
+
+    } else if (plugin->isMediaProvider()) {
+        MediaProvider *provider = static_cast<MediaProvider*>(plugin);
+        QString name = provider->getName();
+
+        connect(provider, &Plugin::enableStateChanged, [=] (bool enable) {
+            if (enable) {
+            } else {
+            }
+        });
+
+        connect(provider, &MediaProvider::fetchFinished, this, [=] (const QList<MediaEntry> &result) {
+
+        });
+
+        connect(provider, &MediaProvider::searchFinished, this, [=] (const QList<MediaEntry> &result) {
+
+        });
+
+        connect(provider, &MediaProvider::downloadFinished, this, [=] (const MediaEntry &entry) {
+
+        });
+    }
 }
 
 void MainWindow::Load(QString file)
@@ -895,8 +941,8 @@ void MainWindow::Load(QString file)
     thumbnail_toolbar->addButton(playpause_toolbutton);
     thumbnail_toolbar->addButton(next_toolbutton);
 #endif
-    baka->LoadPlugins();
     baka->LoadSettings();
+    baka->LoadPlugins();
     mpv->Initialize();
     mpv->LoadAudioDevices();
     mpv->LoadSubtitleEncodings();
@@ -1123,10 +1169,10 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                 if (cursor().shape() == Qt::BlankCursor)
                     unsetCursor();
                 ShowControls(true);
-                autohide->stop();
+                autoHideControls->stop();
                 if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) &&
-                        sidebarResizeStartX < 0 && autohide)
-                    autohide->start(3000);
+                        sidebarResizeStartX < 0 && autoHideControls)
+                    autoHideControls->start(3000);
             }
         } else if (ev->type() == QEvent::Leave) {
             unsetCursor();
@@ -1213,6 +1259,10 @@ void MainWindow::EnablePlaybackControls(bool enable)
 {
     // playback controls
     ui->seekBar->setEnabled(enable);
+    if (enable)
+        updateBufferRange->start(1000);
+    else
+        updateBufferRange->stop();
 
     SetIndexLabels(enable);
 
@@ -1313,7 +1363,7 @@ void MainWindow::ShowStartupPage(bool visible)
         ui->startupPage->show();
         ui->mpvContainer->hide();
         ui->controlsWidget->hide();
-        autohide->stop();
+        autoHideControls->stop();
     } else {
         ui->startupPage->hide();
         ui->mpvContainer->show();

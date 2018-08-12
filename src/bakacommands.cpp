@@ -16,10 +16,10 @@
 #include "ui/aboutdialog.h"
 #include "ui/locationdialog.h"
 #include "ui/jumpdialog.h"
-#include "ui/preferencesdialog.h"
 #include "ui/updatedialog.h"
 #include "ui/screenshotdialog.h"
 #include "ui/inputdialog.h"
+#include "ui/preferencesdialog.h"
 #include "widgets/dimdialog.h"
 #include "mpvhandler.h"
 #include "overlayhandler.h"
@@ -42,16 +42,12 @@ void BakaEngine::BakaSh(QStringList &args)
         args.pop_front();
         QProcess *p = new QProcess(this);
         p->start(arg, args);
-        connect(p, &QProcess::readyRead,
-                [=]
-                {
-                    Print(p->readAll(), QString("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
-                });
-//        connect(p, &QProcess::finished,
-//                [=] (int, QProcess::ExitStatus)
-//                {
-//                    delete p;
-//                });
+        connect(p, &QProcess::readyRead, [=] {
+            Print(p->readAll(), QString("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
+        });
+//        connect(p, &QProcess::finished, [=] (int, QProcess::ExitStatus) {
+//            delete p;
+//        });
     } else
         RequiresParameters("mpv");
 }

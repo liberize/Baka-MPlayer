@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QStyle>
+#include <QStyleOptionSlider>
 
 #include "util.h"
 
@@ -15,20 +16,20 @@ SeekBar::SeekBar(QWidget *parent):
 {
 }
 
-void SeekBar::setTracking(double _totalTime)
+void SeekBar::setTotalTime(double _totalTime)
 {
     if (_totalTime != 0) {
         totalTime = _totalTime;
         // now that we've got totalTime, calculate the tick locations
         // we need to do this because totalTime is obtained after the LOADED event is fired--we need totalTime for calculations
         if (!ticks.empty() && !tickReady)
-            setTicks(ticks);
+            setChapterTicks(ticks);
         setMouseTracking(true);
     } else
         setMouseTracking(false);
 }
 
-void SeekBar::setTicks(const QList<double> &values)
+void SeekBar::setChapterTicks(const QList<double> &values)
 {
     if (!totalTime) {
         ticks = values; // just set the values
@@ -42,7 +43,7 @@ void SeekBar::setTicks(const QList<double> &values)
     }
 }
 
-void SeekBar::updateBufferedRanges(const QVector<QPair<double, double>> &values)
+void SeekBar::updateBufferedRanges(const QList<QPair<double, double>> &values)
 {
     if (!totalTime)
         return;
@@ -53,6 +54,13 @@ void SeekBar::updateBufferedRanges(const QVector<QPair<double, double>> &values)
         range.second = (range.second / totalTime) * maximum();
     }
     repaint(rect());
+}
+
+void SeekBar::mousePressEvent(QMouseEvent *event)
+{
+    ranges.clear();
+    repaint();
+    CustomSlider::mousePressEvent(event);
 }
 
 void SeekBar::mouseMoveEvent(QMouseEvent* event)
@@ -68,33 +76,38 @@ void SeekBar::mouseMoveEvent(QMouseEvent* event)
 void SeekBar::paintEvent(QPaintEvent *event)
 {
     CustomSlider::paintEvent(event);
+
     if (!isEnabled())
         return;
     if (ranges.empty() && !tickReady)
         return;
 
-    int min = minimum(), max = maximum(), val = value(), w = width();
-    QRect region = event->rect();
+    QStyleOptionSlider opt;
+    initStyleOption(&opt);
+    opt.subControls = QStyle::SC_SliderGroove | QStyle::SC_SliderHandle;
+    QRect grooveRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderGroove, this);
+    QRect handleRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
+
+    int min = minimum(), max = maximum(), w = width();
     QPainter painter(this);
 
     if (!ranges.empty()) {
-        painter.setPen(QColor(190, 190, 190));
         for (const auto &range : ranges) {
-            if (range.second < val)
-                continue;
-            if (range.first < val)
-                range.first = val;
-            int x1 = QStyle::sliderPositionFromValue(min, max, range.first, w);
-            int x2 = QStyle::sliderPositionFromValue(min, max, range.second, w);
-            painter.drawRect(x1, region.top(), x2 - x1 + 1, region.height());
+            int x1 = QStyle::sliderPositionFromValue(min, max, qMax((int)range.first, min), w);
+            int x2 = QStyle::sliderPositionFromValue(min, max, qMin((int)range.second, max), w);
+            if (x2 > handleRect.right()) {
+                x1 = qMax(x1, handleRect.right() + 1);
+                painter.fillRect(x1, grooveRect.top(), x2 - x1 + 1, grooveRect.height(), QColor(96, 96, 96));
+            }
         }
     }
 
     if (tickReady) {
-        painter.setPen(QColor(190, 190, 190));
+        painter.setPen(QColor(180, 180, 180));
         for (auto &tick : ticks) {
             int x = QStyle::sliderPositionFromValue(min, max, tick, w);
-            painter.drawLine(x, region.top(), x, region.bottom());
+            if (x > handleRect.right() || x < handleRect.left())
+                painter.drawLine(x, grooveRect.top(), x, grooveRect.bottom());
         }
     }
 }

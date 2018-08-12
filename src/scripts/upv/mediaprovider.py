@@ -7,8 +7,9 @@ from .plugin import Plugin
 class MediaEntry:
     def __init__(self, name, url, cover, description, downloader='default'):
         '''
-        url can be local file path
+        url can be real url, local file path, stdin (-), or file descriptor (fd://123)
         downloader can be 'self', 'ytdl', 'default'
+        setting downloader to 'ytdl' is equivalent to prefixing url with 'ytdl://'
         '''
         self.name = name
         self.url = url
@@ -43,6 +44,6 @@ class MediaProvider(Plugin):
         sample usages:
         1. parsing real url
         2. downloading whole file to local disk
-        3. using named pipe or socket for streaming purpose
+        3. using stdin, named pipe or socket for streaming purpose
         '''
         return entry

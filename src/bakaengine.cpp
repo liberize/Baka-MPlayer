@@ -1,4 +1,3 @@
-#include "pluginmanager.h"
 #include "bakaengine.h"
 
 #include <QMessageBox>
@@ -13,6 +12,7 @@
 #include "updatemanager.h"
 #include "widgets/dimdialog.h"
 #include "requestmanager.h"
+#include "pluginmanager.h"
 
 
 #include "util.h"
@@ -76,7 +76,13 @@ void BakaEngine::LoadSettings()
 
 void BakaEngine::LoadPlugins()
 {
-    pluginManager->LoadPlugins();
+    pluginManager->loadPlugins();
+    connect(pluginManager, &PluginManager::pluginsLoaded, [=] (const QMap<QString, Plugin*> &plugins) {
+        for (auto plugin : plugins) {
+            window->RegisterPlugin(plugin);
+            plugin->setEnabled(!pluginManager->getDisableList().contains(plugin->getName()));
+        }
+    });
 }
 
 void BakaEngine::Command(QString command)

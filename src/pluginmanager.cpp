@@ -1,12 +1,11 @@
 #include "pluginmanager.h"
+#include "pycast.h"
 #include "util.h"
 #include "bakaengine.h"
+#include "worker.h"
 
 #include <QDebug>
 
-using namespace Pi;
-
-#define SAFE_RUN()
 
 PluginManager::PluginManager(QObject *parent)
     : QObject(parent),
@@ -16,184 +15,75 @@ PluginManager::PluginManager(QObject *parent)
         py::initialize_interpreter();
 
         py::module sys = py::module::import("sys");
-        const char *scriptsPath = Util::ScriptsPath().toUtf8().constData();
-        sys.attr("path").attr("insert")(0, scriptsPath);
+        sys.attr("path").attr("insert")(0, py::cast(Util::ScriptsPath()));
+        sys.attr("path").attr("insert")(1, py::cast(Util::Path(Util::ScriptsPath(), "packages")));
 
-        wrapper = py::module::import("upvwrapper");
-        wrapper.attr("init_env")(baka->tempDir->path());
+        py::module os = py::module::import("os");
+        os.attr("environ")["TEMP"] = py::cast(baka->tempDir->path());
+        os.attr("environ")["TMPDIR"] = py::cast(baka->tempDir->path());
+        os.attr("chdir")(py::cast(baka->tempDir->path()));
+
+        module = py::module::import("upv");
     });
 }
 
 PluginManager::~PluginManager()
 {
+    for (auto plugin : plugins)
+        delete plugin;
+
     SafeRun<void>([=] {
-        wrapper.release();
+        module.release();
         py::finalize_interpreter();
     });
 }
 
-void PluginManager::RunWorker(std::function<void()> func)
+Worker *PluginManager::newWorker()
 {
-    workerThread = new QThread;
-    connect(workerThread, &QThread::started, [=] {
-        SafeRun<void>(func);
-        workerThread->exit();
+    if (busy)
+        return nullptr;
+    busy = true;
+    Worker *worker = new Worker(this);
+    connect(worker, &Worker::finished, [=] (py::object) {
+        busy = false;
     });
-    connect(workerThread, &QThread::finished, this, [=] {
-        delete workerThread;
-        workerThread = nullptr;
-    }, Qt::QueuedConnection);
-    workerThread->start();
+    return worker;
 }
 
-void PluginManager::LoadPlugins()
+void PluginManager::loadPlugins()
 {
-    SafeRun<void>([=] {
-        wrapper.attr("load_plugins")(Util::PluginsPaths(), disableList.toList());
-        pluginsLoaded = true;
-    });
-}
-
-QList<Pi::Plugin> PluginManager::GetAllPlugins()
-{
-    if (!pluginsLoaded)
-        return QList<Plugin>();
-
-    return SafeRun<QList<Plugin>>([=] {
-        return wrapper.attr("get_all_plugins")().cast<QList<Plugin>>();
-    });
-}
-
-QList<Plugin> PluginManager::GetSubtitlePlugins()
-{
-    if (!pluginsLoaded)
-        return QList<Plugin>();
-
-    return SafeRun<QList<Plugin>>([=] {
-        return wrapper.attr("get_subtitle_plugins")().cast<QList<Plugin>>();
-    });
-}
-
-QList<Plugin> PluginManager::GetMediaPlugins()
-{
-    if (!pluginsLoaded)
-        return QList<Plugin>();
-
-    return SafeRun<QList<Plugin>>([=] {
-        return wrapper.attr("get_media_plugins")().cast<QList<Plugin>>();
-    });
-}
-
-bool PluginManager::IsSubtitlePlugin(QString name)
-{
-    if (!pluginsLoaded)
-        return false;
-
-    return SafeRun<bool>([=] {
-        return wrapper.attr("is_subtitle_plugin")(name).cast<bool>();
-    });
-}
-
-bool PluginManager::IsMediaPlugin(QString name)
-{
-    if (!pluginsLoaded)
-        return false;
-
-    return SafeRun<bool>([=] {
-        return wrapper.attr("is_media_plugin")(name).cast<bool>();
-    });
-}
-
-void PluginManager::EnablePlugin(QString name, bool enable)
-{
-    if (enable)
-        disableList.remove(name);
-    else
-        disableList.insert(name);
-
-    if (pluginsLoaded)
-        SafeRun<void>([=] {
-            if (enable)
-                wrapper.attr("enable_plugin")(name);
+    auto worker = newWorker();
+    connect(worker, &Worker::finished, this, [=] (py::object result) {
+        auto objList = result.cast<QList<py::object>>();
+        for (auto &obj : objList) {
+            Plugin *plugin = nullptr;
+            if (obj.attr("is_type")("SubtitleProvider").cast<bool>())
+                plugin = new SubtitleProvider(obj, this);
+            else if (obj.attr("is_type")("MediaProvider").cast<bool>())
+                plugin = new MediaProvider(obj, this);
             else
-                wrapper.attr("disable_plugin")(name);
-        });
+                plugin = new Plugin(obj, this);
 
-    emit PluginStateChanged(name, enable);
+            connect(plugin, &Plugin::enableStateChanged, [=] (bool enable) {
+                if (enable)
+                    disableList.remove(plugin->getName());
+                else
+                    disableList.insert(plugin->getName());
+            });
+            plugins[plugin->getName()] = plugin;
+        }
+        emit pluginsLoaded(plugins);
+        delete worker;
+    }, Qt::QueuedConnection);
+
+    worker->run([=] {
+        py::object manager = module.attr("plugin_manager");
+        manager.attr("load_plugins")(Util::PluginsPaths());
+        return manager.attr("get_all_plugins")();
+    });
 }
 
-bool PluginManager::UpdatePluginConfig(QString name, const QList<Pi::ConfigItem> &config)
+Plugin *PluginManager::findPlugin(QString name)
 {
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    SafeRun<void>([=] {
-        py::dict conf;
-        for (const auto &i : config)
-            conf[i.name] = i.value;
-        wrapper.attr("update_plugin_config")(name, conf);
-    });
-    return true;
-}
-
-bool PluginManager::SearchSubtitle(QString name, QString word, int count)
-{
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    RunWorker([=] {
-        QList<SubtitleEntry> result = wrapper.attr("search_subtitle")(name, word, count).cast<QList<SubtitleEntry>>();
-        emit SearchSubtitleFinished(name, std::move(result));
-    });
-    return true;
-}
-
-bool PluginManager::DownloadSubtitle(QString name, const Pi::SubtitleEntry &entry)
-{
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    RunWorker([=] {
-        py::object obj = wrapper.attr("SubtitleEntry")(entry.name, entry.url, entry.downloader);
-        SubtitleEntry result = wrapper.attr("download_subtitle")(name, obj).cast<SubtitleEntry>();
-        emit DownloadSubtitleFinished(name, result);
-    });
-    return true;
-}
-
-bool PluginManager::FetchMedia(QString name, int start, int count)
-{
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    RunWorker([=] {
-        QList<MediaEntry> result = wrapper.attr("fetch_media")(name, start, count).cast<QList<MediaEntry>>();
-        emit FetchMediaFinished(name, std::move(result));
-    });
-    return true;
-}
-
-bool PluginManager::SearchMedia(QString name, QString word, int count)
-{
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    RunWorker([=] {
-        QList<MediaEntry> result = wrapper.attr("search_media")(name, word, count).cast<QList<MediaEntry>>();
-        emit SearchMediaFinished(name, std::move(result));
-    });
-    return true;
-}
-
-bool PluginManager::DownloadMedia(QString name, const Pi::MediaEntry &entry)
-{
-    if (!pluginsLoaded || workerThread)
-        return false;
-
-    RunWorker([=] {
-        py::object obj = wrapper.attr("MediaEntry")(entry.name, entry.url, entry.cover, entry.description, entry.downloader);
-        MediaEntry result = wrapper.attr("download_media")(name, obj).cast<MediaEntry>();
-        emit DownloadMediaFinished(name, result);
-    });
-    return true;
+    return plugins.value(name, nullptr);
 }

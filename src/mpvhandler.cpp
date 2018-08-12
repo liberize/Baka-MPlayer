@@ -393,7 +393,7 @@ int64_t MpvHandler::getCacheSize()
 {
     int64_t fw_bytes = 0, cache_used = 0;
     mpv_node node;
-    mpv_get_property(mpv, "track-list", MPV_FORMAT_NODE, &node);
+    mpv_get_property(mpv, "demuxer-cache-state", MPV_FORMAT_NODE, &node);
     if (node.format == MPV_FORMAT_NODE_MAP) {
         for (int n = 0; n < node.u.list->num; n++) {
             if (QString(node.u.list->keys[n]) == "fw-bytes") {
@@ -406,6 +406,23 @@ int64_t MpvHandler::getCacheSize()
     mpv_get_property(mpv, "cache-used", MPV_FORMAT_INT64, &cache_used);
     cache_used *= 1024;
     return fw_bytes + cache_used;
+}
+
+double MpvHandler::getCacheTime()
+{
+    int64_t cacheSize = getCacheSize();
+
+//    double vbitrate = 0;
+//    mpv_get_property(mpv, "video-bitrate", MPV_FORMAT_DOUBLE, &vbitrate);
+//    if (vbitrate)
+//        return cacheSize / (vbitrate / 8);
+
+    int64_t fileSize = 0;
+    mpv_get_property(mpv, "file-size", MPV_FORMAT_INT64, &fileSize);
+    if (fileSize)
+        return (double)cacheSize / fileSize * fileInfo.length;
+
+    return 0;
 }
 
 bool MpvHandler::event(QEvent *event)

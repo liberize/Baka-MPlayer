@@ -1,6 +1,8 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
+#include "plugintypes.h"
+
 #include <QDialog>
 #include <QString>
 #include <QPair>
@@ -14,7 +16,6 @@ class PreferencesDialog;
 }
 
 class BakaEngine;
-class PluginModel;
 class PluginItemDelegate;
 
 class PreferencesDialog : public QDialog {
@@ -53,9 +54,9 @@ private:
         QTableWidget *parent;
     } *sortLock;
 
-    PluginModel *pluginModel = nullptr;
+    QStandardItemModel *pluginModel = nullptr;
     PluginItemDelegate *pluginItemDelegate = nullptr;
-    QSet<QString> configChangedPlugins;
+    QMap<QString, QVector<ConfigItem>> pluginConfigs;
 };
 
 #endif // PREFERENCESDIALOG_H

@@ -6,7 +6,7 @@
 #include <QCheckBox>
 
 
-PluginConfigDialog::PluginConfigDialog(QString name, QList<Pi::ConfigItem> &items, QWidget *parent) :
+PluginConfigDialog::PluginConfigDialog(QString name, QVector<ConfigItem> &items, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PluginConfigDialog),
     inputWidgets(items.size(), nullptr),
@@ -29,7 +29,7 @@ PluginConfigDialog::PluginConfigDialog(QString name, QList<Pi::ConfigItem> &item
         titleLabel->setMinimumSize(QSize(100, 0));
         ui->gridLayout->addWidget(titleLabel, row, 0);
 
-        if (it->type == Pi::ConfigItem::BOOL) {
+        if (it->type == ConfigItem::BOOL) {
             auto checkBox = new QCheckBox(ui->gridWidget);
             checkBox->setChecked(it->value == "True");
             ui->gridLayout->addWidget(checkBox, row, 1, Qt::AlignLeft);
@@ -74,7 +74,7 @@ PluginConfigDialog::~PluginConfigDialog()
     delete ui;
 }
 
-bool PluginConfigDialog::open(QString name, QList<Pi::ConfigItem> &items, QWidget *parent)
+bool PluginConfigDialog::open(QString name, QVector<ConfigItem> &items, QWidget *parent)
 {
     PluginConfigDialog dialog(name, items, parent);
     return (dialog.exec() == QDialog::Accepted);

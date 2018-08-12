@@ -8,7 +8,6 @@
 #include "ui/keydialog.h"
 #include "util.h"
 #include "delegates/pluginitemdelegate.h"
-#include "models/pluginmodel.h"
 #include "ui/pluginconfigdialog.h"
 
 #include <QFileDialog>
@@ -49,7 +48,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->templateLineEdit->setText(baka->mpv->getScreenshotTemplate());
     ui->msgLvlComboBox->setCurrentText(baka->mpv->getMsgLevel());
 
-    pluginModel = new PluginModel(this);
+    pluginModel = new QStandardItemModel(this);
     pluginItemDelegate = new PluginItemDelegate(this);
     ui->pluginListView->setItemDelegate(pluginItemDelegate);
     ui->pluginListView->setModel(pluginModel);
@@ -116,23 +115,23 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
     connect(ui->openPluginFolderButton, &QPushButton::clicked, [=] {
         QModelIndex index = ui->pluginListView->currentIndex();
-        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
-        Util::ShowInFolder(plugin.path, "");
+        Plugin *plugin = index.data(Qt::UserRole).value<Plugin*>();
+        Util::ShowInFolder(plugin->getPath(), "");
     });
 
     connect(ui->pluginConfigButton, &QPushButton::clicked, [=] {
         QModelIndex index = ui->pluginListView->currentIndex();
-        Pi::Plugin plugin = index.data(Qt::UserRole).value<Pi::Plugin>();
-        if (!plugin.config.empty())
-            if (PluginConfigDialog::open(plugin.name, plugin.config, this)) {
-                pluginModel->setData(index, QVariant::fromValue(plugin), Qt::UserRole);
-                configChangedPlugins.insert(plugin.name);
-            }
+        Plugin *plugin = index.data(Qt::UserRole).value<Plugin*>();
+        if (!plugin->getConfig().empty()) {
+            auto config = pluginConfigs.value(plugin->getName(), plugin->getConfig());
+            if (PluginConfigDialog::open(plugin->getName(), config, this))
+                pluginConfigs[plugin->getName()] = config;
+        }
     });
 
     connect(ui->pluginListView->selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
-        Pi::Plugin plugin = current.data(Qt::UserRole).value<Pi::Plugin>();
-        ui->pluginConfigButton->setEnabled(!plugin.config.empty());
+        Plugin *plugin = current.data(Qt::UserRole).value<Plugin*>();
+        ui->pluginConfigButton->setEnabled(!plugin->getConfig().empty());
         ui->openPluginFolderButton->setEnabled(true);
     });
 
@@ -209,10 +208,12 @@ void PreferencesDialog::PopulateShortcuts()
 
 void PreferencesDialog::PopulatePlugins()
 {
-    QList<Pi::Plugin> plugins = baka->pluginManager->GetAllPlugins();
-    for (const auto &p : plugins) {
+    auto plugins = baka->pluginManager->getPlugins();
+    for (auto plugin : plugins) {
         QStandardItem *item = new QStandardItem;
-        item->setData(QVariant::fromValue(p), Qt::UserRole);
+        item->setData(QVariant::fromValue(plugin), Qt::UserRole);
+        item->setCheckable(true);
+        item->setCheckState(plugin->isEnabled() ? Qt::Checked : Qt::Unchecked);
         pluginModel->appendRow(item);
     }
 }
@@ -221,11 +222,12 @@ void PreferencesDialog::UpdatePlugins()
 {
     for (int i = 0; i < pluginModel->rowCount(); i++) {
         QModelIndex index = pluginModel->index(i, 0);
-        Pi::Plugin plugin = pluginModel->data(index, Qt::UserRole).value<Pi::Plugin>();
-        if (plugin.enabled != !baka->pluginManager->GetDisableList().contains(plugin.name))
-            baka->pluginManager->EnablePlugin(plugin.name, plugin.enabled);
-        if (configChangedPlugins.contains(plugin.name))
-            baka->pluginManager->UpdatePluginConfig(plugin.name, plugin.config);
+        Plugin *plugin = pluginModel->data(index, Qt::UserRole).value<Plugin*>();
+        bool enable = (pluginModel->data(index, Qt::CheckStateRole) == Qt::Checked);
+        if (plugin->isEnabled() != enable)
+            plugin->setEnabled(enable);
+        if (pluginConfigs.contains(plugin->getName()))
+            plugin->updateConfig(pluginConfigs[plugin->getName()]);
     }
 }
 

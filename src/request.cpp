@@ -1,6 +1,5 @@
-#include "fetchrequest.h"
+#include "request.h"
 #include "requestmanager.h"
-#include "bakaengine.h"
 #include "util.h"
 
 #include <QNetworkRequest>
@@ -10,18 +9,20 @@
 #include <QTemporaryFile>
 
 
-FetchRequest::FetchRequest(QString url, BakaEngine *baka, QObject *parent)
-    : QObject(parent), url(url), baka(baka)
+Request::Request(QString url, QObject *parent)
+    : QObject(parent),
+      manager(static_cast<RequestManager*>(parent)),
+      url(url)
 {
 }
 
-FetchRequest::~FetchRequest()
+Request::~Request()
 {
     abort();
     closeFile();
 }
 
-bool FetchRequest::fetch(bool saveToFile, QString savePath, bool overwrite)
+bool Request::fetch(bool saveToFile, QString savePath, bool overwrite)
 {
     if (saveToFile) {
         if (!openFile(savePath, overwrite)) {
@@ -33,7 +34,7 @@ bool FetchRequest::fetch(bool saveToFile, QString savePath, bool overwrite)
     return true;
 }
 
-void FetchRequest::abort()
+void Request::abort()
 {
     if (currentReply) {
         currentReply->abort();
@@ -41,9 +42,9 @@ void FetchRequest::abort()
     }
 }
 
-void FetchRequest::doFetch()
+void Request::doFetch()
 {
-    QNetworkReply *reply = baka->requestManager->sendRequest(this);
+    QNetworkReply *reply = manager->send(this);
     currentReply = reply;
 
     connect(reply, &QNetworkReply::downloadProgress, [=](qint64 received, qint64 total) {
@@ -90,10 +91,10 @@ void FetchRequest::doFetch()
     emit progress(0);
 }
 
-bool FetchRequest::openFile(QString path, bool overwrite)
+bool Request::openFile(QString path, bool overwrite)
 {
     if (path.isEmpty()) {
-        QTemporaryFile *tempFile = new QTemporaryFile(baka->tempDir->path());
+        QTemporaryFile *tempFile = new QTemporaryFile(manager->getSaveDir());
         tempFile->setAutoRemove(false);
         file = tempFile;
     } else {
@@ -117,7 +118,7 @@ bool FetchRequest::openFile(QString path, bool overwrite)
     return file;
 }
 
-void FetchRequest::closeFile()
+void Request::closeFile()
 {
     if (file) {
         file->close();

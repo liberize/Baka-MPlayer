@@ -58,6 +58,7 @@ public:
 
     QString getMediaInfo();
     int64_t getCacheSize();
+    double getCacheTime();
 
     QWidget *getWidget();
     mpv_render_context *createRenderContext(mpv_render_param *params);

@@ -28,6 +28,7 @@ class MainWindow;
 
 class BakaEngine;
 class MpvHandler;
+class Plugin;
 
 class MainWindow : public QMainWindow {
     friend class BakaEngine;
@@ -58,6 +59,7 @@ public:
 public slots:
     void Load(QString f = QString());
     void MapShortcuts();
+    void RegisterPlugin(Plugin *plugin);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);    // drag file into
@@ -107,7 +109,8 @@ private:
     bool firstItem = false;
     bool init = false;
     bool playlistState = false;
-    QTimer *autohide = nullptr;
+    QTimer *autoHideControls = nullptr;
+    QTimer *updateBufferRange = nullptr;
 
     // variables
     QList<Recent> recent;

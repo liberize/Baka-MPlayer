@@ -11,7 +11,7 @@
 #include <QProcess>
 #include <QtGlobal>
 
-#include "fetchrequest.h"
+#include "request.h"
 #include "requestmanager.h"
 
 #if defined(Q_OS_WIN)
@@ -36,18 +36,18 @@ bool UpdateManager::CheckForUpdates()
 {
     emit messageSignal(tr("Checking for updates..."));
 
-    FetchRequest *req = baka->requestManager->newRequest(Util::VersionFileUrl());
-    connect(req, &FetchRequest::progress, [=] (double percent) {
+    Request *req = baka->requestManager->newRequest(Util::VersionFileUrl());
+    connect(req, &Request::progress, [=] (double percent) {
         emit progressSignal((int)(50.0 * percent));
     });
-    connect(req, &FetchRequest::error, [=] (QString msg) {
+    connect(req, &Request::error, [=] (QString msg) {
         emit messageSignal(msg);
         req->deleteLater();
     });
-    connect(req, &FetchRequest::message, [=] (QString msg) {
+    connect(req, &Request::message, [=] (QString msg) {
         emit messageSignal(msg);
     });
-    connect(req, &FetchRequest::fetched, [=] (QByteArray bytes) {
+    connect(req, &Request::fetched, [=] (QByteArray bytes) {
         QList<QByteArray> lines = bytes.split('\n');
         QList<QByteArray> pair;
         QString lastPair;
@@ -65,23 +65,24 @@ bool UpdateManager::CheckForUpdates()
     });
     return req->fetch();
 }
+
 #if defined(Q_OS_WIN)
 bool UpdateManager::DownloadUpdate(const QString &url)
 {
     emit messageSignal(tr("Downloading update..."));
 
-    FetchRequest *req = baka->requestManager->newRequest(url);
-    connect(req, &FetchRequest::progress, [=] (double percent) {
+    Request *req = baka->requestManager->newRequest(url);
+    connect(req, &Request::progress, [=] (double percent) {
         emit progressSignal((int)(99.0 * percent));
     });
-    connect(req, &FetchRequest::error, [=] (QString msg) {
+    connect(req, &Request::error, [=] (QString msg) {
         emit messageSignal(msg);
         req->deleteLater();
     });
-    connect(req, &FetchRequest::message, [=] (QString msg) {
+    connect(req, &Request::message, [=] (QString msg) {
         emit messageSignal(msg);
     });
-    connect(req, &FetchRequest::saved, [=] (QString filePath) {
+    connect(req, &Request::saved, [=] (QString filePath) {
         ApplyUpdate(filePath);
         req->deleteLater();
     });
