@@ -12,6 +12,7 @@
 #include <QProcess>
 
 #import <AppKit/Appkit.h>
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 namespace Util {
 
@@ -56,6 +57,25 @@ void SetAspectRatio(QMainWindow *main, int w, int h)
     view.window.contentAspectRatio = NSMakeSize(w, h);
 }
 
+void EnableScreenSaver(bool enable)
+{
+    static IOPMAssertionID assertionID = kIOPMNullAssertionID;
+
+    if (enable) {
+        if (assertionID == kIOPMNullAssertionID)
+            return;
+        IOReturn ret = IOPMAssertionRelease(assertionID);
+        if (ret == kIOReturnSuccess)
+            assertionID = kIOPMNullAssertionID;
+    } else {
+        if (assertionID != kIOPMNullAssertionID)
+            return;
+        IOReturn ret = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
+                kIOPMAssertionLevelOn, CFSTR("video playing"), &assertionID);
+        Q_UNUSED(ret);
+    }
+}
+
 bool IsValidFile(QString path)
 {
     QRegExp rx("^\\.{1,2}|/", Qt::CaseInsensitive); // relative path, network location, drive
@@ -79,7 +99,7 @@ void ShowInFolder(QString path, QString file)
                                           "  reveal POSIX file \"%1\"\n"
                                           "  activate\n"
                                           "end tell")
-                                         .arg(path + file);
+                                         .arg(Path(path, file));
         QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
     }
 }

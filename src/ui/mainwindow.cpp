@@ -7,6 +7,7 @@
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
+#include <QFileDialog>
 #include <QDebug>
 
 #include "bakaengine.h"
@@ -60,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent):
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
     ui->playlistSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(16, 16));
-    ui->onlineSearchBox->SetIcon(QIcon(":/img/search.svg"), QSize(16, 16));
     ui->openFileButton->SetIcon(QIcon(":/img/default_open.svg"), QSize(16, 16), 12);
     ui->openUrlButton->SetIcon(QIcon(":/img/link.svg"), QSize(16, 16), 12);
     ui->viewOnlineButton->SetIcon(QIcon(":/img/online.svg"), QSize(16, 16), 12);
@@ -274,17 +274,16 @@ MainWindow::MainWindow(QWidget *parent):
 
     // mpv
 
-    connect(mpv, &MpvHandler::playlistChanged, [=] (const QStringList &list) {
-        if (list.length() > 1) {
+    connect(ui->playlistWidget, &PlaylistWidget::playlistChanged, [=] (QStandardItemModel *model) {
+        if (model->rowCount() > 1) {
             ui->actionSh_uffle->setEnabled(true);
             ui->actionStop_after_Current->setEnabled(true);
-            //ShowSidebar(true, false, 0);
         } else {
             ui->actionSh_uffle->setEnabled(false);
             ui->actionStop_after_Current->setEnabled(false);
         }
 
-        if (list.length() > 0)
+        if (model->rowCount() > 0)
             ui->menuR_epeat->setEnabled(true);
         else
             ui->menuR_epeat->setEnabled(false);
@@ -299,8 +298,9 @@ MainWindow::MainWindow(QWidget *parent):
             else
                 setWindowTitle(fileInfo.media_title);
 
+            bool save = mpv->getFileLocalOptions().isEmpty(); // don't save to recent list if has local file options
             QString f = mpv->getFile(), file = mpv->getPath() + f;
-            if (f != QString() && maxRecent > 0) {
+            if (save && f != QString() && maxRecent > 0) {
                 int i = recent.indexOf(file);
                 if (i >= 0) {
                     double t = recent.at(i).time;
@@ -422,11 +422,6 @@ MainWindow::MainWindow(QWidget *parent):
                 // todo: use {artist} - {title}
                 baka->sysTrayIcon->showMessage("Baka MPlayer", mpv->getFileInfo().media_title, QSystemTrayIcon::NoIcon, 4000);
             }
-
-            if (pathChanged) {
-                baka->FitWindow(100, false);
-                pathChanged = false;
-            }
         } else {
             EnableTrackOperations(false);
             EnableAudioFunctions(false);
@@ -491,6 +486,7 @@ MainWindow::MainWindow(QWidget *parent):
             SetPlayButtonIcon(false);
             if (onTop == "playing")
                 Util::SetAlwaysOnTop(this, true);
+            Util::EnableScreenSaver(false);
             break;
 
         case Mpv::Stopped:
@@ -500,23 +496,24 @@ MainWindow::MainWindow(QWidget *parent):
             SetPlayButtonIcon(true);
             if (onTop == "playing")
                 Util::SetAlwaysOnTop(this, false);
+            Util::EnableScreenSaver(true);
             break;
 
         case Mpv::Idle:
             bool stop = false;
             if (init) {
                 if (ui->action_This_File->isChecked()) // repeat this file
-                    ui->playlistWidget->PlayIndex(0, true); // restart file
+                    ui->playlistWidget->playRow(0, true); // restart file
                 else if (ui->actionStop_after_Current->isChecked() ||  // stop after playing this file
-                        ui->playlistWidget->CurrentIndex() >= ui->playlistWidget->count()-1) { // end of the playlist
+                        ui->playlistWidget->playingRow() >= ui->playlistWidget->count() - 1) { // end of the playlist
                     if (!ui->actionStop_after_Current->isChecked() && // not supposed to stop after current
                         ui->action_Playlist->isChecked() && // we're supposed to restart the playlist
                         ui->playlistWidget->count() > 0) { // playlist isn't empty
-                        ui->playlistWidget->PlayIndex(0); // restart playlist
+                        ui->playlistWidget->playRow(0); // restart playlist
                     } else // stop
                         stop = true;
                 } else
-                    ui->playlistWidget->PlayIndex(1, true);
+                    ui->playlistWidget->playRow(1, true);
             } else
                 stop = true;
 
@@ -531,22 +528,22 @@ MainWindow::MainWindow(QWidget *parent):
         }
     });
 
-    connect(mpv, &MpvHandler::pathChanged, [=] () {
-        pathChanged = true;
-    });
-
     connect(mpv, &MpvHandler::fileChanging, [=] (double t, double l) {
-        if (current != nullptr) {
-            if (t > 0.05 * l && t < 0.95 * l) // only save if within the middle 90%
-                current->time = t;
-            else
-                current->time = 0;
-        }
+        if (current != nullptr)
+            current->time = (t > 0.05 * l && t < 0.95 * l) ? t : 0;
         ShowStartupPage(false);
     });
 
-    // connect(mpv, &MpvHandler::fileChanged, [=] (QString f) {
-    // });
+    connect(mpv, &MpvHandler::fileChanged, [=] (QString) {
+        fileChanged = true;
+    });
+
+    connect(mpv, &MpvHandler::videoParamsChanged, [=] (const Mpv::VideoParams &) {
+        if (fileChanged) {
+            fileChanged = false;
+            baka->FitWindow(100, false);
+        }
+    });
 
     connect(mpv, &MpvHandler::timeChanged, [=] (double i) {
         const Mpv::FileInfo &fi = mpv->getFileInfo();
@@ -706,7 +703,7 @@ MainWindow::MainWindow(QWidget *parent):
 //    });
 
     connect(ui->previousButton, &QPushButton::clicked, [=] {                // Playback: Previous button
-        ui->playlistWidget->PlayIndex(-1, true);
+        ui->playlistWidget->playRow(-1, true);
     });
 
     connect(ui->playButton, &QPushButton::clicked, [=] {                    // Playback: Play/pause button
@@ -714,7 +711,7 @@ MainWindow::MainWindow(QWidget *parent):
     });
 
     connect(ui->nextButton, &QPushButton::clicked, [=] {                    // Playback: Next button
-        ui->playlistWidget->PlayIndex(1, true);
+        ui->playlistWidget->playRow(1, true);
     });
 
     connect(ui->muteButton, &QPushButton::clicked, [=] {
@@ -730,12 +727,12 @@ MainWindow::MainWindow(QWidget *parent):
     });
 
     connect(ui->playlistSearchBox, &QLineEdit::textChanged, [=] (QString s) {       // Playlist: Search box
-        ui->playlistWidget->Search(s);
+        ui->playlistWidget->search(s);
     });
 
-    connect(ui->playlistWidget, &PlaylistWidget::currentRowChanged, [=] (int) {     // Playlist: Playlist selection changed
+    connect(ui->playlistWidget, &PlaylistWidget::currentRowChanged, this, [=] (int) {     // Playlist: Playlist selection changed
         SetIndexLabels(true);
-    });
+    }, Qt::QueuedConnection);
 
     connect(ui->repeatButton, &QPushButton::clicked, [=] {
         if (ui->action_Off->isChecked())
@@ -749,11 +746,57 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->shuffleButton, &QPushButton::clicked, ui->actionSh_uffle, &QAction::trigger);
 
     connect(ui->addButton, &QPushButton::clicked, [=] {
-
+        QString file = QFileDialog::getOpenFileName(this, tr("Add File to Playlist"), mpv->getPath(),
+                                                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" ")) +
+                                                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" ")) +
+                                                    QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" ")) +
+                                                    QString("%0 (*.*)").arg(tr("All Files")),
+                                                    0, QFileDialog::DontUseSheet);
+        if (!file.isEmpty())
+            ui->playlistWidget->addItem(QFileInfo(file).fileName(), file, true);
     });
 
-    connect(ui->refreshButton, &QPushButton::clicked, [=] {                         // Playlist: Refresh playlist button
-        ui->playlistWidget->RefreshPlaylist();
+    connect(ui->clearButton, &QPushButton::clicked, [=] {                         // Playlist: Refresh playlist button
+        ui->playlistWidget->clearNotPlaying();
+    });
+
+    connect(ui->onlineSearchBox, &MediaSearchBox::providerChanged, [=] (MediaProvider *provider) {
+        ui->onlineWidget->clear();
+        if (provider) {
+            QString word = ui->onlineSearchBox->getWord();
+            if (word.isEmpty())
+                provider->fetch(0);
+            else
+                provider->search(word);
+        }
+    });
+
+    connect(ui->onlineSearchBox, &CustomLineEdit::submitted, [=] (QString text) {
+        ui->onlineWidget->clear();
+        MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
+        if (provider) {
+            if (text.isEmpty())
+                provider->fetch(0);
+            else
+                provider->search(text);
+        }
+    });
+
+    connect(ui->onlineWidget, &QListView::doubleClicked, [=] (const QModelIndex &index) {
+        MediaEntry *entry = index.data(Qt::UserRole).value<MediaEntry*>();
+        MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
+        if (provider)
+            provider->download(*entry, "", index);
+        ShowSidebar(false);
+    });
+
+    connect(ui->onlineWidget, &OnlineWidget::scrollReachedEnd, [=] () {
+        MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
+        if (provider) {
+            QString word = ui->onlineSearchBox->getWord();
+            if (word.isEmpty())
+                provider->fetchNext();
+        }
     });
 
     // add multimedia shortcuts
@@ -812,8 +855,7 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
                         } else
                             word = base;
                     }
-                    if (!provider->search(word, 10))
-                        mpv->ShowText(tr("Plugin is busy, please try later"));
+                    provider->search(word);
                 });
                 action->setEnabled(mpv->hasVideo());
             } else {
@@ -850,22 +892,8 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
                     QString localFile = Util::ToLocalFile(entry.url);
                     if (!localFile.isEmpty())
                         mpv->AddSubtitleTrack(localFile);
-                    else if (entry.downloader == "self") {
-                        if (!provider->download(entry))
-                            mpv->ShowText(tr("Plugin is busy, please try later"));
-                    } else if (entry.downloader == "default") {
-                        Request *req = baka->requestManager->newRequest(entry.url);
-                        connect(req, &Request::error, [=] (QString msg) {
-                            mpv->ShowText(tr("Download failed with error: %0").arg(msg));
-                            req->deleteLater();
-                        });
-                        connect(req, &Request::saved, [=] (QString filePath) {
-                            mpv->AddSubtitleTrack(filePath);
-                            req->deleteLater();
-                        });
-                        mpv->ShowText(tr("Downloading %0...").arg(entry.name));
-                        req->fetch(true);
-                    }
+                    else
+                        provider->download(entry);
                 });
             }
             menu->setEnabled(mpv->hasVideo());
@@ -875,7 +903,19 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
             QString localFile = Util::ToLocalFile(entry.url);
             if (!localFile.isEmpty())
                 mpv->AddSubtitleTrack(localFile);
-            else
+            else if (Util::IsValidUrl(entry.url)) {
+                Request *req = baka->requestManager->newRequest(entry.url);
+                connect(req, &Request::error, [=] (QString msg) {
+                    mpv->ShowText(tr("Download failed with error: %0").arg(msg));
+                    req->deleteLater();
+                });
+                connect(req, &Request::saved, [=] (QString filePath) {
+                    mpv->AddSubtitleTrack(filePath);
+                    req->deleteLater();
+                });
+                mpv->ShowText(tr("Downloading %0...").arg(entry.name));
+                req->fetch(true);
+            } else
                 mpv->ShowText(tr("Invalid subtitle path: %0").arg(entry.url));
         });
 
@@ -884,21 +924,46 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
         QString name = provider->getName();
 
         connect(provider, &Plugin::enableStateChanged, [=] (bool enable) {
-            if (enable) {
-            } else {
+            if (enable)
+                ui->onlineSearchBox->addProvider(provider);
+            else
+                ui->onlineSearchBox->removeProvider(provider);
+        });
+
+        auto populateMediaList = [=] (const QList<MediaEntry> &result) {
+            auto provider = ui->onlineSearchBox->getCurrentProvider();
+            for (auto &entry : result) {
+                MediaEntry *e = new MediaEntry(entry);
+                QPersistentModelIndex index = ui->onlineWidget->appendEntry(e);
+                if (entry.cover.isNull())
+                    provider->download(entry, "cover", index);
             }
-        });
+        };
+        connect(provider, &MediaProvider::fetchFinished, this, populateMediaList);
+        connect(provider, &MediaProvider::searchFinished, this, populateMediaList);
 
-        connect(provider, &MediaProvider::fetchFinished, this, [=] (const QList<MediaEntry> &result) {
-
-        });
-
-        connect(provider, &MediaProvider::searchFinished, this, [=] (const QList<MediaEntry> &result) {
-
-        });
-
-        connect(provider, &MediaProvider::downloadFinished, this, [=] (const MediaEntry &entry) {
-
+        connect(provider, &MediaProvider::downloadFinished, this, [=] (const MediaEntry &entry, QString what, const QPersistentModelIndex &index) {
+            if (what == "")
+                mpv->LoadFile(entry.url, entry.name, entry.options);
+            else if (what == "cover") {
+                MediaEntry *item = index.data(Qt::UserRole).value<MediaEntry*>();
+                QString localFile = Util::ToLocalFile(entry.coverUrl);
+                if (!localFile.isEmpty()) {
+                    item->cover.load(localFile);
+                    ui->onlineWidget->update(index);
+                } else if (Util::IsValidUrl(entry.coverUrl)) {
+                    Request *req = baka->requestManager->newRequest(entry.coverUrl);
+                    connect(req, &Request::error, [=] (QString) {
+                        req->deleteLater();
+                    });
+                    connect(req, &Request::saved, [=] (QString filePath) {
+                        item->cover.load(filePath);
+                        ui->onlineWidget->update(index);
+                        req->deleteLater();
+                    });
+                    req->fetch(true);
+                }
+            }
         });
     }
 }
@@ -979,6 +1044,18 @@ QIcon MainWindow::getTrayIcon()
 #else
     return windowIcon();
 #endif
+}
+
+Mpv::PlaylistItem *MainWindow::getCurrentPlayFile()
+{
+    return ui->playlistWidget->currentItem();
+}
+
+QString MainWindow::getInput(QString title, QString prompt)
+{
+    return InputDialog::getInput(prompt, title, [=] (QString input) {
+        return !input.isEmpty();
+    }, this);
 }
 
 void MainWindow::MapShortcuts()
@@ -1098,7 +1175,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                 }
             } else if (event->button() == Qt::RightButton) {
                 if (!isFullScreen() && mpv->getPlayState() > 0) {
-                    mpv->PlayPause(ui->playlistWidget->CurrentItem());
+                    mpv->PlayPause();
                     return true;
                 }
             }
@@ -1231,17 +1308,17 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
 void MainWindow::SetIndexLabels(bool enable)
 {
-    int i = ui->playlistWidget->currentRow(),
-        index = ui->playlistWidget->CurrentIndex();
+    int i = ui->playlistWidget->selectedRow(),
+        index = ui->playlistWidget->playingRow();
 
     // next file
-    if (enable && index+1 < ui->playlistWidget->count())
+    if (enable && index + 1 < ui->playlistWidget->count())
         EnableNextButton(true);
     else
         EnableNextButton(false);
 
     // previous file
-    if (enable && index-1 >= 0)
+    if (enable && index - 1 >= 0)
         EnablePreviousButton(true);
     else
         EnablePreviousButton(false);
@@ -1274,7 +1351,7 @@ void MainWindow::EnablePlaybackControls(bool enable)
     ui->menuS_peed->setEnabled(enable);
     ui->action_Jump_to_Time->setEnabled(enable);
     ui->actionMedia_Info->setEnabled(enable);
-    ui->actionClose->setEnabled(enable && baka->mpv->getPath() != QString());
+    ui->actionClose->setEnabled(enable);
     ui->actionShow_in_Folder->setEnabled(enable && baka->mpv->getPath() != QString());
     ui->action_Full_Screen->setEnabled(enable);
     if (!enable) {
@@ -1374,10 +1451,7 @@ void MainWindow::CloseFile()
 {
     if (current != nullptr) {
         double t = mpv->getTime(), l = mpv->getFileInfo().length;
-        if (t > 0.05 * l && t < 0.95 * l) // only save if within the middle 90%
-            current->time = t;
-        else
-            current->time = 0;
+        current->time = (t > 0.05 * l && t < 0.95 * l) ? t : 0;
     }
     mpv->Stop();
     init = false;

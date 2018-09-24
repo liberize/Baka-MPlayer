@@ -6,53 +6,66 @@
 #include <QDropEvent>
 #include <QAction>
 #include <QMouseEvent>
+#include <QListView>
+#include <QStandardItemModel>
+
+#include "mpvtypes.h"
 
 class BakaEngine;
+class PlaylistItemDelegate;
+class PlaylistProxyModel;
 
-class PlaylistWidget : public QListWidget {
+class PlaylistWidget : public QListView {
     Q_OBJECT
 public:
     explicit PlaylistWidget(QWidget *parent = 0);
+    ~PlaylistWidget();
 
     void AttachEngine(BakaEngine *baka);
 
 public slots:
-    void Populate();
-    void RefreshPlaylist();
+    int selectedRow();
+    int playingRow();
+    int count();
 
-    void AddItems(const QStringList &labels);
-    void SelectItem(const QString &item);
-    QString CurrentItem();
-    int CurrentIndex(); // index of the current playing file
-    void SelectIndex(int index, bool relative = false); // relative to current selection
-    void PlayIndex(int index, bool relative = false); // relative to current playing file
-    void RemoveIndex(int index); // remove the selected item
+    void selectRow(int i, bool relative = false);
+    void selectIndex(const QModelIndex &index);
+    void playRow(int i, bool relative = false);
+    void playIndex(const QModelIndex &index);
+    void removeRow(int i);
+    void removeIndex(const QModelIndex &index);
 
-    void Search(const QString&);
-    void ShowAll(bool);
-    void Shuffle();
+    void search(const QString&);
+    void shuffle();
 
-protected slots:
-    void UpdateDisplay(const QString &f, bool playing);
-    void RemoveFromPlaylist(QListWidgetItem *item);
-    void DeleteFromDisk(QListWidgetItem *item);
+    void populatePlaylist(QString dir);
+
+    Mpv::PlaylistItem *currentItem();
+    void addItem(QString name, QString path, bool local);
+    QModelIndex appendItem(Mpv::PlaylistItem *item);
+    void clear();
+    void clearNotPlaying();
+    void deleteFromDisk(const QModelIndex &index);
 
 signals:
     void mouseMoved(QMouseEvent *event);
+    void playlistChanged(QStandardItemModel *);
+    void currentRowChanged(int);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 
 private:
     BakaEngine *baka;
 
-    QStringList playlist;
-    QString file, suffix;
-    bool newPlaylist;
-    bool refresh;
-    bool showAll;
+    QMap<QString, QPersistentModelIndex> pathIndexMap;
+    QStandardItemModel *playlistModel = nullptr;
+    PlaylistProxyModel *proxyModel = nullptr;
+    PlaylistItemDelegate *playlistItemDelegate = nullptr;
+    QPersistentModelIndex curPlayingIndex;
 };
 
 #endif // PLAYLISTWIDGET_H

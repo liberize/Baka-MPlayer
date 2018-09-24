@@ -6,6 +6,7 @@
 #include <QDir>
 
 #include <windows.h>
+#include <powrprof.h>
 
 #include "settings.h"
 
@@ -48,6 +49,7 @@ public:
 };
 
 static WinNativeEventFilter *eventFilter = nullptr;
+
 
 QString VersionFileUrl()
 {
@@ -109,6 +111,14 @@ void SetAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
         *rc = (RECT) { corners[0], corners[1], corners[2], corners[3] };
         return true;
     });
+}
+
+void EnableScreenSaver(bool enable)
+{
+    if (enable)
+        SetThreadExecutionState(ES_CONTINUOUS);
+    else
+        SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 }
 
 bool IsValidFile(QString path)

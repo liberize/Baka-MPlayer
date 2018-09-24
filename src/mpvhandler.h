@@ -20,7 +20,7 @@ class BakaEngine;
 class MpvWidget;
 
 class MpvHandler : public QObject {
-friend class BakaEngine;
+    friend class BakaEngine;
     Q_OBJECT
 public:
     explicit MpvHandler(QWidget *container, QObject *parent = 0);
@@ -31,6 +31,8 @@ public:
     Mpv::PlayState getPlayState()           { return playState; }
     QString getFile()                       { return file; }
     QString getPath()                       { return path; }
+    const QMap<QString, QString> &getFileLocalOptions() { return fileLocalOptions; }
+
     QString getScreenshotFormat()           { return screenshotFormat; }
     QString getScreenshotTemplate()         { return screenshotTemplate; }
     QString getScreenshotDir()              { return screenshotDir; }
@@ -79,9 +81,9 @@ protected:
     bool FileExists(QString);
 
 public slots:
-    void LoadFile(QString);
+    void LoadFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
     QString LoadPlaylist(QString);
-    bool PlayFile(QString);
+    bool PlayFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
 
     void AddOverlay(int id, int x, int y, QString file, int offset, int w, int h);
     void RemoveOverlay(int id);
@@ -89,7 +91,7 @@ public slots:
     void Play();
     void Pause();
     void RestartPaused();
-    void PlayPause(QString fileIfStopped);
+    void PlayPause();
     void Restart();
     void Rewind();
     void Stop();
@@ -153,9 +155,10 @@ public slots:
     void SubtitleShadowOffset(int size);
     void SubtitleShadowColor(const QColor &color);
 
+    void SetFileLocalOptions();
+
 protected slots:
     void OpenFile(QString);
-    QString PopulatePlaylist();
     void LoadFileInfo();
     void SetProperties();
 
@@ -164,11 +167,10 @@ protected slots:
     void HandleErrorCode(int);
 
 private slots:
-    void setPlaylist(const QStringList& l)  { emit playlistChanged(l); }
     void setFileInfo()                      { emit fileInfoChanged(fileInfo); }
     void setPlayState(Mpv::PlayState s)     { emit playStateChanged(playState = s); }
-    void setFile(QString s)                 { emit fileChanged(file = s); }
-    void setPath(QString s)                 { emit pathChanged(path = s); }
+    void setFile(QString s, QString t, const QMap<QString, QString> &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
+    void setPath(QString s)                 { if (path != s) emit pathChanged(path = s); }
     void setScreenshotFormat(QString s)     { emit screenshotFormatChanged(screenshotFormat = s); }
     void setScreenshotTemplate(QString s)   { emit screenshotTemplateChanged(screenshotTemplate = s); }
     void setScreenshotDir(QString s)        { emit screenshotDirChanged(screenshotDir = s); }
@@ -187,7 +189,6 @@ private slots:
     void setMute(bool b)                    { if (mute != b) emit muteChanged(mute = b); }
 
 signals:
-    void playlistChanged(const QStringList&);
     void fileInfoChanged(const Mpv::FileInfo&);
     void trackListChanged(const QList<Mpv::Track>&);
     void chaptersChanged(const QList<Mpv::Chapter>&);
@@ -195,7 +196,7 @@ signals:
     void audioParamsChanged(const Mpv::AudioParams&);
     void playStateChanged(Mpv::PlayState);
     void fileChanging(double, double);
-    void fileChanged(QString);
+    void fileChanged(QString, QString, const QMap<QString, QString> &);
     void pathChanged(QString);
     void screenshotFormatChanged(QString);
     void screenshotTemplateChanged(QString);
@@ -213,9 +214,9 @@ signals:
     void sidChanged(int);
     void subtitleVisibilityChanged(bool);
     void muteChanged(bool);
-    void audioDeviceListChanged(const QList<Mpv::AudioDevice>&);
+    void audioDeviceListChanged(const QList<Mpv::AudioDevice> &);
     void audioDeviceChanged(QString);
-    void subtitleEncodingListChanged(const QList<QPair<QString, QString> >&);
+    void subtitleEncodingListChanged(const QList<QPair<QString, QString>> &);
     void subtitleEncodingChanged(QString);
     void renderContextCreated();
 
@@ -248,7 +249,6 @@ private:
     int     aid;
     int     sid;
     bool    init = false;
-    bool    playlistVisible = false;
     bool    subtitleVisibility = true;
     bool    mute = false;
     int     osdWidth;
@@ -256,6 +256,7 @@ private:
     bool    readyToRender = false;
     bool    hasVideoTrack = true;
     QImage  defaultAlbumArt;
+    QMap<QString, QString> fileLocalOptions;
 };
 
 #endif // MPVHANDLER_H

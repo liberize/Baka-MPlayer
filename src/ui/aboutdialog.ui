@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
   font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-  background: #4B4B4B;
+  background: #3B3B3B;
   color: whitesmoke;
 }
 
@@ -65,7 +65,7 @@ QScrollBar::sub-line:vertical {
 }
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical  {
-  background: #4B4B4B;
+  background: #3B3B3B;
   margin: 0 2px;
 }
 QScrollBar::up-arrow:vertical,
@@ -88,7 +88,7 @@ QScrollBar::sub-line:horizontal {
 }
 QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
-  background: #4B4B4B;
+  background: #3B3B3B;
   margin: 2px 0;
 }
 QScrollBar::left-arrow:horizontal,

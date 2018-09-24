@@ -19,13 +19,15 @@ public:
     ~PluginManager();
 
     py::module &getModule() { return module; }
-    bool isBusy() const { return busy; }
     QSet<QString> &getDisableList() { return disableList; }
     const QMap<QString, Plugin*> &getPlugins() const { return plugins; }
 
     void loadPlugins();
     Plugin *findPlugin(QString name);
+
     Worker *newWorker();
+    void runNextWorker();
+    void deleteWorker(Worker *worker);
 
 signals:
     void pluginsLoaded(const QMap<QString, Plugin*> &plugins);
@@ -35,6 +37,7 @@ private:
     py::module module;
     QSet<QString> disableList;
     QMap<QString, Plugin*> plugins;
+    QList<Worker*> workerQueue;
     bool busy = false;
 };
 

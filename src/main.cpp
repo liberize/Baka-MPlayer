@@ -6,6 +6,8 @@
 
 #include <locale.h>
 
+#include "util.h"
+
 #if defined(Q_OS_WIN)
 #include <windows.h>
 #endif
@@ -17,6 +19,8 @@ int main(int argc, char *argv[])
 #endif
     QApplication a(argc, argv);
     setlocale(LC_NUMERIC, "C"); // for mpv
+
+    Util::RandSeed();
 
     MainWindow w;
     w.show();

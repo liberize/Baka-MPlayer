@@ -200,14 +200,37 @@ template <typename Type> struct plugin_struct_caster {
     PYBIND11_TYPE_CASTER(Type, _("object"));
 };
 
+template <typename Type> struct plugin_pointer_caster {
+
+    bool load(handle src, bool/* convert*/) {
+        value = new Type(reinterpret_borrow<object>(src));
+        return true;
+    }
+
+    template <typename T>
+    static handle cast(T &&/*src*/, return_value_policy/* policy*/, handle/* parent*/) {
+        object s;
+        pybind11_fail("undefined c++ to python cast");
+        return s.release();
+    }
+
+    PYBIND11_TYPE_CASTER(Type *, _("object"));
+};
+
 template <> struct type_caster<ConfigItem>
   : plugin_struct_caster<ConfigItem> { };
 
 template <> struct type_caster<MediaEntry>
   : plugin_struct_caster<MediaEntry> { };
 
+template <> struct type_caster<MediaEntry *>
+  : plugin_pointer_caster<MediaEntry> { };
+
 template <> struct type_caster<SubtitleEntry>
   : plugin_struct_caster<SubtitleEntry> { };
+
+template <> struct type_caster<SubtitleEntry *>
+  : plugin_pointer_caster<SubtitleEntry> { };
 
 }
 }

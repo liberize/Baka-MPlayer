@@ -70,7 +70,7 @@ void BakaEngine::BakaOpenLocation(QStringList &args)
 
 void BakaEngine::OpenLocation()
 {
-    mpv->LoadFile(LocationDialog::getUrl(mpv->getPath()+mpv->getFile(), window));
+    mpv->LoadFile(LocationDialog::getUrl(mpv->getPath() + mpv->getFile(), window));
 }
 
 
@@ -196,38 +196,38 @@ void BakaEngine::BakaPlaylist(QStringList &args)
         args.pop_front();
         if (arg == "play") {
             if (args.empty())
-                window->ui->playlistWidget->PlayIndex(window->ui->playlistWidget->currentRow());
+                window->ui->playlistWidget->playRow(window->ui->playlistWidget->selectedRow());
             else {
                 arg = args.front();
                 args.pop_front();
                 if (args.empty()) {
                     if (arg.startsWith('+') || arg.startsWith('-'))
-                        window->ui->playlistWidget->PlayIndex(arg.toInt(), true);
+                        window->ui->playlistWidget->playRow(arg.toInt(), true);
                     else
-                        window->ui->playlistWidget->PlayIndex(arg.toInt());
+                        window->ui->playlistWidget->playRow(arg.toInt());
                 } else
                     InvalidParameter(args.join(' '));
             }
         } else if (arg == "select") {
             if (args.empty())
-                window->ui->playlistWidget->SelectIndex(window->ui->playlistWidget->CurrentIndex());
+                window->ui->playlistWidget->selectRow(window->ui->playlistWidget->playingRow());
             else {
                 arg = args.front();
                 args.pop_front();
                 if (args.empty()) {
                     if (arg.startsWith('+') || arg.startsWith('-'))
-                        window->ui->playlistWidget->SelectIndex(arg.toInt(), true);
+                        window->ui->playlistWidget->selectRow(arg.toInt(), true);
                     else
-                        window->ui->playlistWidget->SelectIndex(arg.toInt());
+                        window->ui->playlistWidget->selectRow(arg.toInt());
                 } else
                     InvalidParameter(args.join(' '));
             }
         } else if (args.empty()) {
             if (arg == "remove") {
                 if (window->isSidebarVisible(0) && !window->ui->playlistSearchBox->hasFocus())
-                    window->ui->playlistWidget->RemoveIndex(window->ui->playlistWidget->currentRow());
+                    window->ui->playlistWidget->removeRow(window->ui->playlistWidget->selectedRow());
             } else if (arg == "shuffle")
-                window->ui->playlistWidget->Shuffle();
+                window->ui->playlistWidget->shuffle();
             else if (arg == "toggle")
                 window->ToggleSidebar(0);
             else
@@ -379,7 +379,7 @@ void BakaEngine::BakaPlayPause(QStringList &args)
 
 void BakaEngine::PlayPause()
 {
-    mpv->PlayPause(window->ui->playlistWidget->CurrentItem());
+    mpv->PlayPause();
 }
 
 void BakaEngine::BakaVideoSize(QStringList &args)
@@ -400,8 +400,6 @@ void BakaEngine::FitWindow(int percent, bool msg)
 {
     if (window->isFullScreen() || window->isMaximized())
         return;
-
-    mpv->LoadVideoParams();
 
     const Mpv::VideoParams &vG = mpv->getFileInfo().video_params; // video geometry
     QRect mG = window->ui->mpvContainer->geometry(),                      // mpv geometry
@@ -551,7 +549,8 @@ void BakaEngine::BakaSubtitleFont(QStringList &args)
 {
     if (args.empty()) {
         bool ok = false;
-        QFont font = QFontDialog::getFont(&ok, mpv->getSubtitleFont(), window, tr("Set Subtitle Font"));
+        QFont font = QFontDialog::getFont(&ok, mpv->getSubtitleFont(), window, tr("Set Subtitle Font"),
+                                          QFontDialog::DontUseNativeDialog);
         if (ok)
             mpv->SubtitleFont(font);
     } else
@@ -565,15 +564,17 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
         args.pop_front();
         if (args.empty()) {
             if (arg == "color") {
-                QColor color = QColorDialog::getColor(mpv->getSubtitleColor(), window, tr("Set Subtitle Color"), QColorDialog::ShowAlphaChannel);
+                QColor color = QColorDialog::getColor(mpv->getSubtitleColor(), window, tr("Set Subtitle Color"),
+                                                      QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
                     mpv->SubtitleColor(color);
             } else if (arg == "back-color") {
-                QColor color = QColorDialog::getColor(mpv->getSubtitleBackColor(), window, tr("Set Subtitle Background Color"), QColorDialog::ShowAlphaChannel);
+                QColor color = QColorDialog::getColor(mpv->getSubtitleBackColor(), window, tr("Set Subtitle Background Color"),
+                                                      QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
                     mpv->SubtitleBackColor(color);
             } else if (arg == "blur") {
-                QString input = InputDialog::getInput(tr("Input Blur Factor (0-20.0), 0 to Disable:"), tr("Set Blur Factor"), [=] (QString input) {
+                QString input = InputDialog::getInput(tr("Input Blur Factor (0-20.0):"), tr("Set Blur Factor"), [=] (QString input) {
                     double v = input.toDouble();
                     return v >= 0 && v <= 20.0;
                 }, window);
@@ -583,7 +584,7 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
                     window->ui->action_Subtitle_Blur->setChecked(factor);
                 }
             } else if (arg == "shadow-offset") {
-                QString input = InputDialog::getInput(tr("Input Offset Value (0-20), 0 to Disable:"), tr("Set Shadow Offset"), [=] (QString input) {
+                QString input = InputDialog::getInput(tr("Input Offset Value (0-20):"), tr("Set Shadow Offset"), [=] (QString input) {
                     int v = input.toInt();
                     return v >= 0 && v <= 20;
                 }, window);
@@ -593,7 +594,8 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
                     window->ui->action_Subtitle_Shadow_Offset->setChecked(offset);
                 }
             } else if (arg == "shadow-color") {
-                QColor color = QColorDialog::getColor(mpv->getSubtitleShadowColor(), window, tr("Set Shadow Color"), QColorDialog::ShowAlphaChannel);
+                QColor color = QColorDialog::getColor(mpv->getSubtitleShadowColor(), window, tr("Set Shadow Color"),
+                                                      QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
                     mpv->SubtitleShadowColor(color);
             } else

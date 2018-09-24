@@ -3,6 +3,7 @@
 #include "util.h"
 #include "bakaengine.h"
 #include "worker.h"
+#include "ui/mainwindow.h"
 
 #include <QDebug>
 
@@ -24,6 +25,16 @@ PluginManager::PluginManager(QObject *parent)
         os.attr("chdir")(py::cast(baka->tempDir->path()));
 
         module = py::module::import("upv");
+        module.attr("input") = py::cpp_function([=] (QString prompt) {
+            QString inputStr;
+            QMetaObject::invokeMethod(baka->window,
+                                      "getInput",
+                                      QThread::currentThread() == baka->window->thread() ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+                                      Q_RETURN_ARG(QString, inputStr),
+                                      Q_ARG(QString, "Plugin Input"),
+                                      Q_ARG(QString, prompt));
+            return inputStr;
+        });
     });
 }
 
@@ -40,14 +51,26 @@ PluginManager::~PluginManager()
 
 Worker *PluginManager::newWorker()
 {
-    if (busy)
-        return nullptr;
-    busy = true;
     Worker *worker = new Worker(this);
-    connect(worker, &Worker::finished, [=] (py::object) {
-        busy = false;
-    });
+    workerQueue.push_back(worker);
     return worker;
+}
+
+void PluginManager::runNextWorker()
+{
+    if (!busy && !workerQueue.isEmpty()) {
+        busy = true;
+        workerQueue.front()->start();
+    }
+}
+
+void PluginManager::deleteWorker(Worker *worker)
+{
+    assert(worker == workerQueue.front());
+    workerQueue.pop_front();
+    delete worker;
+    busy = false;
+    runNextWorker();
 }
 
 void PluginManager::loadPlugins()
@@ -73,7 +96,7 @@ void PluginManager::loadPlugins()
             plugins[plugin->getName()] = plugin;
         }
         emit pluginsLoaded(plugins);
-        delete worker;
+        deleteWorker(worker);
     }, Qt::QueuedConnection);
 
     worker->run([=] {

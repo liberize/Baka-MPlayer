@@ -8,8 +8,8 @@ class SubtitleProvider : public Plugin {
 public:
     using Plugin::Plugin;
 
-    bool search(QString word, int count);
-    bool download(const SubtitleEntry &entry);
+    void search(QString word, int count = 10);
+    void download(const SubtitleEntry &entry);
 
 signals:
     void searchFinished(const QList<SubtitleEntry> &result);

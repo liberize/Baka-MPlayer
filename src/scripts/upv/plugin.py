@@ -21,6 +21,17 @@ class ConfigItem:
     def __str__(self):
         return 'ConfigItem <{}, {}, {}>'.format(self.name, self.title, self.type.__name__)
 
+    def __repr__(self):
+        return self.__str__()
+
+
+class ConfigError(Exception):
+    pass
+
+
+class PluginError(Exception):
+    pass
+
 
 class Plugin:
     def __init__(self):
@@ -53,8 +64,7 @@ class Plugin:
             with open(conf_file, 'r') as f:
                 conf = json.load(f)
             for i in self.config_items:
-                if i.name in conf:
-                    setattr(self, i.name, conf[i.name])
+                setattr(self, i.name, conf.get(i.name, ''))
         except:
             _logger.error("plugin %s load config failed", self.name)
 

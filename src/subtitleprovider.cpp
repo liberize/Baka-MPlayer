@@ -4,37 +4,29 @@
 #include "worker.h"
 
 
-bool SubtitleProvider::search(QString word, int count)
+void SubtitleProvider::search(QString word, int count)
 {
     auto worker = manager->newWorker();
-    if (!worker)
-        return false;
-
     connect(worker, &Worker::finished, this, [=] (py::object result) {
         emit searchFinished(result.cast<QList<SubtitleEntry>>());
-        delete worker;
+        manager->deleteWorker(worker);
     }, Qt::QueuedConnection);
 
     worker->run([=] {
         return plugin.attr("search")(word, count);
     });
-    return true;
 }
 
-bool SubtitleProvider::download(const SubtitleEntry &entry)
+void SubtitleProvider::download(const SubtitleEntry &entry)
 {
     auto worker = manager->newWorker();
-    if (!worker)
-        return false;
-
     connect(worker, &Worker::finished, this, [=] (py::object result) {
         emit downloadFinished(result.cast<SubtitleEntry>());
-        delete worker;
+        manager->deleteWorker(worker);
     }, Qt::QueuedConnection);
 
     worker->run([=] {
-        py::object obj = manager->getModule().attr("SubtitleEntry")(entry.name, entry.url, entry.downloader);
+        py::object obj = manager->getModule().attr("SubtitleEntry")(entry.name, entry.url);
         return plugin.attr("download")(obj);
     });
-    return true;
 }

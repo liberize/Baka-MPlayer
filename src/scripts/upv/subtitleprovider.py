@@ -5,17 +5,18 @@ from .plugin import Plugin
 
 
 class SubtitleEntry:
-    def __init__(self, name, url, downloader="self"):
+    def __init__(self, name, url):
         '''
         url can be local file path or empty
-        downloader can be 'self', 'default'
         '''
         self.name = name
         self.url = url
-        self.downloader = downloader
 
     def __str__(self):
         return 'SubtitleEntry <{}, {}>'.format(self.name, self.url)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class SubtitleProvider(Plugin):
@@ -31,7 +32,7 @@ class SubtitleProvider(Plugin):
 
     def download(self, entry):
         '''
-        self downloader implementation
+        downloader implementation
         fill entry url, and return the modified entry
         '''
         return entry

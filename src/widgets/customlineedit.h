@@ -3,6 +3,7 @@
 
 #include <QLineEdit>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QIcon>
 
 class CustomLineEdit : public QLineEdit {
@@ -15,9 +16,13 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 signals:
     void submitted(QString);
+
+protected:
+    int iconWidth() const;
 
 private:
     QPixmap pixmap;

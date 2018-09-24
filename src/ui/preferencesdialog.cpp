@@ -213,6 +213,7 @@ void PreferencesDialog::PopulatePlugins()
         QStandardItem *item = new QStandardItem;
         item->setData(QVariant::fromValue(plugin), Qt::UserRole);
         item->setCheckable(true);
+        item->setEditable(false);
         item->setCheckState(plugin->isEnabled() ? Qt::Checked : Qt::Unchecked);
         pluginModel->appendRow(item);
     }

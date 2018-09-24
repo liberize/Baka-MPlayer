@@ -443,7 +443,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <source>Input Blur Factor (0-20.0):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -451,7 +451,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <source>Input Offset Value (0-20):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -656,10 +656,6 @@
     <message>
         <source>Search Playlist</source>
         <translation>검색</translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>재생 목록 다시 불러오기</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -1182,12 +1178,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">미디어 파일</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">비디오 파일</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">오디오 파일</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">모든 파일</translation>
     </message>
 </context>
 <context>
@@ -1342,10 +1354,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>파일 지우기(&amp;D)</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>다시 불러오기 (&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Show in Folder</source>

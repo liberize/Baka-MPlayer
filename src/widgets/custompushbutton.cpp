@@ -2,6 +2,9 @@
 
 #include <QPainter>
 
+namespace {
+    const int PADDING_LEFT = 10;
+}
 
 CustomPushButton::CustomPushButton(QWidget *parent) :
     QPushButton(parent)
@@ -11,10 +14,9 @@ CustomPushButton::CustomPushButton(QWidget *parent) :
 void CustomPushButton::SetIcon(const QIcon &icon, const QSize &size, int space)
 {
     pixmap = icon.pixmap(size);
-    spacing = space;
-    int x = 10 + size.width() + spacing;
-    QString css = QString("%1\nQPushButton {\n\tpadding-left: %2px;\n}").arg(styleSheet(), QString::number(x));
-    setStyleSheet(css);
+    int x = PADDING_LEFT + size.width() + space;
+    QString qss = QString("%1\nQPushButton {\n\tpadding-left: %2px;\n}").arg(styleSheet(), QString::number(x));
+    setStyleSheet(qss);
 }
 
 void CustomPushButton::paintEvent(QPaintEvent* e)
@@ -23,6 +25,6 @@ void CustomPushButton::paintEvent(QPaintEvent* e)
     if (!pixmap.isNull()) {
         QPainter painter(this);
         int y = (height() - pixmap.height()) / 2;
-        painter.drawPixmap(10, y, pixmap);
+        painter.drawPixmap(PADDING_LEFT, y, pixmap);
     }
 }

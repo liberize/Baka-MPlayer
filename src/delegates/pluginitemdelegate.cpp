@@ -26,14 +26,11 @@ void PluginItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
 
     painter->save();
 
-    Plugin* plugin = index.data(Qt::UserRole).value<Plugin*>();
+    Plugin *plugin = index.data(Qt::UserRole).value<Plugin*>();
     QRect rect = option.rect.adjusted(35, 0, 0, 0);
 
     QColor color;
-    if (option.state.testFlag(QStyle::State_Selected))
-        color.setNamedColor("#565656");
-    else
-        color.setNamedColor("#4B4B4B");
+    color.setNamedColor(option.state.testFlag(QStyle::State_Selected) ? "#565656" : "#3B3B3B");
     painter->setPen(QPen(color));
     painter->setBrush(color);
     painter->drawRect(rect);
@@ -53,7 +50,7 @@ void PluginItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     painter->setFont(QFont("Lucida Grande", 13, QFont::Bold));
     painter->drawText(titleRect, Qt::AlignTop | Qt::AlignLeft, plugin->getName(), &titleRect);
 
-    QRect descRect(rect.x(), titleRect.bottom() + 7, rect.width(), rect.height() - titleRect.height() - 5);
+    QRect descRect(rect.x(), titleRect.bottom() + 7, rect.width(), rect.height() - titleRect.height() - 7);
     painter->setFont(QFont("Lucida Grande", 11, QFont::Normal));
     painter->drawText(descRect, Qt::AlignTop | Qt::AlignLeft, plugin->getDescription(), &descRect);
 

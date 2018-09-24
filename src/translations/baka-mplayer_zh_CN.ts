@@ -416,87 +416,87 @@
     </message>
     <message>
         <source>Window Size: %0</source>
-        <translation type="unfinished"></translation>
+        <translation>窗口大小: %0</translation>
     </message>
     <message>
         <source>Fit to Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>适应屏幕大小</translation>
     </message>
     <message>
         <source>Audio Delay: %0</source>
-        <translation type="unfinished"></translation>
+        <translation>音频延迟: %0</translation>
     </message>
     <message>
         <source>Subtitle Delay: %0</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕延迟: %0</translation>
     </message>
     <message>
         <source>Set Subtitle Font</source>
-        <translation type="unfinished"></translation>
+        <translation>设置字幕字体</translation>
     </message>
     <message>
         <source>Set Subtitle Color</source>
-        <translation type="unfinished"></translation>
+        <translation>设置字幕颜色</translation>
     </message>
     <message>
         <source>Set Subtitle Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>设置字幕背景颜色</translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
-        <translation type="unfinished"></translation>
+        <source>Input Blur Factor (0-20.0):</source>
+        <translation>输入模糊系数 (0-20.0):</translation>
     </message>
     <message>
         <source>Set Blur Factor</source>
-        <translation type="unfinished"></translation>
+        <translation>设置模糊系数</translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
-        <translation type="unfinished"></translation>
+        <source>Input Offset Value (0-20):</source>
+        <translation>输入偏移大小 (0-20):</translation>
     </message>
     <message>
         <source>Set Shadow Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>设置阴影偏移</translation>
     </message>
     <message>
         <source>Set Shadow Color</source>
-        <translation type="unfinished"></translation>
+        <translation>设置阴影颜色</translation>
     </message>
     <message>
         <source>Increase subtitle size</source>
-        <translation type="unfinished"></translation>
+        <translation>增加字幕大小</translation>
     </message>
     <message>
         <source>Decrease subtitle size</source>
-        <translation type="unfinished"></translation>
+        <translation>减小字幕大小</translation>
     </message>
     <message>
         <source>Move subtitle up</source>
-        <translation type="unfinished"></translation>
+        <translation>上移字幕</translation>
     </message>
     <message>
         <source>Move subtitle down</source>
-        <translation type="unfinished"></translation>
+        <translation>下移字幕</translation>
     </message>
     <message>
         <source>Increase playback speed by %0%</source>
-        <translation type="unfinished">提高 %0% 播放速度</translation>
+        <translation>提高 %0% 播放速度</translation>
     </message>
     <message>
         <source>Decrease playback speed by %0%</source>
-        <translation type="unfinished">降低 %0% 播放速度</translation>
+        <translation>降低 %0% 播放速度</translation>
     </message>
     <message>
         <source>Increase playback speed to 2.0x</source>
-        <translation type="unfinished"></translation>
+        <translation>2 倍播放速度</translation>
     </message>
     <message>
         <source>Decrease playback speed to 0.5x</source>
-        <translation type="unfinished"></translation>
+        <translation>0.5 倍播放速度</translation>
     </message>
     <message>
         <source>Toggle online visibility</source>
-        <translation type="unfinished"></translation>
+        <translation>切换在线资源</translation>
     </message>
     <message>
         <source>Set video size to fit screen</source>
@@ -656,10 +656,6 @@
     <message>
         <source>Search Playlist</source>
         <translation>搜索播放列表</translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>刷新播放列表</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -991,19 +987,19 @@
     </message>
     <message>
         <source>0 / 0</source>
-        <translation type="unfinished"></translation>
+        <translation>0 / 0</translation>
     </message>
     <message>
         <source>%0 / %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%0 / %1</translation>
     </message>
     <message>
         <source>PLAYLIST</source>
-        <translation type="unfinished"></translation>
+        <translation>播放列表</translation>
     </message>
     <message>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>重复</translation>
     </message>
     <message>
         <source>Shuffle Playlist</source>
@@ -1182,12 +1178,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">媒体文件</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">视频文件</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">音频文件</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">所有文件</translation>
     </message>
 </context>
 <context>
@@ -1342,10 +1354,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>从磁盘删除(&amp;D)</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>刷新(&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Show in Folder</source>

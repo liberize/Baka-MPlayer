@@ -17,14 +17,18 @@ Plugin::Plugin(const py::object &obj, QObject *parent)
         QString iconPath = obj.attr("icon").cast<QString>();
         iconPath = QDir(path).absoluteFilePath(iconPath);
         QFileInfo info(iconPath);
-        if (!info.exists() || !info.isFile())
-            iconPath = ":/img/plugin.svg";
-        icon = QIcon(iconPath);
+        if (info.exists() && info.isFile())
+            icon = QIcon(iconPath);
     });
 }
 
 Plugin::~Plugin()
 {
+}
+
+const QIcon &Plugin::getIcon() const {
+    static QIcon defaultIcon(":/img/plugin.svg");
+    return icon.isNull() ? defaultIcon : icon;
 }
 
 bool Plugin::isSubtitleProvider()

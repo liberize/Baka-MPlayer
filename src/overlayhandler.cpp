@@ -83,45 +83,25 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     }
 
     QFontMetrics fm(font);
-    QStringList lines = text.split('\n');
-    // the 1.3 was pretty much determined through trial and error; this formula isn't perfect
-    // apparently, QFontMetrics doesn't work that well
-    const float fm_correction = 1.3;
-    int w = 0,
-        h = fm.height()*lines.length();
-    for (auto line : lines)
-        w = std::max(fm.width(line), w);
-    float xF = float(baka->window->ui->mpvContainer->width()-2*pos.x()) / (fm_correction*w);
-    float yF = float(baka->window->ui->mpvContainer->height()-2*pos.y()) / h;
-    font.setPointSizeF(std::min(font.pointSizeF()*std::min(xF, yF), font.pointSizeF()));
-
+    QRect bounds = fm.boundingRect(QRect(), 0, text);
+    float xF = float(baka->window->ui->mpvContainer->width() - 2 * pos.x()) / bounds.width();
+    float yF = float(baka->window->ui->mpvContainer->height() - 2 * pos.y()) / bounds.height();
+    font.setPointSizeF(qMin(font.pointSizeF() * qMin(xF, yF), font.pointSizeF()));
     fm = QFontMetrics(font);
-    h = fm.height();
-    w = 0;
-    QPainterPath path(QPoint(0, 0));
-    QPoint p = QPoint(0, h);
-    for (auto line : lines) {
-        path.addText(p, font, line);
-        w = std::max(int(fm_correction*path.currentPosition().x()), w);
-        p += QPoint(0, h);
-    }
+    bounds = fm.boundingRect(QRect(), 0, text);
 
-    QImage *canvas = new QImage(w, p.y(), QImage::Format_ARGB32); // make the canvas the right size
-    canvas->fill(QColor(0,0,0,0)); // fill it with nothing
-
+    QImage *canvas = new QImage(bounds.width(), bounds.height(), QImage::Format_ARGB32);
+    canvas->fill(QColor(0, 0, 0, 0));
     QPainter painter(canvas); // prepare to paint
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setCompositionMode(QPainter::CompositionMode_Overlay);
     painter.setFont(font);
-    painter.setPen(QColor(0, 0, 0));
-    painter.setBrush(color);
-    painter.drawPath(path);
+    painter.setPen(color);
+    painter.drawText(canvas->rect(), Qt::AlignLeft | Qt::AlignTop, text);
 
     // add as mpv overlay
     baka->mpv->AddOverlay(
         id == -1 ? overlay_id : id,
         pos.x(), pos.y(),
-        "&"+QString::number(quintptr(canvas->bits())),
+        "&" + QString::number(quintptr(canvas->bits())),
         0, canvas->width(), canvas->height());
 
     // add over mpv as label
@@ -131,10 +111,10 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     Util::SetWantsLayer(label, true);
     Util::SetLayerBackgroundColor(label, 41, 41, 41, 255);
     Util::SetLayerCornerRadius(label, 5);
-    label->setStyleSheet("padding:10px 10px 0 10px;");
-    label->setGeometry(pos.x() - 10, pos.y() - 5, canvas->width() + 15, canvas->height());
+    label->setStyleSheet("background: #202020; padding: 10px;");
+    label->setGeometry(pos.x() - 10, pos.y() - 10, canvas->width() + 20, canvas->height() + 20);
 #else
-    label->setStyleSheet("background-color:rgb(0,0,0,0);background-image:url();");
+    label->setStyleSheet("background-color: rgb(0,0,0,0); background-image: url();");
     label->setGeometry(pos.x(), pos.y(), canvas->width(), canvas->height());
 #endif
     label->show();
@@ -145,8 +125,9 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     else {
         timer = new QTimer(this);
         timer->start(duration);
-        connect(timer, &QTimer::timeout, // on timeout
-                [=] { remove(id); });
+        connect(timer, &QTimer::timeout, [=] {
+            remove(id);
+        });
     }
 
     if (overlays.find(id) != overlays.end())
@@ -182,8 +163,9 @@ void OverlayHandler::showImage(const QPixmap &pixmap, QPoint pos, int duration, 
     else {
         timer = new QTimer(this);
         timer->start(duration);
-        connect(timer, &QTimer::timeout, // on timeout
-                [=] { remove(id); });
+        connect(timer, &QTimer::timeout, [=] {
+            remove(id);
+        });
     }
 
     if (overlays.find(id) != overlays.end())

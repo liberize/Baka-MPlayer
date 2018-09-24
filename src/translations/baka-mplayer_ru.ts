@@ -444,7 +444,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <source>Input Blur Factor (0-20.0):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -452,7 +452,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <source>Input Offset Value (0-20):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -657,10 +657,6 @@
     <message>
         <source>Search Playlist</source>
         <translation>Искать в списке воспроизведения</translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>Обновить список воспроизведения</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -1183,12 +1179,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">Медиафайлы</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">Видео файлы</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">Аудио файлы</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">Все файлы</translation>
     </message>
 </context>
 <context>
@@ -1331,10 +1343,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>Удалить с &amp;диска</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>&amp;Обновить</translation>
     </message>
     <message>
         <source>Delete sub-file?</source>

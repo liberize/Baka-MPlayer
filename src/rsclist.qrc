@@ -49,5 +49,9 @@
         <file>img/plugin.svg</file>
         <file>img/settings.svg</file>
         <file>img/open_folder.svg</file>
+        <file>img/add_to_playlist.svg</file>
+        <file>img/search_dropdown.svg</file>
+        <file>img/cover.svg</file>
+        <file>img/trash.svg</file>
     </qresource>
 </RCC>

@@ -14,7 +14,7 @@ public:
     ~Plugin();
 
     QString getName() const { return name; }
-    const QIcon &getIcon() const { return icon; }
+    const QIcon &getIcon() const;
     QString getDescription() const { return description; }
     const QVector<ConfigItem> &getConfig() const { return config; }
     QString getPath() const { return path; }

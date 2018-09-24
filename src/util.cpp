@@ -6,6 +6,10 @@
 #include <QStandardPaths>
 #include <QCoreApplication>
 #include <QUrl>
+#include <QTextCodec>
+#include <QDebug>
+
+#include <uchardet.h>
 
 namespace Util {
 
@@ -752,6 +756,16 @@ const QList<QPair<QString, QString> > charEncodingMap = {
 };
 
 
+void RandSeed()
+{
+    qsrand((uint)QTime::currentTime().msec());
+}
+
+int RandInt(int low, int high)
+{
+    return qrand() % ((high + 1) - low) + low;
+}
+
 QString Path(QString dir, QString file)
 {
     return dir + QDir::separator() + file;
@@ -818,14 +832,13 @@ bool IsValidUrl(QString url)
 
 QString ToLocalFile(QString s)
 {
+    if (QFile::exists(s))
+        return s;
     QUrl url(s);
     if (url.isValid()) {
         QString local = url.toLocalFile();
         if (!local.isEmpty())
             return local;
-    } else {
-        if (QFile::exists(s))
-            return s;
     }
     return "";
 }
@@ -999,6 +1012,18 @@ QString GetCharEncodingTitle(QString name)
 const QList<QPair<QString, QString> > &GetAllCharEncodings()
 {
     return charEncodingMap;
+}
+
+QString DetectCharEncoding(const QByteArray &bytes)
+{
+    uchardet_t ud = uchardet_new();
+    uchardet_handle_data(ud, bytes.data(), bytes.length());
+    uchardet_data_end(ud);
+    const char* cs = uchardet_get_charset(ud);
+    uchardet_delete(ud);
+
+    QTextCodec *codec = QTextCodec::codecForName(cs);
+    return codec ? codec->toUnicode(bytes) : "";
 }
 
 }

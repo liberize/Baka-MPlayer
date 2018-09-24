@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>45</height>
+    <height>47</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,14 +16,14 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
   font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-  background: #4B4B4B;
+  background: #3B3B3B;
   color: whitesmoke;
 }
 
 /* QLineEdit */
 
 QLineEdit {
-  background: #4B4B4B;
+  background: #3B3B3B;
   border: 1px solid #CACACA;
   padding: 2px;
 }
@@ -56,22 +56,6 @@ QPushButton:disabled {
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QLabel" name="validEntryLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="../rsclist.qrc">:/img/not_exists.svg</pixmap>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QPushButton" name="pasteButton">
      <property name="sizePolicy">
@@ -119,6 +103,22 @@ QPushButton:pressed {
      </property>
      <property name="clearButtonEnabled">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="validEntryLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../rsclist.qrc">:/img/not_exists.svg</pixmap>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

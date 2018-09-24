@@ -26,9 +26,14 @@ namespace Ui {
 class MainWindow;
 }
 
+namespace Mpv {
+struct PlaylistItem;
+}
+
 class BakaEngine;
 class MpvHandler;
 class Plugin;
+class MediaProvider;
 
 class MainWindow : public QMainWindow {
     friend class BakaEngine;
@@ -53,8 +58,10 @@ public:
     void setSidebarWidth(int width) { sidebarWidth = width; updateSidebarWidth(); }
     void updateSidebarWidth();
     QIcon getTrayIcon();
+    Mpv::PlaylistItem *getCurrentPlayFile();
+    Q_INVOKABLE QString getInput(QString title, QString prompt);
 
-    Ui::MainWindow  *ui;
+    Ui::MainWindow *ui;
 
 public slots:
     void Load(QString f = QString());
@@ -104,7 +111,7 @@ private:
                             *playpause_toolbutton,
                             *next_toolbutton;
 #endif
-    bool pathChanged = false;
+    bool fileChanged = false;
     bool menuVisible = true;
     bool firstItem = false;
     bool init = false;

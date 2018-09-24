@@ -6,6 +6,10 @@
 #include <QDir>
 #include <QUrl>
 
+#include <QDBusInterface>
+#include <QDBusPendingCallWatcher>
+#include <QDBusMessage>
+
 #include <QX11Info>
 #include <X11/Xlib.h>
 
@@ -73,6 +77,37 @@ void SetAspectRatio(QMainWindow *main, int w, int h)
 
     XSetWMNormalHints(display, main->winId(), hint);
     XFree(hint);
+}
+
+void EnableScreenSaver(bool enable)
+{
+    // A cookie is a random, unique, non-zero UINT32 used to identify the inhibit request.
+    static uint32_t cookie = 0;
+
+    QDBusInterface dbusScreensaver("org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver");
+    QDBusPendingCall async;
+    if (enable) {
+        if (cookie == 0)
+            return;
+        async = dbusScreensaver.asyncCall("UnInhibit", cookie);
+    } else {
+        if (cookie != 0)
+            return;
+        async = dbusScreensaver.asyncCall("Inhibit", QCoreApplication::applicationName(), "video playing");
+    }
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(async);
+    connect(watcher, &QDBusPendingCallWatcher::finished, [=, &cookie] (QDBusPendingCallWatcher *call) {
+        if (enable) {
+            QDBusPendingReply<> reply = *call;
+            if (!reply.isError())
+                cookie = 0;
+        } else {
+            QDBusPendingReply<uint32_t> reply = *call;
+            if (!reply.isError())
+                cookie = reply.argumentAt<0>();
+        }
+        call->deleteLater();
+    });
 }
 
 bool IsValidFile(QString path)

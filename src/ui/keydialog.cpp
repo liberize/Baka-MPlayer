@@ -14,15 +14,15 @@ KeyDialog::KeyDialog(QWidget *parent) :
         SetButtons();
     });
 
-    connect(ui->clearButton, &QPushButton::pressed, [=] {
+    connect(ui->clearButton, &QPushButton::clicked, [=] {
         ui->keySequenceEdit->clear();
     });
 
-    connect(ui->addButton, SIGNAL(pressed()),
+    connect(ui->addButton, SIGNAL(clicked()),
             this, SLOT(accept()));
-    connect(ui->changeButton, SIGNAL(pressed()),
+    connect(ui->changeButton, SIGNAL(clicked()),
             this, SLOT(accept()));
-    connect(ui->cancelButton, SIGNAL(pressed()),
+    connect(ui->cancelButton, SIGNAL(clicked()),
             this, SLOT(reject()));
 }
 

@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
 	font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #4B4B4B;
+	background: #3B3B3B;
 	color: whitesmoke;
 }
 
@@ -67,7 +67,7 @@ QCheckBox::indicator:unchecked,
 QGroupBox::indicator:unchecked,
 QListView::indicator:unchecked {
 	border: 1px solid #D6D6D6;
-	background: #4B4B4B;
+	background: #3B3B3B;
 	image: none;
 }
 QCheckBox::indicator:checked,
@@ -99,7 +99,7 @@ QComboBox::item {
 }
 QComboBox::item::selected {
   color: #FFFFFF;
-  background: #3F9BFA;
+  background: #4278F5;
 }
 QComboBox::drop-down {
   width: 16px;
@@ -117,7 +117,7 @@ QComboBox::down-arrow {
 /* QLineEdit */
 
 QLineEdit {
-	background: #4B4B4B;
+	background: #3B3B3B;
 	border: 1px solid #CACACA;
 	padding: 2px;
 }
@@ -224,7 +224,7 @@ QScrollBar::sub-line:vertical {
 }
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical  {
-	background: #4B4B4B;
+	background: #3B3B3B;
 	margin: 0 2px;
 }
 QScrollBar::up-arrow:vertical,
@@ -247,7 +247,7 @@ QScrollBar::sub-line:horizontal {
 }
 QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
-	background: #4B4B4B;
+	background: #3B3B3B;
 	margin: 2px 0;
 }
 QScrollBar::left-arrow:horizontal,
@@ -284,7 +284,7 @@ QTabBar::tab:!selected {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -511,19 +511,22 @@ QTabBar::tab:!selected {
        </item>
        <item>
         <widget class="QTableWidget" name="infoWidget">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="styleSheet">
           <string notr="true">/* QHeaderView set under main stylesheet (QDialog) */
 
 QTableWidget {
 	border: 1px solid #6E6E6E;
-	background: #4B4B4B;
+	background: #3B3B3B;
   gridline-color: #6E6E6E;
 }
 QTableWidget::item {
-	alternate-background-color: #4B4B4B;
+	alternate-background-color: #3B3B3B;
 }
 QTableWidget::item:alternate {
-  background: #4B4B4B;
+  background: #3B3B3B;
 }
 QTableWidget::item:selected {
 	background: #565656;
@@ -960,14 +963,14 @@ QPushButton:pressed {
          <property name="styleSheet">
           <string notr="true">QListView {
 	border: 1px solid #6E6E6E;
-	background: #4B4B4B;
+	background: #3B3B3B;
 }
 QListView::item {
 	padding: 0 10px;
-	alternate-background-color: #4B4B4B;
+	alternate-background-color: #3B3B3B;
 }
 QListView::item:alternate {
-  background: #4B4B4B;
+  background: #3B3B3B;
 }
 QListView::item:selected {
 	background: #565656;

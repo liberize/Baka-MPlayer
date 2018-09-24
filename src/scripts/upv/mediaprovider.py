@@ -5,20 +5,21 @@ from .plugin import Plugin
 
 
 class MediaEntry:
-    def __init__(self, name, url, cover, description, downloader='default'):
+    def __init__(self, name, url, options, cover, description):
         '''
         url can be real url, local file path, stdin (-), or file descriptor (fd://123)
-        downloader can be 'self', 'ytdl', 'default'
-        setting downloader to 'ytdl' is equivalent to prefixing url with 'ytdl://'
         '''
         self.name = name
         self.url = url
+        self.options = options
         self.cover = cover
         self.description = description
-        self.downloader = downloader
 
     def __str__(self):
-        return 'MediaEntry <{}, {}>'.format(self.name, self.url)
+        return 'MediaEntry <{}, {}, {}>'.format(self.name, self.url, self.description)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class MediaProvider(Plugin):
@@ -37,10 +38,10 @@ class MediaProvider(Plugin):
         '''
         return []
 
-    def download(self, entry):
+    def download(self, entry, what=''):
         '''
-        self downloader implementation
-        fill entry url, and return the modified entry
+        downloader implementation
+        fill entry url or cover url, and return the modified entry
         sample usages:
         1. parsing real url
         2. downloading whole file to local disk

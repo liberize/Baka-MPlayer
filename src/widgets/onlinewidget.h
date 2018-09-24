@@ -1,11 +1,14 @@
 #ifndef ONLINEWIDGET_H
 #define ONLINEWIDGET_H
 
-#include <QListWidget>
+#include <QListView>
+#include <QStandardItemModel>
 
 class BakaEngine;
+struct MediaEntry;
+class MediaItemDelegate;
 
-class OnlineWidget : public QListWidget {
+class OnlineWidget : public QListView {
     Q_OBJECT
 
 public:
@@ -14,14 +17,20 @@ public:
 
     void AttachEngine(BakaEngine *baka);
 
+    QModelIndex appendEntry(MediaEntry *entry);
+    void clear();
+
 signals:
     void mouseMoved(QMouseEvent *event);
+    void scrollReachedEnd();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
     BakaEngine *baka;
+    QStandardItemModel *mediaModel = nullptr;
+    MediaItemDelegate *mediaItemDelegate = nullptr;
 };
 
 #endif // ONLINEWIDGET_H

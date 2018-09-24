@@ -443,7 +443,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <source>Input Blur Factor (0-20.0):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -451,7 +451,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <source>Input Offset Value (0-20):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -656,10 +656,6 @@
     <message>
         <source>Search Playlist</source>
         <translation>Cerca nella scaletta</translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>Aggiorna scaletta</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -1182,12 +1178,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">File multimediali</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">File video</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">File audio</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">Tutti i file</translation>
     </message>
 </context>
 <context>
@@ -1330,10 +1342,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>&amp;Elimina da disco</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>A&amp;ggiorna</translation>
     </message>
     <message>
         <source>Delete sub-file?</source>

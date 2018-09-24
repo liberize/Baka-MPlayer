@@ -445,7 +445,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <source>Input Blur Factor (0-20.0):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -453,7 +453,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <source>Input Offset Value (0-20):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -660,10 +660,6 @@
     <message>
         <source>Search Playlist</source>
         <translation>Procurar Lista de Reprodução</translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>Atualizar Lista de Reprodução</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -1187,12 +1183,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">Arquivos de Mídia</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">Arquivos de Vídeo</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">Arquivos de Áudio</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">Todos os Arquivos</translation>
     </message>
 </context>
 <context>
@@ -1348,10 +1360,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>&amp;Excluir Arquivo do Disco</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>Atualiza&amp;r</translation>
     </message>
     <message>
         <source>&amp;Show in Folder</source>

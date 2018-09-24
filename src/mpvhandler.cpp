@@ -12,6 +12,7 @@
 #include "bakaengine.h"
 #include "overlayhandler.h"
 #include "util.h"
+#include "ui/mainwindow.h"
 
 #ifdef ENABLE_MPV_COCOA_WIDGET
 #include "widgets/mpvcocoawidget.h"
@@ -52,6 +53,9 @@ MpvHandler::MpvHandler(QWidget *container, QObject *parent):
     mpv_observe_property(mpv, 0, "mute", MPV_FORMAT_FLAG);
     mpv_observe_property(mpv, 0, "core-idle", MPV_FORMAT_FLAG);
     mpv_observe_property(mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
+
+    // setup event hook
+    mpv_hook_add(mpv, 0, "on_load", 0);
 
     // setup callback event handling
     mpv_set_wakeup_callback(mpv, wakeup, this);
@@ -326,7 +330,7 @@ void MpvHandler::SubtitleShadowColor(const QColor &color)
 
 QString MpvHandler::getMediaInfo()
 {
-    QFileInfo fi(path+file);
+    QFileInfo fi(path + file);
 
     double avsync, fps, vbitrate, abitrate;
 
@@ -386,7 +390,7 @@ QString MpvHandler::getMediaInfo()
         out += '\n';
     }
 
-    return out;
+    return out.trimmed();
 }
 
 int64_t MpvHandler::getCacheSize()
@@ -438,7 +442,7 @@ bool MpvHandler::event(QEvent *event)
             switch (event->event_id) {
             case MPV_EVENT_PROPERTY_CHANGE:
             {
-                mpv_event_property *prop = (mpv_event_property*)event->data;
+                mpv_event_property *prop = static_cast<mpv_event_property*>(event->data);
                 if (QString(prop->name) == "playback-time") {   // playback-time does the same thing as time-pos but works for streaming media
                     if (prop->format == MPV_FORMAT_DOUBLE) {
                         setTime(*(double*)prop->data);
@@ -522,6 +526,14 @@ bool MpvHandler::event(QEvent *event)
                     emit messageSignal(message->text);
                 break;
             }
+            case MPV_EVENT_HOOK:
+            {
+                mpv_event_hook *hook = static_cast<mpv_event_hook*>(event->data);
+                if (QString(hook->name) == "on_load")
+                    SetFileLocalOptions();
+                mpv_hook_continue(mpv, hook->id);
+                break;
+            }
             default: // unhandled events
                 break;
             }
@@ -570,9 +582,17 @@ bool MpvHandler::FileExists(QString f)
     return QFile(f).exists();
 }
 
-void MpvHandler::LoadFile(QString f)
+void MpvHandler::LoadFile(QString f, QString title, const QMap<QString, QString> &options)
 {
-    PlayFile(LoadPlaylist(f));
+    PlayFile(LoadPlaylist(f), title, options);
+}
+
+void MpvHandler::SetFileLocalOptions()
+{
+    for (auto it = fileLocalOptions.begin(); it != fileLocalOptions.end(); ++it) {
+        QString name = "file-local-options/" + it.key();
+        HandleErrorCode(mpv_set_property_string(mpv, name.toUtf8().constData(), (*it).toUtf8().constData()));
+    }
 }
 
 QString MpvHandler::LoadPlaylist(QString f)
@@ -580,46 +600,56 @@ QString MpvHandler::LoadPlaylist(QString f)
     if (f == QString()) // ignore empty file name
         return QString();
 
-    if (f == "-") {
+    if (f == "-" || Util::IsValidUrl(f)) {
         setPath("");
-        setPlaylist({f});
-    } else if (Util::IsValidUrl(f)) { // web url
-        setPath("");
-        setPlaylist({f});
     } else { // local file
         QFileInfo fi(f);
         if (!fi.exists()) { // file doesn't exist
             ShowText(tr("File does not exist")); // tell the user
             return QString(); // don't do anything more
         } else if (fi.isDir()) { // if directory
-            setPath(QDir::toNativeSeparators(fi.absoluteFilePath()+"/")); // set new path
-            return PopulatePlaylist();
+            setPath(QDir::toNativeSeparators(fi.absoluteFilePath() + "/")); // set new path
+            auto item = baka->window->getCurrentPlayFile();
+            return item ? item->path : "";
         } else if (fi.isFile()) { // if file
-            setPath(QDir::toNativeSeparators(fi.absolutePath()+"/")); // set new path
-            PopulatePlaylist();
-            return fi.fileName();
+            setPath(QDir::toNativeSeparators(fi.absolutePath() + "/")); // set new path
+            return fi.absoluteFilePath();
         }
     }
     return f;
 }
 
-bool MpvHandler::PlayFile(QString f)
+bool MpvHandler::PlayFile(QString f, QString title, const QMap<QString, QString> &options)
 {
     if (f == QString()) // ignore if file doesn't exist
         return false;
 
-    if (path == QString()) { // web url
+    if (f == "-" || Util::IsValidUrl(f)) {
         OpenFile(f);
-        setFile(f);
+        setPath("");
+        setFile(f, title, options);
     } else {
-        QFile qf(path+f);
-        if (qf.exists()) {
-            OpenFile(path+f);
-            setFile(f);
-            Play();
+        QFileInfo fi(f);
+        if (fi.isAbsolute()) {
+            if (fi.exists()) {
+                OpenFile(f);
+                setPath(QDir::toNativeSeparators(fi.absolutePath() + "/"));
+                setFile(fi.fileName(), title, options);
+                Play();
+            } else {
+                ShowText(tr("File no longer exists")); // tell the user
+                return false;
+            }
         } else {
-            ShowText(tr("File no longer exists")); // tell the user
-            return false;
+            QFile qf(path + f);
+            if (qf.exists()) {
+                OpenFile(path + f);
+                setFile(f, title, options);
+                Play();
+            } else {
+                ShowText(tr("File no longer exists")); // tell the user
+                return false;
+            }
         }
     }
     return true;
@@ -647,11 +677,13 @@ void MpvHandler::RestartPaused()
     Pause();
 }
 
-void MpvHandler::PlayPause(QString fileIfStopped)
+void MpvHandler::PlayPause()
 {
-    if (playState < 0) // not playing, play plays the selected playlist file
-        PlayFile(fileIfStopped);
-    else {
+    if (playState < 0) { // not playing, play plays the selected playlist file
+        auto item = baka->window->getCurrentPlayFile();
+        if (item)
+            PlayFile(item->path, item->name, item->options);
+    } else {
         const char *args[] = {"cycle", "pause", NULL};
         AsyncCommand(args);
     }
@@ -947,7 +979,8 @@ void MpvHandler::LoadFileInfo()
         fileInfo.length = 0;
     } else {
         // get media-title
-        fileInfo.media_title = mpv_get_property_string(mpv, "media-title");
+        char *title = mpv_get_property_string(mpv, "media-title");
+        fileInfo.media_title = Util::DetectCharEncoding(QByteArray(title));
         // get length
         double len;
         mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &len);
@@ -1182,26 +1215,6 @@ void MpvHandler::OpenFile(QString f)
             Command(args);
         }, Qt::QueuedConnection);
     }
-}
-
-QString MpvHandler::PopulatePlaylist()
-{
-    if (path != "") {
-        QStringList playlist;
-        QDir root(path);
-        QStringList filter = Mpv::media_filetypes;
-        if (path != QString() && file != QString())
-            filter.append(QString("*.%1").arg(file.split(".").last()));
-        QFileInfoList flist;
-        flist = root.entryInfoList(filter, QDir::Files);
-        for (auto &i : flist)
-            playlist.push_back(i.fileName()); // add files to the list
-        setPlaylist(playlist);
-        if (playlist.empty())
-            return QString();
-        return playlist.first();
-    }
-    return QString();
 }
 
 void MpvHandler::SetProperties()

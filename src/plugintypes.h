@@ -11,9 +11,12 @@ namespace py = pybind11;
 
 #pragma pop_macro("slots")
 
+#include "util.h"
+
 #include <QString>
 #include <QDir>
 #include <QIcon>
+#include <QPixmap>
 #include <QDebug>
 #include <functional>
 
@@ -63,42 +66,55 @@ struct ConfigItem {
 struct MediaEntry {
     QString name;
     QString url;
-    QString cover;
+    QMap<QString, QString> options;
+    QString coverUrl;
+    QPixmap cover;
     QString description;
-    QString downloader;
+
+    MediaEntry() {}
+    MediaEntry(const py::object &obj) {
+        operator =(obj);
+    }
 
     MediaEntry &operator =(const py::object &obj) {
         SafeRun<void>([=] {
             name = obj.attr("name").cast<QString>();
             url = obj.attr("url").cast<QString>();
-            cover = obj.attr("cover").cast<QString>();
+            options = obj.attr("options").cast<QMap<QString, QString>>();
+            coverUrl = obj.attr("cover").cast<QString>();
             description = obj.attr("description").cast<QString>();
-            downloader = obj.attr("downloader").cast<QString>();
+            QString localFile = Util::ToLocalFile(coverUrl);
+            if (!localFile.isEmpty())
+                cover = QPixmap(localFile);
         });
         return *this;
+    }
+
+    const QPixmap &getCover() {
+        static QPixmap defaultCover = QIcon(":/img/cover.svg").pixmap(60, 60);
+        return cover.isNull() ? defaultCover : cover;
     }
 };
 
 struct SubtitleEntry {
     QString name;
     QString url;
-    QString downloader;
+
+    SubtitleEntry() {}
+    SubtitleEntry(const py::object &obj) {
+        operator =(obj);
+    }
 
     SubtitleEntry &operator =(const py::object &obj) {
         SafeRun<void>([=] {
             name = obj.attr("name").cast<QString>();
             url = obj.attr("url").cast<QString>();
-            downloader = obj.attr("downloader").cast<QString>();
         });
         return *this;
     }
 };
 
-Q_DECLARE_METATYPE(ConfigItem)
-Q_DECLARE_METATYPE(MediaEntry)
-Q_DECLARE_METATYPE(SubtitleEntry)
-Q_DECLARE_METATYPE(QList<MediaEntry>)
-Q_DECLARE_METATYPE(QList<SubtitleEntry>)
+Q_DECLARE_METATYPE(MediaEntry*)
 Q_DECLARE_METATYPE(py::object)
 
 #endif // PLUGINTYPES_H

@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
   font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-  background: #4B4B4B;
+  background: #3B3B3B;
   color: whitesmoke;
 }
 
@@ -33,7 +33,7 @@ QGroupBox::indicator {
 QCheckBox::indicator:unchecked,
 QGroupBox::indicator:unchecked {
   border: 1px solid #D6D6D6;
-  background: #4B4B4B;
+  background: #3B3B3B;
   image: none;
 }
 QCheckBox::indicator:checked,
@@ -81,7 +81,7 @@ QComboBox::down-arrow {
 /* QLineEdit */
 
 QLineEdit {
-  background: #4B4B4B;
+  background: #3B3B3B;
   border: 1px solid #CACACA;
   padding: 2px;
 }

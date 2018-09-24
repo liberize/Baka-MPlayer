@@ -87,6 +87,14 @@ namespace Mpv
         QString name;
         QString description;
     };
+
+    struct PlaylistItem {
+        QString name;
+        QString path;
+        QMap<QString, QString> options;
+        bool local;
+        bool playing;
+    };
 }
 Q_DECLARE_METATYPE(Mpv::PlayState) // so we can pass it with signals & slots
 Q_DECLARE_METATYPE(Mpv::Chapter)
@@ -94,6 +102,6 @@ Q_DECLARE_METATYPE(Mpv::Track)
 Q_DECLARE_METATYPE(Mpv::VideoParams)
 Q_DECLARE_METATYPE(Mpv::AudioParams)
 Q_DECLARE_METATYPE(Mpv::FileInfo)
-
+Q_DECLARE_METATYPE(Mpv::PlaylistItem*)
 
 #endif // MPVTYPES_H

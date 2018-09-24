@@ -20,11 +20,11 @@ MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
-PKGCONFIG += mpv python3
+PKGCONFIG += libavcodec libavfilter	libavutil libswresample libavdevice libavformat libpostproc libswscale mpv python3 uchardet
 
 
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/FFmpeg/inst/lib/pkgconfig:/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
 
     APP_DATA_DIR = ../Resources
     ICON = img/logo.icns
@@ -225,7 +225,11 @@ SOURCES += \
     plugin.cpp \
     subtitleprovider.cpp \
     mediaprovider.cpp \
-    worker.cpp
+    worker.cpp \
+    widgets/mediasearchbox.cpp \
+    delegates/mediaitemdelegate.cpp \
+    delegates/playlistitemdelegate.cpp \
+    models/playlistproxymodel.cpp
 
 
 HEADERS  += \
@@ -294,7 +298,11 @@ HEADERS  += \
     plugin.h \
     subtitleprovider.h \
     mediaprovider.h \
-    worker.h
+    worker.h \
+    widgets/mediasearchbox.h \
+    delegates/mediaitemdelegate.h \
+    delegates/playlistitemdelegate.h \
+    models/playlistproxymodel.h
 
 
 FORMS    += \

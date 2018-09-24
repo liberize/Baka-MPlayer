@@ -13,6 +13,9 @@ class Settings;
 
 namespace Util {
 
+void RandSeed();
+int RandInt(int low, int high);
+
 // platform specific
 QString VersionFileUrl();
 QString DownloadFileUrl();
@@ -21,6 +24,7 @@ bool DimLightsSupported();
 void InitWindow(QMainWindow *main);
 void SetAlwaysOnTop(QMainWindow *main, bool);
 void SetAspectRatio(QMainWindow *main, int w, int h);
+void EnableScreenSaver(bool);
 
 QString Path(QString dir, QString file);
 QString EnsureDirExists(QString dir);
@@ -63,6 +67,8 @@ QString Ratio(int w, int h);
 QString GetLangName(QString code);
 QString GetCharEncodingTitle(QString name);
 const QList<QPair<QString, QString> > &GetAllCharEncodings();
+
+QString DetectCharEncoding(const QByteArray &bytes);
 
 }
 

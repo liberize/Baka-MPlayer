@@ -444,7 +444,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Blur Factor (0-20.0), 0 to Disable:</source>
+        <source>Input Blur Factor (0-20.0):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -452,7 +452,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input Offset Value (0-20), 0 to Disable:</source>
+        <source>Input Offset Value (0-20):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -661,10 +661,6 @@
     <message>
         <source>0 / 0</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Refresh Playlist</source>
-        <translation>Làm mới danh sách</translation>
     </message>
     <message>
         <source>0:00:00</source>
@@ -1183,12 +1179,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Plugin is busy, please try later</source>
+        <source>Invalid subtitle path: %0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid subtitle path: %0</source>
+        <source>Clear Playlist</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation type="unfinished">Các tập tin đa phương tiện</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation type="unfinished">Các tập tin phim</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation type="unfinished">Các tập tin âm thanh</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation type="unfinished">Tất cả các loại tập tin</translation>
     </message>
 </context>
 <context>
@@ -1343,10 +1355,6 @@
     <message>
         <source>&amp;Delete from Disk</source>
         <translation>&amp;Xoá khỏi ổ đĩa</translation>
-    </message>
-    <message>
-        <source>&amp;Refresh</source>
-        <translation>&amp;Làm mới</translation>
     </message>
     <message>
         <source>&amp;Show in Folder</source>

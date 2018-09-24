@@ -16,7 +16,6 @@ protected:
 
 private:
     QPixmap pixmap;
-    int spacing = 5;
 };
 
 #endif // CUSTOMPUSHBUTTON_H
