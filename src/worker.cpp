@@ -2,8 +2,9 @@
 #include "pluginmanager.h"
 
 
-Worker::Worker(QObject *parent)
+Worker::Worker(Priority p, QObject *parent)
     : QObject(parent),
+      priority(p),
       manager(static_cast<PluginManager*>(parent))
 {
     thread = new QThread(this);

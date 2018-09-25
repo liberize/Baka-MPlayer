@@ -762,6 +762,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     connect(ui->onlineSearchBox, &MediaSearchBox::providerChanged, [=] (MediaProvider *provider) {
         ui->onlineWidget->clear();
+        baka->pluginManager->clearWorkers(Worker::Low);
         if (provider) {
             QString word = ui->onlineSearchBox->getWord();
             if (word.isEmpty())
@@ -773,6 +774,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     connect(ui->onlineSearchBox, &CustomLineEdit::submitted, [=] (QString text) {
         ui->onlineWidget->clear();
+        baka->pluginManager->clearWorkers(Worker::Low);
         MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
         if (provider) {
             if (text.isEmpty())
@@ -780,6 +782,11 @@ MainWindow::MainWindow(QWidget *parent):
             else
                 provider->search(text);
         }
+    });
+
+    connect(ui->playlistWidget, &QListView::doubleClicked, [=] (const QModelIndex &index) {
+        ui->playlistWidget->playIndex(index);
+        ShowSidebar(false);
     });
 
     connect(ui->onlineWidget, &QListView::doubleClicked, [=] (const QModelIndex &index) {
@@ -947,6 +954,8 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
                 mpv->LoadFile(entry.url, entry.name, entry.options);
             else if (what == "cover") {
                 MediaEntry *item = index.data(Qt::UserRole).value<MediaEntry*>();
+                if (!item)
+                    return;
                 QString localFile = Util::ToLocalFile(entry.coverUrl);
                 if (!localFile.isEmpty()) {
                     item->cover.load(localFile);
@@ -1217,7 +1226,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                     QRect hotArea(ui->sidebarWidget->pos().x() - 4, ui->sidebarWidget->pos().y(), 4, ui->sidebarWidget->height());
                     if (hotArea.contains(ui->centralwidget->mapTo(this, event->pos())))
                         sidebarResizeStartX = ui->sidebarWidget->width() + event->pos().x();
-                    else
+                    else if (!ui->sidebarWidget->rect().contains(ui->sidebarWidget->mapFromGlobal(event->globalPos())))
                         ShowSidebar(false, !isFullScreen());
                 }
             }
@@ -1260,6 +1269,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
 
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
+    if (ui->sidebarWidget->rect().contains(ui->sidebarWidget->mapFromGlobal(event->globalPos())))
+        return;
     if (event->delta() > 0)
         mpv->Volume(mpv->getVolume()+5, true);
     else

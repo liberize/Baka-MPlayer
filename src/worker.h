@@ -12,11 +12,16 @@ class PluginManager;
 class Worker : public QObject {
     friend class PluginManager;
     Q_OBJECT
+
 public:
-    explicit Worker(QObject *parent = nullptr);
+    enum Priority { Normal = 0, Low = -1, High = 1 };
+
+public:
+    explicit Worker(Priority p, QObject *parent = nullptr);
     ~Worker();
 
     void run(std::function<py::object()> func);
+    Priority getPriority() const { return priority; }
 
 private:
     void start();
@@ -27,6 +32,7 @@ signals:
 private:
     PluginManager *manager = nullptr;
     QThread *thread = nullptr;
+    Priority priority = Normal;
 };
 
 #endif // WORKER_H

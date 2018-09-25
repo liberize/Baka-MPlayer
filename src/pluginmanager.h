@@ -2,15 +2,16 @@
 #define PLUGINMANAGER_H
 
 #include "plugin.h"
+#include "worker.h"
 
 #include <QStringList>
 #include <QMap>
 #include <QList>
 #include <QSet>
 #include <QThread>
+#include <QQueue>
 
 class BakaEngine;
-class Worker;
 
 class PluginManager : public QObject {
     Q_OBJECT
@@ -25,9 +26,10 @@ public:
     void loadPlugins();
     Plugin *findPlugin(QString name);
 
-    Worker *newWorker();
+    Worker *newWorker(Worker::Priority priority = Worker::Normal);
     void runNextWorker();
     void deleteWorker(Worker *worker);
+    void clearWorkers(Worker::Priority maxPriority);
 
 signals:
     void pluginsLoaded(const QMap<QString, Plugin*> &plugins);
@@ -37,7 +39,7 @@ private:
     py::module module;
     QSet<QString> disableList;
     QMap<QString, Plugin*> plugins;
-    QList<Worker*> workerQueue;
+    QQueue<Worker*> workerQueue;
     bool busy = false;
 };
 

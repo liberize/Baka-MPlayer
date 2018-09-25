@@ -43,7 +43,7 @@ void MediaProvider::search(QString word, int count)
 
 void MediaProvider::download(const MediaEntry &entry, QString what, const QPersistentModelIndex &index)
 {
-    auto worker = manager->newWorker();
+    auto worker = manager->newWorker(what == "cover" ? Worker::Low : Worker::Normal);
     connect(worker, &Worker::finished, this, [=] (py::object result) {
         emit downloadFinished(result.cast<MediaEntry>(), what, index);
         manager->deleteWorker(worker);

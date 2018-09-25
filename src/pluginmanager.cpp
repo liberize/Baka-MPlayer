@@ -2,7 +2,6 @@
 #include "pycast.h"
 #include "util.h"
 #include "bakaengine.h"
-#include "worker.h"
 #include "ui/mainwindow.h"
 
 #include <QDebug>
@@ -49,10 +48,15 @@ PluginManager::~PluginManager()
     });
 }
 
-Worker *PluginManager::newWorker()
+Worker *PluginManager::newWorker(Worker::Priority priority)
 {
-    Worker *worker = new Worker(this);
-    workerQueue.push_back(worker);
+    Worker *worker = new Worker(priority, this);
+    int i = 0;
+    for (; i < workerQueue.count(); i++) {
+        if (priority > workerQueue[i]->getPriority())
+            break;
+    }
+    workerQueue.insert(i, worker);
     return worker;
 }
 
@@ -60,17 +64,24 @@ void PluginManager::runNextWorker()
 {
     if (!busy && !workerQueue.isEmpty()) {
         busy = true;
-        workerQueue.front()->start();
+        workerQueue.dequeue()->start();
     }
 }
 
 void PluginManager::deleteWorker(Worker *worker)
 {
-    assert(worker == workerQueue.front());
-    workerQueue.pop_front();
     delete worker;
     busy = false;
     runNextWorker();
+}
+
+void PluginManager::clearWorkers(Worker::Priority maxPriority)
+{
+    QMutableListIterator<Worker*> i(workerQueue);
+    while (i.hasNext()) {
+        if (i.next()->getPriority() <= maxPriority)
+            i.remove();
+    }
 }
 
 void PluginManager::loadPlugins()

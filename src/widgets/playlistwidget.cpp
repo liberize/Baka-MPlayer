@@ -25,10 +25,6 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     setItemDelegate(playlistItemDelegate);
     setModel(proxyModel);
 
-    connect(this, &QListView::doubleClicked, [=] (const QModelIndex &i) {
-        playIndex(i);
-    });
-
     connect(selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
         emit currentRowChanged(current.row());
     });
@@ -65,7 +61,7 @@ void PlaylistWidget::AttachEngine(BakaEngine *baka)
             item->options = options;
             item->playing = true;
         }
-        if (curPlayingIndex.isValid()) {
+        if (curPlayingIndex.isValid() && curPlayingIndex != index) {
             auto item = curPlayingIndex.data(Qt::UserRole).value<Mpv::PlaylistItem*>();
             item->playing = false;
             emit dataChanged(curPlayingIndex, curPlayingIndex);
