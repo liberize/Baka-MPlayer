@@ -16,7 +16,7 @@
 #include <algorithm>
 
 PlaylistWidget::PlaylistWidget(QWidget *parent) :
-    QListView(parent)
+    CustomListView(parent)
 {
     playlistModel = new QStandardItemModel(this);
     playlistItemDelegate = new PlaylistItemDelegate(this);
@@ -24,10 +24,6 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     proxyModel->setSourceModel(playlistModel);
     setItemDelegate(playlistItemDelegate);
     setModel(proxyModel);
-
-    connect(selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
-        emit currentRowChanged(current.row());
-    });
 }
 
 PlaylistWidget::~PlaylistWidget()
@@ -271,12 +267,6 @@ void PlaylistWidget::deleteFromDisk(const QModelIndex &index)
     QFile f(item->path);
     f.remove();
     removeIndex(index);
-}
-
-void PlaylistWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    emit mouseMoved(event);
-    QListView::mouseMoveEvent(event);
 }
 
 void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event)

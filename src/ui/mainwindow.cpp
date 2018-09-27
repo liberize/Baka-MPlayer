@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     ui->playlistWidget->AttachEngine(baka);
     ui->onlineWidget->AttachEngine(baka);
+    ui->onlineWidget->setPlaceholderText("No media provider selected.");
 
     auto fixCursor = [=] (QMouseEvent *event) {          // fix tab widget intercept MouseMove event
         if (sidebarResizeStartX < 0)
@@ -81,8 +82,8 @@ MainWindow::MainWindow(QWidget *parent):
                 autoHideControls->start(3000);
         }
     };
-    connect(ui->playlistWidget, &PlaylistWidget::mouseMoved, fixCursor);
-    connect(ui->onlineWidget, &OnlineWidget::mouseMoved, fixCursor);
+    connect(ui->playlistWidget, &CustomListView::mouseMoved, fixCursor);
+    connect(ui->onlineWidget, &CustomListView::mouseMoved, fixCursor);
 
     ui->mpvContainer->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     ui->controlsWidget->installEventFilter(this);
@@ -730,7 +731,7 @@ MainWindow::MainWindow(QWidget *parent):
         ui->playlistWidget->search(s);
     });
 
-    connect(ui->playlistWidget, &PlaylistWidget::currentRowChanged, this, [=] (int) {     // Playlist: Playlist selection changed
+    connect(ui->playlistWidget, &CustomListView::currentRowChanged, this, [=] (int) {     // Playlist: Playlist selection changed
         SetIndexLabels(true);
     }, Qt::QueuedConnection);
 
@@ -765,11 +766,15 @@ MainWindow::MainWindow(QWidget *parent):
         baka->pluginManager->clearWorkers(Worker::Low);
         if (provider) {
             QString word = ui->onlineSearchBox->getWord();
-            if (word.isEmpty())
+            if (word.isEmpty()) {
+                ui->onlineWidget->setPlaceholderText("Fetching...");
                 provider->fetch(0);
-            else
+            } else {
+                ui->onlineWidget->setPlaceholderText("Searching...");
                 provider->search(word);
-        }
+            }
+        } else
+            ui->onlineWidget->setPlaceholderText("No media provider selected.");
     });
 
     connect(ui->onlineSearchBox, &CustomLineEdit::submitted, [=] (QString text) {
@@ -777,10 +782,13 @@ MainWindow::MainWindow(QWidget *parent):
         baka->pluginManager->clearWorkers(Worker::Low);
         MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
         if (provider) {
-            if (text.isEmpty())
+            if (text.isEmpty()) {
+                ui->onlineWidget->setPlaceholderText("Fetching...");
                 provider->fetch(0);
-            else
+            } else {
+                ui->onlineWidget->setPlaceholderText("Searching...");
                 provider->search(text);
+            }
         }
     });
 
@@ -797,7 +805,7 @@ MainWindow::MainWindow(QWidget *parent):
         ShowSidebar(false);
     });
 
-    connect(ui->onlineWidget, &OnlineWidget::scrollReachedEnd, [=] () {
+    connect(ui->onlineWidget, &CustomListView::scrollReachedEnd, [=] () {
         MediaProvider *provider = ui->onlineSearchBox->getCurrentProvider();
         if (provider) {
             QString word = ui->onlineSearchBox->getWord();
@@ -938,6 +946,11 @@ void MainWindow::RegisterPlugin(Plugin *plugin)
         });
 
         auto populateMediaList = [=] (const QList<MediaEntry> &result) {
+            if (result.isEmpty()) {
+                ui->onlineWidget->setPlaceholderText("No result found.");
+                ui->onlineWidget->update();
+                return;
+            }
             auto provider = ui->onlineSearchBox->getCurrentProvider();
             for (auto &entry : result) {
                 MediaEntry *e = new MediaEntry(entry);

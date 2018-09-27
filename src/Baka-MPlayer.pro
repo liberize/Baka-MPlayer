@@ -229,7 +229,8 @@ SOURCES += \
     widgets/mediasearchbox.cpp \
     delegates/mediaitemdelegate.cpp \
     delegates/playlistitemdelegate.cpp \
-    models/playlistproxymodel.cpp
+    models/playlistproxymodel.cpp \
+    widgets/customlistview.cpp
 
 
 HEADERS  += \
@@ -302,7 +303,8 @@ HEADERS  += \
     widgets/mediasearchbox.h \
     delegates/mediaitemdelegate.h \
     delegates/playlistitemdelegate.h \
-    models/playlistproxymodel.h
+    models/playlistproxymodel.h \
+    widgets/customlistview.h
 
 
 FORMS    += \

@@ -10,13 +10,15 @@
 #include <QStandardItemModel>
 
 #include "mpvtypes.h"
+#include "customlistview.h"
 
 class BakaEngine;
 class PlaylistItemDelegate;
 class PlaylistProxyModel;
 
-class PlaylistWidget : public QListView {
+class PlaylistWidget : public CustomListView {
     Q_OBJECT
+
 public:
     explicit PlaylistWidget(QWidget *parent = 0);
     ~PlaylistWidget();
@@ -48,19 +50,15 @@ public slots:
     void deleteFromDisk(const QModelIndex &index);
 
 signals:
-    void mouseMoved(QMouseEvent *event);
     void playlistChanged(QStandardItemModel *);
-    void currentRowChanged(int);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 
 private:
     BakaEngine *baka;
-
     QMap<QString, QPersistentModelIndex> pathIndexMap;
     QStandardItemModel *playlistModel = nullptr;
     PlaylistProxyModel *proxyModel = nullptr;

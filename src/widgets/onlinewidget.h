@@ -4,11 +4,13 @@
 #include <QListView>
 #include <QStandardItemModel>
 
+#include "customlistview.h"
+
 class BakaEngine;
 struct MediaEntry;
 class MediaItemDelegate;
 
-class OnlineWidget : public QListView {
+class OnlineWidget : public CustomListView {
     Q_OBJECT
 
 public:
@@ -19,13 +21,6 @@ public:
 
     QModelIndex appendEntry(MediaEntry *entry);
     void clear();
-
-signals:
-    void mouseMoved(QMouseEvent *event);
-    void scrollReachedEnd();
-
-protected:
-    void mouseMoveEvent(QMouseEvent *event);
 
 private:
     BakaEngine *baka;

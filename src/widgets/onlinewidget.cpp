@@ -8,21 +8,14 @@
 #include "request.h"
 #include "requestmanager.h"
 
-#include <QScrollBar>
-
 
 OnlineWidget::OnlineWidget(QWidget *parent) :
-    QListView(parent)
+    CustomListView(parent)
 {
     mediaModel = new QStandardItemModel(this);
     mediaItemDelegate = new MediaItemDelegate(this);
     setItemDelegate(mediaItemDelegate);
     setModel(mediaModel);
-
-    connect(verticalScrollBar(), &QScrollBar::valueChanged, [=] (int value) {
-        if (value == verticalScrollBar()->maximum())
-            emit scrollReachedEnd();
-    });
 }
 
 OnlineWidget::~OnlineWidget()
@@ -55,10 +48,4 @@ void OnlineWidget::clear()
         delete entry;
     }
     mediaModel->clear();
-}
-
-void OnlineWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    emit mouseMoved(event);
-    QListView::mouseMoveEvent(event);
 }
