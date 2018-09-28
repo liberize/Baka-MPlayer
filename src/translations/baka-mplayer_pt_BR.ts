@@ -1206,6 +1206,22 @@
         <source>&amp;Show Library</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No media provider selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fetching...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Searching...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No result found.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>

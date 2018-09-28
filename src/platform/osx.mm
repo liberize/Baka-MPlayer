@@ -6,8 +6,6 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QUrl>
-// not needed as SetAlwaysOnTop was stubbed for now
-//#include <QWindow>
 #include <QMainWindow>
 #include <QProcess>
 
@@ -28,7 +26,6 @@ QString downloadFileUrl()
 
 bool isDimLightsSupported()
 {
-    // stubbed
     return true;
 }
 
@@ -40,15 +37,8 @@ void initWindow(QMainWindow *main)
 
 void setAlwaysOnTop(QMainWindow *main, bool ontop)
 {
-  if (ontop){
-    // doesn't work
-    /*
-    QWindow *window = QWindow::fromWinId(main->winId());
-    window->setFlags(
-          Qt::WindowStaysOnTopHint
-      );
-    */
-  }
+    NSView *view = (__bridge NSView *)(void *)(main->winId());
+    view.window.level = ontop ? NSFloatingWindowLevel : NSNormalWindowLevel;
 }
 
 void setAspectRatio(QMainWindow *main, int w, int h)

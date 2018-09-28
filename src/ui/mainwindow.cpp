@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     ui->playlistWidget->attachEngine(baka);
     ui->libraryWidget->attachEngine(baka);
-    ui->libraryWidget->setPlaceholderText("No media provider selected.");
+    ui->libraryWidget->setPlaceholderText(tr("No media provider selected."));
 
     // fix tab widget intercepting MouseMove event
     auto fixCursor = [=] (QMouseEvent *event) {
@@ -754,14 +754,14 @@ MainWindow::MainWindow(QWidget *parent):
         if (provider) {
             QString word = ui->librarySearchBox->getWord();
             if (word.isEmpty()) {
-                ui->libraryWidget->setPlaceholderText("Fetching...");
+                ui->libraryWidget->setPlaceholderText(tr("Fetching..."));
                 provider->fetch(0);
             } else {
-                ui->libraryWidget->setPlaceholderText("Searching...");
+                ui->libraryWidget->setPlaceholderText(tr("Searching..."));
                 provider->search(word);
             }
         } else
-            ui->libraryWidget->setPlaceholderText("No media provider selected.");
+            ui->libraryWidget->setPlaceholderText(tr("No media provider selected."));
     });
 
     // library: search box submitted
@@ -771,10 +771,10 @@ MainWindow::MainWindow(QWidget *parent):
         MediaProvider *provider = ui->librarySearchBox->getCurrentProvider();
         if (provider) {
             if (text.isEmpty()) {
-                ui->libraryWidget->setPlaceholderText("Fetching...");
+                ui->libraryWidget->setPlaceholderText(tr("Fetching..."));
                 provider->fetch(0);
             } else {
-                ui->libraryWidget->setPlaceholderText("Searching...");
+                ui->libraryWidget->setPlaceholderText(tr("Searching..."));
                 provider->search(text);
             }
         }
@@ -938,7 +938,7 @@ void MainWindow::registerPlugin(Plugin *plugin)
 
         auto populateMediaList = [=] (const QList<MediaEntry> &result) {
             if (result.isEmpty()) {
-                ui->libraryWidget->setPlaceholderText("No result found.");
+                ui->libraryWidget->setPlaceholderText(tr("No result found."));
                 ui->libraryWidget->update();
                 return;
             }
@@ -996,24 +996,22 @@ void MainWindow::load(QString file)
     prevToolButton->setToolTip(tr("Previous"));
     prevToolButton->setIcon(QIcon(":/img/tool-previous.ico"));
     connect(prevToolButton, &QWinThumbnailToolButton::clicked, [=] {
-                ui->playlistWidget->PlayIndex(-1, true);
-            });
+        ui->playlistWidget->playRow(-1, true);
+    });
 
     playPauseToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
     playPauseToolButton->setEnabled(false);
     playPauseToolButton->setToolTip(tr("Play"));
     playPauseToolButton->setIcon(QIcon(":/img/tool-play.ico"));
-    connect(playPauseToolButton, &QWinThumbnailToolButton::clicked, [=] {
-                baka->PlayPause();
-            });
+    connect(playPauseToolButton, &QWinThumbnailToolButton::clicked, baka, &BakaEngine::playPause);
 
     nextToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
     nextToolButton->setEnabled(false);
     nextToolButton->setToolTip(tr("Next"));
     nextToolButton->setIcon(QIcon(":/img/tool-next.ico"));
     connect(nextToolButton, &QWinThumbnailToolButton::clicked, [=] {
-                ui->playlistWidget->PlayIndex(1, true);
-            });
+        ui->playlistWidget->playRow(1, true);
+    });
 
     thumbnailToolBar->addButton(prevToolButton);
     thumbnailToolBar->addButton(playPauseToolButton);

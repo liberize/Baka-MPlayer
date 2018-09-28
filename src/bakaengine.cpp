@@ -115,7 +115,7 @@ void BakaEngine::print(QString what, QString who)
 
 void BakaEngine::println(QString what, QString who)
 {
-    print(what+"\n", who);
+    print(what + "\n", who);
 }
 
 void BakaEngine::invalidCommand(QString command)
