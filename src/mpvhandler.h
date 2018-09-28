@@ -13,20 +13,19 @@
 
 #include "mpvtypes.h"
 
-#define MPV_REPLY_COMMAND 1
-#define MPV_REPLY_PROPERTY 2
-
 class BakaEngine;
 class MpvWidget;
 
 class MpvHandler : public QObject {
     friend class BakaEngine;
     Q_OBJECT
+
 public:
     explicit MpvHandler(QWidget *container, QObject *parent = 0);
     ~MpvHandler();
 
-    void Initialize();
+    void initialize();
+
     const Mpv::FileInfo &getFileInfo()      { return fileInfo; }
     Mpv::PlayState getPlayState()           { return playState; }
     QString getFile()                       { return file; }
@@ -78,115 +77,114 @@ public:
 protected:
     virtual bool event(QEvent*);
 
-    bool FileExists(QString);
-
 public slots:
-    void LoadFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
-    QString LoadPlaylist(QString);
-    bool PlayFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
+    void loadFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
+    QString loadPlaylist(QString);
+    bool playFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
 
-    void AddOverlay(int id, int x, int y, QString file, int offset, int w, int h);
-    void RemoveOverlay(int id);
+    void addOverlay(int id, int x, int y, QString file, int offset, int w, int h);
+    void removeOverlay(int id);
 
-    void Play();
-    void Pause();
-    void RestartPaused();
-    void PlayPause();
-    void Restart();
-    void Rewind();
-    void Stop();
-    void Mute(bool);
+    void play();
+    void pause();
+    void restartPaused();
+    void playPause();
+    void restart();
+    void rewind();
+    void stop();
+    void setMute(bool);
 
-    void Seek(double pos, bool relative = false, bool osd = false);
-    double Relative(double pos);
-    void FrameStep();
-    void FrameBackStep();
+    void seek(double pos, bool relative = false, bool osd = false);
+    double relative(double pos);
+    void frameStep();
+    void frameBackStep();
 
-    void Chapter(int);
-    void NextChapter();
-    void PreviousChapter();
+    void setChapter(int);
+    void nextChapter();
+    void previousChapter();
 
-    void Volume(int, bool osd = false);
-    void AudioDelay(double);
-    void SubtitleDelay(double);
-    void Speed(double);
-    void Aspect(QString);
-    void Vid(int);
-    void Aid(int);
-    void Sid(int);
+    void setVolume(int, bool osd = false);
+    void setAudioDelay(double);
+    void setSubtitleDelay(double);
+    void setSpeed(double);
+    void setAspect(QString);
+    void setVid(int);
+    void setAid(int);
+    void setSid(int);
 
-    void Screenshot(bool withSubs = false);
+    void screenshot(bool withSubs = false);
 
-    void ScreenshotFormat(QString);
-    void ScreenshotTemplate(QString);
-    void ScreenshotDirectory(QString);
+    void setScreenshotFormat(QString);
+    void setScreenshotTemplate(QString);
+    void setScreenshotDirectory(QString);
 
-    void AddSubtitleTrack(QString);
-    void AddAudioTrack(QString);
-    void ShowSubtitles(bool);
-    void SubtitleScale(double scale, bool relative = false);
+    void addSubtitleTrack(QString);
+    void addAudioTrack(QString);
+    void showSubtitles(bool);
+    void setSubtitleScale(double scale, bool relative = false);
 
-    void Deinterlace(bool);
-    void Interpolate(bool);
-    void Vo(QString);
+    void setDeinterlace(bool);
+    void setInterpolate(bool);
+    void setVo(QString);
 
-    void MsgLevel(QString level);
+    void setMsgLevel(QString level);
 
-    void ShowText(QString text, int duration = 4000);
+    void showText(QString text, int duration = 4000);
 
-    void LoadTracks();
-    void LoadChapters();
-    void LoadVideoParams();
-    void LoadAudioParams();
-    void LoadMetadata();
-    void LoadOsdSize();
+    void loadTracks();
+    void loadChapters();
+    void loadVideoParams();
+    void loadAudioParams();
+    void loadMetadata();
+    void loadOsdSize();
+    void loadAudioDevices();
+    void loadSubtitleEncodings();
 
-    void Command(const QStringList &strlist);
-    void SetOption(QString key, QString val);
+    void command(const QStringList &strlist);
+    void mpvSetOption(QString key, QString val);
 
-    void LoadAudioDevices();
-    void AudioDevice(QString name);
-    void LoadSubtitleEncodings();
-    void SubtitleEncoding(QString encoding);
-    void SubtitleFont(const QFont &font);
-    void SubtitleColor(const QColor &color);
-    void SubtitleBackColor(const QColor &color);
-    void SubtitleBlur(double factor);
-    void SubtitleShadowOffset(int size);
-    void SubtitleShadowColor(const QColor &color);
-
-    void SetFileLocalOptions();
+    void setAudioDevice(QString name);
+    void setSubtitleEncoding(QString encoding);
+    void setSubtitleFont(const QFont &font);
+    void setSubtitleColor(const QColor &color);
+    void setSubtitleBackColor(const QColor &color);
+    void setSubtitleBlur(double factor);
+    void setSubtitleShadowOffset(int size);
+    void setSubtitleShadowColor(const QColor &color);
 
 protected slots:
-    void OpenFile(QString);
-    void LoadFileInfo();
-    void SetProperties();
+    void openFile(QString);
+    void loadFileInfo();
+    void setProperties();
 
-    void AsyncCommand(const char *args[]);
-    void Command(const char *args[]);
-    void HandleErrorCode(int);
+    void mpvCommandAsync(const char *args[]);
+    void mpvCommand(const char *args[]);
+    void handleErrorCode(int);
+
+    bool fileExists(QString);
+    void setFileLocalOptions();
 
 private slots:
-    void setFileInfo()                      { emit fileInfoChanged(fileInfo); }
-    void setPlayState(Mpv::PlayState s)     { emit playStateChanged(playState = s); }
-    void setFile(QString s, QString t, const QMap<QString, QString> &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
-    void setPath(QString s)                 { if (path != s) emit pathChanged(path = s); }
-    void setScreenshotFormat(QString s)     { emit screenshotFormatChanged(screenshotFormat = s); }
-    void setScreenshotTemplate(QString s)   { emit screenshotTemplateChanged(screenshotTemplate = s); }
-    void setScreenshotDir(QString s)        { emit screenshotDirChanged(screenshotDir = s); }
-    void setVo(QString s)                   { emit voChanged(vo = s); }
-    void setMsgLevel(QString s)             { emit msgLevelChanged(msgLevel = s); }
-    void setAudioDelay(double d)            { emit audioDelayChanged(audioDelay = d); }
-    void setSubtitleDelay(double d)         { emit subtitleDelayChanged(subtitleDelay = d); }
-    void setSpeed(double d)                 { emit speedChanged(speed = d); }
-    void setTime(double i)                  { emit timeChanged(time = i); }
-    void setVolume(int i)                   { emit volumeChanged(volume = i); }
-    void setIndex(int i)                    { emit indexChanged(index = i); }
-    void setVid(int i)                      { emit vidChanged(vid = i); }
-    void setAid(int i)                      { emit aidChanged(aid = i); }
-    void setSid(int i)                      { emit sidChanged(sid = i); }
-    void setSubtitleVisibility(bool b)      { emit subtitleVisibilityChanged(subtitleVisibility = b); }
-    void setMute(bool b)                    { if (mute != b) emit muteChanged(mute = b); }
+    void updateFileInfo()                      { emit fileInfoChanged(fileInfo); }
+    void updatePlayState(Mpv::PlayState s)     { emit playStateChanged(playState = s); }
+    void updateFile(QString s, QString t, const QMap<QString, QString> &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
+    void updatePath(QString s)                 { if (path != s) emit pathChanged(path = s); }
+    void updateScreenshotFormat(QString s)     { emit screenshotFormatChanged(screenshotFormat = s); }
+    void updateScreenshotTemplate(QString s)   { emit screenshotTemplateChanged(screenshotTemplate = s); }
+    void updateScreenshotDir(QString s)        { emit screenshotDirChanged(screenshotDir = s); }
+    void updateVo(QString s)                   { emit voChanged(vo = s); }
+    void updateMsgLevel(QString s)             { emit msgLevelChanged(msgLevel = s); }
+    void updateAudioDelay(double d)            { emit audioDelayChanged(audioDelay = d); }
+    void updateSubtitleDelay(double d)         { emit subtitleDelayChanged(subtitleDelay = d); }
+    void updateSpeed(double d)                 { emit speedChanged(speed = d); }
+    void updateTime(double i)                  { emit timeChanged(time = i); }
+    void updateVolume(int i)                   { emit volumeChanged(volume = i); }
+    void updateIndex(int i)                    { emit indexChanged(index = i); }
+    void updateVid(int i)                      { emit vidChanged(vid = i); }
+    void updateAid(int i)                      { emit aidChanged(aid = i); }
+    void updateSid(int i)                      { emit sidChanged(sid = i); }
+    void updateSubtitleVisibility(bool b)      { emit subtitleVisibilityChanged(subtitleVisibility = b); }
+    void updateMute(bool b)                    { if (mute != b) emit muteChanged(mute = b); }
 
 signals:
     void fileInfoChanged(const Mpv::FileInfo&);

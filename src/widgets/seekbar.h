@@ -15,7 +15,7 @@ public:
 public slots:
     void setTotalTime(double _totalTime);
     void setChapterTicks(const QList<double> &values);
-    void updateBufferedRanges(const QList<QPair<double, double>> &values);
+    void setBufferedRanges(const QList<QPair<double, double>> &values);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

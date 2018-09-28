@@ -34,7 +34,7 @@ PlaylistWidget::~PlaylistWidget()
     delete playlistItemDelegate;
 }
 
-void PlaylistWidget::AttachEngine(BakaEngine *baka)
+void PlaylistWidget::attachEngine(BakaEngine *baka)
 {
     this->baka = baka;
 
@@ -182,7 +182,7 @@ void PlaylistWidget::playIndex(const QModelIndex &index)
     if (!index.isValid())
         return;
     auto item = index.data(Qt::UserRole).value<Mpv::PlaylistItem*>();
-    if (baka->mpv->PlayFile(item->path, item->name, item->options)) {
+    if (baka->mpv->playFile(item->path, item->name, item->options)) {
         scrollTo(index);
     } else {
         playIndex(playlistModel->index(index.row() + 1, 0));
@@ -206,7 +206,7 @@ void PlaylistWidget::removeIndex(const QModelIndex &index)
     playlistModel->removeRow(index.row());
 }
 
-void PlaylistWidget::search(const QString &s)
+void PlaylistWidget::search(QString s)
 {
     proxyModel->setFilterFixedString(s);
 }
@@ -223,7 +223,7 @@ void PlaylistWidget::shuffle()
         selected = selectionModel()->selectedRows().back().data(Qt::UserRole).value<Mpv::PlaylistItem*>();
 
     for (int i = 0; i < rowCount; i++) {
-        int r = Util::RandInt(i, rowCount - 1);
+        int r = Util::randInt(i, rowCount - 1);
         auto row = playlistModel->takeRow(r);
         playlistModel->insertRow(i, row);
         auto item = row[0]->data(Qt::UserRole).value<Mpv::PlaylistItem*>();
@@ -288,7 +288,7 @@ void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event)
         });
         connect(menu->addAction(tr("&Show in Folder")), &QAction::triggered, [=] {        // Playlist: Show in Folder (right-click)
             QFileInfo fi(item->path);
-            Util::ShowInFolder(fi.absolutePath(), fi.fileName());
+            Util::showInFolder(fi.absolutePath(), fi.fileName());
         });
     }
     menu->exec(viewport()->mapToGlobal(event->pos()));

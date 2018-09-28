@@ -25,9 +25,9 @@ public:
     ~GestureHandler();
 
 public slots:
-    bool Begin(int gesture_type, QPoint mousePos, QPoint windowPos);
-    bool Process(QPoint mousePos);
-    bool End();
+    bool begin(int gesture_type, QPoint mousePos, QPoint windowPos);
+    bool process(QPoint mousePos);
+    bool end();
 
 private:
     BakaEngine *baka;

@@ -5,7 +5,7 @@
 MediaSearchBox::MediaSearchBox(QWidget *parent):
     CustomLineEdit(parent)
 {
-    SetIcon(QIcon(":/img/search_dropdown.svg"), QSize(16, 16));
+    setIcon(QIcon(":/img/search_dropdown.svg"), QSize(16, 16));
     menuProviders = new QMenu(this);
     menuProviders->setStyleSheet(
         "QMenu {\n"
@@ -41,7 +41,7 @@ void MediaSearchBox::addProvider(MediaProvider *provider)
     action->setCheckable(true);
     connect(action, &QAction::triggered, [=] {
         if (currentProvider != provider) {
-            SetIcon(provider->getIcon(), QSize(16, 16));
+            setIcon(provider->getIcon(), QSize(16, 16));
             currentProvider = provider;
             emit providerChanged(provider);
         } else
@@ -59,7 +59,7 @@ void MediaSearchBox::removeProvider(MediaProvider *provider)
         }
     }
     if (currentProvider == provider) {
-        SetIcon(QIcon(":/img/search_dropdown.svg"), QSize(16, 16));
+        setIcon(QIcon(":/img/search_dropdown.svg"), QSize(16, 16));
         currentProvider = nullptr;
         emit providerChanged(nullptr);
     }

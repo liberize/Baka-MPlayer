@@ -11,7 +11,7 @@ class CustomLineEdit : public QLineEdit {
 public:
     explicit CustomLineEdit(QWidget *parent = 0);
 
-    void SetIcon(const QIcon &icon, const QSize &size);
+    void setIcon(const QIcon &icon, const QSize &size);
 
 protected:
     void keyPressEvent(QKeyEvent *event);

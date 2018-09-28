@@ -40,7 +40,6 @@
         <file>img/repeat_one.svg</file>
         <file>img/logo_mask.svg</file>
         <file>img/link.svg</file>
-        <file>img/online.svg</file>
         <file>img/down_arrow.svg</file>
         <file>img/left_arrow.svg</file>
         <file>img/right_arrow.svg</file>
@@ -53,5 +52,6 @@
         <file>img/search_dropdown.svg</file>
         <file>img/cover.svg</file>
         <file>img/trash.svg</file>
+        <file>img/library.svg</file>
     </qresource>
 </RCC>

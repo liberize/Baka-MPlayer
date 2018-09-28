@@ -7,11 +7,11 @@ KeyDialog::KeyDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->keySequenceEdit, &QKeySequenceEdit::keySequenceChanged, [=](const QKeySequence&) {
-        SetButtons();
+        setButtons();
     });
 
     connect(ui->commandLineEdit, &QLineEdit::textChanged, [=](const QString&) {
-        SetButtons();
+        setButtons();
     });
 
     connect(ui->clearButton, &QPushButton::clicked, [=] {
@@ -31,13 +31,13 @@ KeyDialog::~KeyDialog()
     delete ui;
 }
 
-QPair<QString, QPair<QString, QString>> KeyDialog::SelectKey(bool add, QPair<QString, QPair<QString, QString>> init)
+QPair<QString, QPair<QString, QString>> KeyDialog::selectKey(bool add, QPair<QString, QPair<QString, QString>> init)
 {
     this->add = add;
     ui->keySequenceEdit->setKeySequence(QKeySequence(init.first));
     ui->commandLineEdit->setText(init.second.first);
     ui->labelLineEdit->setText(init.second.second);
-    SetButtons();
+    setButtons();
     if (exec() == QDialog::Rejected)
         return QPair<QString, QPair<QString, QString>>();
     return QPair<QString, QPair<QString, QString>>({
@@ -47,7 +47,7 @@ QPair<QString, QPair<QString, QString>> KeyDialog::SelectKey(bool add, QPair<QSt
     });
 }
 
-void KeyDialog::SetButtons()
+void KeyDialog::setButtons()
 {
     bool enabled =
         (!ui->keySequenceEdit->keySequence().isEmpty() &&

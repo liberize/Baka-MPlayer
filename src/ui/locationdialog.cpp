@@ -20,7 +20,7 @@ LocationDialog::LocationDialog(QString path, QWidget *parent) :
         ui->urlEdit->setText(QApplication::clipboard()->text());
     });
 
-    if (Util::IsValidFile(path))
+    if (Util::isValidFile(path))
         ui->urlEdit->setText(QDir::toNativeSeparators(path));
     else
         ui->urlEdit->setText(path);
@@ -42,7 +42,7 @@ QString LocationDialog::getUrl(QString path, QWidget *parent)
 
 void LocationDialog::validate(QString input)
 {
-    if (Util::IsValidLocation(input)) {
+    if (Util::isValidLocation(input)) {
         ui->validEntryLabel->setPixmap(QPixmap(":/img/exists.svg"));
         ui->okButton->setEnabled(true);
     } else {

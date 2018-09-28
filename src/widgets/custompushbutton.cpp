@@ -11,7 +11,7 @@ CustomPushButton::CustomPushButton(QWidget *parent) :
 {
 }
 
-void CustomPushButton::SetIcon(const QIcon &icon, const QSize &size, int space)
+void CustomPushButton::setIcon(const QIcon &icon, const QSize &size, int space)
 {
     pixmap = icon.pixmap(size);
     int x = PADDING_LEFT + size.width() + space;

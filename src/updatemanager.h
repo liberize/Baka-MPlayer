@@ -17,11 +17,11 @@ public:
     const QMap<QString, QString> &getInfo() { return info; }
 
 public slots:
-    bool CheckForUpdates();
+    bool checkForUpdates();
 
 #if defined(Q_OS_WIN)
-    bool DownloadUpdate(const QString &url);
-    void ApplyUpdate(const QString &file);
+    bool downloadUpdate(const QString &url);
+    void applyUpdate(const QString &file);
 #endif
 
 signals:

@@ -9,7 +9,7 @@ class CustomPushButton : public QPushButton {
 public:
     explicit CustomPushButton(QWidget *parent = 0);
 
-    void SetIcon(const QIcon &icon, const QSize &size, int space);
+    void setIcon(const QIcon &icon, const QSize &size, int space);
 
 protected:
     void paintEvent(QPaintEvent* e);

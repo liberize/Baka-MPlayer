@@ -51,21 +51,21 @@ public:
 static WinNativeEventFilter *eventFilter = nullptr;
 
 
-QString VersionFileUrl()
+QString versionFileUrl()
 {
     return "http://bakamplayer.u8sand.net/version_windows";
 }
 
-bool DimLightsSupported()
+bool isDimLightsSupported()
 {
     return true;
 }
 
-void InitWindow(QMainWindow *main)
+void initWindow(QMainWindow *main)
 {
 }
 
-void SetAlwaysOnTop(QMainWindow *main, bool ontop)
+void setAlwaysOnTop(QMainWindow *main, bool ontop)
 {
     SetWindowPos((HWND)main->winId(),
                  ontop ? HWND_TOPMOST : HWND_NOTOPMOST,
@@ -73,7 +73,7 @@ void SetAlwaysOnTop(QMainWindow *main, bool ontop)
                  SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 }
 
-void SetAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
+void setAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
 {
     if (!eventFilter) {
         eventFilter = new WinNativeEventFilter;
@@ -113,7 +113,7 @@ void SetAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
     });
 }
 
-void EnableScreenSaver(bool enable)
+void enableScreenSaver(bool enable)
 {
     if (enable)
         SetThreadExecutionState(ES_CONTINUOUS);
@@ -121,25 +121,30 @@ void EnableScreenSaver(bool enable)
         SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 }
 
-bool IsValidFile(QString path)
+bool isValidFile(QString path)
 {
     QRegExp rx("^(\\.{1,2}|[a-z]:|\\\\\\\\)", Qt::CaseInsensitive); // relative path, network location, drive
     return (rx.indexIn(path) != -1);
 }
 
-bool IsValidLocation(QString loc)
+bool isValidLocation(QString loc)
 {
     QRegExp rx("^([a-z]{2,}://|\\.{1,2}|[a-z]:|\\\\\\\\)", Qt::CaseInsensitive); // url, relative path, network location, drive
     return (rx.indexIn(loc) != -1);
 }
 
-void ShowInFolder(QString path, QString file)
+void showInFolder(QString path, QString file)
 {
     QString args = file.isEmpty() ? path : "/select," + path + file;
     QProcess::startDetached("explorer.exe " + args);
 }
 
-QString MonospaceFont()
+QString defaultFont()
+{
+    return "Sans Serif";
+}
+
+QString monospaceFont()
 {
     return "Lucida Console";
 }

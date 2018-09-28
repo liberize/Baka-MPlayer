@@ -43,7 +43,7 @@ void SeekBar::setChapterTicks(const QList<double> &values)
     }
 }
 
-void SeekBar::updateBufferedRanges(const QList<QPair<double, double>> &values)
+void SeekBar::setBufferedRanges(const QList<QPair<double, double>> &values)
 {
     if (!totalTime)
         return;
@@ -67,7 +67,7 @@ void SeekBar::mouseMoveEvent(QMouseEvent* event)
 {
     if (totalTime != 0) {
         QToolTip::showText(QPoint(event->globalX()-25, mapToGlobal(rect().topLeft()).y()-40),
-                           Util::FormatTime(QStyle::sliderValueFromPosition(minimum(), maximum(), event->x(), width())*(double)totalTime/maximum(), totalTime),
+                           Util::formatTime(QStyle::sliderValueFromPosition(minimum(), maximum(), event->x(), width())*(double)totalTime/maximum(), totalTime),
                            this, rect());
     }
     QSlider::mouseMoveEvent(event);

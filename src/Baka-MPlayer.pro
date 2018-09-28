@@ -20,11 +20,11 @@ MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
-PKGCONFIG += libavcodec libavfilter	libavutil libswresample libavdevice libavformat libpostproc libswscale mpv python3 uchardet
+PKGCONFIG += mpv python3 uchardet
 
 
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/FFmpeg/inst/lib/pkgconfig:/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
 
     APP_DATA_DIR = ../Resources
     ICON = img/logo.icns
@@ -215,7 +215,7 @@ SOURCES += \
     widgets/customsplitter.cpp \
     widgets/dimdialog.cpp \
     widgets/mpvglwidget.cpp \
-    widgets/onlinewidget.cpp \
+    widgets/librarywidget.cpp \
     widgets/playlistwidget.cpp \
     widgets/seekbar.cpp \
     delegates/pluginitemdelegate.cpp \
@@ -288,7 +288,7 @@ HEADERS  += \
     widgets/mpvcocoawidget.h \
     widgets/mpvglwidget.h \
     widgets/mpvwidget.h \
-    widgets/onlinewidget.h \
+    widgets/librarywidget.h \
     widgets/playlistwidget.h \
     widgets/seekbar.h \
     delegates/pluginitemdelegate.h \

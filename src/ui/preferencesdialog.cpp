@@ -24,7 +24,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->infoWidget->sortByColumn(0, Qt::AscendingOrder);
     sortLock = new SortLock(ui->infoWidget);
 
-    PopulateLangs();
+    populateLangs();
 
     QString ontop = baka->window->getOnTop();
     if (ontop == "never")
@@ -52,11 +52,11 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     pluginItemDelegate = new PluginItemDelegate(this);
     ui->pluginListView->setItemDelegate(pluginItemDelegate);
     ui->pluginListView->setModel(pluginModel);
-    PopulatePlugins();
+    populatePlugins();
 
     // add shortcuts
     input = baka->input;
-    PopulateShortcuts();
+    populateShortcuts();
 
     connect(ui->changeButton, &QPushButton::clicked, [=] {
         QString dir = QFileDialog::getExistingDirectory(this, tr("Choose screenshot directory"), screenshotDir);
@@ -65,7 +65,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     });
 
     connect(ui->addKeyButton, &QPushButton::clicked, [=] {
-        SelectKey(true);
+        selectKey(true);
     });
 
     connect(ui->editKeyButton, &QPushButton::clicked, [=] {
@@ -73,7 +73,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
         if (i == -1)
             return;
 
-        SelectKey(false,
+        selectKey(false,
             {ui->infoWidget->item(i, 0)->text(),
             {ui->infoWidget->item(i, 1)->text(),
              ui->infoWidget->item(i, 2)->text()}});
@@ -83,8 +83,8 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
         if (QMessageBox::question(this, tr("Reset All Key Bindings?"), tr("Are you sure you want to reset all shortcut keys to its original bindings?")) == QMessageBox::Yes) {
             input = baka->default_input;
             while (numberOfShortcuts > 0)
-                RemoveRow(numberOfShortcuts-1);
-            PopulateShortcuts();
+                removeRow(numberOfShortcuts-1);
+            populateShortcuts();
         }
     });
 
@@ -94,7 +94,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
             return;
 
         input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
-        RemoveRow(row);
+        removeRow(row);
     });
 
     connect(ui->infoWidget, &QTableWidget::currentCellChanged, [=](int r,int,int,int) {
@@ -104,7 +104,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
     connect(ui->infoWidget, &QTableWidget::doubleClicked, [=](const QModelIndex &index) {
         int i = index.row();
-        SelectKey(false,
+        selectKey(false,
             {ui->infoWidget->item(i, 0)->text(),
             {ui->infoWidget->item(i, 1)->text(),
              ui->infoWidget->item(i, 2)->text()}});
@@ -116,7 +116,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     connect(ui->openPluginFolderButton, &QPushButton::clicked, [=] {
         QModelIndex index = ui->pluginListView->currentIndex();
         Plugin *plugin = index.data(Qt::UserRole).value<Plugin*>();
-        Util::ShowInFolder(plugin->getPath(), "");
+        Util::showInFolder(plugin->getPath(), "");
     });
 
     connect(ui->pluginConfigButton, &QPushButton::clicked, [=] {
@@ -124,7 +124,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
         Plugin *plugin = index.data(Qt::UserRole).value<Plugin*>();
         if (!plugin->getConfig().empty()) {
             auto config = pluginConfigs.value(plugin->getName(), plugin->getConfig());
-            if (PluginConfigDialog::open(plugin->getName(), config, this))
+            if (PluginConfigDialog::showPluginConfig(plugin->getName(), config, this))
                 pluginConfigs[plugin->getName()] = config;
         }
     });
@@ -159,13 +159,13 @@ PreferencesDialog::~PreferencesDialog()
         baka->window->setMaxRecent(ui->recentCheckBox->isChecked() ? ui->recentSpinBox->value() : 0);
         baka->window->setGestures(ui->gestureCheckBox->isChecked());
         baka->window->setResume(ui->resumeCheckBox->isChecked());
-        baka->mpv->ScreenshotFormat(ui->formatComboBox->currentText());
-        baka->mpv->ScreenshotDirectory(screenshotDir);
-        baka->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
-        baka->mpv->MsgLevel(ui->msgLvlComboBox->currentText());
+        baka->mpv->setScreenshotFormat(ui->formatComboBox->currentText());
+        baka->mpv->setScreenshotDirectory(screenshotDir);
+        baka->mpv->setScreenshotTemplate(ui->templateLineEdit->text());
+        baka->mpv->setMsgLevel(ui->msgLvlComboBox->currentText());
         baka->input = input;
-        baka->window->MapShortcuts();
-        UpdatePlugins();
+        baka->window->mapShortcuts();
+        updatePlugins();
     }
     delete sortLock;
     delete ui;
@@ -177,10 +177,10 @@ void PreferencesDialog::showPreferences(BakaEngine *baka, QWidget *parent)
     dialog.exec();
 }
 
-void PreferencesDialog::PopulateLangs()
+void PreferencesDialog::populateLangs()
 {
     // open the language directory
-    QDir root(Util::TranslationsPath());
+    QDir root(Util::translationsPath());
     // get files in the directory with .qm extension
     QFileInfoList flist;
     flist = root.entryInfoList({"*.qm"}, QDir::Files);
@@ -193,7 +193,7 @@ void PreferencesDialog::PopulateLangs()
     }
 }
 
-void PreferencesDialog::PopulateShortcuts()
+void PreferencesDialog::populateShortcuts()
 {
     sortLock->lock();
     numberOfShortcuts = 0;
@@ -201,12 +201,12 @@ void PreferencesDialog::PopulateShortcuts()
         QPair<QString, QString> p = iter.value();
         if (p.first == QString() || p.second == QString())
             continue;
-        AddRow(iter.key(), p.first, p.second);
+        addRow(iter.key(), p.first, p.second);
     }
     sortLock->unlock();
 }
 
-void PreferencesDialog::PopulatePlugins()
+void PreferencesDialog::populatePlugins()
 {
     auto plugins = baka->pluginManager->getPlugins();
     for (auto plugin : plugins) {
@@ -219,7 +219,7 @@ void PreferencesDialog::PopulatePlugins()
     }
 }
 
-void PreferencesDialog::UpdatePlugins()
+void PreferencesDialog::updatePlugins()
 {
     for (int i = 0; i < pluginModel->rowCount(); i++) {
         QModelIndex index = pluginModel->index(i, 0);
@@ -232,7 +232,7 @@ void PreferencesDialog::UpdatePlugins()
     }
 }
 
-void PreferencesDialog::AddRow(QString first, QString second, QString third)
+void PreferencesDialog::addRow(QString first, QString second, QString third)
 {
     bool locked = sortLock->tryLock();
     ui->infoWidget->insertRow(numberOfShortcuts);
@@ -244,7 +244,7 @@ void PreferencesDialog::AddRow(QString first, QString second, QString third)
         sortLock->unlock();
 }
 
-void PreferencesDialog::ModifyRow(int row, QString first, QString second, QString third)
+void PreferencesDialog::modifyRow(int row, QString first, QString second, QString third)
 {
     bool locked = sortLock->tryLock();
     ui->infoWidget->item(row, 0)->setText(first);
@@ -254,7 +254,7 @@ void PreferencesDialog::ModifyRow(int row, QString first, QString second, QStrin
         sortLock->unlock();
 }
 
-void PreferencesDialog::RemoveRow(int row)
+void PreferencesDialog::removeRow(int row)
 {
     bool locked = sortLock->tryLock();
     ui->infoWidget->removeCellWidget(row, 0);
@@ -266,13 +266,13 @@ void PreferencesDialog::RemoveRow(int row)
         sortLock->unlock();
 }
 
-void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QString>> init)
+void PreferencesDialog::selectKey(bool add, QPair<QString, QPair<QString, QString>> init)
 {
     sortLock->lock();
     KeyDialog dialog(this);
     int status = 0;
     while (status != 2) {
-        QPair<QString, QPair<QString, QString>> result = dialog.SelectKey(add, init);
+        QPair<QString, QPair<QString, QString>> result = dialog.selectKey(add, init);
         if (result == QPair<QString, QPair<QString, QString>>()) // cancel
             break;
         for (int i = 0; i < numberOfShortcuts; ++i) {
@@ -284,7 +284,7 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
                        tr("%0 is already being used. Would you like to change its function?").arg(
                            result.first)) == QMessageBox::Yes) {
                     input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
-                    RemoveRow(i);
+                    removeRow(i);
                     status = 0;
                 } else {
                     init = result;
@@ -295,11 +295,11 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
         }
         if (status == 0) {
             if (add) // add
-                AddRow(result.first, result.second.first, result.second.second);
+                addRow(result.first, result.second.first, result.second.second);
             else { // change
                 if (result.first != init.first)
                     input[init.first] = {QString(), QString()};
-                ModifyRow(ui->infoWidget->currentRow(), result.first, result.second.first, result.second.second);
+                modifyRow(ui->infoWidget->currentRow(), result.first, result.second.first, result.second.second);
             }
             input[result.first] = result.second;
             status = 2;
@@ -309,7 +309,10 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
     sortLock->unlock();
 }
 
-PreferencesDialog::SortLock::SortLock(QTableWidget *parent):parent(parent) {}
+PreferencesDialog::SortLock::SortLock(QTableWidget *parent)
+    : parent(parent)
+{
+}
 
 void PreferencesDialog::SortLock::lock()
 {

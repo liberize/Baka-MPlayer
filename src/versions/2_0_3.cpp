@@ -44,7 +44,7 @@ private:
 typedef QJsonValueRef QJsonValueRef2;
 #endif
 
-void BakaEngine::Load2_0_3()
+void BakaEngine::load2_0_3()
 {
     QJsonObject root = settings->getRoot();
     window->setOnTop(QJsonValueRef2(root["onTop"]).toString("never"));
@@ -77,7 +77,7 @@ void BakaEngine::Load2_0_3()
         root["lastcheck"] = QDate::currentDate().toString();
     }
 #endif
-    window->UpdateRecentFiles();
+    window->updateRecentFiles();
 
     // apply default shortcut mappings
     input = default_input;
@@ -92,30 +92,30 @@ void BakaEngine::Load2_0_3()
         };
     }
 
-    window->MapShortcuts();
+    window->mapShortcuts();
 
     QJsonObject mpv_json = root["mpv"].toObject();
-    mpv->Volume(QJsonValueRef2(mpv_json["volume"]).toInt(100));
+    mpv->setVolume(QJsonValueRef2(mpv_json["volume"]).toInt(100));
     mpv_json.remove("volume");
-    mpv->Speed(QJsonValueRef2(mpv_json["speed"]).toDouble(1.0));
+    mpv->setSpeed(QJsonValueRef2(mpv_json["speed"]).toDouble(1.0));
     mpv_json.remove("speed");
-    mpv->Vo(mpv_json["vo"].toString());
+    mpv->setVo(mpv_json["vo"].toString());
     mpv_json.remove("vo");
-    mpv->ScreenshotTemplate(QJsonValueRef2(mpv_json["screenshot-template"]).toString("screenshot%#04n"));
+    mpv->setScreenshotTemplate(QJsonValueRef2(mpv_json["screenshot-template"]).toString("screenshot%#04n"));
     mpv_json.remove("screenshot-template");
-    mpv->ScreenshotDirectory(QJsonValueRef2(mpv_json["screenshot-directory"]).toString("."));
+    mpv->setScreenshotDirectory(QJsonValueRef2(mpv_json["screenshot-directory"]).toString("."));
     mpv_json.remove("screenshot-directory");
-    mpv->MsgLevel(QJsonValueRef2(mpv_json["msg-level"]).toString("status"));
+    mpv->setMsgLevel(QJsonValueRef2(mpv_json["msg-level"]).toString("status"));
     mpv_json.remove("msg-level");
     for (auto &key : mpv_json.keys())
         if (key != QString() && mpv_json[key].toString() != QString())
-            mpv->SetOption(key, mpv_json[key].toString());
+            mpv->mpvSetOption(key, mpv_json[key].toString());
 
     for (auto entry : root["disabledPlugins"].toArray())
         pluginManager->getDisableList().insert(entry.toString());
 }
 
-void BakaEngine::SaveSettings()
+void BakaEngine::saveSettings()
 {
     QString version = "2.0.3";
     QJsonObject root = settings->getRoot();
@@ -180,5 +180,5 @@ void BakaEngine::SaveSettings()
     root["disabledPlugins"] = disable_list_json;
 
     settings->setRoot(root);
-    settings->Save();
+    settings->save();
 }

@@ -1,4 +1,5 @@
 #include "customlistview.h"
+#include "util.h"
 
 #include <QPainter>
 #include <QScrollBar>
@@ -29,7 +30,7 @@ void CustomListView::paintEvent(QPaintEvent *event) {
         QColor color;
         color.setNamedColor("#959595");
         painter.setPen(QPen(color));
-        painter.setFont(QFont("Lucida Grande", 13, QFont::Light, true));
+        painter.setFont(QFont(Util::defaultFont(), 13, QFont::Light, true));
         painter.drawText(rect(), Qt::AlignCenter, placeholderText);
     }
 }

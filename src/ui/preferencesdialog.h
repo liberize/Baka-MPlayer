@@ -20,6 +20,7 @@ class PluginItemDelegate;
 
 class PreferencesDialog : public QDialog {
     Q_OBJECT
+
 public:
     explicit PreferencesDialog(BakaEngine *baka, QWidget *parent = 0);
     ~PreferencesDialog();
@@ -27,14 +28,25 @@ public:
     static void showPreferences(BakaEngine *baka, QWidget *parent = 0);
 
 protected:
-    void PopulateLangs();
-    void PopulateShortcuts();
-    void PopulatePlugins();
-    void UpdatePlugins();
-    void AddRow(QString first, QString second, QString third);
-    void ModifyRow(int row, QString first, QString second, QString third);
-    void RemoveRow(int row);
-    void SelectKey(bool add, QPair<QString, QPair<QString, QString>> init = (QPair<QString, QPair<QString, QString>>()));
+    void populateLangs();
+    void populateShortcuts();
+    void populatePlugins();
+    void updatePlugins();
+    void addRow(QString first, QString second, QString third);
+    void modifyRow(int row, QString first, QString second, QString third);
+    void removeRow(int row);
+    void selectKey(bool add, QPair<QString, QPair<QString, QString>> init = (QPair<QString, QPair<QString, QString>>()));
+
+private:
+    class SortLock : public QMutex {
+    public:
+        SortLock(QTableWidget *parent);
+
+        void lock();
+        void unlock();
+    private:
+        QTableWidget *parent;
+    };
 
 private:
     Ui::PreferencesDialog *ui;
@@ -44,15 +56,7 @@ private:
     QString screenshotDir;
     int numberOfShortcuts;
 
-    class SortLock : public QMutex {
-    public:
-        SortLock(QTableWidget *parent);
-
-        void lock();
-        void unlock();
-    private:
-        QTableWidget *parent;
-    } *sortLock;
+    SortLock *sortLock;
 
     QStandardItemModel *pluginModel = nullptr;
     PluginItemDelegate *pluginItemDelegate = nullptr;

@@ -83,7 +83,7 @@ struct MediaEntry {
             options = obj.attr("options").cast<QMap<QString, QString>>();
             coverUrl = obj.attr("cover").cast<QString>();
             description = obj.attr("description").cast<QString>();
-            QString localFile = Util::ToLocalFile(coverUrl);
+            QString localFile = Util::toLocalFile(coverUrl);
             if (!localFile.isEmpty())
                 cover = QPixmap(localFile);
         });

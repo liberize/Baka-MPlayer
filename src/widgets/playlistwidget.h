@@ -23,7 +23,7 @@ public:
     explicit PlaylistWidget(QWidget *parent = 0);
     ~PlaylistWidget();
 
-    void AttachEngine(BakaEngine *baka);
+    void attachEngine(BakaEngine *baka);
 
 public slots:
     int selectedRow();
@@ -37,7 +37,7 @@ public slots:
     void removeRow(int i);
     void removeIndex(const QModelIndex &index);
 
-    void search(const QString&);
+    void search(QString);
     void shuffle();
 
     void populatePlaylist(QString dir);

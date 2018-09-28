@@ -42,7 +42,7 @@ void OverlayHandler::showStatusText(const QString &text, int duration)
 {
     if (text != QString())
         showText(text,
-                 QFont(Util::MonospaceFont(),
+                 QFont(Util::monospaceFont(),
                        14, QFont::Bold), QColor(0xFFFFFF),
                  QPoint(20, 20), duration, OVERLAY_STATUS);
     else if (duration == 0)
@@ -60,7 +60,7 @@ void OverlayHandler::showInfoText(bool show)
         }
         refresh_timer->start(OVERLAY_REFRESH_RATE);
         showText(baka->mpv->getMediaInfo(),
-                 QFont(Util::MonospaceFont(),
+                 QFont(Util::monospaceFont(),
                        14, QFont::Bold), QColor(0xFFFF00),
                  QPoint(20, 20), 0, OVERLAY_INFO);
     } else { // hide media info
@@ -98,7 +98,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     painter.drawText(canvas->rect(), Qt::AlignLeft | Qt::AlignTop, text);
 
     // add as mpv overlay
-    baka->mpv->AddOverlay(
+    baka->mpv->addOverlay(
         id == -1 ? overlay_id : id,
         pos.x(), pos.y(),
         "&" + QString::number(quintptr(canvas->bits())),
@@ -108,9 +108,9 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     QLabel *label = new QLabel(baka->window->ui->mpvContainer);
     label->setPixmap(QPixmap::fromImage(*canvas));
 #ifdef ENABLE_MPV_COCOA_WIDGET
-    Util::SetWantsLayer(label, true);
-    Util::SetLayerBackgroundColor(label, 41, 41, 41, 255);
-    Util::SetLayerCornerRadius(label, 5);
+    Util::setWantsLayer(label, true);
+    Util::setLayerBackgroundColor(label, 41, 41, 41, 255);
+    Util::setLayerCornerRadius(label, 5);
     label->setStyleSheet("background: #202020; padding: 10px;");
     label->setGeometry(pos.x() - 10, pos.y() - 10, canvas->width() + 20, canvas->height() + 20);
 #else
@@ -152,7 +152,7 @@ void OverlayHandler::showImage(const QPixmap &pixmap, QPoint pos, int duration, 
     QLabel *label = new QLabel(baka->window->ui->mpvContainer);
     label->setPixmap(pixmap);
 #ifdef ENABLE_MPV_COCOA_WIDGET
-    Util::SetWantsLayer(label, true);
+    Util::setWantsLayer(label, true);
 #endif
     label->setGeometry(pos.x(), pos.y(), pixmap.width(), pixmap.height());
     label->show();
@@ -177,7 +177,7 @@ void OverlayHandler::showImage(const QPixmap &pixmap, QPoint pos, int duration, 
 void OverlayHandler::remove(int id)
 {
     overlay_mutex.lock();
-    baka->mpv->RemoveOverlay(id);
+    baka->mpv->removeOverlay(id);
     if (overlays.find(id) != overlays.end()) {
         delete overlays[id];
         overlays.remove(id);

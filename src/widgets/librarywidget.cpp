@@ -1,4 +1,4 @@
-#include "onlinewidget.h"
+#include "librarywidget.h"
 
 #include "bakaengine.h"
 #include "mpvhandler.h"
@@ -9,7 +9,7 @@
 #include "requestmanager.h"
 
 
-OnlineWidget::OnlineWidget(QWidget *parent) :
+LibraryWidget::LibraryWidget(QWidget *parent) :
     CustomListView(parent)
 {
     mediaModel = new QStandardItemModel(this);
@@ -18,19 +18,19 @@ OnlineWidget::OnlineWidget(QWidget *parent) :
     setModel(mediaModel);
 }
 
-OnlineWidget::~OnlineWidget()
+LibraryWidget::~LibraryWidget()
 {
     clear();
     delete mediaModel;
     delete mediaItemDelegate;
 }
 
-void OnlineWidget::AttachEngine(BakaEngine *baka)
+void LibraryWidget::attachEngine(BakaEngine *baka)
 {
     this->baka = baka;
 }
 
-QModelIndex OnlineWidget::appendEntry(MediaEntry *entry)
+QModelIndex LibraryWidget::appendEntry(MediaEntry *entry)
 {
     QStandardItem *item = new QStandardItem;
     item->setData(QVariant::fromValue(entry), Qt::UserRole);
@@ -40,7 +40,7 @@ QModelIndex OnlineWidget::appendEntry(MediaEntry *entry)
     return item->index();
 }
 
-void OnlineWidget::clear()
+void LibraryWidget::clear()
 {
     for (int i = 0; i < mediaModel->rowCount(); i++) {
         QModelIndex index = mediaModel->index(i, 0);

@@ -27,15 +27,15 @@
 #include "util.h"
 
 
-void BakaEngine::BakaMpv(QStringList &args)
+void BakaEngine::bakaMpv(QStringList &args)
 {
     if (!args.empty())
-        mpv->Command(args);
+        mpv->command(args);
     else
-        RequiresParameters("mpv");
+        requiresParameters("mpv");
 }
 
-void BakaEngine::BakaSh(QStringList &args)
+void BakaEngine::bakaSh(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
@@ -43,62 +43,62 @@ void BakaEngine::BakaSh(QStringList &args)
         QProcess *p = new QProcess(this);
         p->start(arg, args);
         connect(p, &QProcess::readyRead, [=] {
-            Print(p->readAll(), QString("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
+            print(p->readAll(), QString("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
         });
 //        connect(p, &QProcess::finished, [=] (int, QProcess::ExitStatus) {
 //            delete p;
 //        });
     } else
-        RequiresParameters("mpv");
+        requiresParameters("mpv");
 }
 
-void BakaEngine::BakaNew(QStringList &args)
+void BakaEngine::bakaNew(QStringList &args)
 {
     if (args.empty())
         QProcess::startDetached(QApplication::applicationFilePath(), {});
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaOpenLocation(QStringList &args)
+void BakaEngine::bakaOpenLocation(QStringList &args)
 {
     if (args.empty())
-        OpenLocation();
+        openLocation();
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::OpenLocation()
+void BakaEngine::openLocation()
 {
-    mpv->LoadFile(LocationDialog::getUrl(mpv->getPath() + mpv->getFile(), window));
+    mpv->loadFile(LocationDialog::getUrl(mpv->getPath() + mpv->getFile(), window));
 }
 
 
-void BakaEngine::BakaOpenClipboard(QStringList &args)
+void BakaEngine::bakaOpenClipboard(QStringList &args)
 {
     if (args.empty())
-        mpv->LoadFile(QApplication::clipboard()->text());
+        mpv->loadFile(QApplication::clipboard()->text());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaClose(QStringList &args)
+void BakaEngine::bakaClose(QStringList &args)
 {
     if (args.empty()) {
-        window->CloseFile();
+        window->closeFile();
     } else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaShowInFolder(QStringList &args)
+void BakaEngine::bakaShowInFolder(QStringList &args)
 {
     if (args.empty())
-        Util::ShowInFolder(mpv->getPath(), mpv->getFile());
+        Util::showInFolder(mpv->getPath(), mpv->getFile());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaAddSubtitles(QStringList &args)
+void BakaEngine::bakaAddSubtitles(QStringList &args)
 {
     QString trackFile;
     if (args.empty()) {
@@ -108,10 +108,10 @@ void BakaEngine::BakaAddSubtitles(QStringList &args)
     } else
         trackFile = args.join(' ');
 
-    mpv->AddSubtitleTrack(trackFile);
+    mpv->addSubtitleTrack(trackFile);
 }
 
-void BakaEngine::BakaAddAudio(QStringList &args)
+void BakaEngine::bakaAddAudio(QStringList &args)
 {
     QString trackFile;
     if (args.empty()) {
@@ -121,36 +121,36 @@ void BakaEngine::BakaAddAudio(QStringList &args)
     } else
         trackFile = args.join(' ');
 
-    mpv->AddAudioTrack(trackFile);
+    mpv->addAudioTrack(trackFile);
 }
 
-void BakaEngine::BakaScreenshot(QStringList &args)
+void BakaEngine::bakaScreenshot(QStringList &args)
 {
     if (args.empty())
-        Screenshot(false);
+        screenshot(false);
     else {
         QString arg = args.front();
         args.pop_front();
         if (args.empty())
             if (arg == "subtitles")
-                Screenshot(true);
+                screenshot(true);
             else if (arg == "show")
-                Util::ShowInFolder(mpv->getScreenshotDir(), "");
+                Util::showInFolder(mpv->getScreenshotDir(), "");
             else
-                InvalidParameter(arg);
+                invalidParameter(arg);
         else
-            InvalidParameter(arg);
+            invalidParameter(arg);
     }
 }
 
-void BakaEngine::Screenshot(bool subs)
+void BakaEngine::screenshot(bool subs)
 {
     if (window->screenshotDialog) {
-        mpv->Pause();
+        mpv->pause();
         if (ScreenshotDialog::showScreenshotDialog(window->screenshotDialog, subs, mpv) != QDialog::Accepted)
             return;
     } else
-        mpv->Screenshot(subs);
+        mpv->screenshot(subs);
 
     QString dir = mpv->getScreenshotDir();
     int i = dir.lastIndexOf('/');
@@ -161,35 +161,35 @@ void BakaEngine::Screenshot(bool subs)
     if (i != -1)
         dir.remove(0, i+1);
     if (subs)
-        mpv->ShowText(tr("Saved to \"%0\", with subs").arg(dir));
+        mpv->showText(tr("Saved to \"%0\", with subs").arg(dir));
     else
-        mpv->ShowText(tr("Saved to \"%0\", without subs").arg(dir));
+        mpv->showText(tr("Saved to \"%0\", without subs").arg(dir));
 }
 
 
-void BakaEngine::BakaMediaInfo(QStringList &args)
+void BakaEngine::bakaMediaInfo(QStringList &args)
 {
     if (args.empty())
-        MediaInfo(window->ui->actionMedia_Info->isChecked());
+        mediaInfo(window->ui->actionMedia_Info->isChecked());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::MediaInfo(bool show)
+void BakaEngine::mediaInfo(bool show)
 {
     overlay->showInfoText(show);
 }
 
 
-void BakaEngine::BakaStop(QStringList &args)
+void BakaEngine::bakaStop(QStringList &args)
 {
     if (args.empty())
-        mpv->RestartPaused();
+        mpv->restartPaused();
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaPlaylist(QStringList &args)
+void BakaEngine::bakaPlaylist(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
@@ -206,7 +206,7 @@ void BakaEngine::BakaPlaylist(QStringList &args)
                     else
                         window->ui->playlistWidget->playRow(arg.toInt());
                 } else
-                    InvalidParameter(args.join(' '));
+                    invalidParameter(args.join(' '));
             }
         } else if (arg == "select") {
             if (args.empty())
@@ -220,7 +220,7 @@ void BakaEngine::BakaPlaylist(QStringList &args)
                     else
                         window->ui->playlistWidget->selectRow(arg.toInt());
                 } else
-                    InvalidParameter(args.join(' '));
+                    invalidParameter(args.join(' '));
             }
         } else if (args.empty()) {
             if (arg == "remove") {
@@ -229,9 +229,9 @@ void BakaEngine::BakaPlaylist(QStringList &args)
             } else if (arg == "shuffle")
                 window->ui->playlistWidget->shuffle();
             else if (arg == "toggle")
-                window->ToggleSidebar(0);
+                window->toggleSidebar(0);
             else
-                InvalidParameter(arg);
+                invalidParameter(arg);
         } else if (arg == "repeat") {
             arg = args.front();
             args.pop_front();
@@ -255,57 +255,57 @@ void BakaEngine::BakaPlaylist(QStringList &args)
                         window->ui->repeatButton->setIcon(QIcon(":/img/repeat.svg"));
                     }
                 } else
-                    InvalidParameter(arg);
+                    invalidParameter(arg);
             } else
-                InvalidParameter(args.join(' '));
+                invalidParameter(args.join(' '));
         } else
-            InvalidParameter(arg);
+            invalidParameter(arg);
     } else
-        RequiresParameters("baka playlist");
+        requiresParameters("baka playlist");
 }
 
-void BakaEngine::BakaOnline(QStringList &args)
+void BakaEngine::bakaLibrary(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty())
-            window->ToggleSidebar(1);
+            window->toggleSidebar(1);
         else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("baka online");
+        requiresParameters("baka library");
 }
 
-void BakaEngine::BakaJump(QStringList &args)
+void BakaEngine::bakaJump(QStringList &args)
 {
     if (args.empty())
-        Jump();
+        jump();
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::Jump()
+void BakaEngine::jump()
 {
     int time = JumpDialog::getTime(mpv->getFileInfo().length, window);
     if (time >= 0)
-        mpv->Seek(time);
+        mpv->seek(time);
 }
 
 
-void BakaEngine::BakaDim(QStringList &args)
+void BakaEngine::bakaDim(QStringList &args)
 {
     if (dimDialog == nullptr) {
-        Print(tr("DimDialog not supported on this platform"));
+        print(tr("DimDialog not supported on this platform"));
         return;
     }
     if (args.empty())
-        Dim(!dimDialog->isVisible());
+        dim(!dimDialog->isVisible());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::Dim(bool dim)
+void BakaEngine::dim(bool dim)
 {
     if (dimDialog == nullptr) {
         QMessageBox::information(window, tr("Dim Lights"), tr("In order to dim the lights, the desktop compositor has to be enabled. This can be done through Window Manager Desktop."));
@@ -317,26 +317,26 @@ void BakaEngine::Dim(bool dim)
         dimDialog->close();
 }
 
-void BakaEngine::BakaPreferences(QStringList &args)
+void BakaEngine::bakaPreferences(QStringList &args)
 {
     if (args.empty())
         PreferencesDialog::showPreferences(this, window);
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaOnlineHelp(QStringList &args)
+void BakaEngine::bakaOnlineHelp(QStringList &args)
 {
     if (args.empty())
         QDesktopServices::openUrl(QUrl(tr("http://bakamplayer.u8sand.net/help.php")));
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaUpdate(QStringList &args)
+void BakaEngine::bakaUpdate(QStringList &args)
 {
     if (args.empty())
-        UpdateDialog::CheckForUpdates(this, window);
+        UpdateDialog::checkForUpdates(this, window);
     else {
 #if defined(Q_OS_WIN)
         QString arg = args.front();
@@ -345,21 +345,21 @@ void BakaEngine::BakaUpdate(QStringList &args)
             QProcess::startDetached("youtube-dl.exe", {"--update"});
         else
 #endif
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     }
 }
 
-void BakaEngine::BakaOpen(QStringList &args)
+void BakaEngine::bakaOpen(QStringList &args)
 {
     if (args.empty())
-        Open();
+        open();
     else
-        mpv->LoadFile(args.join(' '));
+        mpv->loadFile(args.join(' '));
 }
 
-void BakaEngine::Open()
+void BakaEngine::open()
 {
-    mpv->LoadFile(QFileDialog::getOpenFileName(window,
+    mpv->loadFile(QFileDialog::getOpenFileName(window,
                    tr("Open File"),mpv->getPath(),
                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" "))+
                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+
@@ -369,34 +369,34 @@ void BakaEngine::Open()
 }
 
 
-void BakaEngine::BakaPlayPause(QStringList &args)
+void BakaEngine::bakaPlayPause(QStringList &args)
 {
     if (args.empty())
-        PlayPause();
+        playPause();
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::PlayPause()
+void BakaEngine::playPause()
 {
-    mpv->PlayPause();
+    mpv->playPause();
 }
 
-void BakaEngine::BakaVideoSize(QStringList &args)
+void BakaEngine::bakaVideoSize(QStringList &args)
 {
     if (args.empty())
-        FitWindow();
+        fitWindow();
     else {
         QString arg = args.front();
         args.pop_front();
         if (args.empty())
-            FitWindow(arg.toInt());
+            fitWindow(arg.toInt());
         else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     }
 }
 
-void BakaEngine::FitWindow(int percent, bool msg)
+void BakaEngine::fitWindow(int percent, bool msg)
 {
     if (window->isFullScreen() || window->isMaximized())
         return;
@@ -463,101 +463,101 @@ void BakaEngine::FitWindow(int percent, bool msg)
     // finally set the geometry of the window
     window->setGeometry(rect);
 
-    int gcd = Util::GCD(vG.width, vG.height);
+    int gcd = Util::gcd(vG.width, vG.height);
     if (gcd)
-        Util::SetAspectRatio(window, vG.width / gcd, vG.height / gcd);
+        Util::setAspectRatio(window, vG.width / gcd, vG.height / gcd);
 
     if(msg)
-        mpv->ShowText(tr("Window Size: %0").arg(percent == 0 ? tr("Fit to Screen") : (QString::number(percent)+"%")));
+        mpv->showText(tr("Window Size: %0").arg(percent == 0 ? tr("Fit to Screen") : (QString::number(percent)+"%")));
 }
 
-void BakaEngine::BakaDeinterlace(QStringList &args)
+void BakaEngine::bakaDeinterlace(QStringList &args)
 {
     if (args.empty())
-        mpv->Deinterlace(window->ui->action_Deinterlace->isChecked());
+        mpv->setDeinterlace(window->ui->action_Deinterlace->isChecked());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaInterpolate(QStringList &args)
+void BakaEngine::bakaInterpolate(QStringList &args)
 {
     if (args.empty())
-        mpv->Interpolate(window->ui->action_Motion_Interpolation->isChecked());
+        mpv->setInterpolate(window->ui->action_Motion_Interpolation->isChecked());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaMute(QStringList &args)
+void BakaEngine::bakaMute(QStringList &args)
 {
     if (args.empty())
-        mpv->Mute(!mpv->getMute());
+        mpv->setMute(!mpv->getMute());
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaVolume(QStringList &args)
+void BakaEngine::bakaVolume(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty()) {
             if (arg.startsWith('+') || arg.startsWith('-'))
-                mpv->Volume(mpv->getVolume()+arg.toInt(), true);
+                mpv->setVolume(mpv->getVolume()+arg.toInt(), true);
             else
-                mpv->Volume(arg.toInt(), true);
+                mpv->setVolume(arg.toInt(), true);
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("volume");
+        requiresParameters("volume");
 }
 
-void BakaEngine::BakaAudioDelay(QStringList &args)
+void BakaEngine::bakaAudioDelay(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty()) {
             if (arg.startsWith('+') || arg.startsWith('-'))
-                mpv->AudioDelay(mpv->getAudioDelay()+arg.toDouble());
+                mpv->setAudioDelay(mpv->getAudioDelay()+arg.toDouble());
             else
-                mpv->AudioDelay(arg.toDouble());
-            mpv->ShowText(tr("Audio Delay: %0").arg(QString::number(mpv->getAudioDelay(), 'f', 1)));
+                mpv->setAudioDelay(arg.toDouble());
+            mpv->showText(tr("Audio Delay: %0").arg(QString::number(mpv->getAudioDelay(), 'f', 1)));
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("audio_delay");
+        requiresParameters("audio_delay");
 }
 
-void BakaEngine::BakaSubtitleDelay(QStringList &args)
+void BakaEngine::bakaSubtitleDelay(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty()) {
             if (arg.startsWith('+') || arg.startsWith('-'))
-                mpv->SubtitleDelay(mpv->getSubtitleDelay()+arg.toDouble());
+                mpv->setSubtitleDelay(mpv->getSubtitleDelay()+arg.toDouble());
             else
-                mpv->SubtitleDelay(arg.toDouble());
-            mpv->ShowText(tr("Subtitle Delay: %0").arg(QString::number(mpv->getSubtitleDelay(), 'f', 1)));
+                mpv->setSubtitleDelay(arg.toDouble());
+            mpv->showText(tr("Subtitle Delay: %0").arg(QString::number(mpv->getSubtitleDelay(), 'f', 1)));
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("subtitle_delay");
+        requiresParameters("subtitle_delay");
 }
 
-void BakaEngine::BakaSubtitleFont(QStringList &args)
+void BakaEngine::bakaSubtitleFont(QStringList &args)
 {
     if (args.empty()) {
         bool ok = false;
         QFont font = QFontDialog::getFont(&ok, mpv->getSubtitleFont(), window, tr("Set Subtitle Font"),
                                           QFontDialog::DontUseNativeDialog);
         if (ok)
-            mpv->SubtitleFont(font);
+            mpv->setSubtitleFont(font);
     } else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaSubtitleStyle(QStringList &args)
+void BakaEngine::bakaSubtitleStyle(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
@@ -567,12 +567,12 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
                 QColor color = QColorDialog::getColor(mpv->getSubtitleColor(), window, tr("Set Subtitle Color"),
                                                       QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
-                    mpv->SubtitleColor(color);
+                    mpv->setSubtitleColor(color);
             } else if (arg == "back-color") {
                 QColor color = QColorDialog::getColor(mpv->getSubtitleBackColor(), window, tr("Set Subtitle Background Color"),
                                                       QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
-                    mpv->SubtitleBackColor(color);
+                    mpv->setSubtitleBackColor(color);
             } else if (arg == "blur") {
                 QString input = InputDialog::getInput(tr("Input Blur Factor (0-20.0):"), tr("Set Blur Factor"), [=] (QString input) {
                     double v = input.toDouble();
@@ -580,7 +580,7 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
                 }, window);
                 if (!input.isEmpty()) {
                     double factor = input.toDouble();
-                    mpv->SubtitleBlur(factor);
+                    mpv->setSubtitleBlur(factor);
                     window->ui->action_Subtitle_Blur->setChecked(factor);
                 }
             } else if (arg == "shadow-offset") {
@@ -590,63 +590,63 @@ void BakaEngine::BakaSubtitleStyle(QStringList &args)
                 }, window);
                 if (!input.isEmpty()) {
                     int offset = input.toInt();
-                    mpv->SubtitleShadowOffset(offset);
+                    mpv->setSubtitleShadowOffset(offset);
                     window->ui->action_Subtitle_Shadow_Offset->setChecked(offset);
                 }
             } else if (arg == "shadow-color") {
                 QColor color = QColorDialog::getColor(mpv->getSubtitleShadowColor(), window, tr("Set Shadow Color"),
                                                       QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
                 if (color.isValid())
-                    mpv->SubtitleShadowColor(color);
+                    mpv->setSubtitleShadowColor(color);
             } else
-                InvalidParameter(arg);
+                invalidParameter(arg);
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("subtitle_style");
+        requiresParameters("subtitle_style");
 }
 
-void BakaEngine::BakaSpeed(QStringList &args)
+void BakaEngine::bakaSpeed(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty()) {
             if (arg.startsWith('+') || arg.startsWith('-'))
-                mpv->Speed(mpv->getSpeed()+arg.toDouble());
+                mpv->setSpeed(mpv->getSpeed()+arg.toDouble());
             else
-                mpv->Speed(arg.toDouble());
-            mpv->ShowText(tr("Speed: %0x").arg(QString::number(mpv->getSpeed(), 'f', 2)));
+                mpv->setSpeed(arg.toDouble());
+            mpv->showText(tr("Speed: %0x").arg(QString::number(mpv->getSpeed(), 'f', 2)));
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("speed");
+        requiresParameters("speed");
 }
 
-void BakaEngine::BakaFullScreen(QStringList &args)
+void BakaEngine::bakaFullScreen(QStringList &args)
 {
     if (args.empty()) {
-        window->FullScreen(!window->isFullScreen());
+        window->fullScreen(!window->isFullScreen());
         if (window->isFullScreen())
-            mpv->ShowText(tr("Press ESC or double-click to leave full screen"));
+            mpv->showText(tr("Press ESC or double-click to leave full screen"));
     } else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaBoss(QStringList &args)
+void BakaEngine::bakaBoss(QStringList &args)
 {
     if (args.empty()) {
-        mpv->Pause();
+        mpv->pause();
         window->setWindowState(window->windowState() | Qt::WindowMinimized); // minimize window
     } else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaHelp(QStringList &args)
+void BakaEngine::bakaHelp(QStringList &args)
 {
     if (args.empty()) {
-        Print(tr("usage: baka <command> [...]"));
-        Print(tr("commands:"));
+        print(tr("usage: baka <command> [...]"));
+        print(tr("commands:"));
         int len, max_len = 22;
         for (auto command = BakaCommandMap.begin(); command != BakaCommandMap.end(); ++command) {
             QString str = QString("  %0 %1").arg(command.key(), command->second[0]);
@@ -654,7 +654,7 @@ void BakaEngine::BakaHelp(QStringList &args)
             while (len++ <= max_len)
                 str += ' ';
             str += command->second[1];
-            Print(str);
+            print(str);
         }
     } else {
         QString arg = args.front();
@@ -662,58 +662,58 @@ void BakaEngine::BakaHelp(QStringList &args)
         if (args.empty()) {
             auto command = BakaCommandMap.find(arg);
             if (command != BakaCommandMap.end()) { //found
-                Print(tr("usage: %0 %1").arg(arg, command->second[0]));
-                Print(tr("description:"));
-                Print(QString("  %0").arg(command->second[1]));
+                print(tr("usage: %0 %1").arg(arg, command->second[0]));
+                print(tr("description:"));
+                print(QString("  %0").arg(command->second[1]));
                 if (command->second.length() > 2 && command->second[2] != QString()) {
-                    Print(tr("advanced:"));
-                    Print(QString("  %0").arg(command->second[2]));
+                    print(tr("advanced:"));
+                    print(QString("  %0").arg(command->second[2]));
                 }
             } else
-                InvalidParameter(arg);
+                invalidParameter(arg);
         } else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     }
 }
 
-void BakaEngine::BakaAbout(QStringList &args)
+void BakaEngine::bakaAbout(QStringList &args)
 {
-    About(args.join(' '));
+    about(args.join(' '));
 }
 
-void BakaEngine::BakaMsgLevel(QStringList &args)
+void BakaEngine::bakaMsgLevel(QStringList &args)
 {
     if (!args.empty()) {
         QString arg = args.front();
         args.pop_front();
         if (args.empty())
-            mpv->MsgLevel(arg);
+            mpv->setMsgLevel(arg);
         else
-            InvalidParameter(args.join(' '));
+            invalidParameter(args.join(' '));
     } else
-        RequiresParameters("msg_level");
+        requiresParameters("msg_level");
 }
 
-void BakaEngine::About(QString what)
+void BakaEngine::about(QString what)
 {
     if (what == QString())
         AboutDialog::about(APP_VERSION, window);
     else if (what == "qt")
         qApp->aboutQt();
     else
-        InvalidParameter(what);
+        invalidParameter(what);
 }
 
 
-void BakaEngine::BakaQuit(QStringList &args)
+void BakaEngine::bakaQuit(QStringList &args)
 {
     if (args.empty())
-        Quit();
+        quit();
     else
-        InvalidParameter(args.join(' '));
+        invalidParameter(args.join(' '));
 }
 
-void BakaEngine::Quit()
+void BakaEngine::quit()
 {
     qApp->quit();
 }

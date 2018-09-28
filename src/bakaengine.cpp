@@ -21,7 +21,7 @@ BakaEngine::BakaEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
     mpv(new MpvHandler(window->ui->mpvContainer, this)),
-    settings(new Settings(Util::SettingsPath(), this)),
+    settings(new Settings(Util::settingsPath(), this)),
     gesture(new GestureHandler(this)),
     overlay(new OverlayHandler(this)),
     update(new UpdateManager(this)),
@@ -35,7 +35,7 @@ BakaEngine::BakaEngine(QObject *parent):
     translator(nullptr),
     qtTranslator(nullptr)
 {
-    if (Util::DimLightsSupported())
+    if (Util::isDimLightsSupported())
         dimDialog = new DimDialog(window, nullptr);
     else {
         dimDialog = nullptr;
@@ -43,10 +43,10 @@ BakaEngine::BakaEngine(QObject *parent):
     }
 
     connect(mpv, &MpvHandler::messageSignal, [=] (QString msg) {
-        Print(msg, "mpv");
+        print(msg, "mpv");
     });
     connect(update, &UpdateManager::messageSignal, [=] (QString msg) {
-        Print(msg, "update");
+        print(msg, "update");
     });
 }
 
@@ -68,28 +68,28 @@ BakaEngine::~BakaEngine()
     delete mpv;
 }
 
-void BakaEngine::LoadSettings()
+void BakaEngine::loadSettings()
 {
-    settings->Load();
-    Load2_0_3();
+    settings->load();
+    load2_0_3();
 }
 
-void BakaEngine::LoadPlugins()
+void BakaEngine::loadPlugins()
 {
     pluginManager->loadPlugins();
     connect(pluginManager, &PluginManager::pluginsLoaded, [=] (const QMap<QString, Plugin*> &plugins) {
         for (auto plugin : plugins) {
-            window->RegisterPlugin(plugin);
+            window->registerPlugin(plugin);
             plugin->setEnabled(!pluginManager->getDisableList().contains(plugin->getName()));
         }
     });
 }
 
-void BakaEngine::Command(QString command)
+void BakaEngine::command(QString cmd)
 {
-    if (command == QString())
+    if (cmd == QString())
         return;
-    QStringList args = command.split(" ");
+    QStringList args = cmd.split(" ");
     if (!args.empty()) {
         if (args.front() == "baka") // implicitly understood
             args.pop_front();
@@ -99,39 +99,36 @@ void BakaEngine::Command(QString command)
             if (iter != BakaCommandMap.end()) {
                 args.pop_front();
                 (this->*(iter->first))(args); // execute command
-            }
-            else
-                InvalidCommand(args.join(' '));
-        }
-        else
-            RequiresParameters("baka");
-    }
-    else
-        InvalidCommand(args.join(' '));
+            } else
+                invalidCommand(args.join(' '));
+        } else
+            requiresParameters("baka");
+    } else
+        invalidCommand(args.join(' '));
 }
 
-void BakaEngine::Print(QString what, QString who)
+void BakaEngine::print(QString what, QString who)
 {
     QString out = QString("[%0]: %1").arg(who, what);
     (qStdout() << out).flush();
 }
 
-void BakaEngine::PrintLn(QString what, QString who)
+void BakaEngine::println(QString what, QString who)
 {
-    Print(what+"\n", who);
+    print(what+"\n", who);
 }
 
-void BakaEngine::InvalidCommand(QString command)
+void BakaEngine::invalidCommand(QString command)
 {
-    PrintLn(tr("invalid command '%0'").arg(command));
+    println(tr("invalid command '%0'").arg(command));
 }
 
-void BakaEngine::InvalidParameter(QString parameter)
+void BakaEngine::invalidParameter(QString parameter)
 {
-    PrintLn(tr("invalid parameter '%0'").arg(parameter));
+    println(tr("invalid parameter '%0'").arg(parameter));
 }
 
-void BakaEngine::RequiresParameters(QString what)
+void BakaEngine::requiresParameters(QString what)
 {
-    PrintLn(tr("'%0' requires parameters").arg(what));
+    println(tr("'%0' requires parameters").arg(what));
 }

@@ -38,6 +38,7 @@ class MediaProvider;
 class MainWindow : public QMainWindow {
     friend class BakaEngine;
     Q_OBJECT
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -59,14 +60,14 @@ public:
     void updateSidebarWidth();
     QIcon getTrayIcon();
     Mpv::PlaylistItem *getCurrentPlayFile();
-    Q_INVOKABLE QString getInput(QString title, QString prompt);
 
     Ui::MainWindow *ui;
 
 public slots:
-    void Load(QString f = QString());
-    void MapShortcuts();
-    void RegisterPlugin(Plugin *plugin);
+    void load(QString f = QString());
+    void mapShortcuts();
+    void registerPlugin(Plugin *plugin);
+    QString getInput(QString title, QString prompt);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);    // drag file into
@@ -81,35 +82,59 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *event);
 
-public:
-    void SetIndexLabels(bool enable);
-    void EnablePlaybackControls(bool enable);          // macro to enable/disable playback controls
-    void EnableTrackOperations(bool enable);
-    void EnableAudioFunctions(bool enable);
-    void EnableVideoFunctions(bool enable);
-    void ToggleSidebar(int index = -1);                          // toggles playlist visibility
+public slots:
+    void setIndexLabels(bool enable);
+    void enablePlaybackControls(bool enable);          // macro to enable/disable playback controls
+    void enableTrackOperations(bool enable);
+    void enableAudioFunctions(bool enable);
+    void enableVideoFunctions(bool enable);
+    void toggleSidebar(int index = -1);                          // toggles playlist visibility
     bool isSidebarVisible(int index = -1);                       // is the playlist visible?
-    void ShowStartupPage(bool visible);
-    void CloseFile();
+    void showStartupPage(bool visible);
+    void closeFile();
 
-    void FullScreen(bool fullScreen, bool doubleClick = false);           // makes window fullscreen
-    void ShowControls(bool visible, bool anim = true);
-    void ShowSidebar(bool visible, bool anim = true, int index = -1);     // sets the playlist visibility
-    void UpdateRecentFiles();                       // populate recentFiles menu
-    void SetPlayButtonIcon(bool play);
-    void EnableNextButton(bool enable);
-    void EnablePreviousButton(bool enable);
-    void SetRemainingLabels(double time);
+    void fullScreen(bool fullScreen, bool doubleClick = false);           // makes window fullscreen
+    void showControls(bool visible, bool anim = true);
+    void showSidebar(bool visible, bool anim = true, int index = -1);     // sets the playlist visibility
+    void updateRecentFiles();                       // populate recentFiles menu
+    void setPlayButtonIcon(bool play);
+    void enableNextButton(bool enable);
+    void enablePreviousButton(bool enable);
+    void setRemainingLabels(double time);
+
+private slots:
+    void hideCursorAndControls();
+    void showCursorAndControls(QMouseEvent *event);
+
+public slots:
+    void setLang(QString s)          { emit langChanged(lang = s); }
+    void setOnTop(QString s)         { emit onTopChanged(onTop = s); }
+    void setMaxRecent(int i)         { emit maxRecentChanged(maxRecent = i); }
+    void setShowNotification(bool b) { emit showNotificationChanged(showNotification = b); }
+    void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
+    void setScreenshotDialog(bool b) { emit screenshotDialogChanged(screenshotDialog = b); }
+    void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
+    void setResume(bool b)           { emit resumeChanged(resume = b); }
+
+signals:
+    void langChanged(QString);
+    void onTopChanged(QString);
+    void maxRecentChanged(int);
+    void showNotificationChanged(bool);
+    void remainingChanged(bool);
+    void screenshotDialogChanged(bool);
+    void gesturesChanged(bool);
+    void resumeChanged(bool);
 
 private:
-    BakaEngine      *baka;
-    MpvHandler      *mpv;
+    BakaEngine *baka;
+    MpvHandler *mpv;
 
 #if defined(Q_OS_WIN)
-    QWinThumbnailToolBar    *thumbnail_toolbar;
-    QWinThumbnailToolButton *prev_toolbutton,
-                            *playpause_toolbutton,
-                            *next_toolbutton;
+    QWinThumbnailToolBar *thumbnailToolBar;
+    QWinThumbnailToolButton *prevToolButton;
+    QWinThumbnailToolButton *playPauseToolButton;
+    QWinThumbnailToolButton *nextToolButton;
 #endif
     bool fileChanged = false;
     bool menuVisible = true;
@@ -139,28 +164,7 @@ private:
 #ifdef Q_OS_DARWIN
     int delayedFullScreen = -1;      // 0: normal, 1: fullscreen
 #endif
-
     QMap<QString, QAction*> subtitlePluginActions;
-
-public slots:
-    void setLang(QString s)          { emit langChanged(lang = s); }
-    void setOnTop(QString s)         { emit onTopChanged(onTop = s); }
-    void setMaxRecent(int i)         { emit maxRecentChanged(maxRecent = i); }
-    void setShowNotification(bool b) { emit showNotificationChanged(showNotification = b); }
-    void setRemaining(bool b)        { emit remainingChanged(remaining = b); }
-    void setScreenshotDialog(bool b) { emit screenshotDialogChanged(screenshotDialog = b); }
-    void setGestures(bool b)         { emit gesturesChanged(gestures = b); }
-    void setResume(bool b)           { emit resumeChanged(resume = b); }
-
-signals:
-    void langChanged(QString);
-    void onTopChanged(QString);
-    void maxRecentChanged(int);
-    void showNotificationChanged(bool);
-    void remainingChanged(bool);
-    void screenshotDialogChanged(bool);
-    void gesturesChanged(bool);
-    void resumeChanged(bool);
 };
 
 #endif // MAINWINDOW_H

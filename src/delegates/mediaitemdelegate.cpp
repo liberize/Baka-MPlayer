@@ -1,5 +1,6 @@
 #include "mediaitemdelegate.h"
 #include "plugintypes.h"
+#include "util.h"
 
 #include <QPainter>
 #include <QStyledItemDelegate>
@@ -49,11 +50,11 @@ void MediaItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     painter->setPen(QPen(color));
 
     QRect titleRect(rect);
-    painter->setFont(QFont("Lucida Grande", 13, QFont::Bold));
+    painter->setFont(QFont(Util::defaultFont(), 13, QFont::Bold));
     painter->drawText(titleRect, Qt::AlignTop | Qt::AlignLeft, entry->name, &titleRect);
 
     QRect descRect(rect.x(), titleRect.bottom() + 7, rect.width(), rect.height() - titleRect.height() - 7);
-    painter->setFont(QFont("Lucida Grande", 11, QFont::Normal));
+    painter->setFont(QFont(Util::defaultFont(), 11, QFont::Normal));
     QFontMetrics metrics(painter->font());
     QString elidedDesc = metrics.elidedText(entry->description, Qt::ElideRight, descRect.width() - 10);
     painter->drawText(descRect, Qt::AlignTop | Qt::AlignLeft, elidedDesc, &descRect);

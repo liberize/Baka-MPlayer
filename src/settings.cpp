@@ -13,7 +13,7 @@ Settings::~Settings()
 {
 }
 
-void Settings::Load()
+void Settings::load()
 {
     QFile f(file);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -23,11 +23,11 @@ void Settings::Load()
             if (f.open(QIODevice::ReadOnly | QIODevice::Text))
                 document = QJsonDocument::fromJson(f.readAll());
         } else
-            LoadIni();
+            loadIni();
     }
 }
 
-void Settings::LoadIni()
+void Settings::loadIni()
 {
     QFile f(file);
     if (f.open(QFile::ReadOnly | QIODevice::Text)) {
@@ -45,8 +45,8 @@ void Settings::LoadIni()
                     root[group] = group_obj;
                 group = line.mid(1, line.length()-2); // [...] <- get ...
                 group_obj = QJsonObject();
-            }  else if ((i = ParseLine(line)) != -1) { // foo=bar
-                QString key = FixKeyOnLoad(line.left(i)),
+            }  else if ((i = parseLine(line)) != -1) { // foo=bar
+                QString key = fixKeyOnLoad(line.left(i)),
                         val = line.mid(i+1);
                 bool    b = (val == "true" || val == "false");
                 bool    iok;
@@ -81,7 +81,7 @@ void Settings::LoadIni()
 
         // fix recent
         if (root.find("recent") != root.end()) {
-            QStringList recent = SplitQStringList(root["recent"].toString());
+            QStringList recent = splitQStringList(root["recent"].toString());
             QJsonArray R;
             for (auto str : recent) {
                 QJsonObject r;
@@ -95,7 +95,7 @@ void Settings::LoadIni()
     }
 }
 
-void Settings::Save()
+void Settings::save()
 {
     QFile f(file);
     if (f.open(QFile::WriteOnly | QFile::Truncate | QIODevice::Text)) {
@@ -114,7 +114,7 @@ void Settings::setRoot(QJsonObject root)
     document.setObject(root);
 }
 
-int Settings::ParseLine(QString line)
+int Settings::parseLine(QString line)
 {
     for (int i = 0; i < line.length(); ++i) {
         if (line[i] == '\\')
@@ -125,7 +125,7 @@ int Settings::ParseLine(QString line)
     return -1;
 }
 
-QString Settings::FixKeyOnLoad(QString key)
+QString Settings::fixKeyOnLoad(QString key)
 {
     for (int i = 0; i < key.length(); ++i) {
         // revert escaped characters
@@ -135,7 +135,7 @@ QString Settings::FixKeyOnLoad(QString key)
     return key;
 }
 
-QStringList Settings::SplitQStringList(QString str)
+QStringList Settings::splitQStringList(QString str)
 {
     QStringList list;
     QString entry;

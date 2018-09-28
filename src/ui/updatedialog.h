@@ -18,10 +18,10 @@ public:
     explicit UpdateDialog(BakaEngine *baka, QWidget *parent = 0);
     ~UpdateDialog();
 
-    static void CheckForUpdates(BakaEngine *baka, QWidget *parent = 0);
+    static void checkForUpdates(BakaEngine *baka, QWidget *parent = 0);
 
 protected slots:
-    void ShowInfo();
+    void showInfo();
 
 private:
     Ui::UpdateDialog *ui;

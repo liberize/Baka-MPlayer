@@ -10,8 +10,7 @@ namespace Ui {
 class ScreenshotDialog;
 }
 
-class ScreenshotDialog : public QDialog
-{
+class ScreenshotDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -19,6 +18,7 @@ public:
     ~ScreenshotDialog();
 
     static int showScreenshotDialog(bool &always, bool &screenshot, MpvHandler *mpv, QWidget *parent = 0);
+
 private:
     Ui::ScreenshotDialog *ui;
     bool &always;

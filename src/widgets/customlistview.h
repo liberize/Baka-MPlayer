@@ -6,8 +6,10 @@
 
 class CustomListView : public QListView {
     Q_OBJECT
+
 public:
     explicit CustomListView(QWidget *parent = 0);
+
     void setPlaceholderText(QString text) { placeholderText = text; }
 
 protected:

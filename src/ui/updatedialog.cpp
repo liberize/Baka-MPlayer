@@ -35,7 +35,7 @@ UpdateDialog::UpdateDialog(BakaEngine *baka, QWidget *parent) :
             }
 
             if (!init) {
-                ShowInfo();
+                showInfo();
                 init = false;
             }
         } else if (percent == 0) {
@@ -75,7 +75,7 @@ UpdateDialog::UpdateDialog(BakaEngine *baka, QWidget *parent) :
 #if defined(Q_OS_WIN)
     connect(ui->updateButton, &QPushButton::clicked, [=] {
         ui->plainTextEdit->setPlainText(QString());
-        baka->update->DownloadUpdate(Util::DownloadFileUrl());
+        baka->update->downloadUpdate(Util::DownloadFileUrl());
     });
 #endif
 
@@ -83,10 +83,10 @@ UpdateDialog::UpdateDialog(BakaEngine *baka, QWidget *parent) :
             this, SLOT(reject()));
 
     if (baka->update->getInfo().empty())
-        baka->update->CheckForUpdates();
+        baka->update->checkForUpdates();
     else {
         init = false;
-        ShowInfo();
+        showInfo();
     }
 }
 
@@ -97,13 +97,13 @@ UpdateDialog::~UpdateDialog()
     delete ui;
 }
 
-void UpdateDialog::CheckForUpdates(BakaEngine *baka, QWidget *parent)
+void UpdateDialog::checkForUpdates(BakaEngine *baka, QWidget *parent)
 {
     UpdateDialog *dialog = new UpdateDialog(baka, parent);
     dialog->exec();
 }
 
-void UpdateDialog::ShowInfo()
+void UpdateDialog::showInfo()
 {
     auto &info = baka->update->getInfo();
     ui->plainTextEdit->setPlainText(info["bugfixes"]);

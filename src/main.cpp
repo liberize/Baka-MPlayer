@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     setlocale(LC_NUMERIC, "C"); // for mpv
 
-    Util::RandSeed();
+    Util::srand();
 
     MainWindow w;
     w.show();
@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
     QStringList args = QApplication::arguments();
     QStringList::iterator arg = args.begin();
     if (++arg != args.end())
-        w.Load(*arg);
+        w.load(*arg);
     else
-        w.Load();
+        w.load();
 
     return a.exec();
 }

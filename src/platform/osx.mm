@@ -16,29 +16,29 @@
 
 namespace Util {
 
-QString VersionFileUrl()
+QString versionFileUrl()
 {
     return "http://bakamplayer.u8sand.net/version_osx";
 }
 
-QString DownloadFileUrl()
+QString downloadFileUrl()
 {
     return "";
 }
 
-bool DimLightsSupported()
+bool isDimLightsSupported()
 {
     // stubbed
     return true;
 }
 
-void InitWindow(QMainWindow *main)
+void initWindow(QMainWindow *main)
 {
     [NSWindow setAllowsAutomaticWindowTabbing:NO];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
 }
 
-void SetAlwaysOnTop(QMainWindow *main, bool ontop)
+void setAlwaysOnTop(QMainWindow *main, bool ontop)
 {
   if (ontop){
     // doesn't work
@@ -51,13 +51,13 @@ void SetAlwaysOnTop(QMainWindow *main, bool ontop)
   }
 }
 
-void SetAspectRatio(QMainWindow *main, int w, int h)
+void setAspectRatio(QMainWindow *main, int w, int h)
 {
     NSView *view = (__bridge NSView *)(void *)(main->winId());
     view.window.contentAspectRatio = NSMakeSize(w, h);
 }
 
-void EnableScreenSaver(bool enable)
+void enableScreenSaver(bool enable)
 {
     static IOPMAssertionID assertionID = kIOPMNullAssertionID;
 
@@ -76,19 +76,19 @@ void EnableScreenSaver(bool enable)
     }
 }
 
-bool IsValidFile(QString path)
+bool isValidFile(QString path)
 {
     QRegExp rx("^\\.{1,2}|/", Qt::CaseInsensitive); // relative path, network location, drive
     return (rx.indexIn(path) != -1);
 }
 
-bool IsValidLocation(QString loc)
+bool isValidLocation(QString loc)
 {
     QRegExp rx("^([a-z]{2,}://|\\.{1,2}|/)", Qt::CaseInsensitive); // url, relative path, drive
     return (rx.indexIn(loc) != -1);
 }
 
-void ShowInFolder(QString path, QString file)
+void showInFolder(QString path, QString file)
 {
     if (file.isEmpty())
         QDesktopServices::openUrl(QString("file:///%0").arg(path));
@@ -99,35 +99,40 @@ void ShowInFolder(QString path, QString file)
                                           "  reveal POSIX file \"%1\"\n"
                                           "  activate\n"
                                           "end tell")
-                                         .arg(Path(path, file));
+                                         .arg(Util::path(path, file));
         QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
     }
 }
 
-QString MonospaceFont()
+QString defaultFont()
+{
+    return "Lucida Grande";
+}
+
+QString monospaceFont()
 {
     return "Monospace";
 }
 
-void SetWantsLayer(QWidget *widget, bool wants)
+void setWantsLayer(QWidget *widget, bool wants)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     view.wantsLayer = wants ? YES : NO;
 }
 
-void SetLayerOpaque(QWidget *widget, bool opaque)
+void setLayerOpaque(QWidget *widget, bool opaque)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     view.layer.opaque = opaque ? YES : NO;
 }
 
-void SetLayerOpacity(QWidget *widget, double opacity)
+void setLayerOpacity(QWidget *widget, double opacity)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     view.layer.opacity = opacity;
 }
 
-void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, double a)
+void setLayerBackgroundColor(QWidget *widget, double r, double g, double b, double a)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -135,13 +140,13 @@ void SetLayerBackgroundColor(QWidget *widget, double r, double g, double b, doub
     view.layer.backgroundColor = color;
 }
 
-void SetLayerCornerRadius(QWidget *widget, double r)
+void setLayerCornerRadius(QWidget *widget, double r)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     view.layer.cornerRadius = r;
 }
 
-void SetCanDrawSubviewsIntoLayer(QWidget *widget)
+void setCanDrawSubviewsIntoLayer(QWidget *widget)
 {
     NSView *view = (__bridge NSView *)(void *)(widget->winId());
     view.canDrawSubviewsIntoLayer = YES;

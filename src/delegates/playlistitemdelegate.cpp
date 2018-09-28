@@ -1,5 +1,6 @@
 #include "playlistitemdelegate.h"
 #include "mpvtypes.h"
+#include "util.h"
 
 #include <QPainter>
 #include <QStyledItemDelegate>
@@ -46,7 +47,7 @@ void PlaylistItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     color.setNamedColor("#FFFFFF");
     painter->setPen(QPen(color));
 
-    painter->setFont(QFont("Lucida Grande", 13, item->playing ? QFont::Bold : QFont::Normal));
+    painter->setFont(QFont(Util::defaultFont(), 13, item->playing ? QFont::Bold : QFont::Normal));
     QFontMetrics metrics(painter->font());
     QRect nameRect(rect.x(), rect.y() + (rect.height() - metrics.height()) / 2, rect.width(), metrics.height());
     painter->drawText(nameRect, Qt::AlignTop | Qt::AlignLeft, item->name, &nameRect);

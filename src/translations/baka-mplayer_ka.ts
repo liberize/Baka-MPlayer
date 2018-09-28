@@ -495,10 +495,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Toggle online visibility</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Set video size to fit screen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -512,10 +508,6 @@
     </message>
     <message>
         <source>close file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>online options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -540,6 +532,14 @@
     </message>
     <message>
         <source>quit upv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle library visibility</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>library options</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1010,23 +1010,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ONLINE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search Online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Open File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open URL...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>View Online...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1083,10 +1071,6 @@
     </message>
     <message>
         <source>Clos&amp;e</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Show Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1200,6 +1184,22 @@
     <message>
         <source>All Files</source>
         <translation type="unfinished">ყველა ფაილი</translation>
+    </message>
+    <message>
+        <source>LIBRARY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View Library...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Show Library</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

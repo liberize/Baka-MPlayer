@@ -74,7 +74,7 @@ PluginConfigDialog::~PluginConfigDialog()
     delete ui;
 }
 
-bool PluginConfigDialog::open(QString name, QVector<ConfigItem> &items, QWidget *parent)
+bool PluginConfigDialog::showPluginConfig(QString name, QVector<ConfigItem> &items, QWidget *parent)
 {
     PluginConfigDialog dialog(name, items, parent);
     return (dialog.exec() == QDialog::Accepted);

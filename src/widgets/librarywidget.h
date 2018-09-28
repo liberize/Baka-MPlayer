@@ -1,5 +1,5 @@
-#ifndef ONLINEWIDGET_H
-#define ONLINEWIDGET_H
+#ifndef LIBRARYWIDGET_H
+#define LIBRARYWIDGET_H
 
 #include <QListView>
 #include <QStandardItemModel>
@@ -10,14 +10,14 @@ class BakaEngine;
 struct MediaEntry;
 class MediaItemDelegate;
 
-class OnlineWidget : public CustomListView {
+class LibraryWidget : public CustomListView {
     Q_OBJECT
 
 public:
-    explicit OnlineWidget(QWidget *parent = 0);
-    ~OnlineWidget();
+    explicit LibraryWidget(QWidget *parent = 0);
+    ~LibraryWidget();
 
-    void AttachEngine(BakaEngine *baka);
+    void attachEngine(BakaEngine *baka);
 
     QModelIndex appendEntry(MediaEntry *entry);
     void clear();
@@ -28,4 +28,4 @@ private:
     MediaItemDelegate *mediaItemDelegate = nullptr;
 };
 
-#endif // ONLINEWIDGET_H
+#endif // LIBRARYWIDGET_H

@@ -17,7 +17,7 @@ int CustomLineEdit::iconWidth() const
     return pixmap.isNull() ? 0 : pixmap.width() + PADDING_LEFT_RIGHT * 2;
 }
 
-void CustomLineEdit::SetIcon(const QIcon &icon, const QSize &size)
+void CustomLineEdit::setIcon(const QIcon &icon, const QSize &size)
 {
     pixmap = icon.pixmap(size);
     setTextMargins(iconWidth(), 1, 1, 1);

@@ -276,7 +276,7 @@ QMenu::separator {
 /* Playlist group */
 
 #playlistSearchBox,
-#onlineSearchBox {
+#librarySearchBox {
   color: #A5A5A5;
 	background-color: #515151;
 	border: none;
@@ -284,12 +284,12 @@ QMenu::separator {
 	padding: 5px 3px;
 }
 #playlistSearchBox:focus,
-#onlineSearchBox:focus {
+#librarySearchBox:focus {
 	border-color: #008098;
 }
 
 #playlistWidget,
-#onlineWidget {
+#libraryWidget {
   margin-top: 10px;
 }
 
@@ -334,7 +334,7 @@ QListView {
 
 #openFileButton,
 #openUrlButton,
-#viewOnlineButton {
+#viewLibraryButton {
   padding: 5px 10px 5px 10px;
   color: #E5E5E5;
   text-align: left;
@@ -1207,7 +1207,7 @@ QTabBar::tab:!selected {
        </widget>
        <widget class="QWidget" name="tab_4">
         <attribute name="title">
-         <string>ONLINE</string>
+         <string>LIBRARY</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <property name="spacing">
@@ -1226,7 +1226,7 @@ QTabBar::tab:!selected {
           <number>0</number>
          </property>
          <item>
-          <widget class="MediaSearchBox" name="onlineSearchBox">
+          <widget class="MediaSearchBox" name="librarySearchBox">
            <property name="mouseTracking">
             <bool>false</bool>
            </property>
@@ -1240,7 +1240,7 @@ QTabBar::tab:!selected {
             <string notr="true">background-color: #515151;</string>
            </property>
            <property name="placeholderText">
-            <string>Search Online</string>
+            <string>Search Library</string>
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
@@ -1248,7 +1248,7 @@ QTabBar::tab:!selected {
           </widget>
          </item>
          <item>
-          <widget class="OnlineWidget" name="onlineWidget">
+          <widget class="LibraryWidget" name="libraryWidget">
            <property name="focusPolicy">
             <enum>Qt::ClickFocus</enum>
            </property>
@@ -1406,7 +1406,7 @@ QTabBar::tab:!selected {
         </widget>
        </item>
        <item>
-        <widget class="CustomPushButton" name="viewOnlineButton">
+        <widget class="CustomPushButton" name="viewLibraryButton">
          <property name="styleSheet">
           <string notr="true">QPushButton:hover {
 	background: #272727;
@@ -1414,7 +1414,7 @@ QTabBar::tab:!selected {
 }</string>
          </property>
          <property name="text">
-          <string>View Online...</string>
+          <string>View Library...</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -1726,7 +1726,7 @@ QTabBar::tab:!selected {
      <string>&amp;View</string>
     </property>
     <addaction name="action_Show_Playlist"/>
-    <addaction name="action_Show_Online"/>
+    <addaction name="action_Show_Library"/>
     <addaction name="separator"/>
     <addaction name="action_Dim_Lights"/>
     <addaction name="separator"/>
@@ -1933,12 +1933,12 @@ QTabBar::tab:!selected {
     <string>&amp;Show Playlist</string>
    </property>
   </action>
-  <action name="action_Show_Online">
+  <action name="action_Show_Library">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>&amp;Show Online</string>
+    <string>&amp;Show Library</string>
    </property>
   </action>
   <action name="action_Dim_Lights">
@@ -2299,9 +2299,9 @@ QTabBar::tab:!selected {
    <header>widgets/mediasearchbox.h</header>
   </customwidget>
   <customwidget>
-   <class>OnlineWidget</class>
+   <class>LibraryWidget</class>
    <extends>QListView</extends>
-   <header>widgets/onlinewidget.h</header>
+   <header>widgets/librarywidget.h</header>
   </customwidget>
   <customwidget>
    <class>CustomPushButton</class>

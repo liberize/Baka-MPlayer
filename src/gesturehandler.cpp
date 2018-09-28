@@ -25,7 +25,7 @@ GestureHandler::~GestureHandler()
     }
 }
 
-bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
+bool GestureHandler::begin(int gesture_type, QPoint mousePos, QPoint windowPos)
 {
     if (!elapsedTimer) {
         elapsedTimer = new QElapsedTimer();
@@ -48,7 +48,7 @@ bool GestureHandler::Begin(int gesture_type, QPoint mousePos, QPoint windowPos)
     return true;
 }
 
-bool GestureHandler::Process(QPoint mousePos)
+bool GestureHandler::process(QPoint mousePos)
 {
     if (elapsedTimer && elapsedTimer->elapsed() > timer_threshold) {    // 10ms seems pretty good for all purposes
         QPoint delta = mousePos - start.mousePos;
@@ -66,11 +66,11 @@ bool GestureHandler::Process(QPoint mousePos)
             case SEEKING:
             {
                 double relative = delta.x() * hRatio;
-                baka->mpv->Seek(start.time + relative, false, true);
+                baka->mpv->seek(start.time + relative, false, true);
                 break;
             }
             case ADJUSTING_VOLUME:
-                baka->mpv->Volume(start.volume - delta.y() * vRatio, true);
+                baka->mpv->setVolume(start.volume - delta.y() * vRatio, true);
                 break;
             }
         }
@@ -81,7 +81,7 @@ bool GestureHandler::Process(QPoint mousePos)
         return false;
 }
 
-bool GestureHandler::End()
+bool GestureHandler::end()
 {
     if (elapsedTimer) {
         delete elapsedTimer;

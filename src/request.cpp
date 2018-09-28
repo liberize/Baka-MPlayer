@@ -101,7 +101,7 @@ bool Request::openFile(QString path, bool overwrite)
         QFileInfo info(path);
         if (info.isDir()) {
             // for simplicity, use url filename instead of parsing Content-Disposition header
-            path = Util::Path(path, url.fileName());
+            path = Util::path(path, url.fileName());
             info.setFile(path);
         }
         if (info.exists() && !overwrite) {

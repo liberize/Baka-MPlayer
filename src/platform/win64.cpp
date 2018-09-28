@@ -2,7 +2,7 @@
 
 namespace Util {
 
-QString DownloadFileUrl()
+QString downloadFileUrl()
 {
     return "http://bakamplayer.u8sand.net/Baka.MPlayer.64-bit.zip";
 }

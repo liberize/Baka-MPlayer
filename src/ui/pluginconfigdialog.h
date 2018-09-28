@@ -16,11 +16,12 @@ class PluginConfigDialog;
 
 class PluginConfigDialog : public QDialog {
     Q_OBJECT
+
 public:
     explicit PluginConfigDialog(QString name, QVector<ConfigItem> &items, QWidget *parent = 0);
     ~PluginConfigDialog();
 
-    static bool open(QString name, QVector<ConfigItem> &items, QWidget *parent = 0);
+    static bool showPluginConfig(QString name, QVector<ConfigItem> &items, QWidget *parent = 0);
 
 private:
     Ui::PluginConfigDialog *ui;

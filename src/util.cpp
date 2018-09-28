@@ -756,22 +756,22 @@ const QList<QPair<QString, QString> > charEncodingMap = {
 };
 
 
-void RandSeed()
+void srand()
 {
     qsrand((uint)QTime::currentTime().msec());
 }
 
-int RandInt(int low, int high)
+int randInt(int low, int high)
 {
     return qrand() % ((high + 1) - low) + low;
 }
 
-QString Path(QString dir, QString file)
+QString path(QString dir, QString file)
 {
     return dir + QDir::separator() + file;
 }
 
-QString EnsureDirExists(QString dir)
+QString ensureDirExists(QString dir)
 {
     QDir d(dir);
     if (!d.exists())
@@ -779,58 +779,58 @@ QString EnsureDirExists(QString dir)
     return d.absolutePath();
 }
 
-QString ConfigDir()
+QString configDir()
 {
-    return EnsureDirExists(Path(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation), APP_NAME));
+    return ensureDirExists(path(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation), APP_NAME));
 }
 
-QString DataDir()
+QString dataDir()
 {
-    return EnsureDirExists(Path(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), APP_NAME));
+    return ensureDirExists(path(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), APP_NAME));
 }
 
-QString AppDataDir()
+QString appDataDir()
 {
     QString dir(APP_DATA_DIR);
     if (dir[0] == '.')
-        dir = Path(QCoreApplication::applicationDirPath(), dir);
+        dir = path(QCoreApplication::applicationDirPath(), dir);
     return QDir(dir).absolutePath();
 }
 
-QString SettingsPath()
+QString settingsPath()
 {
-    return Path(ConfigDir(), QString(APP_NAME) + ".ini");
+    return path(configDir(), QString(APP_NAME) + ".ini");
 }
 
-QString TranslationsPath()
+QString translationsPath()
 {
     QString dir(":/translations");
     if (QDir(dir).exists())
         return dir;
-    return Path(AppDataDir(), "translations");
+    return path(appDataDir(), "translations");
 }
 
-QString ScriptsPath()
+QString scriptsPath()
 {
-    return Path(AppDataDir(), "scripts");
+    return path(appDataDir(), "scripts");
 }
 
-QList<QString> PluginsPaths()
+QList<QString> pluginsPaths()
 {
     QList<QString> paths = {
-        Path(ScriptsPath(), "plugins"),
-        EnsureDirExists(Path(DataDir(), "plugins"))
+        path(scriptsPath(), "plugins"),
+        ensureDirExists(path(dataDir(), "plugins"))
     };
     return paths;
 }
 
-bool IsValidUrl(QString url)
+bool isValidUrl(QString url)
 {
     QRegExp rx("^[a-z]{2,}://", Qt::CaseInsensitive); // url
     return (rx.indexIn(url) != -1);
 }
 
-QString ToLocalFile(QString s)
+QString toLocalFile(QString s)
 {
     if (QFile::exists(s))
         return s;
@@ -843,7 +843,7 @@ QString ToLocalFile(QString s)
     return "";
 }
 
-QString FormatTime(double _time, double _totalTime)
+QString formatTime(double _time, double _totalTime)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
     if (_totalTime >= 3600) // hours
@@ -853,7 +853,7 @@ QString FormatTime(double _time, double _totalTime)
     return time.toString("00:ss");   // seconds
 }
 
-QString FormatRelativeTime(double _time)
+QString formatRelativeTime(double _time)
 {
     QString prefix;
     if (_time < 0) {
@@ -869,7 +869,7 @@ QString FormatRelativeTime(double _time)
     return prefix+time.toString("0:ss");   // seconds
 }
 
-QString FormatNumber(int val, int length)
+QString formatNumber(int val, int length)
 {
     if (length < 10)
         return QString::number(val);
@@ -879,7 +879,7 @@ QString FormatNumber(int val, int length)
         return QString("%1").arg(val, 3, 10, QChar('0'));
 }
 
-QString FormatNumberWithAmpersand(int val, int length)
+QString formatNumberWithAmpersand(int val, int length)
 {
     if (length < 10)
         return "&"+QString::number(val);
@@ -894,7 +894,7 @@ QString FormatNumberWithAmpersand(int val, int length)
     }
 }
 
-QString HumanSize(qint64 size)
+QString humanSize(qint64 size)
 {
     // taken from http://comments.gmane.org/gmane.comp.lib.qt.general/34914
     float num = size;
@@ -908,10 +908,10 @@ QString HumanSize(qint64 size)
         unit = i.next();
         num /= 1024.0;
     }
-    return QString().setNum(num,'f',2)+" "+unit;
+    return QString().setNum(num,'f',2) + " " + unit;
 }
 
-QString ShortenPathToParent(const Recent &recent)
+QString shortenPathToParent(const Recent &recent)
 {
     const int long_name = 100;
     if (recent.title != QString())
@@ -944,11 +944,11 @@ QString ShortenPathToParent(const Recent &recent)
     return QDir::toNativeSeparators(recent.path);
 }
 
-QStringList ToNativeSeparators(QStringList list)
+QStringList toNativeSeparators(QStringList list)
 {
     QStringList ret;
     for (auto element : list) {
-        if (Util::IsValidLocation(element))
+        if (Util::isValidLocation(element))
             ret.push_back(element);
         else
             ret.push_back(QDir::toNativeSeparators(element));
@@ -956,7 +956,7 @@ QStringList ToNativeSeparators(QStringList list)
     return ret;
 }
 
-QStringList FromNativeSeparators(QStringList list)
+QStringList fromNativeSeparators(QStringList list)
 {
     QStringList ret;
     for (auto element : list)
@@ -964,7 +964,7 @@ QStringList FromNativeSeparators(QStringList list)
     return ret;
 }
 
-int GCD(int u, int v)
+int gcd(int u, int v)
 {
     int shift;
     if (u == 0) return v;
@@ -988,20 +988,20 @@ int GCD(int u, int v)
     return u << shift;
 }
 
-QString Ratio(int w, int h)
+QString ratio(int w, int h)
 {
-    int gcd = GCD(w, h);
-    if (gcd == 0)
+    int d = gcd(w, h);
+    if (d == 0)
         return "0:0";
-    return QString("%0:%1").arg(QString::number(w/gcd), QString::number(h/gcd));
+    return QString("%0:%1").arg(QString::number(w / d), QString::number(h / d));
 }
 
-QString GetLangName(QString code)
+QString getLangName(QString code)
 {
     return iso639CodeMap.value(code, "");
 }
 
-QString GetCharEncodingTitle(QString name)
+QString getCharEncodingTitle(QString name)
 {
     for (const auto &pair : charEncodingMap)
         if (pair.first == name)
@@ -1009,12 +1009,12 @@ QString GetCharEncodingTitle(QString name)
     return "";
 }
 
-const QList<QPair<QString, QString> > &GetAllCharEncodings()
+const QList<QPair<QString, QString> > &getAllCharEncodings()
 {
     return charEncodingMap;
 }
 
-QString DetectCharEncoding(const QByteArray &bytes)
+QString toUnicode(const QByteArray &bytes)
 {
     uchardet_t ud = uchardet_new();
     uchardet_handle_data(ud, bytes.data(), bytes.length());

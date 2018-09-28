@@ -15,8 +15,8 @@ PluginManager::PluginManager(QObject *parent)
         py::initialize_interpreter();
 
         py::module sys = py::module::import("sys");
-        sys.attr("path").attr("insert")(0, py::cast(Util::ScriptsPath()));
-        sys.attr("path").attr("insert")(1, py::cast(Util::Path(Util::ScriptsPath(), "packages")));
+        sys.attr("path").attr("insert")(0, py::cast(Util::scriptsPath()));
+        sys.attr("path").attr("insert")(1, py::cast(Util::path(Util::scriptsPath(), "packages")));
 
         py::module os = py::module::import("os");
         os.attr("environ")["TEMP"] = py::cast(baka->tempDir->path());
@@ -112,7 +112,7 @@ void PluginManager::loadPlugins()
 
     worker->run([=] {
         py::object manager = module.attr("plugin_manager");
-        manager.attr("load_plugins")(Util::PluginsPaths());
+        manager.attr("load_plugins")(Util::pluginsPaths());
         return manager.attr("get_all_plugins")();
     });
 }

@@ -32,11 +32,11 @@ UpdateManager::~UpdateManager()
 {
 }
 
-bool UpdateManager::CheckForUpdates()
+bool UpdateManager::checkForUpdates()
 {
     emit messageSignal(tr("Checking for updates..."));
 
-    Request *req = baka->requestManager->newRequest(Util::VersionFileUrl());
+    Request *req = baka->requestManager->newRequest(Util::versionFileUrl());
     connect(req, &Request::progress, [=] (double percent) {
         emit progressSignal((int)(50.0 * percent));
     });
@@ -67,7 +67,7 @@ bool UpdateManager::CheckForUpdates()
 }
 
 #if defined(Q_OS_WIN)
-bool UpdateManager::DownloadUpdate(const QString &url)
+bool UpdateManager::downloadUpdate(const QString &url)
 {
     emit messageSignal(tr("Downloading update..."));
 
@@ -83,7 +83,7 @@ bool UpdateManager::DownloadUpdate(const QString &url)
         emit messageSignal(msg);
     });
     connect(req, &Request::saved, [=] (QString filePath) {
-        ApplyUpdate(filePath);
+        applyUpdate(filePath);
         req->deleteLater();
     });
 
@@ -91,7 +91,7 @@ bool UpdateManager::DownloadUpdate(const QString &url)
     return req->fetch(true, filePath);
 }
 
-void UpdateManager::ApplyUpdate(const QString &file)
+void UpdateManager::applyUpdate(const QString &file)
 {
     emit messageSignal(tr("Extracting..."));
     // create a temporary directory for baka

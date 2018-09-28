@@ -20,17 +20,17 @@ public:
     ~Settings();
 
 public slots:
-    void Load();
-    void Save();
+    void load();
+    void save();
 
     QJsonObject getRoot();
     void setRoot(QJsonObject);
 
 protected:
-    void LoadIni();
-    int ParseLine(QString line);
-    QString FixKeyOnLoad(QString key);
-    QStringList SplitQStringList(QString list);
+    void loadIni();
+    int parseLine(QString line);
+    QString fixKeyOnLoad(QString key);
+    QStringList splitQStringList(QString list);
 
 private:
     BakaEngine *baka;

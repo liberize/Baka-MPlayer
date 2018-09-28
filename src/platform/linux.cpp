@@ -15,17 +15,17 @@
 
 namespace Util {
 
-QString VersionFileUrl()
+QString versionFileUrl()
 {
     return "http://bakamplayer.u8sand.net/version_linux";
 }
 
-QString DownloadFileUrl()
+QString downloadFileUrl()
 {
     return "";
 }
 
-bool DimLightsSupported()
+bool isDimLightsSupported()
 {
     QString tmp = "_NET_WM_CM_S"+QString::number(QX11Info::appScreen());
     Atom a = XInternAtom(QX11Info::display(), tmp.toUtf8().constData(), false);
@@ -34,11 +34,11 @@ bool DimLightsSupported()
     return false;
 }
 
-void InitWindow(QMainWindow *main)
+void initWindow(QMainWindow *main)
 {
 }
 
-void SetAlwaysOnTop(QMainWindow *main, bool ontop)
+void setAlwaysOnTop(QMainWindow *main, bool ontop)
 {
     // TODO: support wayland
     Display *display = QX11Info::display();
@@ -61,7 +61,7 @@ void SetAlwaysOnTop(QMainWindow *main, bool ontop)
                            SubstructureRedirectMask|SubstructureNotifyMask, &event);
 }
 
-void SetAspectRatio(QMainWindow *main, int w, int h)
+void setAspectRatio(QMainWindow *main, int w, int h)
 {
     // TODO: support wayland
     Display *display = QX11Info::display();
@@ -79,7 +79,7 @@ void SetAspectRatio(QMainWindow *main, int w, int h)
     XFree(hint);
 }
 
-void EnableScreenSaver(bool enable)
+void enableScreenSaver(bool enable)
 {
     // A cookie is a random, unique, non-zero UINT32 used to identify the inhibit request.
     static uint32_t cookie = 0;
@@ -110,24 +110,29 @@ void EnableScreenSaver(bool enable)
     });
 }
 
-bool IsValidFile(QString path)
+bool isValidFile(QString path)
 {
     QRegExp rx("^\\.{1,2}|/", Qt::CaseInsensitive); // relative path, network location, drive
     return (rx.indexIn(path) != -1);
 }
 
-bool IsValidLocation(QString loc)
+bool isValidLocation(QString loc)
 {
     QRegExp rx("^([a-z]{2,}://|\\.{1,2}|/)", Qt::CaseInsensitive); // url, relative path, drive
     return (rx.indexIn(loc) != -1);
 }
 
-void ShowInFolder(QString path, QString)
+void showInFolder(QString path, QString)
 {
     QDesktopServices::openUrl(QString("file:///%0").arg(path));
 }
 
-QString MonospaceFont()
+QString defaultFont()
+{
+    return "Sans Serif";
+}
+
+QString monospaceFont()
 {
     return "Monospace";
 }
