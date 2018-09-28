@@ -50,6 +50,7 @@ public slots:
     void deleteFromDisk(const QModelIndex &index);
 
 signals:
+    void currentRowChanged(int row);
     void playlistChanged(QStandardItemModel *);
 
 protected:

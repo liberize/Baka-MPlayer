@@ -20,14 +20,14 @@ public:
     explicit Worker(Priority p, QObject *parent = nullptr);
     ~Worker();
 
-    void run(std::function<py::object()> func);
+    void run(std::function<QVariant()> func);
     Priority getPriority() const { return priority; }
 
 private:
     void start();
 
 signals:
-    void finished(py::object result);
+    void finished(QVariant result, QString err);
 
 private:
     PluginManager *manager = nullptr;

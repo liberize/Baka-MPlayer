@@ -43,20 +43,20 @@ namespace Mpv
     struct Track {
         int id;
         QString type;
-        int src_id;
+        int srcId;
         QString title;
         QString lang;
-        unsigned albumart : 1;
+        unsigned albumArt : 1;
         unsigned _default : 1;
         unsigned external : 1;
-        QString external_filename;
+        QString externalFileName;
         QString codec;
-        int demux_w;
-        int demux_h;
-        double demux_fps;
-        int demux_channel_count;
-        int demux_samplerate;
-        QString decoder_desc;
+        int demuxW;
+        int demuxH;
+        double demuxFps;
+        int demuxChannelCount;
+        int demuxSampleRate;
+        QString decoderDesc;
 
         bool operator==(const Track &t) { return (id == t.id); }
     };
@@ -69,16 +69,16 @@ namespace Mpv
     };
     struct AudioParams {
         QString codec;
-        int samplerate;
+        int sampleRate;
         int channels;
     };
 
     struct FileInfo {
-        QString media_title;
+        QString mediaTitle;
         double length = 0;
         QMap<QString, QString> metadata;
-        VideoParams video_params;
-        AudioParams audio_params;
+        VideoParams videoParams;
+        AudioParams audioParams;
         QList<Track> tracks; // audio, video, and subs
         QList<Chapter> chapters;
     };

@@ -39,7 +39,7 @@ BakaEngine::BakaEngine(QObject *parent):
         dimDialog = new DimDialog(window, nullptr);
     else {
         dimDialog = nullptr;
-        window->ui->action_Dim_Lights->setEnabled(false);
+        window->ui->actionDimLights->setEnabled(false);
     }
 
     connect(mpv, &MpvHandler::messageSignal, [=] (QString msg) {

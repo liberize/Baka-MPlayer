@@ -19,8 +19,12 @@ public:
 
     void attachEngine(BakaEngine *baka);
 
+    int count();
     QModelIndex appendEntry(MediaEntry *entry);
     void clear();
+
+signals:
+    void scrollReachedEnd();
 
 private:
     BakaEngine *baka;

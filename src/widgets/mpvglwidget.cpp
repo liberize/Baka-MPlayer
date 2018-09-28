@@ -18,7 +18,7 @@
 #include <mpv/qthelper.hpp>
 #include "mpvhandler.h"
 
-#ifndef Q_PROCESSOR_ARM
+#ifdef Q_OS_WIN
     #ifndef GLAPIENTRY
     // On Windows, GLAPIENTRY may sometimes conveniently go missing
     #define GLAPIENTRY __stdcall

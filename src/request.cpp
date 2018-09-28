@@ -11,8 +11,8 @@
 
 Request::Request(QString url, QObject *parent)
     : QObject(parent),
-      manager(static_cast<RequestManager*>(parent)),
-      url(url)
+      url(url),
+      manager(static_cast<RequestManager*>(parent))
 {
 }
 

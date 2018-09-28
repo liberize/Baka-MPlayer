@@ -31,6 +31,7 @@ bool isDimLightsSupported()
 
 void initWindow(QMainWindow *main)
 {
+    Q_UNUSED(main);
     [NSWindow setAllowsAutomaticWindowTabbing:NO];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
 }

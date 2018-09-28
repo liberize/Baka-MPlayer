@@ -33,6 +33,7 @@ public:
 
 signals:
     void pluginsLoaded(const QMap<QString, Plugin*> &plugins);
+    void error(QString msg);
 
 private:
     BakaEngine *baka = nullptr;

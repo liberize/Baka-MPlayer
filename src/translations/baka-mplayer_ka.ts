@@ -1138,10 +1138,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Download Subtitles from &quot;%0&quot;...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Input a word to search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1215,6 +1211,10 @@
     </message>
     <message>
         <source>No result found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download from &quot;%0&quot;...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1622,6 +1622,10 @@
     <name>QObject</name>
     <message>
         <source>Auto Detect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

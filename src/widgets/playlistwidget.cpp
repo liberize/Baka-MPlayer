@@ -24,6 +24,10 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     proxyModel->setSourceModel(playlistModel);
     setItemDelegate(playlistItemDelegate);
     setModel(proxyModel);
+
+    connect(selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
+        emit currentRowChanged(current.row());
+    });
 }
 
 PlaylistWidget::~PlaylistWidget()
@@ -257,7 +261,7 @@ void PlaylistWidget::deleteFromDisk(const QModelIndex &index)
     // check and remove all external subtitle files in the video
     for (auto track : baka->mpv->getFileInfo().tracks) {
         if (track.external) {
-            QFile subf(track.external_filename);
+            QFile subf(track.externalFileName);
             if (subf.exists() && QMessageBox::question(parentWidget(), tr("Delete external sub-file?"),
                 tr("Would you like to delete the associated sub file [%0]?").arg(subf.fileName())) == QMessageBox::Yes)
                 subf.remove();

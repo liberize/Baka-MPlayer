@@ -11,6 +11,7 @@ PluginManager::PluginManager(QObject *parent)
     : QObject(parent),
       baka(static_cast<BakaEngine*>(parent))
 {
+    QString err;
     SafeRun<void>([=] {
         py::initialize_interpreter();
 
@@ -34,7 +35,9 @@ PluginManager::PluginManager(QObject *parent)
                                       Q_ARG(QString, prompt));
             return inputStr;
         });
-    });
+    }, err);
+    if (!err.isEmpty())
+        emit error(err);
 }
 
 PluginManager::~PluginManager()
@@ -87,8 +90,12 @@ void PluginManager::clearWorkers(Worker::Priority maxPriority)
 void PluginManager::loadPlugins()
 {
     auto worker = newWorker();
-    connect(worker, &Worker::finished, this, [=] (py::object result) {
-        auto objList = result.cast<QList<py::object>>();
+    connect(worker, &Worker::finished, this, [=] (QVariant result, QString err) {
+        if (!err.isEmpty()) {
+            emit error(err);
+            return;
+        }
+        auto objList = result.value<QList<py::object>>();
         for (auto &obj : objList) {
             Plugin *plugin = nullptr;
             if (obj.attr("is_type")("SubtitleProvider").cast<bool>())
@@ -113,7 +120,8 @@ void PluginManager::loadPlugins()
     worker->run([=] {
         py::object manager = module.attr("plugin_manager");
         manager.attr("load_plugins")(Util::pluginsPaths());
-        return manager.attr("get_all_plugins")();
+        py::object plugins = manager.attr("get_all_plugins")();
+        return QVariant::fromValue(plugins.cast<QList<py::object>>());
     });
 }
 

@@ -17,4 +17,6 @@ bool PlaylistProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sour
 void PlaylistProxyModel::sort(int column, Qt::SortOrder order)
 {
     // disable sort
+    Q_UNUSED(column);
+    Q_UNUSED(order);
 }

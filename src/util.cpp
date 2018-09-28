@@ -832,6 +832,8 @@ bool isValidUrl(QString url)
 
 QString toLocalFile(QString s)
 {
+    if (s.isEmpty())
+        return "";
     if (QFile::exists(s))
         return s;
     QUrl url(s);

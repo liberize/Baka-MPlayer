@@ -1465,59 +1465,59 @@ QTabBar::tab:!selected {
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_File">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <widget class="QMenu" name="menu_Recently_Opened">
+    <widget class="QMenu" name="menuRecentlyOpened">
      <property name="title">
       <string>&amp;Recently Opened</string>
      </property>
      <addaction name="action_none_4"/>
     </widget>
-    <addaction name="action_New_Player"/>
+    <addaction name="actionNewPlayer"/>
     <addaction name="separator"/>
-    <addaction name="action_Open_File"/>
-    <addaction name="actionOpen_URL"/>
-    <addaction name="actionOpen_Path_from_Clipboard"/>
-    <addaction name="menu_Recently_Opened"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionOpenURL"/>
+    <addaction name="actionOpenPathFromClipboard"/>
+    <addaction name="menuRecentlyOpened"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_in_Folder"/>
+    <addaction name="actionShowInFolder"/>
     <addaction name="separator"/>
-    <addaction name="actionPlay_Next_File"/>
-    <addaction name="actionPlay_Previous_File"/>
+    <addaction name="actionPlayNextFile"/>
+    <addaction name="actionPlayPreviousFile"/>
     <addaction name="separator"/>
-    <addaction name="actionE_xit"/>
+    <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menu_Playback">
+   <widget class="QMenu" name="menuPlayback">
     <property name="title">
      <string>&amp;Playback</string>
     </property>
-    <widget class="QMenu" name="menuR_epeat">
+    <widget class="QMenu" name="menuRepeat">
      <property name="title">
       <string>R&amp;epeat</string>
      </property>
-     <addaction name="action_Off"/>
-     <addaction name="action_Playlist"/>
-     <addaction name="action_This_File"/>
+     <addaction name="actionRepeatOff"/>
+     <addaction name="actionRepeatPlaylist"/>
+     <addaction name="actionRepeatThisFile"/>
     </widget>
-    <widget class="QMenu" name="menuS_peed">
+    <widget class="QMenu" name="menuSpeed">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Spee&amp;d</string>
      </property>
-     <addaction name="action_Increase"/>
-     <addaction name="action_Decrease"/>
+     <addaction name="actionIncreaseSpeed"/>
+     <addaction name="actionDecreaseSpeed"/>
      <addaction name="separator"/>
-     <addaction name="action_Double_Speed"/>
-     <addaction name="action_Half_Speed"/>
+     <addaction name="actionDoubleSpeed"/>
+     <addaction name="actionHalfSpeed"/>
      <addaction name="separator"/>
-     <addaction name="action_Reset"/>
+     <addaction name="actionResetSpeed"/>
     </widget>
-    <widget class="QMenu" name="menu_Chapters">
+    <widget class="QMenu" name="menuChapters">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -1526,52 +1526,52 @@ QTabBar::tab:!selected {
      </property>
      <addaction name="action_none_2"/>
     </widget>
-    <addaction name="action_Play"/>
-    <addaction name="action_Stop"/>
-    <addaction name="action_Restart"/>
+    <addaction name="actionPlay"/>
+    <addaction name="actionStop"/>
+    <addaction name="actionRestart"/>
     <addaction name="separator"/>
-    <addaction name="menuS_peed"/>
+    <addaction name="menuSpeed"/>
     <addaction name="separator"/>
-    <addaction name="actionSh_uffle"/>
-    <addaction name="menuR_epeat"/>
-    <addaction name="actionStop_after_Current"/>
+    <addaction name="actionShuffle"/>
+    <addaction name="menuRepeat"/>
+    <addaction name="actionStopAfterCurrent"/>
     <addaction name="separator"/>
-    <addaction name="action_Next_Chapter"/>
-    <addaction name="action_Previous_Chapter"/>
-    <addaction name="menu_Chapters"/>
+    <addaction name="actionNextChapter"/>
+    <addaction name="actionPreviousChapter"/>
+    <addaction name="menuChapters"/>
     <addaction name="separator"/>
-    <addaction name="action_Frame_Step"/>
-    <addaction name="actionFrame_Back_Step"/>
+    <addaction name="actionFrameStep"/>
+    <addaction name="actionFrameBackStep"/>
     <addaction name="separator"/>
-    <addaction name="action_Jump_to_Time"/>
+    <addaction name="actionJumpToTime"/>
    </widget>
    <widget class="QMenu" name="menuVideo">
     <property name="title">
      <string>Video</string>
     </property>
-    <widget class="QMenu" name="menuVideo_Track">
+    <widget class="QMenu" name="menuVideoTrack">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Video &amp;Track</string>
      </property>
-     <addaction name="action_none_5"/>
+     <addaction name="actionVideoTrackNone"/>
     </widget>
-    <widget class="QMenu" name="menuVideo_Size">
+    <widget class="QMenu" name="menuVideoSize">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>&amp;Video Size</string>
      </property>
-     <addaction name="action50"/>
-     <addaction name="action75"/>
-     <addaction name="action100"/>
-     <addaction name="action150"/>
-     <addaction name="action200"/>
+     <addaction name="actionVideoSize50"/>
+     <addaction name="actionVideoSize75"/>
+     <addaction name="actionVideoSize100"/>
+     <addaction name="actionVideoSize150"/>
+     <addaction name="actionVideoSize200"/>
      <addaction name="separator"/>
-     <addaction name="actionFit_Screen"/>
+     <addaction name="actionFitScreen"/>
     </widget>
     <widget class="QMenu" name="menuScreenshot">
      <property name="enabled">
@@ -1580,116 +1580,116 @@ QTabBar::tab:!selected {
      <property name="title">
       <string>&amp;Screenshot</string>
      </property>
-     <addaction name="actionWith_Subtitles"/>
-     <addaction name="actionWithout_Subtitles"/>
+     <addaction name="actionScreenshotWithSubtitles"/>
+     <addaction name="actionScreenshotWithoutSubtitles"/>
      <addaction name="separator"/>
-     <addaction name="actionOpen_Screenshot_Folder"/>
+     <addaction name="actionOpenScreenshotFolder"/>
     </widget>
-    <addaction name="menuVideo_Track"/>
+    <addaction name="menuVideoTrack"/>
     <addaction name="separator"/>
-    <addaction name="menuVideo_Size"/>
-    <addaction name="action_Full_Screen"/>
+    <addaction name="menuVideoSize"/>
+    <addaction name="actionFullScreen"/>
     <addaction name="separator"/>
     <addaction name="menuScreenshot"/>
     <addaction name="separator"/>
-    <addaction name="action_Motion_Interpolation"/>
-    <addaction name="action_Deinterlace"/>
+    <addaction name="actionMotionInterpolation"/>
+    <addaction name="actionDeinterlace"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuAudio">
     <property name="title">
      <string>Audio</string>
     </property>
-    <widget class="QMenu" name="menuAudio_Track">
+    <widget class="QMenu" name="menuAudioTrack">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Audio &amp;Track</string>
      </property>
-     <addaction name="action_none_3"/>
+     <addaction name="actionAudioTrackNone"/>
     </widget>
-    <widget class="QMenu" name="menu_Volume">
+    <widget class="QMenu" name="menuVolume">
      <property name="title">
       <string>&amp;Volume</string>
      </property>
-     <addaction name="action_Increase_Volume"/>
-     <addaction name="action_Decrease_Volume"/>
+     <addaction name="actionIncreaseVolume"/>
+     <addaction name="actionDecreaseVolume"/>
     </widget>
-    <widget class="QMenu" name="menuAudio_Delay">
+    <widget class="QMenu" name="menuAudioDelay">
      <property name="title">
       <string>Audio &amp;Delay</string>
      </property>
-     <addaction name="action_Increase_Audio_Delay"/>
-     <addaction name="action_Decrease_Audio_Delay"/>
-     <addaction name="action_Reset_Audio_Delay"/>
+     <addaction name="actionIncreaseAudioDelay"/>
+     <addaction name="actionDecreaseAudioDelay"/>
+     <addaction name="actionResetAudioDelay"/>
     </widget>
-    <widget class="QMenu" name="menuAudio_Device">
+    <widget class="QMenu" name="menuAudioDevice">
      <property name="title">
       <string>Audio De&amp;vice</string>
      </property>
     </widget>
-    <addaction name="menuAudio_Track"/>
-    <addaction name="action_Add_Audio_File"/>
+    <addaction name="menuAudioTrack"/>
+    <addaction name="actionAddAudioFile"/>
     <addaction name="separator"/>
-    <addaction name="menu_Volume"/>
-    <addaction name="action_Mute"/>
+    <addaction name="menuVolume"/>
+    <addaction name="actionMute"/>
     <addaction name="separator"/>
-    <addaction name="menuAudio_Delay"/>
+    <addaction name="menuAudioDelay"/>
     <addaction name="separator"/>
-    <addaction name="menuAudio_Device"/>
+    <addaction name="menuAudioDevice"/>
    </widget>
    <widget class="QMenu" name="menuSubtitles">
     <property name="title">
      <string>Subtitles</string>
     </property>
-    <widget class="QMenu" name="menuSubtitle_Track">
+    <widget class="QMenu" name="menuSubtitleTrack">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Subtitle &amp;Track</string>
      </property>
-     <addaction name="action_none"/>
+     <addaction name="actionSubtitleTrackNone"/>
     </widget>
-    <widget class="QMenu" name="menuFont_Si_ze">
+    <widget class="QMenu" name="menuFontSize">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Si&amp;ze</string>
      </property>
-     <addaction name="action_Size"/>
-     <addaction name="actionS_ize"/>
-     <addaction name="action_Reset_Size"/>
+     <addaction name="actionIncreaseFontSize"/>
+     <addaction name="actionDecreaseFontSize"/>
+     <addaction name="actionResetFontSize"/>
     </widget>
-    <widget class="QMenu" name="menuSubtitle_Pos">
+    <widget class="QMenu" name="menuSubtitlePos">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>&amp;Position</string>
      </property>
-     <addaction name="action_Subtitle_Up"/>
-     <addaction name="action_Subtitle_Down"/>
-     <addaction name="action_Reset_Subtitle_Pos"/>
+     <addaction name="actionSubtitleMoveUp"/>
+     <addaction name="actionSubtitleMoveDown"/>
+     <addaction name="actionResetSubtitlePos"/>
     </widget>
-    <widget class="QMenu" name="menuSubtitle_Style">
+    <widget class="QMenu" name="menuSubtitleStyle">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>&amp;Style</string>
      </property>
-     <addaction name="action_Subtitle_Color"/>
-     <addaction name="action_Subtitle_Back_Color"/>
+     <addaction name="actionSubtitleColor"/>
+     <addaction name="actionSubtitleBackColor"/>
      <addaction name="separator"/>
-     <addaction name="action_Subtitle_Shadow_Offset"/>
-     <addaction name="action_Subtitle_Shadow_Color"/>
+     <addaction name="actionSubtitleShadowOffset"/>
+     <addaction name="actionSubtitleShadowColor"/>
      <addaction name="separator"/>
-     <addaction name="action_Subtitle_Blur"/>
+     <addaction name="actionSubtitleBlur"/>
     </widget>
-    <widget class="QMenu" name="menuSubtitle_Encoding">
+    <widget class="QMenu" name="menuSubtitleEncoding">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -1697,62 +1697,62 @@ QTabBar::tab:!selected {
       <string>&amp;Encoding</string>
      </property>
     </widget>
-    <widget class="QMenu" name="menuSubtitle_Delay">
+    <widget class="QMenu" name="menuSubtitleDelay">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
       <string>Subtitle &amp;Delay</string>
      </property>
-     <addaction name="action_Increase_Subtitle_Delay"/>
-     <addaction name="action_Decrease_Subtitle_Delay"/>
-     <addaction name="action_Reset_Subtitle_Delay"/>
+     <addaction name="actionIncreaseSubtitleDelay"/>
+     <addaction name="actionDecreaseSubtitleDelay"/>
+     <addaction name="actionResetSubtitleDelay"/>
     </widget>
-    <addaction name="actionShow_Subtitles"/>
-    <addaction name="menuSubtitle_Track"/>
-    <addaction name="action_Add_Subtitle_File"/>
+    <addaction name="actionShowSubtitles"/>
+    <addaction name="menuSubtitleTrack"/>
+    <addaction name="actionAddSubtitleFile"/>
     <addaction name="separator"/>
-    <addaction name="action_Subtitle_Font"/>
-    <addaction name="menuFont_Si_ze"/>
-    <addaction name="menuSubtitle_Pos"/>
-    <addaction name="menuSubtitle_Style"/>
+    <addaction name="actionSubtitleFont"/>
+    <addaction name="menuFontSize"/>
+    <addaction name="menuSubtitlePos"/>
+    <addaction name="menuSubtitleStyle"/>
     <addaction name="separator"/>
-    <addaction name="menuSubtitle_Encoding"/>
+    <addaction name="menuSubtitleEncoding"/>
     <addaction name="separator"/>
-    <addaction name="menuSubtitle_Delay"/>
+    <addaction name="menuSubtitleDelay"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="action_Show_Playlist"/>
-    <addaction name="action_Show_Library"/>
+    <addaction name="actionShowPlaylist"/>
+    <addaction name="actionShowLibrary"/>
     <addaction name="separator"/>
-    <addaction name="action_Dim_Lights"/>
+    <addaction name="actionDimLights"/>
     <addaction name="separator"/>
-    <addaction name="actionMedia_Info"/>
+    <addaction name="actionMediaInfo"/>
     <addaction name="separator"/>
-    <addaction name="action_Preferences"/>
+    <addaction name="actionPreferences"/>
    </widget>
-   <widget class="QMenu" name="menu_Help">
+   <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionOnline_Help"/>
-    <addaction name="action_Check_for_Updates"/>
-    <addaction name="actionUpdate_Streaming_Support"/>
-    <addaction name="actionAbout_Qt"/>
-    <addaction name="actionAbout_Baka_MPlayer"/>
+    <addaction name="actionOnlineHelp"/>
+    <addaction name="actionCheckForUpdates"/>
+    <addaction name="actionUpdateStreamingSupport"/>
+    <addaction name="actionAboutQt"/>
+    <addaction name="actionAboutBakaMPlayer"/>
    </widget>
-   <addaction name="menu_File"/>
-   <addaction name="menu_Playback"/>
+   <addaction name="menuFile"/>
+   <addaction name="menuPlayback"/>
    <addaction name="menuVideo"/>
    <addaction name="menuAudio"/>
    <addaction name="menuSubtitles"/>
    <addaction name="menuView"/>
-   <addaction name="menu_Help"/>
+   <addaction name="menuHelp"/>
   </widget>
-  <action name="action_New_Player">
+  <action name="actionNewPlayer">
    <property name="text">
     <string>&amp;New Player</string>
    </property>
@@ -1760,17 +1760,17 @@ QTabBar::tab:!selected {
     <string/>
    </property>
   </action>
-  <action name="action_Open_File">
+  <action name="actionOpenFile">
    <property name="text">
     <string>&amp;Open File...</string>
    </property>
   </action>
-  <action name="actionOpen_URL">
+  <action name="actionOpenURL">
    <property name="text">
     <string>Open &amp;Location...</string>
    </property>
   </action>
-  <action name="actionOpen_Path_from_Clipboard">
+  <action name="actionOpenPathFromClipboard">
    <property name="text">
     <string>Open &amp;Copied Link</string>
    </property>
@@ -1783,7 +1783,7 @@ QTabBar::tab:!selected {
     <string>Clos&amp;e</string>
    </property>
   </action>
-  <action name="actionShow_in_Folder">
+  <action name="actionShowInFolder">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1791,7 +1791,7 @@ QTabBar::tab:!selected {
     <string>Show in &amp;Folder</string>
    </property>
   </action>
-  <action name="actionPlay_Next_File">
+  <action name="actionPlayNextFile">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1799,7 +1799,7 @@ QTabBar::tab:!selected {
     <string>Pla&amp;y Next File</string>
    </property>
   </action>
-  <action name="actionPlay_Previous_File">
+  <action name="actionPlayPreviousFile">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1807,12 +1807,12 @@ QTabBar::tab:!selected {
     <string>Play &amp;Previous File</string>
    </property>
   </action>
-  <action name="actionE_xit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
   </action>
-  <action name="action_Full_Screen">
+  <action name="actionFullScreen">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1823,7 +1823,7 @@ QTabBar::tab:!selected {
     <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
-  <action name="actionShow_Subtitles">
+  <action name="actionShowSubtitles">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1834,7 +1834,7 @@ QTabBar::tab:!selected {
     <string>Show S&amp;ubtitles</string>
    </property>
   </action>
-  <action name="actionMedia_Info">
+  <action name="actionMediaInfo">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1845,7 +1845,7 @@ QTabBar::tab:!selected {
     <string>Show Playback &amp;Info</string>
    </property>
   </action>
-  <action name="action_Play">
+  <action name="actionPlay">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1853,7 +1853,7 @@ QTabBar::tab:!selected {
     <string>&amp;Play</string>
    </property>
   </action>
-  <action name="action_Stop">
+  <action name="actionStop">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1861,7 +1861,7 @@ QTabBar::tab:!selected {
     <string>&amp;Stop</string>
    </property>
   </action>
-  <action name="action_Restart">
+  <action name="actionRestart">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1869,7 +1869,7 @@ QTabBar::tab:!selected {
     <string>&amp;Restart</string>
    </property>
   </action>
-  <action name="actionSh_uffle">
+  <action name="actionShuffle">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1877,7 +1877,7 @@ QTabBar::tab:!selected {
     <string>Sh&amp;uffle</string>
    </property>
   </action>
-  <action name="actionStop_after_Current">
+  <action name="actionStopAfterCurrent">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1885,7 +1885,7 @@ QTabBar::tab:!selected {
     <string>Stop after &amp;Current</string>
    </property>
   </action>
-  <action name="action_Next_Chapter">
+  <action name="actionNextChapter">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1893,7 +1893,7 @@ QTabBar::tab:!selected {
     <string>&amp;Next Chapter</string>
    </property>
   </action>
-  <action name="action_Previous_Chapter">
+  <action name="actionPreviousChapter">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1901,7 +1901,7 @@ QTabBar::tab:!selected {
     <string>&amp;Previous Chapter</string>
    </property>
   </action>
-  <action name="action_Frame_Step">
+  <action name="actionFrameStep">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1909,7 +1909,7 @@ QTabBar::tab:!selected {
     <string>&amp;Frame Step</string>
    </property>
   </action>
-  <action name="actionFrame_Back_Step">
+  <action name="actionFrameBackStep">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1917,7 +1917,7 @@ QTabBar::tab:!selected {
     <string>Frame &amp;Back Step</string>
    </property>
   </action>
-  <action name="action_Jump_to_Time">
+  <action name="actionJumpToTime">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1925,7 +1925,7 @@ QTabBar::tab:!selected {
     <string>&amp;Jump to Time...</string>
    </property>
   </action>
-  <action name="action_Show_Playlist">
+  <action name="actionShowPlaylist">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1933,7 +1933,7 @@ QTabBar::tab:!selected {
     <string>&amp;Show Playlist</string>
    </property>
   </action>
-  <action name="action_Show_Library">
+  <action name="actionShowLibrary">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -1941,62 +1941,62 @@ QTabBar::tab:!selected {
     <string>&amp;Show Library</string>
    </property>
   </action>
-  <action name="action_Dim_Lights">
+  <action name="actionDimLights">
    <property name="text">
     <string>&amp;Dim Lights</string>
    </property>
   </action>
-  <action name="actionOnline_Help">
+  <action name="actionOnlineHelp">
    <property name="text">
     <string>Online &amp;Help</string>
    </property>
   </action>
-  <action name="action_Check_for_Updates">
+  <action name="actionCheckForUpdates">
    <property name="text">
     <string>&amp;Check for Updates</string>
    </property>
   </action>
-  <action name="actionAbout_Qt">
+  <action name="actionAboutQt">
    <property name="text">
     <string>About &amp;Qt</string>
    </property>
   </action>
-  <action name="actionAbout_Baka_MPlayer">
+  <action name="actionAboutBakaMPlayer">
    <property name="text">
     <string>About &amp;Baka MPlayer</string>
    </property>
   </action>
-  <action name="action50">
+  <action name="actionVideoSize50">
    <property name="text">
     <string>&amp;50%</string>
    </property>
   </action>
-  <action name="action75">
+  <action name="actionVideoSize75">
    <property name="text">
     <string>&amp;75%</string>
    </property>
   </action>
-  <action name="action100">
+  <action name="actionVideoSize100">
    <property name="text">
     <string>&amp;100%</string>
    </property>
   </action>
-  <action name="action150">
+  <action name="actionVideoSize150">
    <property name="text">
     <string>15&amp;0%</string>
    </property>
   </action>
-  <action name="action200">
+  <action name="actionVideoSize200">
    <property name="text">
     <string>&amp;200%</string>
    </property>
   </action>
-  <action name="actionFit_Screen">
+  <action name="actionFitScreen">
    <property name="text">
     <string>&amp;Fit to Screen</string>
    </property>
   </action>
-  <action name="action_Add_Subtitle_File">
+  <action name="actionAddSubtitleFile">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2004,7 +2004,7 @@ QTabBar::tab:!selected {
     <string>&amp;Add Subtitle File...</string>
    </property>
   </action>
-  <action name="action_Subtitle_Font">
+  <action name="actionSubtitleFont">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2012,7 +2012,7 @@ QTabBar::tab:!selected {
     <string>&amp;Font...</string>
    </property>
   </action>
-  <action name="action_none">
+  <action name="actionSubtitleTrackNone">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2020,47 +2020,47 @@ QTabBar::tab:!selected {
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="action_Size">
+  <action name="actionIncreaseFontSize">
    <property name="text">
     <string>&amp;Size +</string>
    </property>
   </action>
-  <action name="actionS_ize">
+  <action name="actionDecreaseFontSize">
    <property name="text">
     <string>S&amp;ize -</string>
    </property>
   </action>
-  <action name="action_Reset_Size">
+  <action name="actionResetFontSize">
    <property name="text">
     <string>&amp;Reset Size</string>
    </property>
   </action>
-  <action name="action_Subtitle_Up">
+  <action name="actionSubtitleMoveUp">
    <property name="text">
     <string>Move &amp;Up</string>
    </property>
   </action>
-  <action name="action_Subtitle_Down">
+  <action name="actionSubtitleMoveDown">
    <property name="text">
     <string>Move &amp;Down</string>
    </property>
   </action>
-  <action name="action_Reset_Subtitle_Pos">
+  <action name="actionResetSubtitlePos">
    <property name="text">
     <string>&amp;Reset Position</string>
    </property>
   </action>
-  <action name="action_Subtitle_Color">
+  <action name="actionSubtitleColor">
    <property name="text">
     <string>&amp;Color</string>
    </property>
   </action>
-  <action name="action_Subtitle_Back_Color">
+  <action name="actionSubtitleBackColor">
    <property name="text">
     <string>&amp;Background Color</string>
    </property>
   </action>
-  <action name="action_Subtitle_Blur">
+  <action name="actionSubtitleBlur">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2068,7 +2068,7 @@ QTabBar::tab:!selected {
     <string>Bl&amp;ur</string>
    </property>
   </action>
-  <action name="action_Subtitle_Shadow_Offset">
+  <action name="actionSubtitleShadowOffset">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2076,12 +2076,12 @@ QTabBar::tab:!selected {
     <string>&amp;Shadow Offset</string>
    </property>
   </action>
-  <action name="action_Subtitle_Shadow_Color">
+  <action name="actionSubtitleShadowColor">
    <property name="text">
     <string>S&amp;hadow Color</string>
    </property>
   </action>
-  <action name="action_Off">
+  <action name="actionRepeatOff">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2092,7 +2092,7 @@ QTabBar::tab:!selected {
     <string>&amp;Off</string>
    </property>
   </action>
-  <action name="action_Playlist">
+  <action name="actionRepeatPlaylist">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2100,7 +2100,7 @@ QTabBar::tab:!selected {
     <string>&amp;Playlist</string>
    </property>
   </action>
-  <action name="action_This_File">
+  <action name="actionRepeatThisFile">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2116,67 +2116,67 @@ QTabBar::tab:!selected {
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="action_Increase_Volume">
+  <action name="actionIncreaseVolume">
    <property name="text">
     <string>&amp;Increase by 5%</string>
    </property>
   </action>
-  <action name="action_Decrease_Volume">
+  <action name="actionDecreaseVolume">
    <property name="text">
     <string>&amp;Decrease by 5%</string>
    </property>
   </action>
-  <action name="action_Increase_Audio_Delay">
+  <action name="actionIncreaseAudioDelay">
    <property name="text">
     <string>&amp;Increase by 0.5s</string>
    </property>
   </action>
-  <action name="action_Decrease_Audio_Delay">
+  <action name="actionDecreaseAudioDelay">
    <property name="text">
     <string>&amp;Decrease by 0.5s</string>
    </property>
   </action>
-  <action name="action_Reset_Audio_Delay">
+  <action name="actionResetAudioDelay">
    <property name="text">
     <string>&amp;Reset Delay</string>
    </property>
   </action>
-  <action name="action_Increase_Subtitle_Delay">
+  <action name="actionIncreaseSubtitleDelay">
    <property name="text">
     <string>&amp;Increase by 0.5s</string>
    </property>
   </action>
-  <action name="action_Decrease_Subtitle_Delay">
+  <action name="actionDecreaseSubtitleDelay">
    <property name="text">
     <string>&amp;Decrease by 0.5s</string>
    </property>
   </action>
-  <action name="action_Reset_Subtitle_Delay">
+  <action name="actionResetSubtitleDelay">
    <property name="text">
     <string>&amp;Reset Delay</string>
    </property>
   </action>
-  <action name="actionWith_Subtitles">
+  <action name="actionScreenshotWithSubtitles">
    <property name="text">
     <string>With &amp;Subtitles...</string>
    </property>
   </action>
-  <action name="actionWithout_Subtitles">
+  <action name="actionScreenshotWithoutSubtitles">
    <property name="text">
     <string>&amp;Without Subtitles...</string>
    </property>
   </action>
-  <action name="actionOpen_Screenshot_Folder">
+  <action name="actionOpenScreenshotFolder">
    <property name="text">
     <string>&amp;Open Screenshot Folder</string>
    </property>
   </action>
-  <action name="action_Preferences">
+  <action name="actionPreferences">
    <property name="text">
     <string>&amp;Preferences...</string>
    </property>
   </action>
-  <action name="action_none_3">
+  <action name="actionAudioTrackNone">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2184,7 +2184,7 @@ QTabBar::tab:!selected {
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="action_none_5">
+  <action name="actionVideoTrackNone">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -2192,27 +2192,27 @@ QTabBar::tab:!selected {
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="action_Increase">
+  <action name="actionIncreaseSpeed">
    <property name="text">
     <string>&amp;Increase by 10%</string>
    </property>
   </action>
-  <action name="action_Decrease">
+  <action name="actionDecreaseSpeed">
    <property name="text">
     <string>&amp;Decrease by 10%</string>
    </property>
   </action>
-  <action name="action_Double_Speed">
+  <action name="actionDoubleSpeed">
    <property name="text">
     <string>&amp;Up to 2.0x</string>
    </property>
   </action>
-  <action name="action_Half_Speed">
+  <action name="actionHalfSpeed">
    <property name="text">
     <string>&amp;Down to 0.5x</string>
    </property>
   </action>
-  <action name="action_Reset">
+  <action name="actionResetSpeed">
    <property name="text">
     <string>&amp;Reset</string>
    </property>
@@ -2225,12 +2225,12 @@ QTabBar::tab:!selected {
     <string>[ &amp;none ]</string>
    </property>
   </action>
-  <action name="actionUpdate_Streaming_Support">
+  <action name="actionUpdateStreamingSupport">
    <property name="text">
     <string>Update &amp;Streaming Support</string>
    </property>
   </action>
-  <action name="action_Mute">
+  <action name="actionMute">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2238,7 +2238,7 @@ QTabBar::tab:!selected {
     <string>&amp;Mute</string>
    </property>
   </action>
-  <action name="action_Motion_Interpolation">
+  <action name="actionMotionInterpolation">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2252,7 +2252,7 @@ QTabBar::tab:!selected {
     <string>Reduce video studder</string>
    </property>
   </action>
-  <action name="action_Deinterlace">
+  <action name="actionDeinterlace">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2263,7 +2263,7 @@ QTabBar::tab:!selected {
     <string>&amp;Deinterlace</string>
    </property>
   </action>
-  <action name="action_Add_Audio_File">
+  <action name="actionAddAudioFile">
    <property name="enabled">
     <bool>false</bool>
    </property>

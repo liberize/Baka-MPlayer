@@ -18,8 +18,6 @@ protected:
 
 signals:
     void mouseMoved(QMouseEvent *event);
-    void scrollReachedEnd();
-    void currentRowChanged(int row);
 
 private:
     QString placeholderText;

@@ -129,19 +129,19 @@ QString MpvHandler::formatTrackInfo(const Mpv::Track &track)
         infos.append(track.title);
 
     QStringList descs;
-    QString shortDesc = track.decoder_desc.split('(')[0];
+    QString shortDesc = track.decoderDesc.split('(')[0];
     if (!shortDesc.isEmpty())
         descs.append(shortDesc.remove(' '));
     if (track.type == "video") {
-        if (track.demux_w && track.demux_h)
-            descs.append(QString("%0x%1").arg(QString::number(track.demux_w), QString::number(track.demux_h)));
-        if (track.demux_fps)
-            descs.append(QString("%0fps").arg(QString::number(track.demux_fps)));
+        if (track.demuxW && track.demuxH)
+            descs.append(QString("%0x%1").arg(QString::number(track.demuxW), QString::number(track.demuxH)));
+        if (track.demuxFps)
+            descs.append(QString("%0fps").arg(QString::number(track.demuxFps)));
     } else if (track.type == "audio") {
-        if (track.demux_channel_count)
-            descs.append(QString("%0ch").arg(QString::number(track.demux_channel_count)));
-        if (track.demux_samplerate)
-            descs.append(QString("%0kHz").arg(QString::number(track.demux_samplerate / 1000.)));
+        if (track.demuxChannelCount)
+            descs.append(QString("%0ch").arg(QString::number(track.demuxChannelCount)));
+        if (track.demuxSampleRate)
+            descs.append(QString("%0kHz").arg(QString::number(track.demuxSampleRate / 1000.)));
     }
     QString desc = descs.join(", ");
     if (!desc.isEmpty())
@@ -360,24 +360,24 @@ QString MpvHandler::getMediaInfo()
     const QString outer = "%0: %1\n", inner = "    %0: %1\n";
 
     QString out = outer.arg(tr("File"), fi.fileName()) +
-            inner.arg(tr("Title"), fileInfo.media_title) +
+            inner.arg(tr("Title"), fileInfo.mediaTitle) +
             inner.arg(tr("File size"), Util::humanSize(fi.size())) +
             inner.arg(tr("Date created"), fi.created().toString()) +
             inner.arg(tr("Media length"), Util::formatTime(fileInfo.length, fileInfo.length)) + '\n';
-    if (fileInfo.video_params.codec != QString())
-        out += outer.arg(tr("Video (x%0)").arg(QString::number(vtracks)), fileInfo.video_params.codec) +
+    if (fileInfo.videoParams.codec != QString())
+        out += outer.arg(tr("Video (x%0)").arg(QString::number(vtracks)), fileInfo.videoParams.codec) +
             inner.arg(tr("Video Output"), QString("%0 (hwdec %1)").arg(current_vo, hwdec_active)) +
-            inner.arg(tr("Resolution"), QString("%0 x %1 (%2)").arg(QString::number(fileInfo.video_params.width),
-                                                                    QString::number(fileInfo.video_params.height),
-                                                                    Util::ratio(fileInfo.video_params.width, fileInfo.video_params.height))) +
+            inner.arg(tr("Resolution"), QString("%0 x %1 (%2)").arg(QString::number(fileInfo.videoParams.width),
+                                                                    QString::number(fileInfo.videoParams.height),
+                                                                    Util::ratio(fileInfo.videoParams.width, fileInfo.videoParams.height))) +
             inner.arg(tr("FPS"), QString::number(fps)) +
             inner.arg(tr("A/V Sync"), QString::number(avsync)) +
             inner.arg(tr("Bitrate"), tr("%0 kbps").arg(vbitrate/1000)) + '\n';
-    if (fileInfo.audio_params.codec != QString())
-        out += outer.arg(tr("Audio (x%0)").arg(QString::number(atracks)), fileInfo.audio_params.codec) +
+    if (fileInfo.audioParams.codec != QString())
+        out += outer.arg(tr("Audio (x%0)").arg(QString::number(atracks)), fileInfo.audioParams.codec) +
             inner.arg(tr("Audio Output"), current_ao) +
-            inner.arg(tr("Sample Rate"), QString::number(fileInfo.audio_params.samplerate)) +
-            inner.arg(tr("Channels"), QString::number(fileInfo.audio_params.channels)) +
+            inner.arg(tr("Sample Rate"), QString::number(fileInfo.audioParams.sampleRate)) +
+            inner.arg(tr("Channels"), QString::number(fileInfo.audioParams.channels)) +
             inner.arg(tr("Bitrate"), tr("%0 kbps").arg(abitrate)) + '\n';
 
     if (fileInfo.chapters.length() > 0) {
@@ -980,12 +980,12 @@ void MpvHandler::showText(QString text, int duration)
 void MpvHandler::loadFileInfo()
 {
     if (playState < 0) {
-        fileInfo.media_title.clear();
+        fileInfo.mediaTitle.clear();
         fileInfo.length = 0;
     } else {
         // get media-title
         char *title = mpv_get_property_string(mpv, "media-title");
-        fileInfo.media_title = Util::toUnicode(QByteArray(title));
+        fileInfo.mediaTitle = Util::toUnicode(QByteArray(title));
         // get length
         double len;
         mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &len);
@@ -1023,7 +1023,7 @@ void MpvHandler::loadTracks()
                                 track.type = node.u.list->values[i].u.list->values[n].u.string;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "src-id") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
-                                track.src_id = node.u.list->values[i].u.list->values[n].u.int64;
+                                track.srcId = node.u.list->values[i].u.list->values[n].u.int64;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "title") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                                 track.title = node.u.list->values[i].u.list->values[n].u.string;
@@ -1032,7 +1032,7 @@ void MpvHandler::loadTracks()
                                 track.lang = node.u.list->values[i].u.list->values[n].u.string;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "albumart") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
-                                track.albumart = node.u.list->values[i].u.list->values[n].u.flag;
+                                track.albumArt = node.u.list->values[i].u.list->values[n].u.flag;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "default") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_FLAG)
                                 track._default = node.u.list->values[i].u.list->values[n].u.flag;
@@ -1041,28 +1041,28 @@ void MpvHandler::loadTracks()
                                 track.external = node.u.list->values[i].u.list->values[n].u.flag;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "external-filename") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
-                                track.external_filename = node.u.list->values[i].u.list->values[n].u.string;
+                                track.externalFileName = node.u.list->values[i].u.list->values[n].u.string;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "codec") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
                                 track.codec = node.u.list->values[i].u.list->values[n].u.string;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "demux-w") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
-                                track.demux_w = node.u.list->values[i].u.list->values[n].u.int64;
+                                track.demuxW = node.u.list->values[i].u.list->values[n].u.int64;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "demux-h") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
-                                track.demux_h = node.u.list->values[i].u.list->values[n].u.int64;
+                                track.demuxH = node.u.list->values[i].u.list->values[n].u.int64;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "demux-fps") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_DOUBLE)
-                                track.demux_fps = node.u.list->values[i].u.list->values[n].u.double_;
+                                track.demuxFps = node.u.list->values[i].u.list->values[n].u.double_;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "demux-channel-count") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
-                                track.demux_channel_count = node.u.list->values[i].u.list->values[n].u.int64;
+                                track.demuxChannelCount = node.u.list->values[i].u.list->values[n].u.int64;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "demux-samplerate") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_INT64)
-                                track.demux_samplerate = node.u.list->values[i].u.list->values[n].u.int64;
+                                track.demuxSampleRate = node.u.list->values[i].u.list->values[n].u.int64;
                         } else if (QString(node.u.list->values[i].u.list->keys[n]) == "decoder-desc") {
                             if (node.u.list->values[i].u.list->values[n].format == MPV_FORMAT_STRING)
-                                track.decoder_desc = node.u.list->values[i].u.list->values[n].u.string;
+                                track.decoderDesc = node.u.list->values[i].u.list->values[n].u.string;
                         }
                     }
                     if (track.type == "video")
@@ -1106,11 +1106,11 @@ void MpvHandler::loadChapters()
 void MpvHandler::loadVideoParams()
 {
     if (playState < 0) {
-        fileInfo.video_params.codec.clear();
-        fileInfo.video_params.width = fileInfo.video_params.dwidth = 0;
-        fileInfo.video_params.height = fileInfo.video_params.dheight = 0;
+        fileInfo.videoParams.codec.clear();
+        fileInfo.videoParams.width = fileInfo.videoParams.dwidth = 0;
+        fileInfo.videoParams.height = fileInfo.videoParams.dheight = 0;
     } else if (hasVideoTrack) {
-        fileInfo.video_params.codec = mpv_get_property_string(mpv, "video-codec");
+        fileInfo.videoParams.codec = mpv_get_property_string(mpv, "video-codec");
 
         int64_t width = 0, height = 0, dwidth = 0, dheight = 0;
         mpv_get_property(mpv, "width",        MPV_FORMAT_INT64, &width);
@@ -1118,43 +1118,43 @@ void MpvHandler::loadVideoParams()
         mpv_get_property(mpv, "dwidth",       MPV_FORMAT_INT64, &dwidth);
         mpv_get_property(mpv, "dheight",      MPV_FORMAT_INT64, &dheight);
 
-        fileInfo.video_params.width = width;
-        fileInfo.video_params.height = height;
-        fileInfo.video_params.dwidth = dwidth;
-        fileInfo.video_params.dheight = dheight;
+        fileInfo.videoParams.width = width;
+        fileInfo.videoParams.height = height;
+        fileInfo.videoParams.dwidth = dwidth;
+        fileInfo.videoParams.dheight = dheight;
     } else {
-        fileInfo.video_params.codec = "png (PNG (Portable Network Graphics) image)";
-        fileInfo.video_params.width = fileInfo.video_params.dwidth = defaultAlbumArt.width();
-        fileInfo.video_params.height = fileInfo.video_params.dheight = defaultAlbumArt.height();
+        fileInfo.videoParams.codec = "png (PNG (Portable Network Graphics) image)";
+        fileInfo.videoParams.width = fileInfo.videoParams.dwidth = defaultAlbumArt.width();
+        fileInfo.videoParams.height = fileInfo.videoParams.dheight = defaultAlbumArt.height();
     }
 
-    emit videoParamsChanged(fileInfo.video_params);
+    emit videoParamsChanged(fileInfo.videoParams);
 }
 
 void MpvHandler::loadAudioParams()
 {
     if (playState < 0) {
-        fileInfo.audio_params.codec.clear();
-        fileInfo.audio_params.samplerate = 0;
-        fileInfo.audio_params.channels = 0;
+        fileInfo.audioParams.codec.clear();
+        fileInfo.audioParams.sampleRate = 0;
+        fileInfo.audioParams.channels = 0;
     } else {
-        fileInfo.audio_params.codec = mpv_get_property_string(mpv, "audio-codec");
+        fileInfo.audioParams.codec = mpv_get_property_string(mpv, "audio-codec");
         mpv_node node;
         mpv_get_property(mpv, "audio-params", MPV_FORMAT_NODE, &node);
         if (node.format == MPV_FORMAT_NODE_MAP) {
             for (int i = 0; i < node.u.list->num; i++) {
                 if (QString(node.u.list->keys[i]) == "samplerate") {
                     if (node.u.list->values[i].format == MPV_FORMAT_INT64)
-                        fileInfo.audio_params.samplerate = node.u.list->values[i].u.int64;
+                        fileInfo.audioParams.sampleRate = node.u.list->values[i].u.int64;
                 } else if (QString(node.u.list->keys[i]) == "channel-count") {
                     if (node.u.list->values[i].format == MPV_FORMAT_INT64)
-                        fileInfo.audio_params.channels = node.u.list->values[i].u.int64;
+                        fileInfo.audioParams.channels = node.u.list->values[i].u.int64;
                 }
             }
         }
     }
 
-    emit audioParamsChanged(fileInfo.audio_params);
+    emit audioParamsChanged(fileInfo.audioParams);
 }
 
 void MpvHandler::loadMetadata()

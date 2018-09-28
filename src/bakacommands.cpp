@@ -170,7 +170,7 @@ void BakaEngine::screenshot(bool subs)
 void BakaEngine::bakaMediaInfo(QStringList &args)
 {
     if (args.empty())
-        mediaInfo(window->ui->actionMedia_Info->isChecked());
+        mediaInfo(window->ui->actionMediaInfo->isChecked());
     else
         invalidParameter(args.join(' '));
 }
@@ -237,21 +237,21 @@ void BakaEngine::bakaPlaylist(QStringList &args)
             args.pop_front();
             if (args.empty()) {
                 if (arg == "off") {
-                    if (window->ui->action_Off->isChecked()) {
-                        window->ui->action_This_File->setChecked(false);
-                        window->ui->action_Playlist->setChecked(false);
+                    if (window->ui->actionRepeatOff->isChecked()) {
+                        window->ui->actionRepeatThisFile->setChecked(false);
+                        window->ui->actionRepeatPlaylist->setChecked(false);
                         window->ui->repeatButton->setIcon(QIcon(":/img/repeat_off.svg"));
                     }
                 } else if (arg == "this") {
-                    if (window->ui->action_This_File->isChecked()) {
-                        window->ui->action_Off->setChecked(false);
-                        window->ui->action_Playlist->setChecked(false);
+                    if (window->ui->actionRepeatThisFile->isChecked()) {
+                        window->ui->actionRepeatOff->setChecked(false);
+                        window->ui->actionRepeatPlaylist->setChecked(false);
                         window->ui->repeatButton->setIcon(QIcon(":/img/repeat_one.svg"));
                     }
                 } else if (arg == "playlist") {
-                    if (window->ui->action_Playlist->isChecked()) {
-                        window->ui->action_Off->setChecked(false);
-                        window->ui->action_This_File->setChecked(false);
+                    if (window->ui->actionRepeatPlaylist->isChecked()) {
+                        window->ui->actionRepeatOff->setChecked(false);
+                        window->ui->actionRepeatThisFile->setChecked(false);
                         window->ui->repeatButton->setIcon(QIcon(":/img/repeat.svg"));
                     }
                 } else
@@ -401,7 +401,7 @@ void BakaEngine::fitWindow(int percent, bool msg)
     if (window->isFullScreen() || window->isMaximized())
         return;
 
-    const Mpv::VideoParams &vG = mpv->getFileInfo().video_params; // video geometry
+    const Mpv::VideoParams &vG = mpv->getFileInfo().videoParams; // video geometry
     QRect mG = window->ui->mpvContainer->geometry(),                      // mpv geometry
           wfG = window->frameGeometry(),                          // frame geometry of window (window geometry + window frame)
           wG = window->geometry(),                                // window geometry
@@ -474,7 +474,7 @@ void BakaEngine::fitWindow(int percent, bool msg)
 void BakaEngine::bakaDeinterlace(QStringList &args)
 {
     if (args.empty())
-        mpv->setDeinterlace(window->ui->action_Deinterlace->isChecked());
+        mpv->setDeinterlace(window->ui->actionDeinterlace->isChecked());
     else
         invalidParameter(args.join(' '));
 }
@@ -482,7 +482,7 @@ void BakaEngine::bakaDeinterlace(QStringList &args)
 void BakaEngine::bakaInterpolate(QStringList &args)
 {
     if (args.empty())
-        mpv->setInterpolate(window->ui->action_Motion_Interpolation->isChecked());
+        mpv->setInterpolate(window->ui->actionMotionInterpolation->isChecked());
     else
         invalidParameter(args.join(' '));
 }
@@ -581,7 +581,7 @@ void BakaEngine::bakaSubtitleStyle(QStringList &args)
                 if (!input.isEmpty()) {
                     double factor = input.toDouble();
                     mpv->setSubtitleBlur(factor);
-                    window->ui->action_Subtitle_Blur->setChecked(factor);
+                    window->ui->actionSubtitleBlur->setChecked(factor);
                 }
             } else if (arg == "shadow-offset") {
                 QString input = InputDialog::getInput(tr("Input Offset Value (0-20):"), tr("Set Shadow Offset"), [=] (QString input) {
@@ -591,7 +591,7 @@ void BakaEngine::bakaSubtitleStyle(QStringList &args)
                 if (!input.isEmpty()) {
                     int offset = input.toInt();
                     mpv->setSubtitleShadowOffset(offset);
-                    window->ui->action_Subtitle_Shadow_Offset->setChecked(offset);
+                    window->ui->actionSubtitleShadowOffset->setChecked(offset);
                 }
             } else if (arg == "shadow-color") {
                 QColor color = QColorDialog::getColor(mpv->getSubtitleShadowColor(), window, tr("Set Shadow Color"),

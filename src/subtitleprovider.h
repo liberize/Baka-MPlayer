@@ -14,6 +14,7 @@ public:
 signals:
     void searchFinished(const QList<SubtitleEntry> &result);
     void downloadFinished(const SubtitleEntry &entry);
+    void error(QString msg);
 };
 
 #endif // SUBTITLEPROVIDER_H

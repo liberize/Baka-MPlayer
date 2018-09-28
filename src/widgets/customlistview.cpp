@@ -2,19 +2,11 @@
 #include "util.h"
 
 #include <QPainter>
-#include <QScrollBar>
 
 
 CustomListView::CustomListView(QWidget *parent) :
     QListView(parent)
 {
-    connect(verticalScrollBar(), &QScrollBar::valueChanged, [=] (int value) {
-        if (value == verticalScrollBar()->maximum())
-            emit scrollReachedEnd();
-    });
-    connect(selectionModel(), &QItemSelectionModel::currentChanged, [=] (const QModelIndex &current, const QModelIndex &) {
-        emit currentRowChanged(current.row());
-    });
 }
 
 void CustomListView::mouseMoveEvent(QMouseEvent *event)

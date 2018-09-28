@@ -28,6 +28,7 @@
 
 static void *mpvGetOpenGL(void *ctx, const char* name)
 {
+    Q_UNUSED(ctx);
     CFBundleRef framework = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.opengl"));
     if (framework == NULL) {
         NSLog(@"Cannot get OpenGL function pointer!");
@@ -121,6 +122,7 @@ void mpvUpdateCallback(void *ctx) {
 
 - (CGLPixelFormatObj)copyCGLPixelFormatForDisplayMask:(uint32_t)mask
 {
+    Q_UNUSED(mask);
     CGLPixelFormatAttribute attributes0[] = {
         // kCGLPFADisplayMask, (CGLPixelFormatAttribute)mask,
         kCGLPFADoubleBuffer,
@@ -171,11 +173,19 @@ void mpvUpdateCallback(void *ctx) {
 
 - (BOOL)canDrawInCGLContext:(CGLContextObj)glContext pixelFormat:(CGLPixelFormatObj)pixelFormat forLayerTime:(CFTimeInterval)timeInterval displayTime:(const CVTimeStamp *)timeStamp
 {
+    Q_UNUSED(glContext);
+    Q_UNUSED(pixelFormat);
+    Q_UNUSED(timeInterval);
+    Q_UNUSED(timeStamp);
     return YES;
 }
 
 - (void)drawInCGLContext:(CGLContextObj)glContext pixelFormat:(CGLPixelFormatObj)pixelFormat forLayerTime:(CFTimeInterval)timeInterval displayTime:(const CVTimeStamp *)timeStamp
 {
+    Q_UNUSED(pixelFormat);
+    Q_UNUSED(timeInterval);
+    Q_UNUSED(timeStamp);
+
     [_uninitLock lock];
     CGLLockContext(glContext);
     CGLSetCurrentContext(glContext);
@@ -263,6 +273,7 @@ void mpvUpdateCallback(void *ctx) {
 }
 
 - (void)draw:(NSRect)dirtyRect {
+    Q_UNUSED(dirtyRect);
 }
 
 //- (BOOL)acceptsFirstMouse:(NSEvent *)event {

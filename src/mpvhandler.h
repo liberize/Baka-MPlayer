@@ -52,8 +52,8 @@ public:
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
 
-    int toScaledFontSize(int size)          { return fileInfo.video_params.dheight ? size * 720 / fileInfo.video_params.dheight : size; }
-    int fromScaledFontSize(int size)        { return fileInfo.video_params.dheight ? size * fileInfo.video_params.dheight / 720 : size; }
+    int toScaledFontSize(int size)          { return fileInfo.videoParams.dheight ? size * 720 / fileInfo.videoParams.dheight : size; }
+    int fromScaledFontSize(int size)        { return fileInfo.videoParams.dheight ? size * fileInfo.videoParams.dheight / 720 : size; }
     QColor fromColorString(QString colorStr);
     QString toColorString(const QColor &color);
 

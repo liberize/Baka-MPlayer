@@ -8,6 +8,8 @@
 #include "request.h"
 #include "requestmanager.h"
 
+#include <QScrollBar>
+
 
 LibraryWidget::LibraryWidget(QWidget *parent) :
     CustomListView(parent)
@@ -16,6 +18,11 @@ LibraryWidget::LibraryWidget(QWidget *parent) :
     mediaItemDelegate = new MediaItemDelegate(this);
     setItemDelegate(mediaItemDelegate);
     setModel(mediaModel);
+
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, [=] (int value) {
+        if (value == verticalScrollBar()->maximum())
+            emit scrollReachedEnd();
+    });
 }
 
 LibraryWidget::~LibraryWidget()
@@ -28,6 +35,11 @@ LibraryWidget::~LibraryWidget()
 void LibraryWidget::attachEngine(BakaEngine *baka)
 {
     this->baka = baka;
+}
+
+int LibraryWidget::count()
+{
+    return mediaModel->rowCount();
 }
 
 QModelIndex LibraryWidget::appendEntry(MediaEntry *entry)

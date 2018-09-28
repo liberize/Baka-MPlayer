@@ -19,6 +19,7 @@ signals:
     void fetchFinished(const QList<MediaEntry> &result);
     void searchFinished(const QList<MediaEntry> &result);
     void downloadFinished(const MediaEntry &entry, QString what, const QPersistentModelIndex &index);
+    void error(QString msg);
 
 private:
     int nextStart = 0;

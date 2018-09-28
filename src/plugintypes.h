@@ -13,6 +13,7 @@ namespace py = pybind11;
 
 #include "util.h"
 
+#include <QObject>
 #include <QString>
 #include <QDir>
 #include <QIcon>
@@ -27,6 +28,19 @@ T SafeRun(std::function<T()> func) {
         return func();
     } catch (std::runtime_error e) {
         qDebug() << e.what();
+    }
+    return T();
+}
+
+template <typename T>
+T SafeRun(std::function<T()> func, QString &err) {
+    try {
+        return func();
+    } catch (std::runtime_error e) {
+        qDebug() << e.what();
+        err = e.what();
+        if (err.isEmpty())
+            err = QObject::tr("An error occurred.");
     }
     return T();
 }
@@ -114,7 +128,12 @@ struct SubtitleEntry {
     }
 };
 
+Q_DECLARE_METATYPE(MediaEntry)
 Q_DECLARE_METATYPE(MediaEntry*)
+Q_DECLARE_METATYPE(QList<MediaEntry>)
+Q_DECLARE_METATYPE(SubtitleEntry)
+Q_DECLARE_METATYPE(QList<SubtitleEntry>)
 Q_DECLARE_METATYPE(py::object)
+Q_DECLARE_METATYPE(QList<py::object>)
 
 #endif // PLUGINTYPES_H
