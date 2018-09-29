@@ -36,6 +36,12 @@ namespace Mpv
         Paused = 4,
         Stopped = -2
     };
+    enum RepeatType {
+        RepeatOff,
+        RepeatPlaylist,
+        RepeatThisFile
+    };
+
     struct Chapter {
         QString title;
         double time;

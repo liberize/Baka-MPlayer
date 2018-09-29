@@ -23,6 +23,6 @@ void CustomListView::paintEvent(QPaintEvent *event) {
         color.setNamedColor("#959595");
         painter.setPen(QPen(color));
         painter.setFont(QFont(Util::defaultFont(), 13, QFont::Light, true));
-        painter.drawText(rect(), Qt::AlignCenter, placeholderText);
+        painter.drawText(rect(), Qt::AlignCenter | Qt::TextWordWrap , placeholderText);
     }
 }

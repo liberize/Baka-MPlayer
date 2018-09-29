@@ -21,13 +21,10 @@
 #endif
 
 #include "recent.h"
+#include "mpvtypes.h"
 
 namespace Ui {
 class MainWindow;
-}
-
-namespace Mpv {
-struct PlaylistItem;
 }
 
 class BakaEngine;
@@ -60,6 +57,7 @@ public:
     void updateSidebarWidth();
     QIcon getTrayIcon();
     Mpv::PlaylistItem *getCurrentPlayFile();
+    Mpv::RepeatType getRepeatType();
 
     Ui::MainWindow *ui;
 

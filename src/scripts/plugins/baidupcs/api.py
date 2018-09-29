@@ -1,4 +1,5 @@
 # coding=utf-8
+# https://github.com/ly0/baidupcsapi
 
 from functools import wraps
 import re

@@ -263,7 +263,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(baka->dimDialog, &DimDialog::visbilityChanged, [=] (bool dim) {
         if (dim)
             Util::setAlwaysOnTop(this, true);
-        else if (onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
+        else if (onTop == "never" || (onTop == "playing" && mpv->getPlayState() < 0))
             Util::setAlwaysOnTop(this, false);
     });
 
@@ -496,25 +496,33 @@ MainWindow::MainWindow(QWidget *parent):
             break;
 
         case Mpv::Idle:
-            bool stop = false;
+            bool stop = true;
             if (init) {
-                if (ui->actionRepeatThisFile->isChecked()) // repeat this file
-                    ui->playlistWidget->playRow(0, true); // restart file
-                else if (ui->actionStopAfterCurrent->isChecked() ||  // stop after playing this file
-                        ui->playlistWidget->playingRow() >= ui->playlistWidget->count() - 1) { // end of the playlist
-                    if (!ui->actionStopAfterCurrent->isChecked() && // not supposed to stop after current
-                        ui->actionRepeatPlaylist->isChecked() && // we're supposed to restart the playlist
-                        ui->playlistWidget->count() > 0) { // playlist isn't empty
+                auto repeat = getRepeatType();
+                bool stopAfterCurrent = ui->actionStopAfterCurrent->isChecked();
+                int playingRow = ui->playlistWidget->playingRow();
+                int rowCount = ui->playlistWidget->count();
+                if (repeat == Mpv::RepeatThisFile) {
+                    if (playingRow != -1) {
+                        ui->playlistWidget->playRow(0, true); // restart file
+                        stop = false;
+                    }
+                } else if (stopAfterCurrent || playingRow >= rowCount - 1 || playingRow == -1) {
+                    if (!stopAfterCurrent && repeat == Mpv::RepeatPlaylist && rowCount > 0) {
                         ui->playlistWidget->playRow(0); // restart playlist
-                    } else // stop
-                        stop = true;
-                } else
+                        stop = false;
+                    }
+                } else {
                     ui->playlistWidget->playRow(1, true);
-            } else
-                stop = true;
-
+                    stop = false;
+                }
+            }
             if (stop) {
                 setWindowTitle("Baka MPlayer");
+                Util::setAspectRatio(this, 0, 0);
+                QRect rect(0, 0, 640, 480);
+                rect.moveCenter(geometry().center());
+                setGeometry(rect);
                 enablePlaybackControls(false);
                 ui->seekBar->setTotalTime(0);
                 ui->actionStopAfterCurrent->setChecked(false);
@@ -1094,6 +1102,15 @@ QIcon MainWindow::getTrayIcon()
 Mpv::PlaylistItem *MainWindow::getCurrentPlayFile()
 {
     return ui->playlistWidget->currentItem();
+}
+
+Mpv::RepeatType MainWindow::getRepeatType()
+{
+    if (ui->actionRepeatPlaylist->isChecked())
+        return Mpv::RepeatPlaylist;
+    if (ui->actionRepeatThisFile->isChecked())
+        return Mpv::RepeatThisFile;
+    return Mpv::RepeatOff;
 }
 
 QString MainWindow::getInput(QString title, QString prompt)

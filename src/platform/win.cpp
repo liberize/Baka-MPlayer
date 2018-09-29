@@ -75,42 +75,45 @@ void setAlwaysOnTop(QMainWindow *main, bool ontop)
 
 void setAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
 {
-    if (!eventFilter) {
+    if (!eventFilter)
         eventFilter = new WinNativeEventFilter;
-    }
-    eventFilter->installHandler(main->winId(), WM_SIZING, [] (MSG *msg) -> bool {
-        RECT *rc = (RECT*)msg->lParam;
-        // get client area of the windows if it had the rect rc
-        // (subtracting the window borders)
-        RECT b = { 0, 0, 0, 0 };
-        AdjustWindowRect(&b, GetWindowLongPtrW(msg->hwnd, GWL_STYLE), 0);
-        rc->left -= b.left;
-        rc->top -= b.top;
-        rc->right -= b.right;
-        rc->bottom -= b.bottom;
 
-        int c_w = rc->right - rc->left, c_h = rc->bottom - rc->top;
-        float aspect = o_dwidth / (float) qMax(o_dheight, 1);
-        int d_w = c_h * aspect - c_w;
-        int d_h = c_w / aspect - c_h;
-        int d_corners[4] = { d_w, d_h, -d_w, -d_h };
-        int corners[4] = { rc->left, rc->top, rc->right, rc->bottom };
-        int corner = -1;
-        switch (msg->wParam) {
-        case WMSZ_LEFT:         corner = 3; break;
-        case WMSZ_TOP:          corner = 2; break;
-        case WMSZ_RIGHT:        corner = 3; break;
-        case WMSZ_BOTTOM:       corner = 2; break;
-        case WMSZ_TOPLEFT:      corner = 1; break;
-        case WMSZ_TOPRIGHT:     corner = 1; break;
-        case WMSZ_BOTTOMLEFT:   corner = 3; break;
-        case WMSZ_BOTTOMRIGHT:  corner = 3; break;
-        }
-        if (corner >= 0)
-            corners[corner] -= d_corners[corner];
-        *rc = (RECT) { corners[0], corners[1], corners[2], corners[3] };
-        return true;
-    });
+    if (o_dwidth > 0 && o_dheight > 0)
+        eventFilter->installHandler(main->winId(), WM_SIZING, [] (MSG *msg) -> bool {
+            RECT *rc = (RECT*)msg->lParam;
+            // get client area of the windows if it had the rect rc
+            // (subtracting the window borders)
+            RECT b = { 0, 0, 0, 0 };
+            AdjustWindowRect(&b, GetWindowLongPtrW(msg->hwnd, GWL_STYLE), 0);
+            rc->left -= b.left;
+            rc->top -= b.top;
+            rc->right -= b.right;
+            rc->bottom -= b.bottom;
+
+            int c_w = rc->right - rc->left, c_h = rc->bottom - rc->top;
+            float aspect = o_dwidth / (float) qMax(o_dheight, 1);
+            int d_w = c_h * aspect - c_w;
+            int d_h = c_w / aspect - c_h;
+            int d_corners[4] = { d_w, d_h, -d_w, -d_h };
+            int corners[4] = { rc->left, rc->top, rc->right, rc->bottom };
+            int corner = -1;
+            switch (msg->wParam) {
+            case WMSZ_LEFT:         corner = 3; break;
+            case WMSZ_TOP:          corner = 2; break;
+            case WMSZ_RIGHT:        corner = 3; break;
+            case WMSZ_BOTTOM:       corner = 2; break;
+            case WMSZ_TOPLEFT:      corner = 1; break;
+            case WMSZ_TOPRIGHT:     corner = 1; break;
+            case WMSZ_BOTTOMLEFT:   corner = 3; break;
+            case WMSZ_BOTTOMRIGHT:  corner = 3; break;
+            }
+            if (corner >= 0)
+                corners[corner] -= d_corners[corner];
+            *rc = (RECT) { corners[0], corners[1], corners[2], corners[3] };
+            return true;
+        });
+    else
+        eventFilter->removeHandler(main->winId(), WM_SIZING);
 }
 
 void enableScreenSaver(bool enable)

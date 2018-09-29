@@ -86,7 +86,8 @@ class BaiduPCS(MediaProvider):
                 'preset': 'pcs',
                 'user_agent': headers['User-Agent'],
                 'referer': headers['Referer'],
-                'cookies': headers['Cookie']
+                'cookies': headers['Cookie'],
+                'max_conn': '16'
             }
             if self.file_dir:
                 options['file_dir'] = self.file_dir

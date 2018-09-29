@@ -58,11 +58,11 @@ class Plugin:
 
     def __load_config(self):
         conf_file = os.path.join(self.__path, 'config.json')
-        if not os.path.isfile(conf_file):
-            return
+        conf = {}
         try:
-            with open(conf_file, 'r') as f:
-                conf = json.load(f)
+            if os.path.isfile(conf_file):
+                with open(conf_file, 'r') as f:
+                    conf = json.load(f)
             for i in self.config_items:
                 setattr(self, i.name, conf.get(i.name, ''))
         except:

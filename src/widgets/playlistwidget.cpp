@@ -176,6 +176,8 @@ void PlaylistWidget::selectIndex(const QModelIndex &index)
 
 void PlaylistWidget::playRow(int i, bool relative)
 {
+    if (relative && !curPlayingIndex.isValid())
+        return;
     int row = relative ? playingRow() + i : i;
     row = qMin(qMax(row, 0), playlistModel->rowCount() - 1);
     playIndex(playlistModel->index(row, 0));
@@ -183,8 +185,10 @@ void PlaylistWidget::playRow(int i, bool relative)
 
 void PlaylistWidget::playIndex(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        baka->mpv->stop();
         return;
+    }
     auto item = index.data(Qt::UserRole).value<Mpv::PlaylistItem*>();
     if (baka->mpv->playFile(item->path, item->name, item->options)) {
         scrollTo(index);

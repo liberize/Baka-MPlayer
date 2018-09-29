@@ -45,7 +45,10 @@ void setAlwaysOnTop(QMainWindow *main, bool ontop)
 void setAspectRatio(QMainWindow *main, int w, int h)
 {
     NSView *view = (__bridge NSView *)(void *)(main->winId());
-    view.window.contentAspectRatio = NSMakeSize(w, h);
+    if (w > 0 && h > 0)
+        view.window.contentAspectRatio = NSMakeSize(w, h);
+    else
+        view.window.contentResizeIncrements = NSMakeSize(1.0, 1.0);
 }
 
 void enableScreenSaver(bool enable)
