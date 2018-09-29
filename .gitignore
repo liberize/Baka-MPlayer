@@ -6,3 +6,5 @@ Makefile
 *.out
 .tags*
 .qmake.stash
+config.json
+*.cookies
