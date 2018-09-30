@@ -113,6 +113,8 @@ void BakaEngine::load2_0_3()
 
     for (auto entry : root["disabledPlugins"].toArray())
         pluginManager->getDisableList().insert(entry.toString());
+
+    window->setRepeatType(QJsonValueRef2(root["repeat"]).toString("off"));
 }
 
 void BakaEngine::saveSettings()
@@ -178,6 +180,8 @@ void BakaEngine::saveSettings()
     for (auto &entry : pluginManager->getDisableList())
         disable_list_json.append(entry);
     root["disabledPlugins"] = disable_list_json;
+
+    root["repeat"] = window->getRepeatType();
 
     settings->setRoot(root);
     settings->save();

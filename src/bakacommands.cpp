@@ -70,14 +70,14 @@ void BakaEngine::bakaOpenLocation(QStringList &args)
 
 void BakaEngine::openLocation()
 {
-    mpv->loadFile(LocationDialog::getUrl(mpv->getPath() + mpv->getFile(), window));
+    mpv->playFile(LocationDialog::getUrl(mpv->getPath() + mpv->getFile(), window));
 }
 
 
 void BakaEngine::bakaOpenClipboard(QStringList &args)
 {
     if (args.empty())
-        mpv->loadFile(QApplication::clipboard()->text());
+        mpv->playFile(QApplication::clipboard()->text());
     else
         invalidParameter(args.join(' '));
 }
@@ -354,12 +354,12 @@ void BakaEngine::bakaOpen(QStringList &args)
     if (args.empty())
         open();
     else
-        mpv->loadFile(args.join(' '));
+        mpv->playFile(args.join(' '));
 }
 
 void BakaEngine::open()
 {
-    mpv->loadFile(QFileDialog::getOpenFileName(window,
+    mpv->playFile(QFileDialog::getOpenFileName(window,
                    tr("Open File"),mpv->getPath(),
                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" "))+
                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+

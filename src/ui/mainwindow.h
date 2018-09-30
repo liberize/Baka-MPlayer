@@ -31,6 +31,7 @@ class BakaEngine;
 class MpvHandler;
 class Plugin;
 class MediaProvider;
+class PlaylistWidget;
 
 class MainWindow : public QMainWindow {
     friend class BakaEngine;
@@ -56,8 +57,9 @@ public:
     void setSidebarWidth(int width) { sidebarWidth = width; updateSidebarWidth(); }
     void updateSidebarWidth();
     QIcon getTrayIcon();
-    Mpv::PlaylistItem *getCurrentPlayFile();
-    Mpv::RepeatType getRepeatType();
+    PlaylistWidget *getPlaylistWidget();
+    QString getRepeatType();
+    void setRepeatType(QString r);
 
     Ui::MainWindow *ui;
 

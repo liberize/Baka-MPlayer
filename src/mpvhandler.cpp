@@ -13,6 +13,7 @@
 #include "overlayhandler.h"
 #include "util.h"
 #include "ui/mainwindow.h"
+#include "widgets/playlistwidget.h"
 
 #ifdef ENABLE_MPV_COCOA_WIDGET
 #include "widgets/mpvcocoawidget.h"
@@ -587,11 +588,6 @@ bool MpvHandler::fileExists(QString f)
     return QFile(f).exists();
 }
 
-void MpvHandler::loadFile(QString f, QString title, const QMap<QString, QString> &options)
-{
-    playFile(loadPlaylist(f), title, options);
-}
-
 void MpvHandler::setFileLocalOptions()
 {
     for (auto it = fileLocalOptions.begin(); it != fileLocalOptions.end(); ++it) {
@@ -600,64 +596,72 @@ void MpvHandler::setFileLocalOptions()
     }
 }
 
-QString MpvHandler::loadPlaylist(QString f)
+bool MpvHandler::playItem(Mpv::PlaylistItem *item)
 {
-    if (f == QString()) // ignore empty file name
-        return QString();
+    if (!item)
+        return false;
 
-    if (f == "-" || Util::isValidUrl(f)) {
-        updatePath("");
-    } else { // local file
-        QFileInfo fi(f);
-        if (!fi.exists()) { // file doesn't exist
-            showText(tr("File does not exist")); // tell the user
-            return QString(); // don't do anything more
-        } else if (fi.isDir()) { // if directory
-            updatePath(QDir::toNativeSeparators(fi.absoluteFilePath() + "/")); // set new path
-            auto item = baka->window->getCurrentPlayFile();
-            return item ? item->path : "";
-        } else if (fi.isFile()) { // if file
-            updatePath(QDir::toNativeSeparators(fi.absolutePath() + "/")); // set new path
-            return fi.absoluteFilePath();
-        }
-    }
-    return f;
+    return playFile(item->path, item->name, item->options);
 }
 
-bool MpvHandler::playFile(QString f, QString title, const QMap<QString, QString> &options)
+bool MpvHandler::playFile(QString f, QString title, const OptionMap &options)
 {
-    if (f == QString()) // ignore if file doesn't exist
+    if (f.isEmpty()) // ignore if file doesn't exist
         return false;
 
     if (f == "-" || Util::isValidUrl(f)) {
-        openFile(f);
         updatePath("");
+        openFile(f);
         updateFile(f, title, options);
     } else {
         QFileInfo fi(f);
+        QString newPath, newFile;
         if (fi.isAbsolute()) {
-            if (fi.exists()) {
-                openFile(f);
-                updatePath(QDir::toNativeSeparators(fi.absolutePath() + "/"));
-                updateFile(fi.fileName(), title, options);
-                play();
-            } else {
-                showText(tr("File no longer exists")); // tell the user
-                return false;
+            if (fi.isDir())
+                newPath = QDir::toNativeSeparators(fi.absoluteFilePath() + "/");
+            else {
+                newPath = QDir::toNativeSeparators(fi.absolutePath() + "/");
+                newFile = fi.fileName();
             }
         } else {
-            QFile qf(path + f);
-            if (qf.exists()) {
-                openFile(path + f);
-                updateFile(f, title, options);
-                play();
-            } else {
-                showText(tr("File no longer exists")); // tell the user
-                return false;
-            }
+            newPath = path;
+            newFile = f;
+            fi = QFileInfo(path + f);
         }
+        if (!fi.exists()) {
+            showText(tr("File doesn't exists"));
+            return false;
+        }
+        updatePath(newPath);
+        if (!baka->window->getPlaylistWidget()->isInPlaylist(fi.absoluteFilePath()))
+            populatePlaylist(newPath, newFile);
+
+        if (newFile.isEmpty()) {
+            showText(tr("No media file found in directory"));
+            return false;
+        }
+        openFile(newPath + newFile);
+        updateFile(newFile, title, options);
+        play();
     }
     return true;
+}
+
+void MpvHandler::populatePlaylist(QString dir, QString &f)
+{
+    if (dir.isEmpty())
+        return;
+
+    QDir root(dir);
+    QStringList filter = Mpv::media_filetypes;
+    if (!f.isEmpty())
+        filter.append(QString("*.%1").arg(f.split(".").last()));
+    QFileInfoList flist = root.entryInfoList(filter, QDir::Files);
+    for (auto &i : flist) {
+        baka->window->getPlaylistWidget()->addItem(i.fileName(), dir + i.fileName(), true);
+        if (f.isEmpty())
+            f = i.fileName();
+    }
 }
 
 void MpvHandler::play()
@@ -685,7 +689,7 @@ void MpvHandler::restartPaused()
 void MpvHandler::playPause()
 {
     if (playState < 0) { // not playing, play plays the selected playlist file
-        auto item = baka->window->getCurrentPlayFile();
+        auto item = baka->window->getPlaylistWidget()->currentItem();
         if (item)
             playFile(item->path, item->name, item->options);
     } else {

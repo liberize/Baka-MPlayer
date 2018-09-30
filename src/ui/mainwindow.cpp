@@ -277,7 +277,6 @@ MainWindow::MainWindow(QWidget *parent):
             ui->actionShuffle->setEnabled(false);
             ui->actionStopAfterCurrent->setEnabled(false);
         }
-
         if (model->rowCount() > 0)
             ui->menuRepeat->setEnabled(true);
         else
@@ -502,13 +501,13 @@ MainWindow::MainWindow(QWidget *parent):
                 bool stopAfterCurrent = ui->actionStopAfterCurrent->isChecked();
                 int playingRow = ui->playlistWidget->playingRow();
                 int rowCount = ui->playlistWidget->count();
-                if (repeat == Mpv::RepeatThisFile) {
+                if (repeat == "this") {
                     if (playingRow != -1) {
                         ui->playlistWidget->playRow(0, true); // restart file
                         stop = false;
                     }
                 } else if (stopAfterCurrent || playingRow >= rowCount - 1 || playingRow == -1) {
-                    if (!stopAfterCurrent && repeat == Mpv::RepeatPlaylist && rowCount > 0) {
+                    if (!stopAfterCurrent && repeat == "playlist" && rowCount > 0) {
                         ui->playlistWidget->playRow(0); // restart playlist
                         stop = false;
                     }
@@ -986,7 +985,7 @@ void MainWindow::registerPlugin(Plugin *plugin)
             if (what == "") {
                 // media download finished
                 // in most cases, plugin simply translates url instead of downloading it actually
-                mpv->loadFile(entry.url, entry.name, entry.options);
+                mpv->playFile(entry.url, entry.name, entry.options);
             } else if (what == "cover") {
                 // cover download finished
                 // if entry not exist any more, do nothing
@@ -1064,7 +1063,7 @@ void MainWindow::load(QString file)
     mpv->initialize();
     mpv->loadAudioDevices();
     mpv->loadSubtitleEncodings();
-    mpv->loadFile(file);
+    mpv->playFile(file);
 }
 
 void MainWindow::updateControlsPos()
@@ -1099,18 +1098,28 @@ QIcon MainWindow::getTrayIcon()
 #endif
 }
 
-Mpv::PlaylistItem *MainWindow::getCurrentPlayFile()
+PlaylistWidget *MainWindow::getPlaylistWidget()
 {
-    return ui->playlistWidget->currentItem();
+    return ui->playlistWidget;
 }
 
-Mpv::RepeatType MainWindow::getRepeatType()
+QString MainWindow::getRepeatType()
 {
     if (ui->actionRepeatPlaylist->isChecked())
-        return Mpv::RepeatPlaylist;
+        return "playlist";
     if (ui->actionRepeatThisFile->isChecked())
-        return Mpv::RepeatThisFile;
-    return Mpv::RepeatOff;
+        return "this";
+    return "off";
+}
+
+void MainWindow::setRepeatType(QString r)
+{
+    if (r == "playlist")
+        ui->actionRepeatPlaylist->trigger();
+    else if (r == "this")
+        ui->actionRepeatThisFile->trigger();
+    else if (r == "off")
+        ui->actionRepeatOff->trigger();
 }
 
 QString MainWindow::getInput(QString title, QString prompt)
@@ -1148,12 +1157,12 @@ void MainWindow::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) { // urls
         for (QUrl &url : mimeData->urls()) {
             if (url.isLocalFile())
-                mpv->loadFile(url.toLocalFile());
+                mpv->playFile(url.toLocalFile());
             else
-                mpv->loadFile(url.url());
+                mpv->playFile(url.url());
         }
     } else if (mimeData->hasText()) // text
-        mpv->loadFile(mimeData->text());
+        mpv->playFile(mimeData->text());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -1633,7 +1642,7 @@ void MainWindow::updateRecentFiles()
         if (n++ == 1)
             action->setShortcut(QKeySequence("Ctrl+Z"));
         connect(action, &QAction::triggered, [=] {
-            mpv->loadFile(f);
+            mpv->playFile(f);
         });
     }
 }

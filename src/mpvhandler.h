@@ -21,6 +21,8 @@ class MpvHandler : public QObject {
     Q_OBJECT
 
 public:
+    typedef QMap<QString, QString> OptionMap;
+
     explicit MpvHandler(QWidget *container, QObject *parent = 0);
     ~MpvHandler();
 
@@ -30,7 +32,7 @@ public:
     Mpv::PlayState getPlayState()           { return playState; }
     QString getFile()                       { return file; }
     QString getPath()                       { return path; }
-    const QMap<QString, QString> &getFileLocalOptions() { return fileLocalOptions; }
+    const OptionMap &getFileLocalOptions()  { return fileLocalOptions; }
 
     QString getScreenshotFormat()           { return screenshotFormat; }
     QString getScreenshotTemplate()         { return screenshotTemplate; }
@@ -78,9 +80,8 @@ protected:
     virtual bool event(QEvent*);
 
 public slots:
-    void loadFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
-    QString loadPlaylist(QString);
-    bool playFile(QString, QString = "", const QMap<QString, QString> & = QMap<QString, QString>());
+    bool playItem(Mpv::PlaylistItem *item);
+    bool playFile(QString, QString = "", const OptionMap & = OptionMap());
 
     void addOverlay(int id, int x, int y, QString file, int offset, int w, int h);
     void removeOverlay(int id);
@@ -154,6 +155,7 @@ public slots:
 
 protected slots:
     void openFile(QString);
+    void populatePlaylist(QString dir, QString &f);
     void loadFileInfo();
     void setProperties();
 
@@ -167,7 +169,7 @@ protected slots:
 private slots:
     void updateFileInfo()                      { emit fileInfoChanged(fileInfo); }
     void updatePlayState(Mpv::PlayState s)     { emit playStateChanged(playState = s); }
-    void updateFile(QString s, QString t, const QMap<QString, QString> &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
+    void updateFile(QString s, QString t, const OptionMap &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
     void updatePath(QString s)                 { if (path != s) emit pathChanged(path = s); }
     void updateScreenshotFormat(QString s)     { emit screenshotFormatChanged(screenshotFormat = s); }
     void updateScreenshotTemplate(QString s)   { emit screenshotTemplateChanged(screenshotTemplate = s); }

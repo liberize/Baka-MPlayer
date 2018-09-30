@@ -42,10 +42,6 @@ void PlaylistWidget::attachEngine(BakaEngine *baka)
 {
     this->baka = baka;
 
-    connect(baka->mpv, &MpvHandler::pathChanged, [=] (QString path) {
-        populatePlaylist(path);
-    });
-
     connect(baka->mpv, &MpvHandler::fileChanged, [=] (QString file, QString title, const QMap<QString, QString> &options) {
         QString path = baka->mpv->getPath() + file;
         auto iter = pathIndexMap.find(path);
@@ -69,6 +65,14 @@ void PlaylistWidget::attachEngine(BakaEngine *baka)
         curPlayingIndex = index;
         selectIndex(index);
     });
+
+    connect(baka->mpv, &MpvHandler::playStateChanged, [=] (Mpv::PlayState state) {
+        if (state == Mpv::Idle && curPlayingIndex.isValid()) {
+            auto item = curPlayingIndex.data(Qt::UserRole).value<Mpv::PlaylistItem*>();
+            item->playing = false;
+            emit dataChanged(curPlayingIndex, curPlayingIndex);
+        }
+    });
 }
 
 QModelIndex PlaylistWidget::appendItem(Mpv::PlaylistItem *i)
@@ -79,6 +83,7 @@ QModelIndex PlaylistWidget::appendItem(Mpv::PlaylistItem *i)
     item->setEditable(false);
     playlistModel->appendRow(item);
     pathIndexMap[i->path] = item->index();
+    emit playlistChanged(playlistModel);
     return item->index();
 }
 
@@ -92,6 +97,7 @@ void PlaylistWidget::clear()
     }
     playlistModel->clear();
     pathIndexMap.clear();
+    emit playlistChanged(playlistModel);
 }
 
 void PlaylistWidget::clearNotPlaying()
@@ -106,39 +112,29 @@ void PlaylistWidget::clearNotPlaying()
             pathIndexMap.remove(item->path);
             delete item;
             playlistModel->removeRow(row);
+            emit playlistChanged(playlistModel);
         }
     }
 }
 
-void PlaylistWidget::populatePlaylist(QString dir)
-{
-    if (dir.isEmpty())
-        return;
-
-    QDir root(dir);
-    QStringList filter = Mpv::media_filetypes;
-    QFileInfoList flist = root.entryInfoList(filter, QDir::Files);
-    for (auto &i : flist) {
-        auto item = new Mpv::PlaylistItem { i.fileName(), dir + i.fileName(), QMap<QString, QString>(), true, false };
-        if (!pathIndexMap.contains(item->path))
-            appendItem(item);
-    }
-    emit playlistChanged(playlistModel);
-}
-
 Mpv::PlaylistItem *PlaylistWidget::currentItem()
 {
-    QModelIndex index = curPlayingIndex.isValid() ? (QModelIndex)curPlayingIndex : playlistModel->index(0, 0);
+    return curPlayingIndex.isValid() ? curPlayingIndex.data(Qt::UserRole).value<Mpv::PlaylistItem*>() : nullptr;
+}
+
+Mpv::PlaylistItem *PlaylistWidget::itemAtRow(int row)
+{
+    auto index = playlistModel->index(row, 0);
     return index.isValid() ? index.data(Qt::UserRole).value<Mpv::PlaylistItem*>() : nullptr;
 }
 
 void PlaylistWidget::addItem(QString name, QString path, bool local)
 {
-    auto item = new Mpv::PlaylistItem { name, path, QMap<QString, QString>(), local, false };
     auto iter = pathIndexMap.find(path);
-    if (iter == pathIndexMap.end())
+    if (iter == pathIndexMap.end()) {
+        auto item = new Mpv::PlaylistItem { name, path, QMap<QString, QString>(), local, false };
         appendItem(item);
-    else
+    } else
         selectIndex(*iter);
 }
 
@@ -155,6 +151,11 @@ int PlaylistWidget::playingRow()
 int PlaylistWidget::count()
 {
     return playlistModel->rowCount();
+}
+
+bool PlaylistWidget::isInPlaylist(QString path)
+{
+    return pathIndexMap.contains(path);
 }
 
 void PlaylistWidget::selectRow(int i, bool relative)
@@ -190,7 +191,7 @@ void PlaylistWidget::playIndex(const QModelIndex &index)
         return;
     }
     auto item = index.data(Qt::UserRole).value<Mpv::PlaylistItem*>();
-    if (baka->mpv->playFile(item->path, item->name, item->options)) {
+    if (baka->mpv->playItem(item)) {
         scrollTo(index);
     } else {
         playIndex(playlistModel->index(index.row() + 1, 0));
@@ -212,6 +213,7 @@ void PlaylistWidget::removeIndex(const QModelIndex &index)
     pathIndexMap.remove(item->path);
     delete item;
     playlistModel->removeRow(index.row());
+    emit playlistChanged(playlistModel);
 }
 
 void PlaylistWidget::search(QString s)

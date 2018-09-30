@@ -29,6 +29,7 @@ public slots:
     int selectedRow();
     int playingRow();
     int count();
+    bool isInPlaylist(QString path);
 
     void selectRow(int i, bool relative = false);
     void selectIndex(const QModelIndex &index);
@@ -40,9 +41,8 @@ public slots:
     void search(QString);
     void shuffle();
 
-    void populatePlaylist(QString dir);
-
     Mpv::PlaylistItem *currentItem();
+    Mpv::PlaylistItem *itemAtRow(int row);
     void addItem(QString name, QString path, bool local);
     QModelIndex appendItem(Mpv::PlaylistItem *item);
     void clear();
