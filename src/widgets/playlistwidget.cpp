@@ -32,6 +32,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
 
 PlaylistWidget::~PlaylistWidget()
 {
+    blockSignals(true);
     clear();
     delete proxyModel;
     delete playlistModel;

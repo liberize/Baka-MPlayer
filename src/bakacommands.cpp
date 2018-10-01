@@ -237,23 +237,20 @@ void BakaEngine::bakaPlaylist(QStringList &args)
             args.pop_front();
             if (args.empty()) {
                 if (arg == "off") {
-                    if (window->ui->actionRepeatOff->isChecked()) {
-                        window->ui->actionRepeatThisFile->setChecked(false);
-                        window->ui->actionRepeatPlaylist->setChecked(false);
-                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat_off.svg"));
-                    }
+                    window->ui->actionRepeatOff->setChecked(true);
+                    window->ui->actionRepeatThisFile->setChecked(false);
+                    window->ui->actionRepeatPlaylist->setChecked(false);
+                    window->ui->repeatButton->setIcon(QIcon(":/img/repeat_off.svg"));
                 } else if (arg == "this") {
-                    if (window->ui->actionRepeatThisFile->isChecked()) {
-                        window->ui->actionRepeatOff->setChecked(false);
-                        window->ui->actionRepeatPlaylist->setChecked(false);
-                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat_one.svg"));
-                    }
+                    window->ui->actionRepeatThisFile->setChecked(true);
+                    window->ui->actionRepeatOff->setChecked(false);
+                    window->ui->actionRepeatPlaylist->setChecked(false);
+                    window->ui->repeatButton->setIcon(QIcon(":/img/repeat_one.svg"));
                 } else if (arg == "playlist") {
-                    if (window->ui->actionRepeatPlaylist->isChecked()) {
-                        window->ui->actionRepeatOff->setChecked(false);
-                        window->ui->actionRepeatThisFile->setChecked(false);
-                        window->ui->repeatButton->setIcon(QIcon(":/img/repeat.svg"));
-                    }
+                    window->ui->actionRepeatPlaylist->setChecked(true);
+                    window->ui->actionRepeatOff->setChecked(false);
+                    window->ui->actionRepeatThisFile->setChecked(false);
+                    window->ui->repeatButton->setIcon(QIcon(":/img/repeat.svg"));
                 } else
                     invalidParameter(arg);
             } else
