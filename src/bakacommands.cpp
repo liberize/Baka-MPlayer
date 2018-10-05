@@ -103,7 +103,7 @@ void BakaEngine::bakaAddSubtitles(QStringList &args)
     QString trackFile;
     if (args.empty()) {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Subtitle File"), mpv->getPath(),
-                                                 QString("%0 (%1)").arg(tr("Subtitle Files"), Mpv::subtitle_filetypes.join(" ")),
+                                                 QString("%0 (%1)").arg(tr("Subtitle Files"), Mpv::SUBTITLE_FILE_TYPES.join(" ")),
                                                  0, QFileDialog::DontUseSheet);
     } else
         trackFile = args.join(' ');
@@ -116,7 +116,7 @@ void BakaEngine::bakaAddAudio(QStringList &args)
     QString trackFile;
     if (args.empty()) {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Audio File"), mpv->getPath(),
-                                                 QString("%0 (%1)").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" ")),
+                                                 QString("%0 (%1)").arg(tr("Audio Files"), Mpv::AUDIO_FILE_TYPES.join(" ")),
                                                  0, QFileDialog::DontUseSheet);
     } else
         trackFile = args.join(' ');
@@ -358,9 +358,9 @@ void BakaEngine::open()
 {
     mpv->playFile(QFileDialog::getOpenFileName(window,
                    tr("Open File"),mpv->getPath(),
-                   QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" "))+
-                   QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+
-                   QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" "))+
+                   QString("%0 (%1);;").arg(tr("Media Files"), Mpv::MEDIA_FILE_TYPES.join(" "))+
+                   QString("%0 (%1);;").arg(tr("Video Files"), Mpv::VIDEO_FILE_TYPES.join(" "))+
+                   QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::AUDIO_FILE_TYPES.join(" "))+
                    QString("%0 (*.*)").arg(tr("All Files")),
                    0, QFileDialog::DontUseSheet));
 }

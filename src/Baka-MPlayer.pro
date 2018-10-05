@@ -20,11 +20,14 @@ MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
 
-PKGCONFIG += mpv python3 uchardet
+PKGCONFIG += libavcodec libavfilter libavutil libswresample libavdevice libavformat libpostproc libswscale mpv python3
 
+# uchardet is optional
+DEFINES += "ENABLE_UCHARDET"
+PKGCONFIG += uchardet
 
 macx {
-    PKG_CONFIG = PKG_CONFIG_PATH=/Users/libo/Code/Private/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
+    PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/FFmpeg/inst/lib/pkgconfig:/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
 
     APP_DATA_DIR = ../Resources
     ICON = img/logo.icns

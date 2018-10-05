@@ -52,6 +52,7 @@ public slots:
 signals:
     void currentRowChanged(int row);
     void playlistChanged(QStandardItemModel *);
+    void menuVisibilityChanging(bool visible);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event);

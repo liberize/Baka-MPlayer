@@ -15,6 +15,7 @@ public:
 protected:
     void mouseMoveEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool event(QEvent *ev);
 
 signals:
     void mouseMoved(QMouseEvent *event);

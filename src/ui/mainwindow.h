@@ -77,7 +77,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);        // moved mouse on the form
     void leaveEvent(QEvent *event);                 // mouse left the form
     void mouseDoubleClickEvent(QMouseEvent *event); // double clicked the form
-    bool eventFilter(QObject *obj, QEvent *event);  // event filter (get mouse move events from mpvFrame)
+    bool eventFilter(QObject *obj, QEvent *ev);  // event filter (get mouse move events from mpvFrame)
     void wheelEvent(QWheelEvent *event);            // the mouse wheel is used
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -165,6 +165,7 @@ private:
     int delayedFullScreen = -1;      // 0: normal, 1: fullscreen
 #endif
     QMap<QString, QAction*> subtitlePluginActions;
+    bool isContextMenuVisible = false;
 };
 
 #endif // MAINWINDOW_H

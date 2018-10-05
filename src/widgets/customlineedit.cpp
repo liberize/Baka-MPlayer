@@ -48,4 +48,19 @@ void CustomLineEdit::mouseMoveEvent(QMouseEvent *event)
     QRect rect(0, 0, iconWidth(), height());
     setCursor(rect.contains(event->pos()) ? Qt::ArrowCursor : Qt::IBeamCursor);
     QLineEdit::mouseMoveEvent(event);
+    emit mouseMoved(event);
+}
+
+bool CustomLineEdit::event(QEvent *ev)
+{
+    if (ev->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *event = static_cast<QKeyEvent*>(ev);
+        QString key = QKeySequence(event->modifiers() | event->key()).toString();
+        key.replace("Num+", "");
+        if (key == "Return") {
+            event->accept();
+            return true;
+        }
+    }
+    return QLineEdit::event(ev);
 }

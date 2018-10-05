@@ -59,7 +59,7 @@ QString formatRelativeTime(double time);
 QString formatNumber(int val, int length);
 QString formatNumberWithAmpersand(int val, int length);
 QString humanSize(qint64);
-QString shortenPathToParent(const Recent &recent);
+QString formatPath(const Recent &recent);
 QStringList toNativeSeparators(QStringList list);
 QStringList fromNativeSeparators(QStringList list);
 int gcd(int v, int u);
@@ -67,9 +67,9 @@ QString ratio(int w, int h);
 
 QString getLangName(QString code);
 QString getCharEncodingTitle(QString name);
-const QList<QPair<QString, QString> > &getAllCharEncodings();
+const QList<QPair<QString, QString>> &getAllCharEncodings();
 
-QString toUnicode(const QByteArray &bytes);
+QString toUnicode(const QByteArray &bytes, const char *codec = nullptr);
 
 }
 

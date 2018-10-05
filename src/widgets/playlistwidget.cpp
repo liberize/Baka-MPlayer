@@ -259,7 +259,7 @@ void PlaylistWidget::deleteFromDisk(const QModelIndex &index)
 
     QString r = item->path.left(item->path.lastIndexOf('.') + 1); // get file root (no extension)
     // check and remove all subtitle_files with the same root as the video
-    for (auto ext : Mpv::subtitle_filetypes) {
+    for (auto ext : Mpv::SUBTITLE_FILE_TYPES) {
         QFile subf(r + ext.mid(2));
         if (subf.exists() && QMessageBox::question(parentWidget(), tr("Delete sub-file?"),
             tr("Would you like to delete the associated sub file [%0]?").arg(subf.fileName())) == QMessageBox::Yes)
@@ -302,6 +302,12 @@ void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event)
             Util::showInFolder(fi.absolutePath(), fi.fileName());
         });
     }
+    connect(menu, &QMenu::aboutToShow, [=] {
+        emit menuVisibilityChanging(true);
+    });
+    connect(menu, &QMenu::aboutToHide, [=] {
+        emit menuVisibilityChanging(false);
+    });
     menu->exec(viewport()->mapToGlobal(event->pos()));
     delete menu;
 }

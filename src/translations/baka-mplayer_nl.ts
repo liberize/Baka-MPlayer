@@ -1241,14 +1241,6 @@
         <translation>Kanalen</translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>Bestand bestaat niet</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>Bestand bestaat niet meer</translation>
-    </message>
-    <message>
         <source>File</source>
         <translation>Bestand</translation>
     </message>
@@ -1347,6 +1339,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Pauze</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

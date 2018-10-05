@@ -1302,14 +1302,6 @@
         <translation>Không thể mở tập tin</translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>Tập tin không tồn tại</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>Tập tin hiện không còn tồn tại</translation>
-    </message>
-    <message>
         <source>Volume: %0%</source>
         <translation>Âm lượng: %0%</translation>
     </message>
@@ -1348,6 +1340,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Tạm dừng</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

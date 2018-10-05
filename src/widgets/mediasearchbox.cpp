@@ -25,6 +25,13 @@ MediaSearchBox::MediaSearchBox(QWidget *parent):
         "  margin-left: 8px;\n"
         "}\n");
 
+    connect(menuProviders, &QMenu::aboutToShow, [=] {
+        emit menuVisibilityChanging(true);
+    });
+    connect(menuProviders, &QMenu::aboutToHide, [=] {
+        emit menuVisibilityChanging(false);
+    });
+
     connect(this, &CustomLineEdit::submitted, [=] (QString s) {
         word = s;
     });
@@ -70,6 +77,7 @@ void MediaSearchBox::mouseMoveEvent(QMouseEvent *event)
     QRect rect(0, 0, iconWidth(), height());
     setCursor(rect.contains(event->pos()) ? Qt::PointingHandCursor : Qt::IBeamCursor);
     QLineEdit::mouseMoveEvent(event);
+    emit mouseMoved(event);
 }
 
 void MediaSearchBox::mousePressEvent(QMouseEvent *event)
@@ -77,6 +85,7 @@ void MediaSearchBox::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton) {
         QRect rect(0, 0, iconWidth(), height());
         if (rect.contains(event->pos()) && !menuProviders->actions().isEmpty()) {
+            unsetCursor();
             QPoint pos(0, height());
             menuProviders->exec(mapToGlobal(pos));
         }

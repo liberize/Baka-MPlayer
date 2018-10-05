@@ -169,7 +169,7 @@ protected slots:
 private slots:
     void updateFileInfo()                      { emit fileInfoChanged(fileInfo); }
     void updatePlayState(Mpv::PlayState s)     { emit playStateChanged(playState = s); }
-    void updateFile(QString s, QString t, const OptionMap &opts) { emit fileChanged(file = s, t, fileLocalOptions = opts); }
+    void updateFile(QString s, QString t, const OptionMap &opts) { emit fileChanged(file = s, fileInfo.mediaTitle = t, fileLocalOptions = opts); }
     void updatePath(QString s)                 { if (path != s) emit pathChanged(path = s); }
     void updateScreenshotFormat(QString s)     { emit screenshotFormatChanged(screenshotFormat = s); }
     void updateScreenshotTemplate(QString s)   { emit screenshotTemplateChanged(screenshotTemplate = s); }

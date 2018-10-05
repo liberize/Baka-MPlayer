@@ -9,7 +9,9 @@
 #include <QTextCodec>
 #include <QDebug>
 
+#ifdef ENABLE_UCHARDET
 #include <uchardet.h>
+#endif
 
 namespace Util {
 
@@ -865,10 +867,10 @@ QString formatRelativeTime(double _time)
         prefix = "+";
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
     if (_time >= 3600) // hours
-        return prefix+time.toString("h:mm:ss");
+        return prefix + time.toString("h:mm:ss");
     if (_time >= 60)   // minutes
-        return prefix+time.toString("mm:ss");
-    return prefix+time.toString("0:ss");   // seconds
+        return prefix + time.toString("mm:ss");
+    return prefix + time.toString("0:ss");   // seconds
 }
 
 QString formatNumber(int val, int length)
@@ -884,14 +886,14 @@ QString formatNumber(int val, int length)
 QString formatNumberWithAmpersand(int val, int length)
 {
     if (length < 10)
-        return "&"+QString::number(val);
+        return "&" + QString::number(val);
     else if (length < 100) {
         if (val < 10)
-            return "0&"+QString::number(val);
+            return "0&" + QString::number(val);
         return QString("%1").arg(val, 2, 10, QChar('0'));
     } else {
         if (val < 10)
-            return "00&"+QString::number(val);
+            return "00&" + QString::number(val);
         return QString("%1").arg(val, 3, 10, QChar('0'));
     }
 }
@@ -913,37 +915,11 @@ QString humanSize(qint64 size)
     return QString().setNum(num,'f',2) + " " + unit;
 }
 
-QString shortenPathToParent(const Recent &recent)
+QString formatPath(const Recent &recent)
 {
-    const int long_name = 100;
-    if (recent.title != QString())
+    if (isValidUrl(recent.path) && !recent.title.isEmpty())
         return QString("%0 (%1)").arg(recent.title, recent.path);
-    QString p = QDir::fromNativeSeparators(recent.path);
-    int i = p.lastIndexOf('/');
-    if (i != -1) {
-        int j = p.lastIndexOf('/', i-1);
-        if (j != -1) {
-            QString parent = p.mid(j+1, i-j-1),
-                    file = p.mid(i+1);
-            // todo: smarter trimming
-            if (parent.length() > long_name) {
-                parent.truncate(long_name);
-                parent += "..";
-            }
-            if (file.length() > long_name) {
-                file.truncate(long_name);
-                i = p.lastIndexOf('.');
-                file += "..";
-                if (i != -1) {
-                    QString ext = p.mid(i);
-                    file.truncate(file.length()-ext.length());
-                    file += ext; // add the extension back
-                }
-            }
-            return QDir::toNativeSeparators(parent+"/"+file);
-        }
-    }
-    return QDir::toNativeSeparators(recent.path);
+    return recent.path;
 }
 
 QStringList toNativeSeparators(QStringList list)
@@ -1011,21 +987,26 @@ QString getCharEncodingTitle(QString name)
     return "";
 }
 
-const QList<QPair<QString, QString> > &getAllCharEncodings()
+const QList<QPair<QString, QString>> &getAllCharEncodings()
 {
     return charEncodingMap;
 }
 
-QString toUnicode(const QByteArray &bytes)
+QString toUnicode(const QByteArray &bytes, const char *codec)
 {
-    uchardet_t ud = uchardet_new();
-    uchardet_handle_data(ud, bytes.data(), bytes.length());
-    uchardet_data_end(ud);
-    const char* cs = uchardet_get_charset(ud);
-    uchardet_delete(ud);
-
-    QTextCodec *codec = QTextCodec::codecForName(cs);
-    return codec ? codec->toUnicode(bytes) : "";
+#ifdef ENABLE_UCHARDET
+    if (!codec) {
+        uchardet_t ud = uchardet_new();
+        uchardet_handle_data(ud, bytes.data(), bytes.length());
+        uchardet_data_end(ud);
+        codec = uchardet_get_charset(ud);
+        uchardet_delete(ud);
+    }
+#endif
+    if (!codec || QString(codec) == "")
+        codec = "UTF-8";
+    QTextCodec *tc = QTextCodec::codecForName(codec);
+    return tc ? tc->toUnicode(bytes) : "";
 }
 
 }

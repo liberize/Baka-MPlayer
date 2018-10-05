@@ -17,9 +17,11 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    bool event(QEvent *ev);
 
 signals:
     void submitted(QString);
+    void mouseMoved(QMouseEvent *event);
 
 protected:
     int iconWidth() const;

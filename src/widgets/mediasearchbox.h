@@ -25,6 +25,7 @@ protected:
 
 signals:
     void providerChanged(MediaProvider *provider);
+    void menuVisibilityChanging(bool visible);
 
 private:
     MediaProvider *currentProvider = nullptr;

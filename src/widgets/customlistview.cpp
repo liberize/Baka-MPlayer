@@ -26,3 +26,17 @@ void CustomListView::paintEvent(QPaintEvent *event) {
         painter.drawText(rect(), Qt::AlignCenter | Qt::TextWordWrap , placeholderText);
     }
 }
+
+bool CustomListView::event(QEvent *ev)
+{
+    if (ev->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *event = static_cast<QKeyEvent*>(ev);
+        QString key = QKeySequence(event->modifiers() | event->key()).toString();
+        key.replace("Num+", "");
+        if (key == "Up" || key == "Down") {
+            event->accept();
+            return true;
+        }
+    }
+    return QListView::event(ev);
+}

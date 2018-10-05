@@ -9,7 +9,7 @@ import re
 import requests
 from urllib.parse import urlencode
 from upv import input, ConfigItem, ConfigError, PluginError, MediaEntry, MediaProvider
-from .api import PCS
+from .api import PCS, BAIDUPAN_HEADERS
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -81,17 +81,18 @@ class BaiduPCS(MediaProvider):
     def download(self, entry, what):
         self.login()
         if what == '':
-            url, headers = self.pcs.download_url2(entry.url)
+            url = self.pcs.download_url2(entry.url)
             options = {
                 'preset': 'pcs',
-                'user_agent': headers['User-Agent'],
-                'referer': headers['Referer'],
-                'cookies': headers['Cookie'],
-                'max_conn': '16'
+                'user_agent': BAIDUPAN_HEADERS['User-Agent'],
+                'referer': BAIDUPAN_HEADERS['Referer'],
+                'cookies': self.pcs.get_cookies(keys=['BDUSS', 'pcsett']),
+                'max_conn': '3'
             }
             if self.file_dir:
                 options['file_dir'] = self.file_dir
             entry.url = 'mtsp://' + base64.b64encode(url.encode('utf-8')).decode('utf-8') + '?' + urlencode(options)
+            # entry.options = {'cache': 'no'}
         elif what == 'cover':
             data = self.pcs.thumbnail(entry.url, 144, 256).content
             with tempfile.NamedTemporaryFile(dir=os.environ['TMPDIR'], suffix=".jpg", delete=False) as cover_file:

@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui->libraryWidget->attachEngine(baka);
     ui->libraryWidget->setPlaceholderText(tr("No media provider selected."));
 
-    // fix tab widget intercepting MouseMove event
+    // fix tab and line edit widget intercepting MouseMove event
     auto fixCursor = [=] (QMouseEvent *event) {
         if (sidebarResizeStartX < 0)
             unsetCursor();
@@ -82,6 +82,16 @@ MainWindow::MainWindow(QWidget *parent):
     };
     connect(ui->playlistWidget, &CustomListView::mouseMoved, fixCursor);
     connect(ui->libraryWidget, &CustomListView::mouseMoved, fixCursor);
+    connect(ui->playlistSearchBox, &CustomLineEdit::mouseMoved, fixCursor);
+    connect(ui->librarySearchBox, &CustomLineEdit::mouseMoved, fixCursor);
+
+    // disable auto hide when context menu is visible
+    auto fixCursor2 = [=] (bool visible) {
+        isContextMenuVisible = visible;
+        showCursorAndControls(nullptr);
+    };
+    connect(ui->librarySearchBox, &MediaSearchBox::menuVisibilityChanging, fixCursor2);
+    connect(ui->playlistWidget, &PlaylistWidget::menuVisibilityChanging, fixCursor2);
 
     // install event filters for mpv container, playback controls widget and central widget
     ui->mpvContainer->installEventFilter(this);
@@ -148,8 +158,8 @@ MainWindow::MainWindow(QWidget *parent):
         {"subtitle_delay -0.5", ui->actionDecreaseSubtitleDelay}, // "mpv add sub-delay -0.5"
         {"subtitle_delay 0", ui->actionResetSubtitleDelay},       // "mpv set sub-delay 0"
         {"subtitle_font", ui->actionSubtitleFont},
-        {"mpv add sub-pos -3", ui->actionSubtitleMoveUp},
-        {"mpv add sub-pos +3", ui->actionSubtitleMoveDown},
+        {"mpv add sub-pos -1", ui->actionSubtitleMoveUp},
+        {"mpv add sub-pos +1", ui->actionSubtitleMoveDown},
         {"mpv set sub-pos 100", ui->actionResetSubtitlePos},
         {"subtitle_style color", ui->actionSubtitleColor},
         {"subtitle_style back-color", ui->actionSubtitleBackColor},
@@ -306,7 +316,7 @@ MainWindow::MainWindow(QWidget *parent):
                     updateRecentFiles(); // update after initialization and only if the current file is different from the first recent
                     while (recent.length() > maxRecent - 1)
                         recent.removeLast();
-                    recent.push_front(Recent(file, (mpv->getPath().isEmpty() || !Util::isValidFile(file)) ? fileInfo.mediaTitle : QString()));
+                    recent.push_front(Recent(file, fileInfo.mediaTitle));
                     current = &recent.front();
                 }
             }
@@ -747,9 +757,9 @@ MainWindow::MainWindow(QWidget *parent):
     // playlist: add button clicked, add item to playlist
     connect(ui->addButton, &QPushButton::clicked, [=] {
         QString file = QFileDialog::getOpenFileName(this, tr("Add File to Playlist"), mpv->getPath(),
-                                                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" ")) +
-                                                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" ")) +
-                                                    QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" ")) +
+                                                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::MEDIA_FILE_TYPES.join(" ")) +
+                                                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::VIDEO_FILE_TYPES.join(" ")) +
+                                                    QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::AUDIO_FILE_TYPES.join(" ")) +
                                                     QString("%0 (*.*)").arg(tr("All Files")),
                                                     0, QFileDialog::DontUseSheet);
         if (!file.isEmpty())
@@ -1156,9 +1166,14 @@ void MainWindow::dropEvent(QDropEvent *event)
     const QMimeData *mimeData = event->mimeData();
     if (mimeData->hasUrls()) { // urls
         for (QUrl &url : mimeData->urls()) {
-            if (url.isLocalFile())
-                mpv->playFile(url.toLocalFile());
-            else
+            if (url.isLocalFile()) {
+                QString file = url.toLocalFile();
+                QRegExp re(Mpv::SUBTITLE_FILE_TYPES.join('|').replace('.', "\\.").replace('*', ".*"));
+                if (re.exactMatch(file))
+                    mpv->addSubtitleTrack(file);
+                else
+                    mpv->playFile(file);
+            } else
                 mpv->playFile(url.url());
         }
     } else if (mimeData->hasText()) // text
@@ -1252,12 +1267,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
                         baka->gesture->begin(GestureHandler::HSEEK_VVOLUME, event->globalPos(), pos());
                 }
             } else if (event->button() == Qt::RightButton) {
-                if (!isFullScreen() && mpv->getPlayState() > 0) {
+                if (mpv->getPlayState() > 0) {
                     mpv->playPause();
                     return true;
                 }
             }
-        }  else if (ev->type() == QEvent::MouseButtonRelease) {
+        } else if (ev->type() == QEvent::MouseButtonRelease) {
             if (sidebarResizeStartX >= 0)   // if resizing sidebar
                 return false;
 #ifdef Q_OS_DARWIN
@@ -1349,7 +1364,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     // keyboard shortcuts
     if (!baka->input.empty()) {
-        QString key = QKeySequence(event->modifiers()|event->key()).toString();
+        QString key = QKeySequence(event->modifiers() | event->key()).toString();
         key.replace("Num+", "");
 
         // Escape exits fullscreen
@@ -1638,11 +1653,11 @@ void MainWindow::updateRecentFiles()
     int n = 1,
         N = recent.length();
     for (auto &f : recent) {
-        action = ui->menuRecentlyOpened->addAction(QString("%0. %1").arg(Util::formatNumberWithAmpersand(n, N), Util::shortenPathToParent(f).replace("&","&&")));
+        action = ui->menuRecentlyOpened->addAction(QString("%0. %1").arg(Util::formatNumberWithAmpersand(n, N), Util::formatPath(f).replace("&","&&")));
         if (n++ == 1)
             action->setShortcut(QKeySequence("Ctrl+Z"));
         connect(action, &QAction::triggered, [=] {
-            mpv->playFile(f);
+            mpv->playFile(f.path, f.title);
         });
     }
 }
@@ -1725,6 +1740,7 @@ void MainWindow::showCursorAndControls(QMouseEvent *event)
         unsetCursor();
     showControls(true);
     autoHideControls->stop();
-    if (!ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos())) && sidebarResizeStartX < 0)
+    if (sidebarResizeStartX < 0 && !isContextMenuVisible &&
+        (!event || !ui->controlsWidget->rect().contains(ui->controlsWidget->mapFromGlobal(event->globalPos()))))
         autoHideControls->start(3000);
 }

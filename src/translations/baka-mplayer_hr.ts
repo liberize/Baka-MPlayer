@@ -1241,14 +1241,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1346,6 +1338,14 @@
     </message>
     <message>
         <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -10,19 +10,19 @@
 namespace Mpv
 {
     // filetypes supported by mpv: https://github.com/mpv-player/mpv/blob/master/player/external_files.c
-    const QStringList audio_filetypes = {
+    const QStringList AUDIO_FILE_TYPES = {
         "*.mp3","*.ogg","*.wav","*.wma","*.m4a","*.aac","*.ac3","*.ape",
         "*.flac","*.ra","*.mka","*.dts","*.opus"
     };
-    const QStringList video_filetypes = {
+    const QStringList VIDEO_FILE_TYPES = {
         "*.avi","*.divx","*.mpg","*.mpeg","*.m1v","*.m2v","*.mpv","*.dv",
         "*.3gp","*.mov","*.mp4","*.m4v","*.mqv","*.dat","*.vcd","*.ogm",
         "*.ogv","*.asf","*.wmv","*.vob","*.mkv","*.ram","*.flv","*.rm",
         "*.ts","*.rmvb","*.dvr-ms","*.m2t","*.m2ts","*.rec","*.f4v","*.hdmov",
         "*.webm","*.vp8","*.letv","*.hlv","*.mts"
     };
-    const QStringList media_filetypes = audio_filetypes + video_filetypes;
-    const QStringList subtitle_filetypes = {
+    const QStringList MEDIA_FILE_TYPES = AUDIO_FILE_TYPES + VIDEO_FILE_TYPES;
+    const QStringList SUBTITLE_FILE_TYPES = {
         "*.sub","*.srt","*.ass","*.ssa","*.smi","*.rt","*.txt","*.mks",
         "*.vtt","*.sup"
     };

@@ -1241,14 +1241,6 @@
         <translation>Kanallar</translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>Dosya bulunmuyor</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>Dosya artık mevcut değil</translation>
-    </message>
-    <message>
         <source>File</source>
         <translation>Dosya</translation>
     </message>
@@ -1347,6 +1339,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Bekle</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

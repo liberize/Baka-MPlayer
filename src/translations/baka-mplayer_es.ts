@@ -1293,14 +1293,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>El fichero no existe</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>El fichero ya no existe</translation>
-    </message>
-    <message>
         <source>Volume: %0%</source>
         <translation>Volúmen: %0%</translation>
     </message>
@@ -1347,6 +1339,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Pausa</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

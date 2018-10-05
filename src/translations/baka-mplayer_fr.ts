@@ -1249,14 +1249,6 @@
         <translation>Le fichier ne peut être ouvert</translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>Le fichier n&apos;existe pas</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>Le fichier n&apos;existe plus</translation>
-    </message>
-    <message>
         <source>Volume: %0%</source>
         <translation>Volume : %0 %</translation>
     </message>
@@ -1347,6 +1339,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Pause</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

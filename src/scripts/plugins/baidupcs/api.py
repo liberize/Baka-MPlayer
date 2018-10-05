@@ -251,7 +251,6 @@ class PCSBase(object):
                 self.session.cookies = cookies
                 self.user['BDUSS'] = self.session.cookies['BDUSS']
                 self.user['token'] = self._get_token()
-                self.user['pcsett'] = self.session.cookies['pcsett']
                 return True
         else:
             return False
@@ -343,14 +342,6 @@ class PCSBase(object):
                      (self.username, self.user['BDUSS']))
 
         self.user['token'] = self._get_token()
-
-        # get pcsett
-        self.session.get(
-            'http://d.pcs.baidu.com/rest/2.0/pcs/file?method=plantcookie&type=ett')
-        try:
-            self.user['pcsett'] = self.session.cookies['pcsett']
-        except:
-            raise LoginFailed('Logging failed.')
 
         self.user_info()
         self._save_cookies()
@@ -766,41 +757,32 @@ class PCS(PCSBase):
         :param remote_path: 每一项代表需要下载的文件路径
         :type remote_path: str list
         """
-
-        def get_url(dlink):
-            return self.session.get(dlink,
-                                    headers=BAIDUPAN_HEADERS,
-                                    stream=True).url
-
-        if not hasattr(self, 'dsign'):
-            self.get_sign()
-
-        if isinstance(remote_path, str) or isinstance(remote_path, str):
-            remote_path = [remote_path]
+        remote_paths = [remote_path] if isinstance(remote_path, str) else remote_path
 
         file_list = []
-        jdata = json.loads(self.meta(remote_path).content)
+        jdata = json.loads(self.meta(remote_paths).content)
         if jdata['errno'] != 0:
             jdata = self.__err_handler('generic', jdata['errno'],
                                        self.meta,
-                                       args=(remote_path,)
+                                       args=(remote_paths,)
                                        )
         logging.debug('[*]' + str(jdata))
         for i, entry in enumerate(jdata['info']):
-            url = entry['dlink']
-            foo = get_url(url)
-            if 'wenxintishi' in foo:
-                file_list.append(self._yunguanjia_format(remote_path[i]))
-            else:
-                file_list.append(get_url(entry['dlink']))
+            file_list.append(entry['dlink'])
 
-        return file_list
+        return file_list[0] if isinstance(remote_path, str) else file_list
 
     def download_url2(self, remote_path):
+        # plant pcsett
+        self.session.get('http://pcs.baidu.com/rest/2.0/pcs/file?method=plantcookie&type=ett')
+
         dlink = "https://pcs.baidu.com/rest/2.0/pcs/file?method=download&app_id=250528&path=" + quote_plus(remote_path)
-        headers = dict(BAIDUPAN_HEADERS.items())
-        headers['Cookie'] = 'BDUSS=' + self.user['BDUSS'] + '; pcsett=' + self.user['pcsett']
-        return dlink, headers
+        return dlink
+
+    def get_cookies(self, domain=None, keys=[]):
+        cookie_dict = self.session.cookies.get_dict(domain=domain)
+        found = ['%s=%s' % (name, value) for (name, value) in cookie_dict.items() if not keys or name in keys]
+        return '; '.join(found)
 
     def share_dlink_for_fs_ids(self, fsid_list, shareid, uk, sign):
         # TODO: 需要文档

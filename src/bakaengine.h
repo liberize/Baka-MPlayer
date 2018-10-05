@@ -52,8 +52,8 @@ public:
     const QHash<QString, QPair<QString, QString>> default_input = {
         {"Ctrl+Alt++",      {"mpv add sub-scale +0.1", tr("Increase subtitle size")}},
         {"Ctrl+Alt+-",      {"mpv add sub-scale -0.1", tr("Decrease subtitle size")}},
-        {"Ctrl+Alt+Up",     {"mpv add sub-pos -3", tr("Move subtitle up")}},
-        {"Ctrl+Alt+Down",   {"mpv add sub-pos +3", tr("Move subtitle down")}},
+        {"Ctrl+Alt+Up",     {"mpv add sub-pos -1", tr("Move subtitle up")}},
+        {"Ctrl+Alt+Down",   {"mpv add sub-pos +1", tr("Move subtitle down")}},
         {"Ctrl+W",          {"mpv cycle sub-visibility", tr("Toggle subtitle visibility")}},
         {"Ctrl+R",          {"mpv set time-pos 0", tr("Restart playback")}},
         {"PgDown",          {"mpv add chapter +1", tr("Go to next chapter")}},

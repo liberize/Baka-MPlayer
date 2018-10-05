@@ -653,7 +653,7 @@ void MpvHandler::populatePlaylist(QString dir, QString &f)
         return;
 
     QDir root(dir);
-    QStringList filter = Mpv::media_filetypes;
+    QStringList filter = Mpv::MEDIA_FILE_TYPES;
     if (!f.isEmpty())
         filter.append(QString("*.%1").arg(f.split(".").last()));
     QFileInfoList flist = root.entryInfoList(filter, QDir::Files);
@@ -989,7 +989,9 @@ void MpvHandler::loadFileInfo()
     } else {
         // get media-title
         char *title = mpv_get_property_string(mpv, "media-title");
-        fileInfo.mediaTitle = Util::toUnicode(QByteArray(title));
+        QString mediaTitle = Util::toUnicode(QByteArray(title));
+        if (!mediaTitle.isEmpty())
+            fileInfo.mediaTitle = mediaTitle;
         // get length
         double len;
         mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &len);

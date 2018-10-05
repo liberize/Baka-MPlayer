@@ -1327,14 +1327,6 @@
         <translation>Canais</translation>
     </message>
     <message>
-        <source>File does not exist</source>
-        <translation>Arquivo não existe</translation>
-    </message>
-    <message>
-        <source>File no longer exists</source>
-        <translation>Arquivo não existe mais</translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1353,6 +1345,14 @@
     <message>
         <source>Pause</source>
         <translation type="unfinished">Pausar</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No media file found in directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
