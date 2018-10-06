@@ -339,6 +339,7 @@ QListView {
   color: #E5E5E5;
   text-align: left;
   border: none;
+  padding-left: 38px;
 }
 
 /* QScrollBar */
@@ -866,6 +867,10 @@ QSlider::groove:horizontal {
 QSlider::sub-page:horizontal {
 	/* the progress color */
 	background: #767676;
+}
+QSlider::sub-page:horizontal[mtsp=true] {
+  /* the progress color */
+  background: #434343;
 }</string>
          </property>
          <property name="maximum">

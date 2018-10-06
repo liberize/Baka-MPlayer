@@ -11,12 +11,9 @@ CustomPushButton::CustomPushButton(QWidget *parent) :
 {
 }
 
-void CustomPushButton::setIcon(const QIcon &icon, const QSize &size, int space)
+void CustomPushButton::setIcon(const QIcon &icon, const QSize &size)
 {
     pixmap = icon.pixmap(size);
-    int x = PADDING_LEFT + size.width() + space;
-    QString qss = QString("%1\nQPushButton {\n\tpadding-left: %2px;\n}").arg(styleSheet(), QString::number(x));
-    setStyleSheet(qss);
 }
 
 void CustomPushButton::paintEvent(QPaintEvent* e)

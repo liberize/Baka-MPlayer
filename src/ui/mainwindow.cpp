@@ -24,6 +24,7 @@
 #include "pluginmanager.h"
 #include "subtitleprovider.h"
 #include "mediaprovider.h"
+#include "mtspmessagehandler.h"
 
 
 MainWindow::MainWindow(QWidget *parent):
@@ -64,9 +65,9 @@ MainWindow::MainWindow(QWidget *parent):
 
     // set icons for start page buttons
     ui->playlistSearchBox->setIcon(QIcon(":/img/search.svg"), QSize(16, 16));
-    ui->openFileButton->setIcon(QIcon(":/img/default_open.svg"), QSize(16, 16), 12);
-    ui->openUrlButton->setIcon(QIcon(":/img/link.svg"), QSize(16, 16), 12);
-    ui->viewLibraryButton->setIcon(QIcon(":/img/library.svg"), QSize(16, 16), 12);
+    ui->openFileButton->setIcon(QIcon(":/img/default_open.svg"), QSize(16, 16));
+    ui->openUrlButton->setIcon(QIcon(":/img/link.svg"), QSize(16, 16));
+    ui->viewLibraryButton->setIcon(QIcon(":/img/library.svg"), QSize(16, 16));
 
     // initialize playlist widget and library widget
     ui->playlistWidget->attachEngine(baka);
@@ -261,12 +262,24 @@ MainWindow::MainWindow(QWidget *parent):
     connect(autoHideControls, &QTimer::timeout, this, &MainWindow::hideCursorAndControls);
 
     connect(updateBufferRange, &QTimer::timeout, [=] {
+        if (mpv->isMtsp())
+            return;
         double current = mpv->getTime();
         double cached = mpv->getCacheTime();
         if (cached) {
-            QList<QPair<double, double>> ranges = {{current, current + cached}};
+            QList<QPair<double, double>> ranges = {{0, current + cached}};
             ui->seekBar->setBufferedRanges(ranges);
         }
+    });
+
+    connect(baka->mtspMessageHandler, &MtspMessageHandler::bufferRangesUpdated, [=] (QList<QPair<double, double>> &ranges) {
+        if (!mpv->isMtsp() || !mpv->getFileInfo().size)
+            return;
+        for (auto &range : ranges) {
+            range.first = range.first / mpv->getFileInfo().size * mpv->getFileInfo().length;
+            range.second = range.second / mpv->getFileInfo().size * mpv->getFileInfo().length;
+        }
+        ui->seekBar->setBufferedRanges(ranges);
     });
 
     // dim dialog
@@ -547,8 +560,9 @@ MainWindow::MainWindow(QWidget *parent):
         showStartupPage(false);
     });
 
-    connect(mpv, &MpvHandler::fileChanged, [=] (QString) {
+    connect(mpv, &MpvHandler::fileChanged, [=] (QString, QString, const QMap<QString, QString> &) {
         fileChanged = true;
+        ui->seekBar->setMtspMode(mpv->isMtsp());
     });
 
     connect(mpv, &MpvHandler::videoParamsChanged, [=] (const Mpv::VideoParams &) {

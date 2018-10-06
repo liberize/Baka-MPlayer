@@ -56,9 +56,16 @@ void SeekBar::setBufferedRanges(const QList<QPair<double, double>> &values)
     repaint(rect());
 }
 
+void SeekBar::setMtspMode(bool mtsp)
+{
+    mtspMode = mtsp;
+    setProperty("mtsp", mtsp);
+    style()->unpolish(this);
+    style()->polish(this);
+}
+
 void SeekBar::mousePressEvent(QMouseEvent *event)
 {
-    ranges.clear();
     repaint();
     CustomSlider::mousePressEvent(event);
 }
@@ -96,8 +103,12 @@ void SeekBar::paintEvent(QPaintEvent *event)
             int x1 = QStyle::sliderPositionFromValue(min, max, qMax((int)range.first, min), w);
             int x2 = QStyle::sliderPositionFromValue(min, max, qMin((int)range.second, max), w);
             if (x2 > handleRect.right()) {
-                x1 = qMax(x1, handleRect.right() + 1);
-                painter.fillRect(x1, grooveRect.top(), x2 - x1 + 1, grooveRect.height(), QColor(96, 96, 96));
+                int x = qMax(x1, handleRect.right() + 1);
+                painter.fillRect(x, grooveRect.top(), x2 - x + 1, grooveRect.height(), QColor(96, 96, 96));
+            }
+            if (mtspMode && x1 < handleRect.left()) {
+                int x = qMin(x2, handleRect.left() - 1);
+                painter.fillRect(x1, grooveRect.top(), x - x1 + 1, grooveRect.height(), QColor(96, 96, 96));
             }
         }
     }

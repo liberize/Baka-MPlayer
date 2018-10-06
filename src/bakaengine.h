@@ -19,6 +19,7 @@ class UpdateManager;
 class DimDialog;
 class PluginManager;
 class RequestManager;
+class MtspMessageHandler;
 
 class BakaEngine : public QObject {
     Q_OBJECT
@@ -36,6 +37,7 @@ public:
     QTemporaryDir  *tempDir;
     PluginManager  *pluginManager;
     RequestManager *requestManager;
+    MtspMessageHandler *mtspMessageHandler;
 
     QSystemTrayIcon *sysTrayIcon;
     QMenu           *trayIconMenu;

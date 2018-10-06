@@ -14,6 +14,7 @@
 #include "util.h"
 #include "ui/mainwindow.h"
 #include "widgets/playlistwidget.h"
+#include "mtspmessagehandler.h"
 
 #ifdef ENABLE_MPV_COCOA_WIDGET
 #include "widgets/mpvcocoawidget.h"
@@ -362,7 +363,7 @@ QString MpvHandler::getMediaInfo()
 
     QString out = outer.arg(tr("File"), fi.fileName()) +
             inner.arg(tr("Title"), fileInfo.mediaTitle) +
-            inner.arg(tr("File size"), Util::humanSize(fi.size())) +
+            inner.arg(tr("File size"), Util::humanSize(fileInfo.size)) +
             inner.arg(tr("Date created"), fi.created().toString()) +
             inner.arg(tr("Media length"), Util::formatTime(fileInfo.length, fileInfo.length)) + '\n';
     if (fileInfo.videoParams.codec != QString())
@@ -427,10 +428,8 @@ double MpvHandler::getCacheTime()
 //    if (vbitrate)
 //        return cacheSize / (vbitrate / 8);
 
-    int64_t fileSize = 0;
-    mpv_get_property(mpv, "file-size", MPV_FORMAT_INT64, &fileSize);
-    if (fileSize)
-        return (double)cacheSize / fileSize * fileInfo.length;
+    if (fileInfo.size)
+        return (double)cacheSize / fileInfo.size * fileInfo.length;
 
     return 0;
 }
@@ -497,6 +496,7 @@ bool MpvHandler::event(QEvent *event)
             }
             case MPV_EVENT_IDLE:
                 fileInfo.length = 0;
+                fileInfo.size = 0;
                 updateTime(0);
                 updatePlayState(Mpv::Idle);
                 loadFileInfo();
@@ -590,7 +590,13 @@ bool MpvHandler::fileExists(QString f)
 
 void MpvHandler::setFileLocalOptions()
 {
-    for (auto it = fileLocalOptions.begin(); it != fileLocalOptions.end(); ++it) {
+    auto options = fileLocalOptions;
+    if (isMtsp()) {
+        QString mtspOpts = "message_types=buffer-ranges,message_output_port=" + QString::number(baka->mtspMessageHandler->getPort());
+        auto &lavfOpts = options["stream-lavf-o"];
+        lavfOpts = lavfOpts.isEmpty() ? mtspOpts : lavfOpts + ',' + mtspOpts;
+    }
+    for (auto it = options.begin(); it != options.end(); ++it) {
         QString name = "file-local-options/" + it.key();
         handleErrorCode(mpv_set_property_string(mpv, name.toUtf8().constData(), (*it).toUtf8().constData()));
     }
@@ -986,6 +992,7 @@ void MpvHandler::loadFileInfo()
     if (playState < 0) {
         fileInfo.mediaTitle.clear();
         fileInfo.length = 0;
+        fileInfo.size = 0;
     } else {
         // get media-title
         char *title = mpv_get_property_string(mpv, "media-title");
@@ -993,9 +1000,9 @@ void MpvHandler::loadFileInfo()
         if (!mediaTitle.isEmpty())
             fileInfo.mediaTitle = mediaTitle;
         // get length
-        double len;
-        mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &len);
-        fileInfo.length = len;
+        mpv_get_property(mpv, "duration", MPV_FORMAT_DOUBLE, &fileInfo.length);
+        // get size
+        mpv_get_property(mpv, "file-size", MPV_FORMAT_INT64, &fileInfo.size);
     }
 
     loadTracks();

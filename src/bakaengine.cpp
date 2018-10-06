@@ -13,6 +13,7 @@
 #include "widgets/dimdialog.h"
 #include "requestmanager.h"
 #include "pluginmanager.h"
+#include "mtspmessagehandler.h"
 
 
 #include "util.h"
@@ -28,6 +29,7 @@ BakaEngine::BakaEngine(QObject *parent):
     tempDir(new QTemporaryDir),
     pluginManager(new PluginManager(this)),
     requestManager(new RequestManager(this)),
+    mtspMessageHandler(new MtspMessageHandler(this)),
     // note: trayIcon does not work in my environment--known qt bug
     // see: https://bugreports.qt-project.org/browse/QTBUG-34364
     sysTrayIcon(new QSystemTrayIcon(window->getTrayIcon(), this)),
@@ -58,6 +60,7 @@ BakaEngine::~BakaEngine()
         delete qtTranslator;
     if (dimDialog != nullptr)
         delete dimDialog;
+    delete mtspMessageHandler;
     delete requestManager;
     delete pluginManager;
     delete tempDir;

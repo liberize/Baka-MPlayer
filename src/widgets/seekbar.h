@@ -16,6 +16,7 @@ public slots:
     void setTotalTime(double _totalTime);
     void setChapterTicks(const QList<double> &values);
     void setBufferedRanges(const QList<QPair<double, double>> &values);
+    void setMtspMode(bool mtsp);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -27,6 +28,7 @@ private:
     bool tickReady;
     double totalTime;
     QList<QPair<double, double>> ranges;
+    bool mtspMode = false;
 };
 
 #endif // SEEKBAR_H

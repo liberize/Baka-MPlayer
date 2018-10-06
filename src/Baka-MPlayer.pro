@@ -233,7 +233,8 @@ SOURCES += \
     delegates/mediaitemdelegate.cpp \
     delegates/playlistitemdelegate.cpp \
     models/playlistproxymodel.cpp \
-    widgets/customlistview.cpp
+    widgets/customlistview.cpp \
+    mtspmessagehandler.cpp
 
 
 HEADERS  += \
@@ -307,7 +308,8 @@ HEADERS  += \
     delegates/mediaitemdelegate.h \
     delegates/playlistitemdelegate.h \
     models/playlistproxymodel.h \
-    widgets/customlistview.h
+    widgets/customlistview.h \
+    mtspmessagehandler.h
 
 
 FORMS    += \

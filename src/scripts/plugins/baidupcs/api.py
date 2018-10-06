@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.DEBUG,
 BAIDUPAN_SERVER = 'pan.baidu.com'
 BAIDUPCS_SERVER = 'pcs.baidu.com'
 BAIDUPAN_HEADERS = {"Referer": "http://pan.baidu.com/disk/home",
-                    "User-Agent": "netdisk;4.6.2.0;PC;PC-Windows;10.0.10240;WindowsBaiduYunGuanJia"}
+                    "User-Agent": "netdisk;8.3.1;android-android"}
 
 
 # https://pcs.baidu.com/rest/2.0/pcs/manage?method=listhost -> baidu cdn

@@ -50,6 +50,7 @@ public:
     bool getSubtitleVisibility()            { return subtitleVisibility; }
     bool getMute()                          { return mute; }
     bool hasVideo()                         { return hasVideoTrack; }
+    bool isMtsp()                           { return path.isEmpty() && file.startsWith("mtsp://"); }
 
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
