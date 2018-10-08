@@ -73,7 +73,7 @@ void BakaEngine::load2_0_3()
 #if defined(Q_OS_WIN)
     QDate last = QDate::fromString(root["lastcheck"].toString()); // convert to date
     if (last.daysTo(QDate::currentDate()) > 7) { // been a week since we last checked?
-        update->CheckForUpdates();
+        update->checkForUpdates();
         root["lastcheck"] = QDate::currentDate().toString();
     }
 #endif

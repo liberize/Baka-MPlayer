@@ -14,7 +14,7 @@ TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 CONFIG += install_translations install_scripts
 
-DESTDIR = build
+DESTDIR = $$PWD/build
 OBJECTS_DIR = $${DESTDIR}/obj
 MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
@@ -23,8 +23,8 @@ UI_DIR = $${DESTDIR}/ui
 PKGCONFIG += libavcodec libavfilter libavutil libswresample libavdevice libavformat libpostproc libswscale mpv python3
 
 # uchardet is optional
-DEFINES += "ENABLE_UCHARDET"
-PKGCONFIG += uchardet
+#DEFINES += "ENABLE_UCHARDET"
+#PKGCONFIG += uchardet
 
 macx {
     PKG_CONFIG = PKG_CONFIG_PATH=/Users/liberize/Code/GitHub/FFmpeg/inst/lib/pkgconfig:/Users/liberize/Code/GitHub/mpv/inst/lib/pkgconfig:/usr/local/lib/pkgconfig /usr/local/bin/pkg-config
@@ -33,6 +33,7 @@ macx {
     ICON = img/logo.icns
 
     CONFIG += objective_c
+    HEADERS += widgets/mpvcocoawidget.h
     OBJECTIVE_SOURCES += platform/osx.mm widgets/mpvcocoawidget.mm
     QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
     LIBS += -framework AppKit -framework Foundation -framework OpenGL -framework QuartzCore
@@ -289,7 +290,6 @@ HEADERS  += \
     widgets/customslider.h \
     widgets/customsplitter.h \
     widgets/dimdialog.h \
-    widgets/mpvcocoawidget.h \
     widgets/mpvglwidget.h \
     widgets/mpvwidget.h \
     widgets/librarywidget.h \

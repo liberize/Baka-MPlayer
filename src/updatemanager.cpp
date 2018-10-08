@@ -149,6 +149,6 @@ void UpdateManager::applyUpdate(const QString &file)
 
     QProcess::startDetached(bat);
     emit messageSignal(tr("Done. Restarting..."));
-    baka->Quit();
+    baka->quit();
 }
 #endif

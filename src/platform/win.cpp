@@ -4,6 +4,8 @@
 #include <QRegExp>
 #include <QProcess>
 #include <QDir>
+#include <QAbstractNativeEventFilter>
+#include <QAbstractEventDispatcher>
 
 #include <windows.h>
 #include <powrprof.h>
@@ -79,7 +81,7 @@ void setAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
         eventFilter = new WinNativeEventFilter;
 
     if (o_dwidth > 0 && o_dheight > 0)
-        eventFilter->installHandler(main->winId(), WM_SIZING, [] (MSG *msg) -> bool {
+        eventFilter->installHandler((HWND)main->winId(), WM_SIZING, [=] (MSG *msg) -> bool {
             RECT *rc = (RECT*)msg->lParam;
             // get client area of the windows if it had the rect rc
             // (subtracting the window borders)
@@ -113,7 +115,7 @@ void setAspectRatio(QMainWindow *main, int o_dwidth, int o_dheight)
             return true;
         });
     else
-        eventFilter->removeHandler(main->winId(), WM_SIZING);
+        eventFilter->removeHandler((HWND)main->winId(), WM_SIZING);
 }
 
 void enableScreenSaver(bool enable)

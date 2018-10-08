@@ -75,7 +75,7 @@ UpdateDialog::UpdateDialog(BakaEngine *baka, QWidget *parent) :
 #if defined(Q_OS_WIN)
     connect(ui->updateButton, &QPushButton::clicked, [=] {
         ui->plainTextEdit->setPlainText(QString());
-        baka->update->downloadUpdate(Util::DownloadFileUrl());
+        baka->update->downloadUpdate(Util::downloadFileUrl());
     });
 #endif
 
